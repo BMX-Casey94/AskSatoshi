@@ -141,12 +141,14 @@ button:disabled {
   padding-bottom: 48px;
 }
 
-/* Hero: sits directly on top of the composer; waist aligns with the top edge. */
+/* Hero: sits on the composer; overlap scales with hero width so all viewports match. */
 .hero {
+  --hero-w: min(384px, 70vw);
   position: relative;
-  width: min(384px, 70vw);
+  width: var(--hero-w);
   aspect-ratio: 3 / 2;
-  margin-bottom: -97px;
+  /* Design: −97px at 384px wide → keep that ratio as the hero shrinks. */
+  margin-bottom: calc(var(--hero-w) * -97 / 384);
   z-index: 2;
   pointer-events: none;
   user-select: none;
@@ -161,9 +163,9 @@ button:disabled {
   transition: opacity 0.16s ease-out;
 }
 
-/* Interactive pose: 20% smaller, nudged up to clear the composer. */
+/* Interactive pose: 20% smaller; lift scales with hero (design: −108px at 384px). */
 .hero-img--interact {
-  transform: scale(0.8) translateY(-108px);
+  transform: scale(0.8) translateY(calc(var(--hero-w) * -108 / 384));
   transform-origin: center bottom;
 }
 
@@ -1236,10 +1238,6 @@ button:disabled {
 @media (max-width: 600px) {
   .msg-bubble--user {
     max-width: 88%;
-  }
-
-  .hero {
-    margin-bottom: -77px;
   }
 
   .suggestion-pill {

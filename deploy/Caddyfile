@@ -1,0 +1,27 @@
+# Ask Satoshi — reverse proxy with automatic HTTPS.
+# Replace ask-satoshi.example.com with your domain and point its DNS A/AAAA record at
+# this VPS. Caddy obtains and renews the Let's Encrypt certificate automatically.
+#
+# Install: see deploy/RUNBOOK.md. Reload after editing: `sudo systemctl reload caddy`.
+
+ask-satoshi.example.com {
+	# Security headers (Caddy sits in front of Express/helmet; these are additive).
+	header {
+		# Prevent MIME sniffing and clickjacking; helmet already sets most of these,
+		# but defence in depth at the edge costs nothing.
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy strict-origin-when-cross-origin
+		# Don't leak the Caddy version.
+		-Server
+	}
+
+	# Everything (API + built client) is served by the Express app on localhost:8787.
+	# The app binds 127.0.0.1, so it is unreachable except through this proxy.
+	reverse_proxy 127.0.0.1:8787 {
+		# SSE (/api/chat) streams tokens; disable proxy buffering so tokens flush live.
+		flush_interval -1
+		# Forward the real client IP for rate limiting (TRUST_PROXY=1 reads it).
+		header_up X-Forwarded-For {remote_host}
+	}
+}

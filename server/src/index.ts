@@ -34,6 +34,10 @@ dotenv.config({ path: resolve(__dirname, '../../.env') });
 dotenv.config({ path: resolve(__dirname, '../.env'), override: true });
 
 const PORT = Number(process.env.PORT ?? 8787);
+// Bind address. Default 0.0.0.0 (all interfaces) preserves direct-hosting behaviour;
+// set HOST=127.0.0.1 when behind a same-host reverse proxy (Caddy/nginx) so the app
+// port is unreachable from the public internet except through the proxy's TLS.
+const HOST = process.env.HOST ?? '0.0.0.0';
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGIN ?? 'http://localhost:5173')
   .split(',')
   .map((o) => o.trim())
@@ -379,9 +383,9 @@ mcp.connect().catch((err) => {
 // On Vercel the module is imported as a function handler — listening is the platform's
 // job. Everywhere else (npm start, tsx dev) we bind the port ourselves.
 if (!process.env.VERCEL) {
-  const httpServer = app.listen(PORT, () => {
+  const httpServer = app.listen(PORT, HOST, () => {
     const tiers = configuredTiers(keys).map((t) => t.id);
-    console.log(`[ask-satoshi] listening on :${PORT}`);
+    console.log(`[ask-satoshi] listening on ${HOST}:${PORT}`);
     console.log(`[ask-satoshi] model tiers configured: ${tiers.length > 0 ? tiers.join(', ') : 'NONE (set API keys in .env)'}`);
   });
 

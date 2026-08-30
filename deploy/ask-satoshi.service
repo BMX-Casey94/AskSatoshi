@@ -1,0 +1,49 @@
+[Unit]
+Description=Ask Satoshi — API + client (Express, with BSV-AIO-MCP child)
+# Start after the network is up; the MCP child and model providers need outbound HTTPS.
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Dedicated unprivileged user — never run the app as root.
+User=asksatoshi
+Group=asksatoshi
+WorkingDirectory=/opt/ask-satoshi
+
+# Production runtime. HOST=127.0.0.1 keeps the app port off the public internet —
+# only Caddy (same host) may reach it. TRUST_PROXY=1 so per-IP rate limits see the
+# real client address from Caddy's X-Forwarded-For. BSV_AIO_DB_PATH gives the MCP
+# child's SQLite index a durable home so it survives reboots instead of rebuilding
+# in the per-boot tmpdir.
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=PORT=8787
+Environment=TRUST_PROXY=1
+Environment=BSV_AIO_DB_PATH=/var/lib/ask-satoshi/knowledge.sqlite
+# API keys and ALLOWED_ORIGIN live in /opt/ask-satoshi/.env (0640 root:asksatoshi —
+# systemd reads it as root; the app also reads it via dotenv as the service group).
+# The '-' prefix tolerates it being absent.
+EnvironmentFile=-/opt/ask-satoshi/.env
+
+ExecStart=/usr/bin/node server/dist/index.js
+
+# Restart on crash (never on a clean exit). Small delay so a crash-loop doesn't spin.
+Restart=on-failure
+RestartSec=3
+
+# Hardening: no privilege escalation, private /tmp, read-only system and home, with
+# writes allowed only to the index directory.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/lib/ask-satoshi
+
+# Logs to the journal: `journalctl -u ask-satoshi -f`
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=ask-satoshi
+
+[Install]
+WantedBy=multi-user.target

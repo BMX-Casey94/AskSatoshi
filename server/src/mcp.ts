@@ -108,7 +108,14 @@ export class McpBridge {
     const transport = new StdioClientTransport({
       command: process.execPath,
       args: [entry],
-      env: getDefaultEnvironment(),
+      env: {
+        ...getDefaultEnvironment(),
+        // getDefaultEnvironment() forwards only an allowlist, so pass the index/root
+        // overrides explicitly — on a long-running host these point the child's SQLite
+        // index at a persistent path instead of the per-boot tmpdir.
+        ...(process.env.BSV_AIO_DB_PATH ? { BSV_AIO_DB_PATH: process.env.BSV_AIO_DB_PATH } : {}),
+        ...(process.env.BSV_AIO_ROOT ? { BSV_AIO_ROOT: process.env.BSV_AIO_ROOT } : {}),
+      },
       stderr: 'pipe',
     });
     // Surface the child's stderr on failure — on a serverless instance a missing

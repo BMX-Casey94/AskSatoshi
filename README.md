@@ -82,20 +82,37 @@ Environment Variables (`GEMINI_API_KEY`, `GROQ_API_KEY`, optional `OPENROUTER_AP
 
 Caveats of the serverless model:
 
-- The BSV knowledge helper is a separate program the server starts. On Vercel it is only
-  there while an instance is awake; after idle it has to start again. The first question
-  after idle waits a few seconds for it to wake (the UI shows "Just grabbing my notepad"
-  meanwhile); if it is still not ready after that, the site answers from Satoshi's own
-  posts and e-mails — grounding is just thinner.
+- **The BSV knowledge helper does not run reliably here.** It is a stdio child process that
+  builds a SQLite index on boot, but serverless instances freeze between requests, so its
+  startup handshake never completes — `/api/health` reports `mcp:false`. Technical questions
+  (BRCs, Teranode, Script) then fall back to Satoshi's own posts and e-mails, which do not
+  cover them. **Use a long-running host (below) if you want the full knowledge base.**
 - Rate limits, the quota breaker and the answer cache are in-memory, so they apply per
   function instance rather than globally.
 - Function duration caps apply to chat streams (plan-dependent).
 
-### Long-running host (guaranteed MCP)
+### Long-running host (guaranteed MCP) — recommended
 
-For an always-on MCP child process, deploy to Railway, Render, Fly or a VPS instead:
-`npm install`, `npm run build`, `npm start`, with `ALLOWED_ORIGIN` set to your public origin
-and `TRUST_PROXY=1` when behind a proxy.
+The BSV knowledge helper is a stdio child process that builds a SQLite index on boot.
+Serverless platforms freeze instances between requests, so the child's startup handshake
+can never reliably complete — on Vercel the MCP stays down (`/api/health` reports
+`mcp:false`) and every technical question falls back to Satoshi's corpus. **For the full
+knowledge base, run it on a long-running host.**
+
+A ready-made bundle for **AlmaLinux 9 + systemd + Caddy** (automatic HTTPS, everything on
+one origin) lives in [`deploy/`](deploy/):
+
+```bash
+sudo bash deploy/setup.sh    # installs Node 22 + Caddy, builds, configures systemd + TLS
+```
+
+See [deploy/RUNBOOK.md](deploy/RUNBOOK.md) for the full guide (DNS, `.env`, verification).
+The app binds `127.0.0.1` behind Caddy, runs as an unprivileged user, and keeps the MCP
+index at `BSV_AIO_DB_PATH` so it survives reboots.
+
+For other hosts (Railway, Render, Fly, a different VPS distro): `npm install`,
+`npm run build`, `npm start`, with `ALLOWED_ORIGIN` set to your public origin,
+`TRUST_PROXY=1` when behind a proxy, and optionally `HOST` and `BSV_AIO_DB_PATH`.
 
 ## Privacy notes
 

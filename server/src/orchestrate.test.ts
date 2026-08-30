@@ -102,9 +102,43 @@ describe('locatorToUrl', () => {
     // Far-future BRC not in the snapshot → fail closed, never guess a category.
     expect(locatorToUrl('brc://spec/99999')).toBeUndefined();
   });
+  it('maps principles (education/{era}--{slug}.md) to the same public essay URLs', () => {
+    expect(locatorToUrl('education/substack--the-quantum-apocalypse-is-coming.md')).toBe(
+      'https://singulargrit.substack.com/p/the-quantum-apocalypse-is-coming',
+    );
+    expect(locatorToUrl('education/medium--what-is-bitcoin-8ee9d3e86674.md')).toBe(
+      'https://medium.com/@craig_10243/what-is-bitcoin-8ee9d3e86674',
+    );
+  });
+  it('maps repo:// docs and examples to GitHub blob URLs via the shipped registry', () => {
+    expect(locatorToUrl('repo://go-sdk/docs/concepts/OP.md')).toBe(
+      'https://github.com/bsv-blockchain/go-sdk/blob/master/docs/concepts/OP.md',
+    );
+  });
+  it('maps repo:// for runar (absent from the registry) to its known home', () => {
+    expect(locatorToUrl('repo://runar/examples/end2end-example/webapp-blackjack/blackjack.go')).toBe(
+      'https://github.com/icellan/runar/blob/master/examples/end2end-example/webapp-blackjack/blackjack.go',
+    );
+  });
+  it('returns undefined for repo:// names absent from the registry', () => {
+    expect(locatorToUrl('repo://no-such-repo/README.md')).toBeUndefined();
+  });
+  it('maps code symbols ({owner}/{repo}/{path}:{line}) to GitHub blob URLs with a line anchor', () => {
+    expect(locatorToUrl('bsv-blockchain/go-sdk/transaction/transaction.go:20')).toBe(
+      'https://github.com/bsv-blockchain/go-sdk/blob/master/transaction/transaction.go#L20',
+    );
+  });
+  it('keeps the dedicated BRCs-path mapping ahead of the generic symbol rule', () => {
+    // bsv-blockchain/BRCs/... also matches the symbol shape; the BRCs rule must win.
+    expect(locatorToUrl('bsv-blockchain/BRCs/scripts/0047.md')).toBe(
+      'https://github.com/bsv-blockchain/BRCs/blob/master/scripts/0047.md',
+    );
+  });
   it('returns undefined for internal-only schemes', () => {
     expect(locatorToUrl('essay://medium/123')).toBeUndefined();
     expect(locatorToUrl('csw://principles/nodes')).toBeUndefined();
+    expect(locatorToUrl('csw://contradictions/XT-15')).toBeUndefined();
+    expect(locatorToUrl('vector://bsv-tx/1-in-1-out.json')).toBeUndefined();
     expect(locatorToUrl(undefined)).toBeUndefined();
   });
 });
@@ -114,14 +148,14 @@ describe('citation linkability', () => {
     const g = await groundQuestion('What is the frobnicate opcode?', {
       mcp: fakeMcp({
         claims: [{ text: 'The frobnicate opcode frobs.', support: ['sym:1'], status: 'supports' }],
-        hits: [{ id: 'sym:1', locator: 'repo://ts-stack/frob', title: 'frobnicate', excerpt: '…' }],
+        hits: [{ id: 'sym:1', locator: 'vector://bsv-tx/frob.json', title: 'frobnicate', excerpt: '…' }],
         gaps: [],
         contradictions: [],
       }),
       corpus: null,
     });
     expect(g.mode).toBe('mcp');
-    // repo://ts-stack/... has no public URL → not cited.
+    // vector://... is an internal conformance fixture with no public URL → not cited.
     expect(g.citations).toHaveLength(0);
     // …but the claim is still shown to the model as evidence, without a marker.
     expect(g.evidenceText).toContain('The frobnicate opcode frobs.');

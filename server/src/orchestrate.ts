@@ -249,6 +249,35 @@ function brcPathByNumber(): Map<number, string> {
 }
 
 /**
+ * Short repo name → GitHub `owner/repo`, lazily built once from the registry the MCP
+ * package ships (`reference/repo_registry.json`). Used to resolve `repo://{name}/{path}`
+ * and bare `{owner}/{repo}/{path}:{line}` symbol locators to GitHub URLs. `runar` is not
+ * in the registry, so it is hardcoded to its known home (`icellan/runar`). Returns an
+ * empty map if the package/registry is unavailable.
+ */
+let repoFullNameCache: Map<string, string> | null = null;
+function repoFullNameByShortName(): Map<string, string> {
+  if (repoFullNameCache) return repoFullNameCache;
+  repoFullNameCache = new Map([['runar', 'icellan/runar']]);
+  try {
+    const require = createRequire(import.meta.url);
+    const pkgDir = dirname(require.resolve('bsv-aio-mcp/package.json'));
+    const rows = JSON.parse(readFileSync(join(pkgDir, 'reference', 'repo_registry.json'), 'utf8')) as {
+      name?: string;
+      full_name?: string;
+    }[];
+    for (const row of Array.isArray(rows) ? rows : []) {
+      if (typeof row.name === 'string' && typeof row.full_name === 'string') {
+        repoFullNameCache.set(row.name, row.full_name);
+      }
+    }
+  } catch {
+    // Registry unavailable — repo:// and symbol locators stay uncitable (fail closed).
+  }
+  return repoFullNameCache;
+}
+
+/**
  * Translate an internal MCP locator into a real, clickable web URL.
  * Verified against bsv-aio-mcp@1.1.0: hits carry no URL field, only `locator`.
  * Returns undefined for schemes with no public mapping (never emit a dead link).
@@ -276,6 +305,35 @@ export function locatorToUrl(locator: string | undefined): string | undefined {
   if (spec) {
     const path = brcPathByNumber().get(Number(spec[1]));
     if (path) return `https://github.com/bsv-blockchain/BRCs/blob/master/${path}`;
+  }
+
+  // Principles: education/{medium|substack}--{slug}.md. The slug is byte-identical to the
+  // essay slug, so reuse the essay URL builders. This is the largest uncitable tier and
+  // dominates broad/conceptual queries.
+  const principle = /^education\/(medium|substack)--(.+)\.md$/.exec(locator);
+  if (principle) {
+    const [, era, slug] = principle;
+    if (era === 'substack') return `https://singulargrit.substack.com/p/${slug}`;
+    if (era === 'medium') return `https://medium.com/@craig_10243/${slug}`;
+  }
+
+  // Repo docs and examples: repo://{shortRepo}/{path}. Resolve the short name via the
+  // shipped repo registry. Branch is not recorded; GitHub redirects /blob/master to the
+  // default branch, so master is a safe canonical target.
+  const repo = /^repo:\/\/([a-z0-9-]+)\/(.+)$/.exec(locator);
+  if (repo) {
+    const [, shortName, repoPath] = repo;
+    const fullName = shortName ? repoFullNameByShortName().get(shortName) : undefined;
+    if (fullName && repoPath) return `https://github.com/${fullName}/blob/master/${repoPath}`;
+  }
+
+  // Code symbols: {owner}/{repo}/{path}:{line}. Evaluated AFTER the BRCs-path rule above,
+  // which also matches this shape, so BRC specs keep their dedicated mapping. Branch is
+  // not recorded; GitHub redirects /blob/master to the default branch.
+  const symbol = /^([a-z0-9-]+\/[a-z0-9-]+)\/(.+):(\d+)$/.exec(locator);
+  if (symbol) {
+    const [, fullName, path, line] = symbol;
+    return `https://github.com/${fullName}/blob/master/${path}#L${line}`;
   }
 
   return undefined;

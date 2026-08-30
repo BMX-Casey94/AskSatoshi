@@ -12,6 +12,9 @@
  * There is NO package-level status field: insufficiency is per-claim plus gaps.
  */
 
+import { createRequire } from 'node:module';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import type { McpBridge } from './mcp.js';
 import type { SatoshiCorpus, CorpusDoc } from './satoshiCorpus.js';
 import { htmlToText } from './htmlText.js';
@@ -217,6 +220,35 @@ function sharesTermWith(question: string, hit: RawHit): boolean {
 }
 
 /**
+ * BRC number → repo path, lazily built once from the index the MCP package ships
+ * (`reference/brc_index.json`). The `brc://spec/{n}` locator carries only the number,
+ * not the category folder, and consecutive BRCs jump categories (100 → wallet, 101 →
+ * overlays), so the path cannot be derived from the number alone. The index is the same
+ * file the MCP ingests, pinned to the same snapshot, so citations can never drift from
+ * the knowledge base. Returns an empty map if the package/index is unavailable.
+ */
+let brcPathCache: Map<number, string> | null = null;
+function brcPathByNumber(): Map<number, string> {
+  if (brcPathCache) return brcPathCache;
+  brcPathCache = new Map();
+  try {
+    const require = createRequire(import.meta.url);
+    const pkgDir = dirname(require.resolve('bsv-aio-mcp/package.json'));
+    const idx = JSON.parse(readFileSync(join(pkgDir, 'reference', 'brc_index.json'), 'utf8')) as {
+      brcs?: { number?: number; path?: string }[];
+    };
+    for (const row of idx.brcs ?? []) {
+      if (typeof row.number === 'number' && typeof row.path === 'string') {
+        brcPathCache.set(row.number, row.path);
+      }
+    }
+  } catch {
+    // Index unavailable — brc://spec locators simply stay uncitable (fail closed).
+  }
+  return brcPathCache;
+}
+
+/**
  * Translate an internal MCP locator into a real, clickable web URL.
  * Verified against bsv-aio-mcp@1.1.0: hits carry no URL field, only `locator`.
  * Returns undefined for schemes with no public mapping (never emit a dead link).
@@ -237,7 +269,15 @@ export function locatorToUrl(locator: string | undefined): string | undefined {
   const brcPath = /^(?:bsv-blockchain|bitcoin-sv)\/BRCs\/(.+\.md)$/.exec(locator);
   if (brcPath) return `https://github.com/bsv-blockchain/BRCs/blob/master/${brcPath[1]}`;
 
-  // brc://spec/{n} and all other schemes have no reliable public mapping.
+  // BRC master specs surfaced by investigate as brc://spec/{n}. The number alone does
+  // not encode the category folder, so resolve it via the shipped BRC index. Fail
+  // closed (undefined) for BRCs added after the pinned snapshot.
+  const spec = /^brc:\/\/spec\/(\d+)$/.exec(locator);
+  if (spec) {
+    const path = brcPathByNumber().get(Number(spec[1]));
+    if (path) return `https://github.com/bsv-blockchain/BRCs/blob/master/${path}`;
+  }
+
   return undefined;
 }
 

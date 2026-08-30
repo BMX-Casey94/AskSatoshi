@@ -89,8 +89,20 @@ describe('locatorToUrl', () => {
   it('passes through real http(s) URLs unchanged', () => {
     expect(locatorToUrl('https://example.com/x')).toBe('https://example.com/x');
   });
+  it('maps brc://spec/{n} master specs to their GitHub page via the shipped BRC index', () => {
+    // BRC-62 is BEEF (transactions/0062.md); BRC-100 is the wallet interface (wallet/0100.md).
+    expect(locatorToUrl('brc://spec/62')).toBe(
+      'https://github.com/bsv-blockchain/BRCs/blob/master/transactions/0062.md',
+    );
+    expect(locatorToUrl('brc://spec/100')).toBe(
+      'https://github.com/bsv-blockchain/BRCs/blob/master/wallet/0100.md',
+    );
+  });
+  it('returns undefined for brc://spec numbers absent from the pinned index', () => {
+    // Far-future BRC not in the snapshot → fail closed, never guess a category.
+    expect(locatorToUrl('brc://spec/99999')).toBeUndefined();
+  });
   it('returns undefined for internal-only schemes', () => {
-    expect(locatorToUrl('brc://spec/62')).toBeUndefined();
     expect(locatorToUrl('essay://medium/123')).toBeUndefined();
     expect(locatorToUrl('csw://principles/nodes')).toBeUndefined();
     expect(locatorToUrl(undefined)).toBeUndefined();
@@ -99,21 +111,40 @@ describe('locatorToUrl', () => {
 
 describe('citation linkability', () => {
   it('omits citations for sources with no public URL', async () => {
-    const g = await groundQuestion('What is BEEF?', {
+    const g = await groundQuestion('What is the frobnicate opcode?', {
       mcp: fakeMcp({
-        claims: [{ text: 'BEEF is defined by BRC-62.', support: ['brc:62'], status: 'supports' }],
-        hits: [{ id: 'brc:62', locator: 'brc://spec/62', title: 'BRC-62', excerpt: '…' }],
+        claims: [{ text: 'The frobnicate opcode frobs.', support: ['sym:1'], status: 'supports' }],
+        hits: [{ id: 'sym:1', locator: 'repo://ts-stack/frob', title: 'frobnicate', excerpt: '…' }],
         gaps: [],
         contradictions: [],
       }),
       corpus: null,
     });
     expect(g.mode).toBe('mcp');
-    // brc://spec/62 has no public URL → not cited.
+    // repo://ts-stack/... has no public URL → not cited.
     expect(g.citations).toHaveLength(0);
     // …but the claim is still shown to the model as evidence, without a marker.
-    expect(g.evidenceText).toContain('BEEF is defined by BRC-62.');
+    expect(g.evidenceText).toContain('The frobnicate opcode frobs.');
     expect(g.evidenceText).not.toMatch(/\[\d+\]/);
+  });
+
+  it('cites the BRC master spec for an investigate-grounded BRC answer', async () => {
+    // Regression: a conversational BRC question resolves to the master spec (brc://spec/100),
+    // which must now be citable rather than silently dropped.
+    const g = await groundQuestion('What can you tell me about BRC-100?', {
+      mcp: fakeMcp({
+        claims: [{ text: 'BRC-100 is the wallet-to-application interface.', support: ['brc:100'], status: 'supports' }],
+        hits: [{ id: 'brc:100', locator: 'brc://spec/100', title: 'BRC-100 Wallet Interface', excerpt: '…' }],
+        gaps: [],
+        contradictions: [],
+      }),
+      corpus: null,
+    });
+    expect(g.mode).toBe('mcp');
+    expect(g.citations.length).toBeGreaterThan(0);
+    expect(g.citations[0]?.url).toBe(
+      'https://github.com/bsv-blockchain/BRCs/blob/master/wallet/0100.md',
+    );
   });
 
   it('cites sources that resolve to a real URL', async () => {
@@ -216,8 +247,10 @@ describe('groundQuestion routing', () => {
     });
     expect(g.mode).toBe('mcp');
     expect(g.evidenceText).toContain('BRC-62');
-    // brc://spec/62 has no public URL, so it is not surfaced as a citation.
-    expect(g.citations).toHaveLength(0);
+    // brc://spec/62 now resolves to the BEEF spec on GitHub via the BRC index.
+    expect(g.citations[0]?.url).toBe(
+      'https://github.com/bsv-blockchain/BRCs/blob/master/transactions/0062.md',
+    );
   });
 
   it('cites a linkable BRC repo path using its title', async () => {

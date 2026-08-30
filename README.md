@@ -34,7 +34,7 @@ fall back to Satoshi's own writings. All model API keys stay server-side.
 
 ## Setup
 
-Requires **Node.js ≥ 22.13**.
+Requires **Node.js 22**.
 
 ```bash
 npm install

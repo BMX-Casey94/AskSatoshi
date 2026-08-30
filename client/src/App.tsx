@@ -384,7 +384,6 @@ export function App() {
               onAttach={handleAttach}
               onRemoveImage={handleRemoveImage}
               onFocusChange={setComposerFocused}
-              autoFocus
             />
             {asleep && <SleepBanner retryAfter={retryAfter} lines={sleepLines} />}
             <Suggestions onPick={(q) => send(q)} disabled={asleep || sending} />

@@ -485,6 +485,61 @@ describe('conceptual blend (searchGrounding)', () => {
     expect(commentary).toHaveLength(1);
     expect(commentary[0]?.url).toBe('https://medium.com/@craig_10243/scaling');
   });
+
+  it('admits internal curated cards as model-facing evidence without citing them', async () => {
+    // The scaling-history card (analysis://…) has no public URL: it must still reach the
+    // model on a hijack question, but never appear as a source.
+    const mcp = blendingMcp();
+    mcp.searchKnowledge = (async (_q: string, filters?: { kind?: string[] }) => {
+      if (filters?.kind?.includes('doc')) {
+        return {
+          hits: [
+            {
+              id: 'analysis:bitcoin-scaling-history',
+              kind: 'doc',
+              title: "Bitcoin's 2014–2017 direction change",
+              locator: 'analysis://bitcoin-scaling-history',
+              excerpt: 'How Bitcoin was hijacked from peer-to-peer electronic cash.',
+            },
+          ],
+        };
+      }
+      return { hits: [] };
+    }) as McpBridge['searchKnowledge'];
+    mcp.getResource = (async () => ({
+      text: 'The documented record of the scaling wars, with epistemic status attached.',
+    })) as McpBridge['getResource'];
+    const g = await groundQuestion('Why was Bitcoin hijacked?', { mcp, corpus: null });
+    expect(g.mode).toBe('mcp');
+    // The card's body reaches the model as evidence…
+    expect(g.evidenceText).toContain('documented record of the scaling wars');
+    // …but with no public URL it is never cited, and carries no [n] marker.
+    expect(g.citations).toHaveLength(0);
+    expect(g.evidenceText).not.toMatch(/\[\d+\]/);
+  });
+
+  it('does not admit unrelated internal cards that share no term with the question', async () => {
+    const mcp = blendingMcp();
+    mcp.searchKnowledge = (async (_q: string, filters?: { kind?: string[] }) => {
+      if (filters?.kind?.includes('doc')) {
+        return {
+          hits: [
+            {
+              id: 'ops:testnet',
+              kind: 'doc',
+              title: 'Testnet operations playbook',
+              locator: 'ops://testnet',
+              excerpt: 'Faucets, explorers and mempool policy on testnet.',
+            },
+          ],
+        };
+      }
+      return { hits: [] };
+    }) as McpBridge['searchKnowledge'];
+    const g = await groundQuestion('Why was Bitcoin hijacked?', { mcp, corpus: null });
+    // No linkable hits and the internal card is off-topic → the blend fails closed.
+    expect(g.mode).not.toBe('mcp');
+  });
 });
 
 describe('prompt construction', () => {

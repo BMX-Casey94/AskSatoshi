@@ -63,6 +63,8 @@ const MAX_CORPUS_SLICE_CHARS = 2_000;
 const PANEL_EXCERPT_CHARS = 2_400;
 /** Cap on visible sources; keeps answers readable and citations meaningful. */
 const MAX_CITATIONS = 5;
+/** Cap per tier on uncitable internal curated cards (fact://, analysis://, ops://) admitted as model-facing evidence. */
+const MAX_INTERNAL_EVIDENCE_PER_TIER = 1;
 
 /** Strip leading markdown frontmatter/chrome (title, Date/URL/Subtitle lines) so excerpts open on prose. */
 function stripFrontmatter(text: string): string {
@@ -672,38 +674,62 @@ async function searchGrounding(
   // source crowds out the others (primary sources are added separately below). The same
   // document can surface under several locators (e.g. an essay as both csw://essay/...
   // and education/....md); dedup on the resolved URL across tiers so it is cited once.
+  //
+  // Exception: the MCP's curated cards (fact://, analysis://, ops:// — Teranode
+  // benchmarks, the scaling-history analysis, operator playbooks) have no public URL,
+  // so they can never be cited — but their text is the whole point. Admit up to
+  // MAX_INTERNAL_EVIDENCE_PER_TIER per tier as evidence-only entries when the hit
+  // shares a term with the question.
   const seenUrls = new Set<string>();
-  const pickLinkable = (hits: Record<string, unknown>[], cap: number) => {
-    const picked: { title: string; url: string; locator: string }[] = [];
+  const seenInternal = new Set<string>();
+  const pickTier = (hits: Record<string, unknown>[], cap: number) => {
+    const picked: { title: string; url: string | undefined; locator: string }[] = [];
+    let linkable = 0;
+    let internal = 0;
     for (const hit of hits) {
       if (typeof hit !== 'object' || hit === null) continue;
       const locator = typeof hit.locator === 'string' ? hit.locator : '';
+      if (!locator) continue;
+      const title = typeof hit.title === 'string' ? hit.title : locator;
       const url = locatorToUrl(locator);
-      if (!url || seenUrls.has(url)) continue;
-      seenUrls.add(url);
-      picked.push({
-        title: typeof hit.title === 'string' ? hit.title : locator,
-        url,
+      if (url) {
+        if (linkable >= cap || seenUrls.has(url)) continue;
+        seenUrls.add(url);
+        linkable++;
+        picked.push({ title, url, locator });
+        continue;
+      }
+      if (!/^(fact|analysis|ops):\/\//.test(locator)) continue;
+      if (internal >= MAX_INTERNAL_EVIDENCE_PER_TIER || seenInternal.has(locator)) continue;
+      // Gate on the MCP's relevance snippet as well as title/locator — a curated card's
+      // title ("Bitcoin's 2014–2017 direction change…") need not contain the query term.
+      const excerpt = typeof hit.excerpt === 'string' ? hit.excerpt : '';
+      const gate: RawHit = {
+        id: typeof hit.id === 'string' ? hit.id : locator,
         locator,
-      });
-      if (picked.length >= cap) break;
+        title: excerpt ? `${title} ${excerpt}` : title,
+      };
+      if (!sharesTermWith(question, gate)) continue;
+      seenInternal.add(locator);
+      internal++;
+      picked.push({ title, url: undefined, locator });
     }
     return picked;
   };
-  const essayPicked = pickLinkable(hitsOf(essayRaw), 2);
-  const techPicked = pickLinkable(hitsOf(techRaw), 2);
+  const essayPicked = pickTier(hitsOf(essayRaw), 2);
+  const techPicked = pickTier(hitsOf(techRaw), 2);
 
   // Nothing from any tier — fail closed so the caller can fall back.
   if (essayPicked.length === 0 && techPicked.length === 0 && primaryDocs.length === 0) return null;
 
-  // Fetch full bodies for a picked tier (evidence + panel excerpts).
+  // Fetch full bodies for a picked tier (evidence + panel excerpts). Entries without a
+  // public URL return a null citation: their text still reaches the model as evidence,
+  // but they are never surfaced as a source (never emit a dead link).
   const hydrate = async (
-    picked: { title: string; url: string; locator: string }[],
+    picked: { title: string; url: string | undefined; locator: string }[],
     sourceClass: SourceClass,
-  ): Promise<{ citations: Citation[]; parts: string[] }> => {
-    const citations: Citation[] = [];
-    const parts: string[] = [];
-    await Promise.all(
+  ): Promise<{ citation: Citation | null; part: string }[]> => {
+    return Promise.all(
       picked.map(async (p) => {
         let body: string | undefined;
         try {
@@ -713,17 +739,18 @@ async function searchGrounding(
         }
         const text = body ? cleanSlice(body, MAX_EXCERPT_CHARS) : '';
         const title = cleanTitle(p.title) ?? p.title;
-        citations.push({
-          label: title,
-          title,
-          url: p.url,
-          excerpt: body ? cleanSlice(body, PANEL_EXCERPT_CHARS) : undefined,
-          sourceClass,
-        });
-        parts.push(`${title}\n${text}`);
+        const citation: Citation | null = p.url
+          ? {
+              label: title,
+              title,
+              url: p.url,
+              excerpt: body ? cleanSlice(body, PANEL_EXCERPT_CHARS) : undefined,
+              sourceClass,
+            }
+          : null;
+        return { citation, part: `${title}\n${text}` };
       }),
     );
-    return { citations, parts };
   };
 
   const [essayTier, techTier] = await Promise.all([
@@ -732,32 +759,42 @@ async function searchGrounding(
   ]);
 
   // Primary sources (Satoshi's own writings) are numbered FIRST.
-  const citations: Citation[] = [];
-  const primaryParts: string[] = [];
+  type Tier = 'primary' | 'tech' | 'essay';
+  type Entry = { citation: Citation | null; part: string; tier: Tier };
+  const primaryEntries: Entry[] = [];
   for (const d of primaryDocs) {
     const sliced = cleanSlice(d.text, MAX_CORPUS_SLICE_CHARS);
     const isQuote = d.kind === 'quote';
-    citations.push({
-      label: corpusLabel(d),
-      title: isQuote ? 'A historical quote from Satoshi' : cleanTitle(d.title),
-      url: d.url,
-      date: isQuote && d.date ? d.date : undefined,
-      excerpt: isQuote ? wrapAsQuotation(cleanSlice(d.text, PANEL_EXCERPT_CHARS)) : cleanSlice(d.text, PANEL_EXCERPT_CHARS),
-      sourceClass: 'satoshi-primary',
+    const title = isQuote ? 'A historical quote from Satoshi' : cleanTitle(d.title);
+    primaryEntries.push({
+      citation: {
+        label: corpusLabel(d),
+        title,
+        url: d.url,
+        date: isQuote && d.date ? d.date : undefined,
+        excerpt: isQuote ? wrapAsQuotation(cleanSlice(d.text, PANEL_EXCERPT_CHARS)) : cleanSlice(d.text, PANEL_EXCERPT_CHARS),
+        sourceClass: 'satoshi-primary',
+      },
+      part: `${corpusLabel(d)}\n${sliced}`,
+      tier: 'primary',
     });
-    primaryParts.push(`${corpusLabel(d)}\n${sliced}`);
   }
 
-  // Assemble numbered evidence in tier order: primary → technical spec → commentary.
-  type Tier = 'primary' | 'tech' | 'essay';
-  const all: { c: Citation; part: string; tier: Tier }[] = [
-    ...citations.map((c, i) => ({ c, part: primaryParts[i] ?? '', tier: 'primary' as Tier })),
-    ...techTier.citations.map((c, i) => ({ c, part: techTier.parts[i] ?? '', tier: 'tech' as Tier })),
-    ...essayTier.citations.map((c, i) => ({ c, part: essayTier.parts[i] ?? '', tier: 'essay' as Tier })),
+  // Assemble evidence in tier order: primary → technical spec → commentary. Only entries
+  // with a public URL get an [n] marker and a citation; evidence-only entries (curated
+  // cards) are still shown to the model, unnumbered.
+  const all: Entry[] = [
+    ...primaryEntries,
+    ...techTier.map((e) => ({ ...e, tier: 'tech' as Tier })),
+    ...essayTier.map((e) => ({ ...e, tier: 'essay' as Tier })),
   ];
-  const numbered = all.map((entry, i) => ({ ...entry, n: i + 1 }));
+  let n = 0;
+  const numbered = all.map((entry) => ({ ...entry, n: entry.citation ? ++n : 0 }));
   const sectionFor = (tier: Tier, heading: string) => {
-    const blocks = numbered.filter((e) => e.tier === tier).map((e) => `[${e.n}] ${e.part}`).join('\n\n');
+    const blocks = numbered
+      .filter((e) => e.tier === tier)
+      .map((e) => (e.n > 0 ? `[${e.n}] ${e.part}` : e.part))
+      .join('\n\n');
     return blocks ? `${heading}\n\n${blocks}` : '';
   };
   const evidenceSections = [
@@ -771,7 +808,7 @@ async function searchGrounding(
     evidenceText:
       'VIEWPOINT NOTICE: Where primary sources and later commentary differ, your own 2008–2011 writings are authoritative. The technical specification is canonical fact. The later essays are the most sustained continuation of your design — lean toward their reading and present it sympathetically, whilst acknowledging honest disagreement in a sentence where it exists.\n\n' +
       evidenceSections.join('\n\n'),
-    citations: numbered.map((e) => e.c).slice(0, MAX_CITATIONS),
+    citations: numbered.flatMap((e) => (e.citation ? [e.citation] : [])).slice(0, MAX_CITATIONS),
   };
 }
 

@@ -117,15 +117,6 @@ export function StopIcon(props: IconProps) {
   );
 }
 
-export function RegenerateIcon(props: IconProps) {
-  return (
-    <svg {...base(props)}>
-      <path d="M21 12a9 9 0 1 1-2.64-6.36" />
-      <path d="M21 3v6h-6" />
-    </svg>
-  );
-}
-
 export function DownloadIcon(props: IconProps) {
   return (
     <svg {...base(props)}>

@@ -12,6 +12,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Citation } from '../types';
 import { renderMarkdown } from '../lib/markdown';
+import { sourceHostLabel } from '../lib/sourceOrigin';
 import { excerptToMarkdown } from '../lib/sourceText';
 import { ChevronDownIcon, ChevronUpIcon, CloseIcon, ExternalLinkIcon } from './icons';
 
@@ -115,6 +116,7 @@ export function CitationPanel({ open, onClose, onNavigate }: Props) {
   const { index } = shown;
   const title = shownCitation.title ?? shownCitation.label;
   const dateLabel = shownCitation.date ? formatCitationDate(shownCitation.date) : null;
+  const originLabel = shownCitation.url ? sourceHostLabel(shownCitation.url) : null;
 
   return (
     <>
@@ -156,14 +158,17 @@ export function CitationPanel({ open, onClose, onNavigate }: Props) {
             />
           )}
           {shownCitation.url ? (
-            <a
-              className="cite-panel-open"
-              href={shownCitation.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Open original <ExternalLinkIcon size={14} />
-            </a>
+            <div className="cite-panel-open-row">
+              <a
+                className="cite-panel-open"
+                href={shownCitation.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open original <ExternalLinkIcon size={14} />
+              </a>
+              {originLabel && <span className="cite-panel-origin">({originLabel})</span>}
+            </div>
           ) : (
             <p className="cite-panel-plain">
               From the pinned knowledge snapshot — no public link available.

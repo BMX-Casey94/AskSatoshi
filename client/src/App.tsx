@@ -228,7 +228,9 @@ export function App() {
 
     void streamChat(historyPayload, sentImage, {
       onStatus: (status) => {
-        if (status.phase === 'warming') setChatPhase('warming');
+        // 'warming' pins the warm-up line; the server's follow-up status hands back
+        // to the normal progress cycle once the warm-up window closes.
+        setChatPhase(status.phase === 'warming' ? 'warming' : 'typing');
       },
       onDelta: (delta) => {
         setAwaitingFirstToken(false);
@@ -274,27 +276,6 @@ export function App() {
   };
 
   const handleStop = () => abortRef.current?.abort();
-
-  const handleRegenerate = () => {
-    if (!activeThread || sending || asleep) return;
-    const lastUser = [...activeThread.messages].reverse().find((m) => m.role === 'user');
-    if (!lastUser) return;
-    // Drop the last assistant answer and resend the last question.
-    setStore((s) => ({
-      ...s,
-      threads: s.threads.map((t) =>
-        t.id === t.id && s.activeThreadId === t.id
-          ? {
-              ...t,
-              messages: t.messages.filter(
-                (m, i) => !(i === t.messages.length - 1 && m.role === 'assistant'),
-              ),
-            }
-          : t,
-      ),
-    }));
-    window.setTimeout(() => send(lastUser.content), 0);
-  };
 
   // Retry a failed exchange: drop the error answer and its question, then resend the question.
   const handleRetry = (failedAssistantId: string) => {
@@ -367,12 +348,6 @@ export function App() {
 
   // ---- render -----------------------------------------------------------------------
 
-  const canRegenerate =
-    !!activeThread &&
-    activeThread.messages.length >= 2 &&
-    activeThread.messages[activeThread.messages.length - 1]?.role === 'assistant' &&
-    !activeThread.messages[activeThread.messages.length - 1]?.streaming;
-
   return (
     <div className="app">
       {view === 'landing' || !activeThread ? (
@@ -429,9 +404,7 @@ export function App() {
           onComposerChange={setComposer}
           onSubmit={() => send()}
           onStop={handleStop}
-          onRegenerate={handleRegenerate}
           onRetry={handleRetry}
-          canRegenerate={canRegenerate}
           asleep={asleep}
           retryAfter={retryAfter}
           sleepLines={sleepLines}

@@ -8,7 +8,7 @@ import { Composer } from './Composer';
 import { MessageList } from './MessageList';
 import { SleepBanner } from './SleepBanner';
 import { ThemeToggle } from './ThemeToggle';
-import { CloseIcon, DownloadIcon, HomeIcon, MenuIcon, PlusIcon, RegenerateIcon } from './icons';
+import { CloseIcon, DownloadIcon, HomeIcon, MenuIcon, PlusIcon } from './icons';
 
 interface Props {
   messages: Message[];
@@ -19,9 +19,7 @@ interface Props {
   onComposerChange: (v: string) => void;
   onSubmit: () => void;
   onStop: () => void;
-  onRegenerate: () => void;
   onRetry: (failedAssistantId: string) => void;
-  canRegenerate: boolean;
   asleep: boolean;
   retryAfter?: string;
   sleepLines?: string[];
@@ -66,17 +64,6 @@ export function ChatView(props: Props) {
               title="Export chat as Markdown"
             >
               <DownloadIcon size={18} />
-            </button>
-          )}
-          {props.canRegenerate && !props.sending && (
-            <button
-              type="button"
-              className="icon-btn"
-              onClick={props.onRegenerate}
-              aria-label="Regenerate last answer"
-              title="Regenerate last answer"
-            >
-              <RegenerateIcon size={18} />
             </button>
           )}
           <button type="button" className="icon-btn" onClick={props.onNewChat} aria-label="New chat" title="New chat">
@@ -127,10 +114,7 @@ export function ChatView(props: Props) {
         />
         {props.asleep && <SleepBanner retryAfter={props.retryAfter} lines={props.sleepLines} />}
         <p className="chat-footnote">
-          Answers are grounded in the cited sources.{' '}
-          <span className="disclaimer-rest">
-            Free to use; chats stay on your device.
-          </span>
+          Answers are grounded in the cited sources. Free to use; chats stay on your device.
         </p>
       </div>
     </div>

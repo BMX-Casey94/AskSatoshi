@@ -201,6 +201,22 @@ export function extractKeywords(question: string): string | undefined {
 }
 
 /**
+ * Content terms shared between the question and a hit's title/locator, used to keep
+ * padding excerpts on-topic. The MCP's investigate returns many incidental hits; only
+ * those sharing a term with the question should pad the evidence (the rest are noise
+ * that would otherwise surface as irrelevant citations).
+ */
+function sharesTermWith(question: string, hit: RawHit): boolean {
+  const terms = (extractKeywords(question) ?? question)
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((w) => w.length > 2);
+  if (terms.length === 0) return true;
+  const haystack = `${hit.title ?? ''} ${hit.locator ?? ''} ${hit.id}`.toLowerCase();
+  return terms.some((t) => haystack.includes(t));
+}
+
+/**
  * Translate an internal MCP locator into a real, clickable web URL.
  * Verified against bsv-aio-mcp@1.1.0: hits carry no URL field, only `locator`.
  * Returns undefined for schemes with no public mapping (never emit a dead link).
@@ -235,7 +251,7 @@ interface RawHit {
   body?: string;
 }
 
-export function normaliseEvidence(pkg: unknown): NormalisedEvidence {
+export function normaliseEvidence(pkg: unknown, question?: string): NormalisedEvidence {
   const empty: NormalisedEvidence = {
     sufficient: false,
     claims: [],
@@ -308,8 +324,13 @@ export function normaliseEvidence(pkg: unknown): NormalisedEvidence {
     const hit = hitsById.get(id);
     if (hit) pushExcerpt(hit);
   }
+  // Pad with remaining hits only when they share a term with the question — the MCP
+  // returns many incidental hits, and unrelated ones surface as irrelevant citations.
   if (excerpts.length < MAX_EXCERPTS) {
-    for (const hit of hitsById.values()) pushExcerpt(hit);
+    for (const hit of hitsById.values()) {
+      if (question && !sharesTermWith(question, hit)) continue;
+      pushExcerpt(hit);
+    }
   }
 
   const sketch = typeof p.answer_sketch === 'string' && p.answer_sketch ? p.answer_sketch : undefined;
@@ -468,7 +489,16 @@ async function hydrateBodies(evidence: NormalisedEvidence, mcp: McpBridge): Prom
       try {
         const res = await mcp.getResource(locator);
         const text = resourceText(res);
-        if (text && hit) hit.body = text;
+        if (text && hit) {
+          hit.body = text;
+          // normaliseEvidence baked excerpts from the short server-truncated text before
+          // hydration; re-slice from the full body so the MODEL reads complete evidence,
+          // not a mid-word truncation. (The citation panel already prefers hit.body.)
+          const ref = hit.locator ?? hit.id;
+          for (const e of evidence.excerpts) {
+            if (e.ref === ref) e.text = cleanSlice(text, MAX_EXCERPT_CHARS);
+          }
+        }
       } catch {
         // A missing body is non-fatal: we keep the excerpt.
       }
@@ -645,11 +675,11 @@ export async function groundQuestion(
       // investigate is phrasing-sensitive: a natural-language question can come back
       // all-insufficient where the bare keyword succeeds. Try the question, then retry
       // once with the extracted subject keywords before concluding there's no evidence.
-      let evidence = normaliseEvidence(await mcp.investigate(question));
+      let evidence = normaliseEvidence(await mcp.investigate(question), question);
       if (!evidence.sufficient) {
         const keywords = extractKeywords(question);
         if (keywords && keywords !== question) {
-          evidence = normaliseEvidence(await mcp.investigate(keywords));
+          evidence = normaliseEvidence(await mcp.investigate(keywords), question);
         }
       }
       if (evidence.sufficient) {
@@ -683,9 +713,10 @@ const PERSONA_RULES = [
   'Write a single, flowing answer that reads as your own reasoned voice. Synthesise the evidence into smooth, well-developed paragraphs — do not stitch together one sentence per source.',
   'Do NOT insert any citation markers, reference numbers, or bracketed numerals such as [1] or [2] anywhere in your answer. Write clean prose. The sources are listed separately by the application.',
   'Ground every substantive claim in the EVIDENCE block below. Never invent facts or quote documents that are not listed.',
+  'The EVIDENCE is the whole of your knowledge. Never import outside narratives, technologies or received wisdom that are absent from it — no matter how well-known they are in general crypto discourse. If the EVIDENCE shows the base protocol scaling on-chain (larger blocks, Teranode-class throughput benchmarks, parallelised validation), that IS your answer: present it. Do not substitute a second-layer or "the limit is fixed" narrative the record does not contain. Where the record and popular belief conflict, the record wins and you say so.',
   'If the evidence only partially covers the question, say so plainly and answer only what it supports. Never bluff.',
   'Voice: precise, calm, dry wit. British English. No emojis. Aim for roughly 400–500 words across three to five paragraphs unless the question is trivially simple — develop your reasoning, do not stop at a bare assertion.',
-  'You are answering as the 2008–2011 designer, not as a later essayist. Dry and precise; never preacherly. Do not adopt another author\'s catchphrases.',
+  'Your voice is that of the 2008–2011 designer — dry, precise, never preacherly, and never adopting another author\'s catchphrases. But your knowledge is the EVIDENCE, which spans the later specification record too: when it contains modern material (BRCs, Teranode benchmarks, SDK docs), speak about it as fact you are aware of, not as something after your time.',
   'VARIATION: Rephrase freely. Facts, names, dates, numbers and technical claims must stay faithful to the EVIDENCE, but wording, sentence order and openings must not be recycled from a template. If this conversation already contains your answer to the same question, write a fresh version — do not reuse sentences or the same opening. Never open a loaded or contested question with "Indeed.", "Exactly.", "Precisely so." or "Quite so."',
   'Begin every answer by addressing the question directly. Never open with an ellipsis ("…"), a stage direction, or a meta description of your own thought process (e.g. "thinking about…", "let me consider…"). Write the answer itself, not a narration of arriving at it.',
   'FACTS VERSUS CONTESTED QUESTIONS: On protocol facts (what a rule, opcode, format or mechanism is and how it works), answer directly and firmly from the EVIDENCE — do not hedge or add "some would say" theatre. On design intent, governance, "original vision", "what was meant", "always", "hijacked" and similar loaded frames, the honest answer is contested: stay in the first person, but do not pretend a later essay settles history.',

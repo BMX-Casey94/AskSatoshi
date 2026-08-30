@@ -175,6 +175,35 @@ describe('normaliseEvidence', () => {
     expect(normaliseEvidence('nonsense').sufficient).toBe(false);
     expect(normaliseEvidence({ raw: 'plain text' }).sufficient).toBe(false);
   });
+
+  it('keeps padding excerpts on-topic when a question is given', () => {
+    // The claim is backed by a Teranode hit; the package also carries an unrelated
+    // wallet-onboarding hit. Padding must not pull the unrelated hit into the evidence.
+    const pkg = {
+      claims: [
+        { text: 'Teranode sustained 1M TPS.', support: ['doc:teranode'], status: 'supports' },
+      ],
+      hits: [
+        { id: 'doc:teranode', locator: 'doc:teranode:bench', title: 'Teranode throughput benchmarks', excerpt: 'sustained 1 million TPS' },
+        { id: 'brc:137', locator: 'bsv-blockchain/BRCs/wallet/0137.md', title: 'Device-Aware Wallet Onboarding', excerpt: 'wallet login fallback' },
+      ],
+    };
+    const e = normaliseEvidence(pkg, 'how do I scale bitcoin for more transactions per second?');
+    expect(e.excerpts.some((x) => x.ref === 'doc:teranode:bench')).toBe(true);
+    expect(e.excerpts.some((x) => x.ref === 'bsv-blockchain/BRCs/wallet/0137.md')).toBe(false);
+  });
+
+  it('pads freely when no question is supplied (back-compat)', () => {
+    const pkg = {
+      claims: [{ text: 'X.', support: ['a'], status: 'supports' }],
+      hits: [
+        { id: 'a', locator: 'brc://spec/1', excerpt: 'one' },
+        { id: 'b', locator: 'brc://spec/2', excerpt: 'two' },
+      ],
+    };
+    const e = normaliseEvidence(pkg);
+    expect(e.excerpts.length).toBe(2);
+  });
 });
 
 describe('groundQuestion routing', () => {

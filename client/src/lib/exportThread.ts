@@ -27,7 +27,7 @@ export function exportThreadMarkdown(thread: Thread): string {
   lines.push(`# ${thread.title}`);
   lines.push('');
   lines.push(
-    `_Exported from Ask Satoshi — an AI speaking in Satoshi's voice, not Satoshi Nakamoto. ${fmtDate(thread.updatedAt)}._`,
+    `_Exported from Ask Satoshi. ${fmtDate(thread.updatedAt)}._`,
   );
   lines.push('');
   lines.push('---');

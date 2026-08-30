@@ -127,10 +127,9 @@ export function ChatView(props: Props) {
         />
         {props.asleep && <SleepBanner retryAfter={props.retryAfter} lines={props.sleepLines} />}
         <p className="chat-footnote">
-          An AI speaking in Satoshi's voice — not Satoshi Nakamoto. Answers are grounded in the cited
-          sources.{' '}
+          Answers are grounded in the cited sources.{' '}
           <span className="disclaimer-rest">
-            Free to use; chats are saved locally on your device.
+            Free to use; chats stay on your device.
           </span>
         </p>
       </div>

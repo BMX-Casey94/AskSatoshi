@@ -415,8 +415,8 @@ export function App() {
             <Suggestions onPick={(q) => send(q)} disabled={asleep || sending} />
           </div>
           <footer className="landing-footer">
-            An AI speaking in Satoshi's voice — not Satoshi Nakamoto. Free to use; chats are saved
-            locally on your device.
+            Grounded in the writings and the protocol record. Free to use; chats stay on your
+            device.
           </footer>
         </main>
       ) : (

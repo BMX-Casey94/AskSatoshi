@@ -219,6 +219,14 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
     finish();
   };
 
+  // If the MCP child is still waking up, tell the client and give it a short window
+  // before we fall back to the corpus. This keeps the first answer after idle grounded
+  // without ever hanging the request.
+  if (!mcp.connected) {
+    sseWrite(res, 'status', { phase: 'warming' });
+    await mcp.waitUntilConnected();
+  }
+
   // Prior user question (for contextualising follow-ups) and whether this is a
   // standalone question we may safely cache.
   const priorMessages = messages.slice(0, -1);

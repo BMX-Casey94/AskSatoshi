@@ -14,7 +14,7 @@ simple, accurate and fast are welcome.
 ## Getting started
 
 ```bash
-npm run install:all   # install server + client deps
+npm install           # workspaces: installs server + client together
 cp .env.example .env  # add your own free API keys (Gemini / Groq / OpenRouter)
 npm run fetch-corpus  # pin the Satoshi writings corpus
 npm run dev           # run server (:8787) + client (:5173)

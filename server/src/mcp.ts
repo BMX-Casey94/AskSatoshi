@@ -13,6 +13,9 @@ import { StdioClientTransport, getDefaultEnvironment } from '@modelcontextprotoc
 
 const INVESTIGATE_TIMEOUT_MS = 12_000;
 const RECONNECT_DELAY_MS = 5_000;
+/** How long a chat request may wait for a cold MCP child to become ready. */
+const WARMUP_TIMEOUT_MS = 4_000;
+const WARMUP_POLL_MS = 100;
 
 /** Resolve the installed bsv-aio-mcp entry point without assuming its layout. */
 export function resolveMcpEntry(): string {
@@ -71,6 +74,20 @@ export class McpBridge {
   private intentionallyClosed = false;
 
   get connected(): boolean {
+    return this.client !== null;
+  }
+
+  /**
+   * Give a cold start a short window to come up before we fall back to the corpus.
+   * Never throws — a still-missing MCP is handled downstream.
+   */
+  async waitUntilConnected(timeoutMs = WARMUP_TIMEOUT_MS): Promise<boolean> {
+    if (this.client) return true;
+    const deadline = Date.now() + timeoutMs;
+    while (Date.now() < deadline) {
+      if (this.client) return true;
+      await new Promise((resolve) => setTimeout(resolve, WARMUP_POLL_MS));
+    }
     return this.client !== null;
   }
 

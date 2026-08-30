@@ -27,8 +27,10 @@ Browser (Vite + React)                Node.js backend (Express)
                                       └────────────────────────────────────────┘
 ```
 
-The MCP server is stdio-only, so the backend keeps it alive as a long-running child process
-and speaks to it with the official MCP SDK. All model API keys stay server-side.
+The MCP server is stdio-only, so the backend starts it as a child process and speaks to it
+with the official MCP SDK. On a long-running host that child stays up. On Vercel it is
+started when an instance wakes and is gone again after idle — when it is not ready, answers
+fall back to Satoshi's own writings. All model API keys stay server-side.
 
 ## Setup
 
@@ -78,9 +80,9 @@ override — and set your keys under Project → Environment Variables (`GEMINI_
 
 Caveats of the serverless model:
 
-- The BSV-AIO-MCP child process is best-effort: it lives while an instance is warm but does
-  not survive cold starts. When it is down, answers fall back to Satoshi's own posts and
-  e-mails (the pinned corpus) — the site stays up, grounding is just thinner.
+- The BSV knowledge helper is a separate program the server starts. On Vercel it is only
+  there while an instance is awake; after idle it has to start again. If it is not ready,
+  the site still answers from Satoshi's own posts and e-mails — grounding is just thinner.
 - Rate limits, the quota breaker and the answer cache are in-memory, so they apply per
   function instance rather than globally.
 - Function duration caps apply to chat streams (plan-dependent).

@@ -31,15 +31,12 @@ function threadTitle(firstQuestion: string): string {
 
 export function App() {
   const [store, setStore] = useState(loadStore);
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    const saved = loadStore().theme;
-    if (saved) return saved;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  });
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => loadStore().theme ?? 'light');
   const [composer, setComposer] = useState('');
   const [composerFocused, setComposerFocused] = useState(false);
   const [sending, setSending] = useState(false);
   const [awaitingFirstToken, setAwaitingFirstToken] = useState(false);
+  const [chatPhase, setChatPhase] = useState<'warming' | 'typing'>('typing');
   const [awakeState, setAwakeState] = useState<AwakeState>('awake');
   const [retryAfter, setRetryAfter] = useState<string | undefined>();
   const [sleepLines, setSleepLines] = useState<string[] | undefined>();
@@ -209,6 +206,7 @@ export function App() {
     setImage(null);
     setSending(true);
     setAwaitingFirstToken(true);
+    setChatPhase('typing');
 
     const controller = new AbortController();
     abortRef.current = controller;
@@ -229,8 +227,12 @@ export function App() {
     };
 
     void streamChat(historyPayload, sentImage, {
+      onStatus: (status) => {
+        if (status.phase === 'warming') setChatPhase('warming');
+      },
       onDelta: (delta) => {
         setAwaitingFirstToken(false);
+        setChatPhase('typing');
         setStore((s) => ({
           ...s,
           threads: s.threads.map((t) =>
@@ -421,6 +423,7 @@ export function App() {
         <ChatView
           messages={activeThread.messages}
           awaitingFirstToken={awaitingFirstToken}
+          chatPhase={chatPhase}
           sending={sending}
           composerValue={composer}
           onComposerChange={setComposer}

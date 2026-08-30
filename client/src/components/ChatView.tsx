@@ -13,6 +13,7 @@ import { CloseIcon, DownloadIcon, HomeIcon, MenuIcon, PlusIcon, RegenerateIcon }
 interface Props {
   messages: Message[];
   awaitingFirstToken: boolean;
+  chatPhase: 'warming' | 'typing';
   sending: boolean;
   composerValue: string;
   onComposerChange: (v: string) => void;
@@ -87,6 +88,7 @@ export function ChatView(props: Props) {
       <MessageList
         messages={props.messages}
         awaitingFirstToken={props.awaitingFirstToken}
+        chatPhase={props.chatPhase}
         onRetry={props.onRetry}
         sending={props.sending}
       />
@@ -126,7 +128,10 @@ export function ChatView(props: Props) {
         {props.asleep && <SleepBanner retryAfter={props.retryAfter} lines={props.sleepLines} />}
         <p className="chat-footnote">
           An AI speaking in Satoshi's voice — not Satoshi Nakamoto. Answers are grounded in the cited
-          sources. Free to use; chats are saved locally on your device.
+          sources.{' '}
+          <span className="disclaimer-rest">
+            Free to use; chats are saved locally on your device.
+          </span>
         </p>
       </div>
     </div>

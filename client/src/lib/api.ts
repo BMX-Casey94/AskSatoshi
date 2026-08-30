@@ -10,6 +10,8 @@ export interface ChatHandlers {
   onMeta: (meta: { mode?: string; citations?: Citation[]; tier?: string }) => void;
   onError: (err: { code: string; message: string; retryAfter?: string }) => void;
   onDone: () => void;
+  /** Pre-grounding status, e.g. the MCP child is still waking up. */
+  onStatus?: (status: { phase?: string }) => void;
 }
 
 interface ChatMessagePayload {
@@ -84,6 +86,9 @@ export async function streamChat(
         break;
       case 'meta':
         handlers.onMeta(payload as { mode?: string; citations?: Citation[]; tier?: string });
+        break;
+      case 'status':
+        handlers.onStatus?.(payload as { phase?: string });
         break;
       case 'error':
         handlers.onError({

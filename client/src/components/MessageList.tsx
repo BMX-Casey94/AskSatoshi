@@ -20,11 +20,12 @@ const SOURCE_CLASS_LABEL: Record<SourceClass, string> = {
 interface Props {
   messages: Message[];
   awaitingFirstToken: boolean;
+  chatPhase: 'warming' | 'typing';
   onRetry?: (failedAssistantId: string) => void;
   sending?: boolean;
 }
 
-export function MessageList({ messages, awaitingFirstToken, onRetry, sending }: Props) {
+export function MessageList({ messages, awaitingFirstToken, chatPhase, onRetry, sending }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [pinned, setPinned] = useState(true);
   const [openCite, setOpenCite] = useState<{ citation: Citation; index: number } | null>(null);
@@ -105,7 +106,7 @@ export function MessageList({ messages, awaitingFirstToken, onRetry, sending }: 
             </div>
           ),
         )}
-        {awaitingFirstToken && <TypingIndicator />}
+        {awaitingFirstToken && <TypingIndicator phase={chatPhase} />}
       </div>
       <CitationPanel open={openCite} onClose={() => setOpenCite(null)} />
       {!pinned && (

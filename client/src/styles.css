@@ -858,6 +858,12 @@ button:disabled {
   color: var(--text-muted);
 }
 
+@media (min-width: 601px) {
+  .disclaimer-rest {
+    display: block;
+  }
+}
+
 /* One-time local-storage privacy note above the composer. */
 .storage-note {
   display: flex;

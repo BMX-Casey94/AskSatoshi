@@ -13,6 +13,12 @@ import { StdioClientTransport, getDefaultEnvironment } from '@modelcontextprotoc
 
 const INVESTIGATE_TIMEOUT_MS = 12_000;
 const RECONNECT_DELAY_MS = 5_000;
+/**
+ * The initialize handshake must outlast the child's first-boot SQLite ingest. On a
+ * throttled serverless CPU that can take minutes (the SDK default of 60s is not
+ * enough); once the index is cached in the instance's tmpdir, warm boots are fast.
+ */
+const CONNECT_TIMEOUT_MS = 300_000;
 /** How long a chat request may wait for a cold MCP child to become ready. */
 const WARMUP_TIMEOUT_MS = 4_000;
 const WARMUP_POLL_MS = 100;
@@ -124,12 +130,15 @@ export class McpBridge {
     };
 
     try {
-      await client.connect(transport);
+      await client.connect(transport, { timeout: CONNECT_TIMEOUT_MS });
       this.lastError = null;
     } catch (err) {
       const detail = stderr.join('').trim();
       const message = `MCP child failed to start (entry ${entry})${detail ? `: ${detail.slice(-500)}` : ''}`;
       this.lastError = err instanceof Error ? `${message} [${err.message}]` : message;
+      // A failed handshake leaves the transport half-open; close it so the child is
+      // reaped and the reconnect loop starts from a clean slate.
+      await client.close().catch(() => undefined);
       throw new Error(message, { cause: err });
     }
 

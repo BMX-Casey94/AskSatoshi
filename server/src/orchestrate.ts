@@ -14,6 +14,7 @@
 
 import type { McpBridge } from './mcp.js';
 import type { SatoshiCorpus, CorpusDoc } from './satoshiCorpus.js';
+import { htmlToText } from './htmlText.js';
 
 /** Where a source sits in the evidentiary hierarchy. */
 export type SourceClass = 'satoshi-primary' | 'spec' | 'later-commentary';
@@ -117,8 +118,9 @@ function cleanTitle(title: string | undefined): string | undefined {
  * ends mid-word and the panel renders real markdown instead of one collapsed block.
  */
 function cleanSlice(text: string, max: number): string {
-  // Normalise newlines and strip frontmatter, but keep the line structure intact.
-  const body = stripFrontmatter(text).replace(/\r/g, '').replace(/[ \t]+\n/g, '\n').trim();
+  // Strip any archive HTML first (MCP bodies are not pre-cleaned like the corpus is),
+  // then normalise newlines and frontmatter, keeping the line structure intact.
+  const body = stripFrontmatter(htmlToText(text)).replace(/\r/g, '').replace(/[ \t]+\n/g, '\n').trim();
   if (body.length <= max) return body;
 
   const window = body.slice(0, max);

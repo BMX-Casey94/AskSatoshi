@@ -31,6 +31,74 @@ async function fetchJson(url) {
   return res.json();
 }
 
+/**
+ * Convert the archive's raw HTML post bodies to plain text. Block-level tags become
+ * line breaks, inline tags vanish, entities are decoded after stripping so a `&lt;`
+ * can never re-form a tag. Keep in sync with server/src/htmlText.ts — this script is
+ * standalone (no src/ imports) by design.
+ */
+// Only known forum tags are stripped (the pinned archive uses exactly: br, div, a,
+// span, i, b, img, del, tt, li, ul) — a generic strip would eat decoded C++ fragments
+// like `#include <stdio.h>`. The (?=[\s/>]) lookahead keeps <break>/<stdio.h> safe.
+const BLOCK_TAGS =
+  /<\/?(?:br|div|p|li|ul|ol|tr|td|th|table|thead|tbody|blockquote|pre|code|h[1-6]|hr)(?=[\s/>])[^>]*>/gi;
+const INLINE_TAGS = /<\/?(?:a|b|i|u|em|strong|span|font|center|small|sub|sup|img|del|tt)(?=[\s/>])[^>]*>/gi;
+const NAMED_ENTITIES = {
+  nbsp: ' ', amp: '&', lt: '<', gt: '>', quot: '"', apos: "'",
+  ndash: '\u2013', mdash: '\u2014', hellip: '\u2026',
+  lsquo: '\u2018', rsquo: '\u2019', ldquo: '\u201C', rdquo: '\u201D',
+  laquo: '\u00AB', raquo: '\u00BB', middot: '\u00B7', bull: '\u2022',
+  copy: '\u00A9', deg: '\u00B0', plusmn: '\u00B1', times: '\u00D7', divide: '\u00F7',
+};
+const fromCode = (n) => (n >= 0 && n <= 0x10ffff ? String.fromCodePoint(n) : '');
+
+/**
+ * Remove other users' quoted replies (`<div class="quoteheader">…</div><div
+ * class="quote">…</div>`, nesting included) so the corpus is Satoshi's voice only.
+ * Depth-tracking scan; an unterminated quote drops the tail rather than risking
+ * misattribution. Must run on raw HTML, before htmlToText.
+ */
+const QUOTE_DIV = /^<div\s+class="(?:quote|quoteheader)(?:\s[^"]*)?"[^>]*>/i;
+const DIV_OPEN = /^<div(?=[\s/>])/i;
+const DIV_CLOSE = /^<\/div\s*>/i;
+
+function stripQuotedReplies(html) {
+  if (!/<div\s+class="quote/i.test(html)) return html;
+  let result = '';
+  let cursor = 0;
+  let depth = 0;
+  const tagRe = /<[^>]+>/g;
+  let m;
+  while ((m = tagRe.exec(html)) !== null) {
+    if (depth === 0) {
+      if (QUOTE_DIV.test(m[0])) {
+        result += html.slice(cursor, m.index);
+        depth = 1;
+      }
+    } else if (DIV_OPEN.test(m[0])) {
+      depth++;
+    } else if (DIV_CLOSE.test(m[0]) && --depth === 0) {
+      cursor = tagRe.lastIndex;
+    }
+  }
+  if (depth === 0) result += html.slice(cursor);
+  return result;
+}
+
+function htmlToText(text) {
+  if (!/</.test(text) && !/&[a-z#]/i.test(text)) return text;
+  return String(text)
+    .replace(/\r/g, '')
+    .replace(BLOCK_TAGS, '\n')
+    .replace(INLINE_TAGS, '')
+    .replace(/&#(\d+);/g, (_m, n) => fromCode(Number(n)))
+    .replace(/&#x([0-9a-f]+);/gi, (_m, h) => fromCode(parseInt(h, 16)))
+    .replace(/&([a-z]+);/gi, (m, name) => NAMED_ENTITIES[name.toLowerCase()] ?? m)
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 /** Strip quoted parent lines, signatures and mailing-list chrome; keep Satoshi's words. */
 function cleanText(text) {
   const lines = String(text).split('\n');
@@ -41,12 +109,16 @@ function cleanText(text) {
     if (/^-{5,}/.test(trimmed)) break; // mailing-list footer marker
     kept.push(line);
   }
-  return kept
-    .join('\n')
-    .replace(/Satoshi Nakamoto\s*(https?:\/\/\S+)?\s*$/m, '')
-    .replace(/The Cryptography Mailing List[\s\S]*$/m, '')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+  return htmlToText(
+    stripQuotedReplies(
+      kept
+        .join('\n')
+        .replace(/Satoshi Nakamoto\s*(https?:\/\/\S+)?\s*$/m, '')
+        .replace(/The Cryptography Mailing List[\s\S]*$/m, '')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim(),
+    ),
+  );
 }
 
 function postSource(url) {

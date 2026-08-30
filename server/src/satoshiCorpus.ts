@@ -8,6 +8,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import MiniSearch from 'minisearch';
+import { htmlToText, stripQuotedReplies } from './htmlText.js';
 
 export interface CorpusDoc {
   id: string;
@@ -31,20 +32,60 @@ export interface CorpusFile {
 /** Minimum BM25 score to treat a hit as relevant; below this we fail closed. */
 const MIN_SCORE = 2;
 
+/**
+ * Terms that carry no retrieval signal for this corpus. Without filtering, a natural
+ * question like "Was the block size always meant to be small?" scores mostly on
+ * "was"/"the"/"always" — every post matches, scores compress, and a thread titled
+ * "Always pay transaction fee?" outranks the actual block-size-limit thread. Standard
+ * English stop words plus question-frame words (always/meant/intended…) that describe
+ * the asker's phrasing rather than the subject matter.
+ */
+const STOP_WORDS = new Set(
+  (
+    'a,an,and,are,as,at,be,been,but,by,for,from,had,has,have,he,her,his,how,i,if,in,into,is,it,its,' +
+    'me,my,not,of,on,or,so,that,the,their,them,they,this,to,was,we,were,what,when,which,who,why,will,' +
+    'with,you,your,do,does,did,can,could,should,would,there,here,than,then,too,very,just,about,again,' +
+    'once,such,no,nor,only,own,same,some,any,all,each,other,more,most,much,many,up,down,out,off,am,' +
+    'always,meant,mean,means,intended,intend,supposed,really,actually,original,originally,ever,never,' +
+    'still,even,say,said,tell,told,know,known,want,wanted,like,may,might,must,shall,thing,things,way,' +
+    'make,made,take,get,got'
+  ).split(','),
+);
+
+/** Lowercase (MiniSearch's default) plus stop-word and stray-single-letter removal. */
+function processTerm(term: string): string | null {
+  const t = term.toLowerCase();
+  if (STOP_WORDS.has(t)) return null;
+  if (t.length === 1 && !/\d/.test(t)) return null;
+  return t;
+}
+
 export class SatoshiCorpus {
   private readonly mini: MiniSearch<CorpusDoc>;
 
   constructor(documents: CorpusDoc[]) {
+    // Normalise at ingest: the pinned archive stores posts as raw HTML, which would
+    // otherwise pollute the index with tag tokens and leak into excerpts shown to
+    // the user (the client renders markdown with raw HTML disabled). Quoted replies
+    // are cut first — the corpus is Satoshi's voice only, and other users' words must
+    // neither be indexed as his nor shown as his in citations.
+    const cleaned = documents.map((d) => ({
+      ...d,
+      title: htmlToText(d.title),
+      text: htmlToText(stripQuotedReplies(d.text)),
+    }));
     this.mini = new MiniSearch<CorpusDoc>({
       fields: ['title', 'text'],
       storeFields: ['id', 'kind', 'title', 'date', 'url', 'text'],
+      processTerm,
       searchOptions: {
-        boost: { title: 2 },
+        // The corpus's strongest signal is the thread title; body text is noisy.
+        boost: { title: 3 },
         prefix: true,
         fuzzy: 0.1,
       },
     });
-    this.mini.addAll(documents);
+    this.mini.addAll(cleaned);
   }
 
   search(question: string, limit = 3): CorpusDoc[] {

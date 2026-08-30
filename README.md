@@ -81,8 +81,10 @@ override — and set your keys under Project → Environment Variables (`GEMINI_
 Caveats of the serverless model:
 
 - The BSV knowledge helper is a separate program the server starts. On Vercel it is only
-  there while an instance is awake; after idle it has to start again. If it is not ready,
-  the site still answers from Satoshi's own posts and e-mails — grounding is just thinner.
+  there while an instance is awake; after idle it has to start again. The first question
+  after idle waits a few seconds for it to wake (the UI shows "Just grabbing my notepad"
+  meanwhile); if it is still not ready after that, the site answers from Satoshi's own
+  posts and e-mails — grounding is just thinner.
 - Rate limits, the quota breaker and the answer cache are in-memory, so they apply per
   function instance rather than globally.
 - Function duration caps apply to chat streams (plan-dependent).

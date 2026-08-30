@@ -28,7 +28,7 @@ interface Props {
 export function MessageList({ messages, awaitingFirstToken, chatPhase, onRetry, sending }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [pinned, setPinned] = useState(true);
-  const [openCite, setOpenCite] = useState<{ citation: Citation; index: number } | null>(null);
+  const [openCite, setOpenCite] = useState<{ citations: Citation[]; index: number } | null>(null);
 
   useEffect(() => {
     if (!pinned) return;
@@ -79,14 +79,14 @@ export function MessageList({ messages, awaitingFirstToken, chatPhase, onRetry, 
                         <BookIcon size={13} /> Sources
                       </span>
                       <ol className="sources-list">
-                        {m.citations.map((c, i) => {
+                        {m.citations.map((c, i, all) => {
                           const label = c.title ?? c.label;
                           return (
                             <li key={`${m.id}-cite-${i}`} className="source-item">
                               <button
                                 type="button"
                                 className="source-link"
-                                onClick={() => setOpenCite({ citation: c, index: i + 1 })}
+                                onClick={() => setOpenCite({ citations: all, index: i + 1 })}
                               >
                                 {c.sourceClass && (
                                   <span className={`source-chip source-chip--${c.sourceClass}`}>
@@ -108,7 +108,15 @@ export function MessageList({ messages, awaitingFirstToken, chatPhase, onRetry, 
         )}
         {awaitingFirstToken && <TypingIndicator phase={chatPhase} />}
       </div>
-      <CitationPanel open={openCite} onClose={() => setOpenCite(null)} />
+      <CitationPanel
+        open={openCite}
+        onClose={() => setOpenCite(null)}
+        onNavigate={(idx) =>
+          setOpenCite((s) =>
+            s && idx >= 1 && idx <= s.citations.length ? { ...s, index: idx } : s,
+          )
+        }
+      />
       {!pinned && (
         <button
           type="button"

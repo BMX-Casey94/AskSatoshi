@@ -99,6 +99,13 @@ export class McpBridge {
       env: getDefaultEnvironment(),
       stderr: 'pipe',
     });
+    // Surface the child's stderr on failure — on a serverless instance a missing
+    // snapshot or a spawn error is otherwise invisible until every question fails.
+    const stderr: string[] = [];
+    transport.stderr?.on('data', (chunk: Buffer) => {
+      stderr.push(chunk.toString());
+      if (stderr.join('').length > 8_000) stderr.shift();
+    });
     const client = new Client(
       { name: 'ask-satoshi', version: '1.0.0' },
       { capabilities: {} },
@@ -110,7 +117,15 @@ export class McpBridge {
       if (!this.intentionallyClosed) this.scheduleReconnect();
     };
 
-    await client.connect(transport);
+    try {
+      await client.connect(transport);
+    } catch (err) {
+      const detail = stderr.join('').trim();
+      throw new Error(
+        `MCP child failed to start (entry ${entry})${detail ? `: ${detail.slice(-500)}` : ''}`,
+        { cause: err },
+      );
+    }
 
     // Discover the investigate tool's argument name rather than assuming it.
     const { tools } = await client.listTools();

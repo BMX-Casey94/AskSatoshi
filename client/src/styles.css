@@ -671,8 +671,17 @@ button:disabled {
   box-shadow: -16px 0 48px rgba(0, 0, 0, 0.22);
   z-index: 90;
   padding: 20px 22px;
-  overflow-y: auto;
+  /* The body wrapper scrolls instead, so the nav buttons stay pinned. */
+  overflow: hidden;
   animation: cite-slide 0.22s cubic-bezier(0.32, 0.72, 0.35, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cite-panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -813,6 +822,68 @@ button:disabled {
   margin: 0;
   font-size: 0.82rem;
   color: var(--text-muted);
+}
+
+/* Full-width Previous/Next buttons pinned to the panel's top and bottom. */
+.cite-nav {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  flex-shrink: 0;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+.cite-nav:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.cite-nav:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.cite-nav-num {
+  margin-left: auto;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Source-to-source flow: content scrolls vertically towards the target number. */
+.cite-panel-body--out-next {
+  animation: cite-swap-out-next 0.16s ease-in forwards;
+}
+.cite-panel-body--in-next {
+  animation: cite-swap-in-next 0.22s cubic-bezier(0.32, 0.72, 0.35, 1);
+}
+.cite-panel-body--out-prev {
+  animation: cite-swap-out-prev 0.16s ease-in forwards;
+}
+.cite-panel-body--in-prev {
+  animation: cite-swap-in-prev 0.22s cubic-bezier(0.32, 0.72, 0.35, 1);
+}
+@keyframes cite-swap-out-next {
+  to { transform: translateY(-18px); opacity: 0; }
+}
+@keyframes cite-swap-in-next {
+  from { transform: translateY(18px); opacity: 0; }
+}
+@keyframes cite-swap-out-prev {
+  to { transform: translateY(18px); opacity: 0; }
+}
+@keyframes cite-swap-in-prev {
+  from { transform: translateY(-18px); opacity: 0; }
 }
 
 @keyframes cite-slide {

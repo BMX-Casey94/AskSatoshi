@@ -2,5 +2,14 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "express",
   "buildCommand": "npm run build",
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "functions": {
+    "index.js": {
+      "includeFiles": [
+        "node_modules/bsv-aio-mcp/**",
+        "server/node_modules/bsv-aio-mcp/**",
+        "server/data/**"
+      ]
+    }
+  }
 }

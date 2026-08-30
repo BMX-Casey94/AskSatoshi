@@ -40,6 +40,27 @@ export const WITTY: Record<ErrorCode, string> = {
     "I dug through my old posts and emails and found nothing on that. Try me on Bitcoin's design, Script, SPV, or the BRCs.",
 };
 
+/**
+ * Rotating first-person lines for the no-knowledge case, so a run of unanswered
+ * questions doesn't read as a stuck record. The client/server picks one per answer.
+ * Every variant stays fail-closed: it admits the gap and points back to what the
+ * knowledgebase actually covers, never bluffing an answer.
+ */
+export const NO_KNOWLEDGE_LINES: string[] = [
+  "I dug through my old posts and emails and found nothing on that. Try me on Bitcoin's design, Script, SPV, or the BRCs.",
+  "That one's not in my writings or the protocol record I have here. Bitcoin's design, Script, SPV, or the BRCs are firmer ground.",
+  "Nothing in the archive or the spec corpus touches that, I'm afraid. Ask me about Bitcoin's design, Script, SPV, or the BRCs.",
+  "I've nothing on record for that — my posts, emails and the protocol specs are silent on it. Bitcoin's design, Script, SPV, or the BRCs I can speak to.",
+  "That falls outside what I wrote down and what's pinned in the spec record. Happier to talk Bitcoin's design, Script, SPV, or the BRCs.",
+];
+
+/** Deterministically pick a no-knowledge line, varying per question so repeats differ. */
+export function noKnowledgeLine(seed: string): string {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+  return NO_KNOWLEDGE_LINES[h % NO_KNOWLEDGE_LINES.length] ?? WITTY.NO_KNOWLEDGE;
+}
+
 /** Rotating banner lines for the all-quotas-spent "asleep" state (client picks/rotates). */
 export const SLEEP_LINES: string[] = [
   'Satoshi is currently sleeping — even the creator of Bitcoin needs his eight hours.',

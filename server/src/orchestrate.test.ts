@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildSystemPrompt,
   buildUserContent,
+  extractKeywords,
   groundQuestion,
   locatorToUrl,
   normaliseEvidence,
@@ -343,5 +344,35 @@ describe('prompt construction', () => {
   it('corpus mode tells the model the evidence is Satoshi’s own writing', () => {
     expect(buildSystemPrompt('corpus')).toMatch(/historical forum posts and e-mails/);
     expect(buildSystemPrompt('mcp')).toMatch(/pinned snapshot/);
+  });
+});
+
+describe('extractKeywords', () => {
+  it('pulls a BRC identifier out of a conversational question', () => {
+    expect(extractKeywords('What can you tell me about BRC-100s?')).toBe('BRC-100');
+    expect(extractKeywords('What is BRC-100?')).toBe('BRC-100');
+    expect(extractKeywords('explain BRC-62 please')).toBe('BRC-62');
+  });
+
+  it('normalises plural BRC references to the singular spec id', () => {
+    expect(extractKeywords('What are BRC-100s used for?')).toBe('BRC-100');
+    // A bare "BRCs" has no numeric id, so it falls through to content words.
+    expect(extractKeywords('tell me about the BRCs')).toBe('BRCs');
+  });
+
+  it('keeps opcode and coined technical terms', () => {
+    expect(extractKeywords('How does OP_CHECKSIG work?')).toBe('OP_CHECKSIG');
+    expect(extractKeywords('What is BEEF?')).toBe('BEEF');
+  });
+
+  it('strips the conversational wrapper when no identifier is present', () => {
+    const kw = extractKeywords('Was the block size always meant to be small?');
+    expect(kw).toBeDefined();
+    expect(kw).not.toMatch(/\b(was|the|to|be)\b/i);
+    expect(kw).toContain('block');
+  });
+
+  it('returns undefined for a question with no content words', () => {
+    expect(extractKeywords('what is it?')).toBeUndefined();
   });
 });

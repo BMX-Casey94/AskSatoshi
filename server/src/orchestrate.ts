@@ -157,6 +157,50 @@ function isConceptualQuestion(q: string): boolean {
 }
 
 /**
+ * Extract the retrieval keywords from a natural-language question. The MCP's
+ * `investigate` and `search_knowledge` are phrasing-sensitive: "What can you tell me
+ * about BRC-100s?" retrieves nothing, whilst "BRC-100" returns the BRC-100 document as
+ * the top hit. Pull out the subject terms — protocol identifiers (BRC-100, BEEF,
+ * OP_RETURN), capitalised/coined terms, and content words — so the fallback search
+ * queries the subject, not the conversational wrapper. Returns undefined when no
+ * useful keyword can be isolated (caller then uses the raw question).
+ */
+export function extractKeywords(question: string): string | undefined {
+  const q = question.trim();
+  if (!q) return undefined;
+
+  // Strongest signal: explicit protocol/spec identifiers. BRC-100, OP_CHECKSIG, BEEF,
+  // SPV, Rúnar, UTXO, etc. A trailing plural 's' on a BRC id is stripped in the
+  // normalisation below so "BRC-100s" resolves to the spec id "BRC-100".
+  const idMatches = q.match(/\b(?:BRC-?\d+s?|OP_[A-Z0-9_]+|BEEF|SPV|UTXO|Rúnar|Runar|SDK|TS-?stack|Arc(?:ade)?|WoC)\b/gi);
+  if (idMatches && idMatches.length > 0) {
+    const ids = [
+      ...new Set(
+        idMatches.map((m) => {
+          const brc = /^BRC-?(\d+?)s?$/i.exec(m);
+          return brc ? `BRC-${brc[1]}` : m;
+        }),
+      ),
+    ]
+      .slice(0, 3)
+      .join(' ');
+    return ids;
+  }
+
+  // Otherwise strip the conversational wrapper and keep content words.
+  const STOP = new Set(
+    ('a,an,and,are,as,at,be,been,but,by,can,could,did,do,does,for,from,had,has,have,he,her,his,how,i,if,in,into,is,it,its,me,my,of,on,or,so,tell,that,the,their,them,they,this,to,was,we,were,what,when,which,who,why,will,with,you,your,about,know,known,want,wanted,like,show,explain,describe,give,say,said,please,thanks,thank'.split(',')),
+  );
+  const words = q
+    .replace(/[?!.,;:"'()]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 1 && !STOP.has(w.toLowerCase()));
+  if (words.length === 0) return undefined;
+  // Keep it tight: the subject is usually in the first few content words.
+  return words.slice(0, 6).join(' ');
+}
+
+/**
  * Translate an internal MCP locator into a real, clickable web URL.
  * Verified against bsv-aio-mcp@1.1.0: hits carry no URL field, only `locator`.
  * Returns undefined for schemes with no public mapping (never emit a dead link).
@@ -449,14 +493,31 @@ async function searchGrounding(
   // parallel. Technical kinds come from the MCP's search index (brc/symbol/test/
   // example/doc); essays/principles are the Craig Wright commentary corpus. No `era`
   // filter — that would silently exclude all technical docs (they carry era: null).
-  const essayPromise = mcp
-    .searchKnowledge(question, { kind: ['essay', 'principle'] }, 30)
+  //
+  // The MCP ranks on phrasing, so query with the extracted subject keywords first and
+  // fall back to the raw question only if keywords yield nothing. This is what lets
+  // "What can you tell me about BRC-100s?" find BRC-100.
+  const keywords = extractKeywords(question) ?? question;
+  const essayQuery = mcp
+    .searchKnowledge(keywords, { kind: ['essay', 'principle'] }, 30)
     .catch(() => null);
-  const techPromise = mcp
-    .searchKnowledge(question, { kind: ['brc', 'symbol', 'test', 'example', 'doc'] }, 30)
+  const techQuery = mcp
+    .searchKnowledge(keywords, { kind: ['brc', 'symbol', 'test', 'example', 'doc'] }, 30)
     .catch(() => null);
   const primaryDocs = corpus ? corpus.search(question, 2) : [];
-  const [essayRaw, techRaw] = await Promise.all([essayPromise, techPromise]);
+  let [essayRaw, techRaw] = await Promise.all([essayQuery, techQuery]);
+
+  // Keyword query found nothing at all — retry once with the raw question phrasing.
+  const empty = (r: unknown) => {
+    const h = typeof r === 'object' && r !== null ? (r as Record<string, unknown>).hits : undefined;
+    return !Array.isArray(h) || h.length === 0;
+  };
+  if (keywords !== question && empty(essayRaw) && empty(techRaw)) {
+    [essayRaw, techRaw] = await Promise.all([
+      mcp.searchKnowledge(question, { kind: ['essay', 'principle'] }, 30).catch(() => null),
+      mcp.searchKnowledge(question, { kind: ['brc', 'symbol', 'test', 'example', 'doc'] }, 30).catch(() => null),
+    ]);
+  }
 
   const hitsOf = (raw: unknown): Record<string, unknown>[] => {
     const hits = typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>).hits : undefined;
@@ -581,8 +642,16 @@ export async function groundQuestion(
         if (g) return g;
       }
 
-      const pkg = await mcp.investigate(question);
-      const evidence = normaliseEvidence(pkg);
+      // investigate is phrasing-sensitive: a natural-language question can come back
+      // all-insufficient where the bare keyword succeeds. Try the question, then retry
+      // once with the extracted subject keywords before concluding there's no evidence.
+      let evidence = normaliseEvidence(await mcp.investigate(question));
+      if (!evidence.sufficient) {
+        const keywords = extractKeywords(question);
+        if (keywords && keywords !== question) {
+          evidence = normaliseEvidence(await mcp.investigate(keywords));
+        }
+      }
       if (evidence.sufficient) {
         if (typeof mcp.getResource === 'function') await hydrateBodies(evidence, mcp);
         return buildMcpGrounding(evidence);

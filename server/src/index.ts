@@ -15,7 +15,7 @@ import rateLimit from 'express-rate-limit';
 import { z } from 'zod';
 import { Breaker } from './breaker.js';
 import { AnswerCache } from './cache.js';
-import { SLEEP_LINES, WITTY, witty, WittyException, type ErrorCode } from './errors.js';
+import { noKnowledgeLine, SLEEP_LINES, WITTY, witty, WittyException, type ErrorCode } from './errors.js';
 import { runChain, type ChainRequest } from './llm.js';
 import { McpBridge } from './mcp.js';
 import { configuredTiers, type ProviderKeys } from './models.config.js';
@@ -261,7 +261,7 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
     const retrievalQuery = contextualQuery(question, priorUser);
     const grounding = await groundQuestion(retrievalQuery, { mcp, corpus });
     if (grounding.mode === 'none') {
-      sseWrite(res, 'delta', { text: WITTY.NO_KNOWLEDGE });
+      sseWrite(res, 'delta', { text: noKnowledgeLine(question) });
       sseWrite(res, 'meta', { mode: 'none', citations: [] });
       sseWrite(res, 'done', {});
       finish();

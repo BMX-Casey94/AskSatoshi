@@ -74,8 +74,9 @@ npm start     # serves public/ and the API from one Node process
 
 The repo deploys to Vercel as-is: the client builds into `public/` (served by Vercel's CDN)
 and the Express app is default-exported from the root `index.js`, which Vercel runs as a
-single function on Fluid compute. Import the repo at vercel.com/new — no build settings to
-override — and set your keys under Project → Environment Variables (`GEMINI_API_KEY`,
+single function on Fluid compute. `vercel.json` pins the Express framework so `/api/*` is
+not swallowed by a Vite/SPA fallback (that would 405 on `POST /api/chat`). Import the repo
+at vercel.com/new and set your keys under Project → Environment Variables (`GEMINI_API_KEY`,
 `GROQ_API_KEY`, optional `OPENROUTER_API_KEY`). `TRUST_PROXY` is handled automatically.
 
 Caveats of the serverless model:

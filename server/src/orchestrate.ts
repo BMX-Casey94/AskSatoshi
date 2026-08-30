@@ -433,67 +433,94 @@ async function hydrateBodies(evidence: NormalisedEvidence, mcp: McpBridge): Prom
 }
 
 /**
- * Build a grounding bundle for conceptual questions by BLENDING sources: Satoshi's own
- * 2008–2011 writings (primary) come first, then later essays/principles (commentary).
- * Primary sources must never be preempted by a later essayist's interpretation.
+ * Build a grounding bundle for conceptual questions by BLENDING three tiers: Satoshi's
+ * own 2008–2011 writings (primary) come first, then the technical spec/SDK corpus
+ * (BRCs, opcodes, symbols, examples — the "how"), then later essays/principles
+ * (commentary — the "why"). Primary sources must never be preempted by a later
+ * essayist's interpretation, and technical questions should reach the spec data, not
+ * just essays.
  */
 async function searchGrounding(
   question: string,
   mcp: McpBridge,
   corpus: SatoshiCorpus | null,
 ): Promise<Grounding | null> {
-  // Pull later commentary (essays) and Satoshi's own writings in parallel.
+  // Pull later commentary (essays), technical spec data, and Satoshi's own writings in
+  // parallel. Technical kinds come from the MCP's search index (brc/symbol/test/
+  // example/doc); essays/principles are the Craig Wright commentary corpus. No `era`
+  // filter — that would silently exclude all technical docs (they carry era: null).
   const essayPromise = mcp
-    .searchKnowledge(question, { kind: ['essay', 'principle'], authority_max: 4 }, 30)
+    .searchKnowledge(question, { kind: ['essay', 'principle'] }, 30)
+    .catch(() => null);
+  const techPromise = mcp
+    .searchKnowledge(question, { kind: ['brc', 'symbol', 'test', 'example', 'doc'] }, 30)
     .catch(() => null);
   const primaryDocs = corpus ? corpus.search(question, 2) : [];
-  const raw = await essayPromise;
+  const [essayRaw, techRaw] = await Promise.all([essayPromise, techPromise]);
 
-  const hits = (typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>).hits : undefined);
-  const essayHits = Array.isArray(hits) ? hits : [];
+  const hitsOf = (raw: unknown): Record<string, unknown>[] => {
+    const hits = typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>).hits : undefined;
+    return Array.isArray(hits) ? (hits as Record<string, unknown>[]) : [];
+  };
 
-  // Keep only essay hits that resolve to a real, clickable URL.
-  const picked: { title: string; url: string; locator: string }[] = [];
-  for (const h of essayHits) {
-    if (typeof h !== 'object' || h === null) continue;
-    const hit = h as Record<string, unknown>;
-    const locator = typeof hit.locator === 'string' ? hit.locator : '';
-    const url = locatorToUrl(locator);
-    if (!url) continue;
-    picked.push({
-      title: typeof hit.title === 'string' ? hit.title : locator,
-      url,
-      locator,
-    });
-    if (picked.length >= 3) break; // leave room for primary sources
-  }
-
-  // Nothing from either tier — fail closed so the caller can fall back.
-  if (picked.length === 0 && primaryDocs.length === 0) return null;
-
-  // Fetch full bodies for the essay hits (evidence + panel excerpts).
-  const essayCitations: Citation[] = [];
-  const essayParts: string[] = [];
-  await Promise.all(
-    picked.map(async (p) => {
-      let body: string | undefined;
-      try {
-        body = resourceText(await mcp.getResource(p.locator));
-      } catch {
-        body = undefined;
-      }
-      const text = body ? cleanSlice(body, MAX_EXCERPT_CHARS) : '';
-      const title = cleanTitle(p.title) ?? p.title;
-      essayCitations.push({
-        label: title,
-        title,
-        url: p.url,
-        excerpt: body ? cleanSlice(body, PANEL_EXCERPT_CHARS) : undefined,
-        sourceClass: 'later-commentary',
+  // Keep only hits that resolve to a real, clickable URL, capped per tier so no single
+  // source crowds out the others (primary sources are added separately below).
+  const pickLinkable = (hits: Record<string, unknown>[], cap: number) => {
+    const picked: { title: string; url: string; locator: string }[] = [];
+    for (const hit of hits) {
+      if (typeof hit !== 'object' || hit === null) continue;
+      const locator = typeof hit.locator === 'string' ? hit.locator : '';
+      const url = locatorToUrl(locator);
+      if (!url) continue;
+      picked.push({
+        title: typeof hit.title === 'string' ? hit.title : locator,
+        url,
+        locator,
       });
-      essayParts.push(`${title}\n${text}`);
-    }),
-  );
+      if (picked.length >= cap) break;
+    }
+    return picked;
+  };
+  const essayPicked = pickLinkable(hitsOf(essayRaw), 2);
+  const techPicked = pickLinkable(hitsOf(techRaw), 2);
+
+  // Nothing from any tier — fail closed so the caller can fall back.
+  if (essayPicked.length === 0 && techPicked.length === 0 && primaryDocs.length === 0) return null;
+
+  // Fetch full bodies for a picked tier (evidence + panel excerpts).
+  const hydrate = async (
+    picked: { title: string; url: string; locator: string }[],
+    sourceClass: SourceClass,
+  ): Promise<{ citations: Citation[]; parts: string[] }> => {
+    const citations: Citation[] = [];
+    const parts: string[] = [];
+    await Promise.all(
+      picked.map(async (p) => {
+        let body: string | undefined;
+        try {
+          body = resourceText(await mcp.getResource(p.locator));
+        } catch {
+          body = undefined;
+        }
+        const text = body ? cleanSlice(body, MAX_EXCERPT_CHARS) : '';
+        const title = cleanTitle(p.title) ?? p.title;
+        citations.push({
+          label: title,
+          title,
+          url: p.url,
+          excerpt: body ? cleanSlice(body, PANEL_EXCERPT_CHARS) : undefined,
+          sourceClass,
+        });
+        parts.push(`${title}\n${text}`);
+      }),
+    );
+    return { citations, parts };
+  };
+
+  const [essayTier, techTier] = await Promise.all([
+    hydrate(essayPicked, 'later-commentary'),
+    hydrate(techPicked, 'spec'),
+  ]);
 
   // Primary sources (Satoshi's own writings) are numbered FIRST.
   const citations: Citation[] = [];
@@ -512,33 +539,28 @@ async function searchGrounding(
     primaryParts.push(`${corpusLabel(d)}\n${sliced}`);
   }
 
-  // Assemble numbered evidence: primary first, then commentary.
-  const all = [...citations.map((c) => ({ c, primary: true })), ...essayCitations.map((c) => ({ c, primary: false }))];
+  // Assemble numbered evidence in tier order: primary → technical spec → commentary.
+  type Tier = 'primary' | 'tech' | 'essay';
+  const all: { c: Citation; part: string; tier: Tier }[] = [
+    ...citations.map((c, i) => ({ c, part: primaryParts[i] ?? '', tier: 'primary' as Tier })),
+    ...techTier.citations.map((c, i) => ({ c, part: techTier.parts[i] ?? '', tier: 'tech' as Tier })),
+    ...essayTier.citations.map((c, i) => ({ c, part: essayTier.parts[i] ?? '', tier: 'essay' as Tier })),
+  ];
   const numbered = all.map((entry, i) => ({ ...entry, n: i + 1 }));
-  const evidenceSections: string[] = [];
-  if (primaryParts.length > 0) {
-    const blocks = numbered
-      .filter((e) => e.primary)
-      .map((e) => `[${e.n}] ${primaryParts[numbered.filter((x) => x.primary).indexOf(e)]}`)
-      .join('\n\n');
-    evidenceSections.push(
-      "PRIMARY SOURCES — your own 2008–2011 writings (these are the authoritative record of your design intent):\n\n" + blocks,
-    );
-  }
-  if (essayParts.length > 0) {
-    const blocks = numbered
-      .filter((e) => !e.primary)
-      .map((e) => `[${e.n}] ${essayParts[numbered.filter((x) => !x.primary).indexOf(e)]}`)
-      .join('\n\n');
-    evidenceSections.push(
-      'LATER COMMENTARY — essays and principles written years after 2011 (one later interpretation, NOT your own words and not a unanimous record; do not present as settled history):\n\n' + blocks,
-    );
-  }
+  const sectionFor = (tier: Tier, heading: string) => {
+    const blocks = numbered.filter((e) => e.tier === tier).map((e) => `[${e.n}] ${e.part}`).join('\n\n');
+    return blocks ? `${heading}\n\n${blocks}` : '';
+  };
+  const evidenceSections = [
+    sectionFor('primary', "PRIMARY SOURCES — your own 2008–2011 writings (the authoritative record of your design intent):"),
+    sectionFor('tech', 'TECHNICAL SPECIFICATION — BRCs, Script/opcodes, SDK symbols and examples (the canonical "how"; treat as fact):'),
+    sectionFor('essay', 'LATER COMMENTARY — essays and principles written years after 2011 (one later interpretation, NOT your own words and not a unanimous record; do not present as settled history):'),
+  ].filter(Boolean);
 
   return {
     mode: 'mcp',
     evidenceText:
-      'VIEWPOINT NOTICE: Where primary sources and later commentary differ, your own 2008–2011 writings are authoritative. Later essays are one interpretation — acknowledge disagreement rather than presenting them as settled fact.\n\n' +
+      'VIEWPOINT NOTICE: Where primary sources and later commentary differ, your own 2008–2011 writings are authoritative. The technical specification is canonical fact. Later essays are one interpretation — acknowledge disagreement rather than presenting them as settled fact.\n\n' +
       evidenceSections.join('\n\n'),
     citations: numbered.map((e) => e.c).slice(0, MAX_CITATIONS),
   };

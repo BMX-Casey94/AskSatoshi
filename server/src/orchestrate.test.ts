@@ -262,6 +262,68 @@ describe('groundQuestion routing', () => {
   });
 });
 
+describe('conceptual blend (searchGrounding)', () => {
+  /** MCP stub that serves search_knowledge by kind filter and get_resource bodies. */
+  function blendingMcp(): McpBridge {
+    const bodies: Record<string, string> = {
+      'csw://essay/medium/scaling': 'I have argued for years that Bitcoin must scale on-chain to reach the world.',
+      'bsv-blockchain/BRCs/transactions/0062.md': 'BRC-62 defines Background Evaluation Extended Format (BEEF) for SPV proofs.',
+    };
+    return {
+      connected: true,
+      investigate: async () => INSUFFICIENT_PKG,
+      searchKnowledge: async (_q: string, filters?: { kind?: string[] }) => {
+        const kinds = filters?.kind ?? [];
+        const hits: unknown[] = [];
+        if (kinds.includes('essay')) {
+          hits.push({ id: 'e:1', kind: 'essay', title: 'Scaling Bitcoin', locator: 'csw://essay/medium/scaling' });
+        }
+        if (kinds.includes('brc') || kinds.includes('doc')) {
+          hits.push({ id: 'b:62', kind: 'brc', title: 'BRC-62', locator: 'bsv-blockchain/BRCs/transactions/0062.md' });
+        }
+        return { hits };
+      },
+      getResource: async (uri: string) => ({ text: bodies[uri] }),
+    } as unknown as McpBridge;
+  }
+
+  it('blends Satoshi primary, technical spec, and essays for a conceptual question', async () => {
+    // SPV_DOC is about Simplified Payment Verification, so ask a "why" question about it.
+    const g = await groundQuestion('Why did you design Simplified Payment Verification?', {
+      mcp: blendingMcp(),
+      corpus: new SatoshiCorpus([SPV_DOC]),
+    });
+    expect(g.mode).toBe('mcp');
+    // All three tiers present in the evidence.
+    expect(g.evidenceText).toContain('PRIMARY SOURCES');
+    expect(g.evidenceText).toContain('TECHNICAL SPECIFICATION');
+    expect(g.evidenceText).toContain('LATER COMMENTARY');
+    expect(g.evidenceText).toContain('Simplified Payment Verification'); // Satoshi primary
+    expect(g.evidenceText).toContain('BRC-62'); // technical
+    expect(g.evidenceText).toContain('scale on-chain'); // essay
+    // Citations carry the right provenance chips, primary numbered first.
+    const classes = g.citations.map((c) => c.sourceClass);
+    expect(classes).toContain('satoshi-primary');
+    expect(classes).toContain('spec');
+    expect(classes).toContain('later-commentary');
+    expect(classes[0]).toBe('satoshi-primary');
+  });
+
+  it('surfaces technical spec data even when no essay matches', async () => {
+    const mcp = blendingMcp();
+    // Remove essay results by making the essay kind return nothing.
+    mcp.searchKnowledge = (async (_q: string, filters?: { kind?: string[] }) => {
+      if (filters?.kind?.includes('essay')) return { hits: [] };
+      return { hits: [{ id: 'b:62', kind: 'brc', title: 'BRC-62', locator: 'bsv-blockchain/BRCs/transactions/0062.md' }] };
+    }) as McpBridge['searchKnowledge'];
+    const g = await groundQuestion('Why did you design SPV proofs?', { mcp, corpus: null });
+    expect(g.mode).toBe('mcp');
+    expect(g.evidenceText).toContain('TECHNICAL SPECIFICATION');
+    expect(g.evidenceText).toContain('BRC-62');
+    expect(g.evidenceText).not.toContain('LATER COMMENTARY');
+  });
+});
+
 describe('prompt construction', () => {
   it('sends the latest question raw; evidence lives in the system prompt', () => {
     const grounding = {

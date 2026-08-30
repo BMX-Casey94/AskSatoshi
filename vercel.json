@@ -5,11 +5,7 @@
   "outputDirectory": ".",
   "functions": {
     "index.js": {
-      "includeFiles": [
-        "node_modules/bsv-aio-mcp/**",
-        "server/node_modules/bsv-aio-mcp/**",
-        "server/data/**"
-      ]
+      "includeFiles": "{node_modules/bsv-aio-mcp/**,server/node_modules/bsv-aio-mcp/**,server/data/**}"
     }
   }
 }

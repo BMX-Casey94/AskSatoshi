@@ -1,0 +1,123 @@
+import { describe, expect, it } from 'vitest';
+import { Breaker } from './breaker.js';
+import { WittyException } from './errors.js';
+import { runChain, type ChainRequest, type ProviderFn } from './llm.js';
+
+const REQ: ChainRequest = {
+  system: 'You are Satoshi.',
+  history: [],
+  userContent: 'EVIDENCE:\n[1] x\n\nQUESTION: What is BEEF?',
+};
+
+const keys = { gemini: 'g', groq: 'q' };
+
+function okProvider(text: string): ProviderFn {
+  return async (_tier, _req, onDelta) => {
+    onDelta(text);
+    return text;
+  };
+}
+
+function failingProvider(err: unknown): ProviderFn {
+  return async () => {
+    throw err;
+  };
+}
+
+describe('runChain', () => {
+  it('answers on the primary tier when healthy', async () => {
+    const result = await runChain(REQ, {
+      keys,
+      breaker: new Breaker(),
+      onDelta: () => undefined,
+      providers: { gemini: okProvider('BEEF is defined by BRC-62 [1].') },
+    });
+    expect(result.tierId).toBe('gemini-3.6-flash');
+    expect(result.text).toContain('BRC-62');
+  });
+
+  it('fails over to the next tier on a daily-quota error and marks the breaker', async () => {
+    const breaker = new Breaker();
+    const result = await runChain(REQ, {
+      keys,
+      breaker,
+      onDelta: () => undefined,
+      providers: {
+        gemini: failingProvider({ status: 429, message: 'Quota exceeded: requests per day limit reached' }),
+        groq: okProvider('answer from groq'),
+      },
+    });
+    expect(result.tierId).toBe('groq-gpt-oss-120b');
+    // All three Gemini tiers share one project quota, so each is marked day-exhausted…
+    expect(breaker.isUsable('gemini-3.6-flash')).toBe(false);
+  });
+
+  it('throws EXHAUSTED with retryAfter when every tier is day-exhausted', async () => {
+    const breaker = new Breaker();
+    await expect(
+      runChain(REQ, {
+        keys,
+        breaker,
+        onDelta: () => undefined,
+        providers: {
+          gemini: failingProvider({ status: 429, message: 'daily quota exhausted' }),
+          groq: failingProvider({ status: 429, message: 'requests per day limit' }),
+        },
+      }),
+    ).rejects.toSatisfy(
+      (e) => e instanceof WittyException && e.wittyError.code === 'EXHAUSTED' && !!e.wittyError.retryAfter,
+    );
+  });
+
+  it('throws TIMEOUT when all tiers fail transiently', async () => {
+    await expect(
+      runChain(REQ, {
+        keys,
+        breaker: new Breaker(),
+        onDelta: () => undefined,
+        providers: {
+          gemini: failingProvider({ status: 503, message: 'unavailable' }),
+          groq: failingProvider(new Error('fetch failed')),
+        },
+      }),
+    ).rejects.toSatisfy((e) => e instanceof WittyException && e.wittyError.code === 'TIMEOUT');
+  });
+
+  it('does not fail over after partial output has streamed (avoids doubled answers)', async () => {
+    const halfProvider: ProviderFn = async (_tier, _req, onDelta) => {
+      onDelta('partial…');
+      throw { status: 500, message: 'boom' };
+    };
+    const deltas: string[] = [];
+    await expect(
+      runChain(REQ, {
+        keys,
+        breaker: new Breaker(),
+        onDelta: (t) => deltas.push(t),
+        providers: { gemini: halfProvider, groq: okProvider('should never arrive') },
+      }),
+    ).rejects.toSatisfy((e) => e instanceof WittyException && e.wittyError.code === 'PROVIDER_ERROR');
+    expect(deltas).toEqual(['partial…']);
+  });
+
+  it('routes image requests to a vision-capable tier', async () => {
+    // With only an OpenRouter key, gemma-4-31b is the sole vision tier in the chain.
+    const seenModels: string[] = [];
+    const visionProbe: ProviderFn = async (tier, _req, onDelta) => {
+      seenModels.push(tier.model);
+      onDelta('seen');
+      return 'seen';
+    };
+    const result = await runChain(
+      { ...REQ, image: { data: 'aGk=', mimeType: 'image/png' } },
+      {
+        keys: { openrouter: 'o' },
+        breaker: new Breaker(),
+        onDelta: () => undefined,
+        providers: { openrouter: visionProbe },
+      },
+    );
+    expect(result.tierId).toBe('openrouter-gemma-4-31b');
+    expect(seenModels).toEqual(['google/gemma-4-31b-it:free']);
+  });
+});

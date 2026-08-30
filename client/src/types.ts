@@ -1,0 +1,48 @@
+export interface Citation {
+  label: string;
+  /** Human-readable source title, when known. */
+  title?: string;
+  /** Real, clickable web URL — never an internal locator. Omitted when none exists. */
+  url?: string;
+  /** Short excerpt from the source, for the citation detail panel. */
+  excerpt?: string;
+}
+
+export type MessageRole = 'user' | 'assistant';
+
+export interface Message {
+  id: string;
+  role: MessageRole;
+  content: string;
+  ts: number;
+  citations?: Citation[];
+  /** Witty error code when this assistant message is an error rather than an answer. */
+  errorCode?: string;
+  /** True while tokens are still arriving. */
+  streaming?: boolean;
+}
+
+export interface Thread {
+  id: string;
+  title: string;
+  createdAt: number;
+  updatedAt: number;
+  messages: Message[];
+}
+
+export interface AttachedImage {
+  /** Base64 without the data-URL prefix. */
+  data: string;
+  mimeType: 'image/jpeg' | 'image/png' | 'image/webp';
+  /** Object URL for the preview chip. */
+  previewUrl: string;
+  name: string;
+}
+
+export type AwakeState = 'awake' | 'asleep' | 'unconfigured';
+
+export interface StatusResponse {
+  state: AwakeState;
+  retryAfter?: string;
+  sleepLines?: string[];
+}

@@ -1,0 +1,19 @@
+# Normalise line endings: LF in the repo, native in the working copy.
+* text=auto
+
+# Explicitly treat these as text with LF endings.
+*.ts        text eol=lf
+*.tsx       text eol=lf
+*.js        text eol=lf
+*.mjs       text eol=lf
+*.json      text eol=lf
+*.css       text eol=lf
+*.html      text eol=lf
+*.md        text eol=lf
+
+# Binary assets — never normalise.
+*.webp      binary
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.ico       binary

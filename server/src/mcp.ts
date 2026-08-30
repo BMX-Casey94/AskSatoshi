@@ -72,9 +72,15 @@ export class McpBridge {
   private questionArg = 'query';
   private reconnectTimer: NodeJS.Timeout | null = null;
   private intentionallyClosed = false;
+  private lastError: string | null = null;
 
   get connected(): boolean {
     return this.client !== null;
+  }
+
+  /** Last connection failure, for the /api/health diagnostic. */
+  get lastConnectError(): string | null {
+    return this.lastError;
   }
 
   /**
@@ -119,12 +125,12 @@ export class McpBridge {
 
     try {
       await client.connect(transport);
+      this.lastError = null;
     } catch (err) {
       const detail = stderr.join('').trim();
-      throw new Error(
-        `MCP child failed to start (entry ${entry})${detail ? `: ${detail.slice(-500)}` : ''}`,
-        { cause: err },
-      );
+      const message = `MCP child failed to start (entry ${entry})${detail ? `: ${detail.slice(-500)}` : ''}`;
+      this.lastError = err instanceof Error ? `${message} [${err.message}]` : message;
+      throw new Error(message, { cause: err });
     }
 
     // Discover the investigate tool's argument name rather than assuming it.

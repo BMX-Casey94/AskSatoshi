@@ -69,6 +69,14 @@ const cache = new AnswerCache();
 const mcp = new McpBridge();
 const corpus = loadCorpus();
 
+/**
+ * When a warm-up wait last timed out. A child that cannot come up (e.g. a frozen
+ * serverless invocation) must not tax every chat request with the warm-up wait —
+ * after a miss we go straight to the corpus for a minute before trying again.
+ */
+let warmupMissedAt = 0;
+const WARMUP_SKIP_MS = 60_000;
+
 // ---------------------------------------------------------------------------
 // Validation
 // ---------------------------------------------------------------------------
@@ -161,7 +169,13 @@ app.get('/api/status', (_req, res) => {
 });
 
 app.get('/api/health', (_req, res) => {
-  res.json({ ok: true, mcp: mcp.connected, corpus: corpus !== null });
+  res.json({
+    ok: true,
+    mcp: mcp.connected,
+    corpus: corpus !== null,
+    // Diagnostic only — helps explain a down MCP on serverless without leaking internals.
+    mcpError: mcp.connected ? null : mcp.lastConnectError,
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -219,14 +233,6 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
     finish();
   };
 
-  // If the MCP child is still waking up, tell the client and give it a short window
-  // before we fall back to the corpus. This keeps the first answer after idle grounded
-  // without ever hanging the request.
-  if (!mcp.connected) {
-    sseWrite(res, 'status', { phase: 'warming' });
-    await mcp.waitUntilConnected();
-  }
-
   // Prior user question (for contextualising follow-ups) and whether this is a
   // standalone question we may safely cache.
   const priorMessages = messages.slice(0, -1);
@@ -258,6 +264,18 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
 
     // 2. Ground the question: MCP snapshot, then Satoshi's own writings. Follow-ups
     //    are retrieved against a contextualised query so pronouns resolve correctly.
+    //    If the MCP child is still waking up, tell the client and give it a short window
+    //    first — this keeps the first answer after idle grounded without ever hanging
+    //    the request. Cached answers above never pay the wait, and a recently timed-out
+    //    warm-up is not retried for a minute (see WARMUP_SKIP_MS).
+    if (!mcp.connected && Date.now() - warmupMissedAt > WARMUP_SKIP_MS) {
+      sseWrite(res, 'status', { phase: 'warming' });
+      if (await mcp.waitUntilConnected()) warmupMissedAt = 0;
+      else warmupMissedAt = Date.now();
+      // Warm-up is over: hand the client back to its normal progress cycle so the
+      // warm-up line never outlives the actual wait.
+      sseWrite(res, 'status', { phase: 'grounding' });
+    }
     const retrievalQuery = contextualQuery(question, priorUser);
     const grounding = await groundQuestion(retrievalQuery, { mcp, corpus });
     if (grounding.mode === 'none') {

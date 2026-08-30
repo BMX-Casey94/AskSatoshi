@@ -20,9 +20,11 @@ import { runChain, type ChainRequest } from './llm.js';
 import { McpBridge } from './mcp.js';
 import { configuredTiers, type ProviderKeys } from './models.config.js';
 import {
+  buildCitationFilter,
   buildSystemPrompt,
   buildUserContent,
   groundQuestion,
+  parseCitationFilter,
   pickStyleSeed,
   questionClass,
 } from './orchestrate.js';
@@ -304,6 +306,21 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
       chars += m.content.length;
     }
 
+    // Run a strict citation relevance filter in parallel with the answer — it needs only
+    // the question and candidate citations, so it adds no latency. Word-sense false
+    // positives (a logo post matching "scaling" in the image sense) survive lexical
+    // retrieval; this semantic pass rejects them. Best-effort: any error, timeout, or
+    // garbled reply fails open to the unfiltered list.
+    const hasKeys = !!(keys.gemini || keys.groq || keys.openrouter);
+    const filterReq = buildCitationFilter(question, grounding.citations);
+    const filterPromise: Promise<{ text: string } | null> =
+      filterReq && hasKeys && !image
+        ? runChain(
+            { system: filterReq.system, history: [], userContent: filterReq.userContent },
+            { keys, breaker, signal: controller.signal, onDelta: () => undefined },
+          ).catch(() => null)
+        : Promise.resolve(null);
+
     const result = await runChain(
       {
         system: buildSystemPrompt(grounding.mode, grounding, {
@@ -322,10 +339,25 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
       },
     );
 
-    if (cacheable) {
-      cache.set(question, { text: result.text, mode: grounding.mode, citations: grounding.citations });
+    // The filter started in parallel, so by now it is almost always done; the 8s race is
+    // just a safety bound so a hung filter never delays the citations.
+    const filterRes = await Promise.race([
+      filterPromise,
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 8_000)),
+    ]);
+    let citations = grounding.citations;
+    if (filterRes) {
+      const keep = parseCitationFilter(filterRes.text, citations.length);
+      // Apply only a parseable, non-empty result. An empty/all-rejected or garbled result
+      // fails open — a grounded answer must have drawn on something, so an empty filter
+      // result is treated as a filter miss, not a reason to show zero sources.
+      if (keep && keep.length > 0) citations = keep.map((i) => citations[i]!).filter(Boolean);
     }
-    sseWrite(res, 'meta', { mode: grounding.mode, citations: grounding.citations, tier: result.tierId });
+
+    if (cacheable) {
+      cache.set(question, { text: result.text, mode: grounding.mode, citations });
+    }
+    sseWrite(res, 'meta', { mode: grounding.mode, citations, tier: result.tierId });
     sseWrite(res, 'done', {});
     finish();
   } catch (err) {

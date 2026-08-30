@@ -786,3 +786,53 @@ export function buildSystemPrompt(
 export function buildUserContent(question: string, _grounding?: Grounding): string {
   return question;
 }
+
+/**
+ * Strict relevance filter for the citation list. Lexical (BM25) retrieval cannot tell
+ * word senses apart — for "scaling" the corpus's only string matches are Satoshi's
+ * logo posts ("scaling down to custom sizes"), which are about image resizing, not
+ * network throughput. A semantic pass rejects sources that share a keyword but not the
+ * subject. Runs in parallel with the answer so it adds no latency.
+ */
+const CITATION_FILTER_SYSTEM = [
+  'You are a strict relevance filter for a citation list in a Bitcoin knowledge tool.',
+  'You are given a question and a numbered list of candidate sources (title + excerpt).',
+  'Keep ONLY sources whose subject matter genuinely helps answer the question.',
+  'Reject any source that merely shares a keyword but is about something else. Examples: a forum post about a logo image being "scaled" to pixel sizes is NOT about scaling the Bitcoin network; a token/ordinals basket spec is NOT about base-layer throughput; a post about mining software is NOT about a protocol rule unless it discusses that rule.',
+  'Be strict: when in doubt, reject. It is better to show fewer, correct sources.',
+  'Reply with ONLY a comma-separated list of the relevant source numbers (e.g. "1, 3"), or the word "none". No explanation, no other text.',
+].join('\n');
+
+/**
+ * Build the filter request for the candidate citations, or undefined when there is
+ * nothing worth filtering (fewer than two). Excerpts are trimmed to keep the call small.
+ */
+export function buildCitationFilter(
+  question: string,
+  citations: Citation[],
+): { system: string; userContent: string } | undefined {
+  if (citations.length < 2) return undefined;
+  const list = citations
+    .map((c, i) => `[${i + 1}] ${c.title ?? c.label} — ${(c.excerpt ?? '').slice(0, 300)}`)
+    .join('\n');
+  return {
+    system: CITATION_FILTER_SYSTEM,
+    userContent: `Question: ${question}\n\nCandidate sources:\n${list}`,
+  };
+}
+
+/**
+ * Parse the filter's reply into 0-based citation indices. Returns undefined when the
+ * reply is not a bare list (so the caller fails open and keeps the original citations).
+ * An explicit "none" yields an empty array (the filter judged every source irrelevant).
+ */
+export function parseCitationFilter(reply: string, count: number): number[] | undefined {
+  const t = reply.trim().toLowerCase();
+  if (/^none\b/.test(t)) return [];
+  const cleaned = t.replace(/[.\s]+$/g, '');
+  if (!/^[\d,\s]+$/.test(cleaned)) return undefined;
+  const nums = [...cleaned.matchAll(/\d{1,2}/g)]
+    .map((m) => Number(m[0]) - 1)
+    .filter((n) => n >= 0 && n < count);
+  return [...new Set(nums)];
+}

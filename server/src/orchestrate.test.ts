@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
+  buildCitationFilter,
   buildSystemPrompt,
   buildUserContent,
   extractKeywords,
   groundQuestion,
   locatorToUrl,
   normaliseEvidence,
+  parseCitationFilter,
 } from './orchestrate.js';
 import { SatoshiCorpus, type CorpusDoc } from './satoshiCorpus.js';
 import type { McpBridge } from './mcp.js';
@@ -403,5 +405,46 @@ describe('extractKeywords', () => {
 
   it('returns undefined for a question with no content words', () => {
     expect(extractKeywords('what is it?')).toBeUndefined();
+  });
+});
+
+describe('citation relevance filter', () => {
+  const CITES = [
+    { label: 'a', title: 'New icon/logo', url: 'https://x/1', excerpt: 'Full size 530x529 image for scaling down to custom sizes', sourceClass: 'satoshi-primary' as const },
+    { label: 'b', title: 'The myths of Bitcoin', url: 'https://x/2', excerpt: 'Bitcoin can scale to terabyte size blocks today', sourceClass: 'spec' as const },
+  ];
+
+  it('builds no filter request for fewer than two citations', () => {
+    expect(buildCitationFilter('q', [CITES[0]!])).toBeUndefined();
+    expect(buildCitationFilter('q', [])).toBeUndefined();
+  });
+
+  it('builds a filter request listing each candidate with its excerpt', () => {
+    const req = buildCitationFilter('What is the importance of scaling?', CITES);
+    expect(req).toBeDefined();
+    expect(req!.userContent).toContain('What is the importance of scaling?');
+    expect(req!.userContent).toContain('[1] New icon/logo');
+    expect(req!.userContent).toContain('[2] The myths of Bitcoin');
+    expect(req!.system).toMatch(/strict relevance filter/i);
+  });
+
+  it('parses a bare numeric list into 0-based indices', () => {
+    expect(parseCitationFilter('1, 3', 5)).toEqual([0, 2]);
+    expect(parseCitationFilter('2', 5)).toEqual([1]);
+    expect(parseCitationFilter('2, 2, 4.', 5)).toEqual([1, 3]);
+  });
+
+  it('treats "none" as an explicit all-rejected', () => {
+    expect(parseCitationFilter('none', 3)).toEqual([]);
+    expect(parseCitationFilter('None of these.', 3)).toEqual([]);
+  });
+
+  it('returns undefined for prose so the caller fails open', () => {
+    expect(parseCitationFilter('Sources 1 and 3 are relevant', 5)).toBeUndefined();
+    expect(parseCitationFilter('', 5)).toBeUndefined();
+  });
+
+  it('drops out-of-range indices', () => {
+    expect(parseCitationFilter('1, 9', 3)).toEqual([0]);
   });
 });

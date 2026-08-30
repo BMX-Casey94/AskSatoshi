@@ -219,6 +219,27 @@ describe('groundQuestion routing', () => {
     expect(g.citations[0]?.url).toContain('satoshi.nakamotoinstitute.org');
   });
 
+  it('formats Quoted remarks with a date and quotation marks around the excerpt', async () => {
+    const quoteDoc: CorpusDoc = {
+      id: 'quote-spv',
+      kind: 'quote',
+      title: 'Quoted remark',
+      date: '2010-06-18',
+      url: 'https://satoshi.nakamotoinstitute.org/quotes/',
+      text: 'Simplified Payment Verification is for lightweight client-only users who only do transactions.',
+    };
+    const g = await groundQuestion('Simplified Payment Verification lightweight clients', {
+      mcp: fakeMcp(INSUFFICIENT_PKG),
+      corpus: new SatoshiCorpus([quoteDoc]),
+    });
+    expect(g.mode).toBe('corpus');
+    expect(g.citations[0]?.title).toBe('A historical quote from Satoshi');
+    expect(g.citations[0]?.date).toBe('2010-06-18');
+    expect(g.citations[0]?.excerpt).toBe(
+      '"Simplified Payment Verification is for lightweight client-only users who only do transactions."',
+    );
+  });
+
   it('falls back to the corpus when the MCP throws', async () => {
     const g = await groundQuestion('What is Simplified Payment Verification?', {
       mcp: failingMcp(),

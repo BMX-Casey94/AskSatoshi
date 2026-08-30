@@ -19,7 +19,13 @@ import { SLEEP_LINES, WITTY, witty, WittyException, type ErrorCode } from './err
 import { runChain, type ChainRequest } from './llm.js';
 import { McpBridge } from './mcp.js';
 import { configuredTiers, type ProviderKeys } from './models.config.js';
-import { buildSystemPrompt, buildUserContent, groundQuestion } from './orchestrate.js';
+import {
+  buildSystemPrompt,
+  buildUserContent,
+  groundQuestion,
+  pickStyleSeed,
+  questionClass,
+} from './orchestrate.js';
 import { loadCorpus } from './satoshiCorpus.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -36,6 +42,8 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGIN ?? 'http://localhost:5173')
 const MAX_HISTORY_MESSAGES = 10;
 const MAX_HISTORY_CHARS = 12_000;
 const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
+/** Max length of a single user message. Generous — Gemini's context window is huge. */
+const MAX_QUESTION_CHARS = 8_000;
 
 /** Heuristic: is this message a short follow-up that needs the prior question for context? */
 function isFollowUp(text: string): boolean {
@@ -80,7 +88,7 @@ const chatBodySchema = z.object({
     .array(
       z.object({
         role: z.enum(['user', 'assistant']),
-        content: z.string().min(1).max(8_000),
+        content: z.string().min(1).max(MAX_QUESTION_CHARS),
       }),
     )
     .min(1)
@@ -155,7 +163,7 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
   }
 
   const question = messages[messages.length - 1]?.content ?? '';
-  if (!question.trim() || question.length > 2_000) {
+  if (!question.trim() || question.length > MAX_QUESTION_CHARS) {
     res.status(400).json({ error: witty('BAD_INPUT') });
     return;
   }
@@ -194,11 +202,17 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
   const priorUser = [...priorMessages].reverse().find((m) => m.role === 'user')?.content;
   const standalone = !isFollowUp(question) || priorMessages.length === 0;
   const cacheable = standalone && !image;
+  // If this thread already asked the same question, bypass the cache so the user gets a
+  // freshly-phrased answer rather than a byte-identical repeat.
+  const alreadyAskedInThread = priorMessages.some(
+    (m) => m.role === 'user' && AnswerCache.key(m.content) === AnswerCache.key(question),
+  );
+  const serveFromCache = cacheable && !alreadyAskedInThread;
 
   try {
-    // 1. Cache first — identical standalone questions cost nothing. Follow-ups are
-    //    never served from cache (their meaning depends on the thread).
-    if (cacheable) {
+    // 1. Cache first — identical standalone questions cost nothing. Follow-ups and
+    //    same-thread repeats are never served from cache.
+    if (serveFromCache) {
       const cached = cache.get(question);
       if (cached) {
         sseWrite(res, 'delta', { text: cached.text });
@@ -237,7 +251,10 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
 
     const result = await runChain(
       {
-        system: buildSystemPrompt(grounding.mode, grounding),
+        system: buildSystemPrompt(grounding.mode, grounding, {
+          questionClass: questionClass(question),
+          styleSeed: pickStyleSeed(),
+        }),
         history: picked,
         userContent: buildUserContent(question, grounding),
         image,

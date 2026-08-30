@@ -31,7 +31,7 @@ export const WITTY: Record<ErrorCode, string> = {
     'Something upstream has gone pear-shaped. Not a reorg, just a hiccup — try again in a moment.',
   MCP_UNAVAILABLE:
     'My reference library is temporarily off the shelf. Ask me again in a moment.',
-  BAD_INPUT: 'That message does not parse — keep it under 2,000 characters and on the rails.',
+  BAD_INPUT: 'That message does not parse — keep it under 8,000 characters and on the rails.',
   IMAGE_REJECTED:
     'That image is heavier than a full block. Keep it under 4 MB — PNG, JPEG or WebP only.',
   VISION_UNAVAILABLE:

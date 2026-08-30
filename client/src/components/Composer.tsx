@@ -27,6 +27,10 @@ interface Props {
 
 const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
 const ACCEPTED_MIMES = ['image/jpeg', 'image/png', 'image/webp'];
+/** Matches the server's MAX_QUESTION_CHARS. */
+const MAX_CHARS = 8_000;
+/** Only show the counter once the user is within this many chars of the cap. */
+const COUNTER_THRESHOLD = 500;
 
 export function Composer(props: Props) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -91,8 +95,16 @@ export function Composer(props: Props) {
         placeholder={props.asleep ? 'Satoshi is sleeping…' : 'Ask anything…'}
         disabled={props.disabled || props.asleep}
         aria-label="Ask Satoshi a question"
-        maxLength={2000}
+        maxLength={MAX_CHARS}
       />
+      {props.value.length >= MAX_CHARS - COUNTER_THRESHOLD && (
+        <span
+          className={`composer-charcount${props.value.length >= MAX_CHARS ? ' composer-charcount--max' : ''}`}
+          aria-live="polite"
+        >
+          {props.value.length.toLocaleString()} / {MAX_CHARS.toLocaleString()}
+        </span>
+      )}
       <div className="composer-toolbar">
         <div className="composer-toolbar-left">
           <span

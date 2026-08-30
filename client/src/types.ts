@@ -6,6 +6,8 @@ export interface Citation {
   url?: string;
   /** Short excerpt from the source, for the citation detail panel. */
   excerpt?: string;
+  /** ISO date (YYYY-MM-DD or full) when known — shown above Quoted remarks. */
+  date?: string;
 }
 
 export type MessageRole = 'user' | 'assistant';

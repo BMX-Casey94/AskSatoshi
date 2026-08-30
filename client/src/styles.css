@@ -123,7 +123,11 @@ button:disabled {
 .landing-topbar {
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+}
+
+.landing-topbar-end {
+  margin-left: auto;
 }
 
 .landing-centre {
@@ -209,6 +213,25 @@ button:disabled {
   font-size: 1rem;
   line-height: 1.5;
   padding: 6px 10px;
+}
+
+/* Soft character counter — only rendered near the cap. */
+.composer-charcount {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.composer-charcount--max {
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.composer-input {
   max-height: 200px;
 }
 
@@ -529,18 +552,29 @@ button:disabled {
 }
 .sources-list {
   margin: 0;
-  padding-left: 1.2em;
+  padding: 0;
+  list-style: none;
+  counter-reset: source;
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
 .source-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45em;
   font-size: 0.82rem;
   line-height: 1.4;
+  counter-increment: source;
 }
-.source-item::marker {
+.source-item::before {
+  content: counter(source) '.';
+  flex-shrink: 0;
+  min-width: 1.15em;
   color: var(--text-muted);
   font-size: 0.78rem;
+  line-height: 1.4;
+  text-align: right;
 }
 .source-link {
   appearance: none;
@@ -555,6 +589,9 @@ button:disabled {
   border-bottom: 1px solid transparent;
   word-break: break-word;
   transition: color 0.12s ease, border-color 0.12s ease;
+  /* Keep wrapped titles aligned under the first line, not under the number. */
+  flex: 1;
+  min-width: 0;
 }
 .source-link:hover {
   color: var(--accent);
@@ -607,6 +644,13 @@ button:disabled {
   line-height: 1.35;
   font-weight: 650;
 }
+.cite-panel-date {
+  margin: -4px 0 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: -0.01em;
+}
 .cite-panel-excerpt {
   margin: 0;
   padding: 16px 18px;
@@ -614,6 +658,7 @@ button:disabled {
   border: 1px solid var(--border);
   border-radius: 14px;
   font-size: 0.92rem;
+  font-weight: 400;
   line-height: 1.65;
   color: var(--text);
   word-break: break-word;
@@ -632,11 +677,13 @@ button:disabled {
 .cite-panel-excerpt h2,
 .cite-panel-excerpt h3,
 .cite-panel-excerpt h4 {
-  margin: 0.85em 0 0.4em;
-  font-size: 0.92rem;
-  font-weight: 650;
+  margin: 0.9em 0 0.35em;
+  font-size: 0.8rem;
+  font-weight: 600;
   line-height: 1.35;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
 .cite-panel-excerpt h1:first-child,
@@ -661,7 +708,7 @@ button:disabled {
 }
 
 .cite-panel-excerpt strong {
-  font-weight: 650;
+  font-weight: 550;
 }
 
 .cite-panel-excerpt a {
@@ -798,10 +845,12 @@ button:disabled {
 }
 
 .scroll-pill {
-  position: absolute;
-  bottom: 16px;
+  /* Fixed so it stays pinned above the composer regardless of scroll position. */
+  position: fixed;
+  bottom: 132px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 40;
   border: 1px solid var(--border);
   background: var(--bg);
   color: var(--text);
@@ -809,6 +858,12 @@ button:disabled {
   padding: 7px 14px;
   font-size: 0.8rem;
   box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.scroll-pill:hover {
+  background: var(--hover);
 }
 
 /* ---------------------------------------------------------------------------

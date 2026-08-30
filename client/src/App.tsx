@@ -11,6 +11,7 @@ import { HistoryDrawer } from './components/HistoryDrawer';
 import { SleepBanner } from './components/SleepBanner';
 import { Suggestions } from './components/Suggestions';
 import { ThemeToggle } from './components/ThemeToggle';
+import { MenuIcon } from './components/icons';
 import { getStatus, streamChat } from './lib/api';
 import { createRecogniser } from './lib/speech';
 import { clearStore, loadStore, saveStore } from './lib/storage';
@@ -338,7 +339,19 @@ export function App() {
       {view === 'landing' || !activeThread ? (
         <main className="landing">
           <div className="landing-topbar">
-            <ThemeToggle theme={theme} onToggle={() => setTheme(theme === 'light' ? 'dark' : 'light')} />
+            {store.threads.length > 0 && (
+              <button
+                type="button"
+                className="icon-btn"
+                onClick={() => setDrawerOpen(true)}
+                aria-label="Open chat history"
+              >
+                <MenuIcon size={18} />
+              </button>
+            )}
+            <div className="landing-topbar-end">
+              <ThemeToggle theme={theme} onToggle={() => setTheme(theme === 'light' ? 'dark' : 'light')} />
+            </div>
           </div>
           <div className="landing-centre">
             <Hero interacting={composerFocused || composer.length > 0} />

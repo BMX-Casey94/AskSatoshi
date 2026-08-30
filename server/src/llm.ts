@@ -53,7 +53,10 @@ const FIRST_TOKEN_TIMEOUT_MS = 30_000;
 // visible token, cutting answers short. 4096 leaves generous room for reasoning +
 // a full answer; the system prompt still caps length, so headroom costs nothing.
 const MAX_OUTPUT_TOKENS = 4_096;
-const TEMPERATURE = 0.3; // grounded RAG: keep the model on the evidence, not wandering
+// Grounded RAG, but with enough warmth for natural phrasing variety across asks.
+// 0.45 is the safe ceiling: claims stay pinned by the evidence contract while openings
+// and cadence vary. Higher risks the persona inventing claims on opinionated evidence.
+const TEMPERATURE = 0.45;
 
 export function createGeminiProvider(apiKey: string): ProviderFn {
   const ai = new GoogleGenAI({ apiKey });

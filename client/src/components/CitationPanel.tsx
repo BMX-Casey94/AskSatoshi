@@ -1,8 +1,8 @@
 /**
  * Citation detail panel. On desktop it docks to the side of the chat column; on
- * narrow screens it becomes a bottom sheet. Shows the source title, a sanitised
- * markdown excerpt, and an "Open original" link when a real URL exists.
- * Internal-only sources (no public URL) are shown with a plain-text note.
+ * narrow screens it becomes a bottom sheet. Shows the source title, optional
+ * date (Quoted remarks), a sanitised markdown excerpt, and an "Open original"
+ * link when a real URL exists. Internal-only sources are shown with a note.
  */
 
 import { useEffect, useMemo } from 'react';
@@ -14,6 +14,21 @@ interface Props {
   /** The citation to show, plus its 1-based number; null closes the panel. */
   open: { citation: Citation; index: number } | null;
   onClose: () => void;
+}
+
+/** Format an ISO / YYYY-MM-DD date for UK display (e.g. 11 December 2010). */
+function formatCitationDate(iso: string): string | null {
+  const dayOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  const d = dayOnly
+    ? new Date(Date.UTC(Number(dayOnly[1]), Number(dayOnly[2]) - 1, Number(dayOnly[3])))
+    : new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
 }
 
 export function CitationPanel({ open, onClose }: Props) {
@@ -34,6 +49,7 @@ export function CitationPanel({ open, onClose }: Props) {
   if (!open) return null;
   const { citation, index } = open;
   const title = citation.title ?? citation.label;
+  const dateLabel = citation.date ? formatCitationDate(citation.date) : null;
 
   return (
     <>
@@ -46,6 +62,7 @@ export function CitationPanel({ open, onClose }: Props) {
           </button>
         </div>
         <h3 className="cite-panel-title">{title}</h3>
+        {dateLabel && <p className="cite-panel-date">{dateLabel}</p>}
         {excerptHtml && (
           <blockquote
             className="cite-panel-excerpt"

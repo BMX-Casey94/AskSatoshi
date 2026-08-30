@@ -67,7 +67,7 @@ const keys: ProviderKeys = {
 const breaker = new Breaker();
 const cache = new AnswerCache();
 const mcp = new McpBridge();
-const corpus = loadCorpus(join(__dirname, '..', 'data', 'satoshi-corpus.json'));
+const corpus = loadCorpus();
 
 // ---------------------------------------------------------------------------
 // Validation
@@ -102,8 +102,31 @@ const chatBodySchema = z.object({
 
 const app = express();
 app.disable('x-powered-by');
-app.set('trust proxy', process.env.TRUST_PROXY === '1' ? 1 : false);
-app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
+// Vercel always sits behind its proxy; elsewhere TRUST_PROXY=1 opts in explicitly.
+app.set('trust proxy', process.env.TRUST_PROXY === '1' || process.env.VERCEL ? 1 : false);
+app.use(
+  helmet({
+    // Content-Security-Policy: the SPA is self-contained (bundled JS/CSS, no CDN), so we
+    // can run a strict policy. Images may be blob:/data: (local previews + inline assets);
+    // the API is same-origin. No inline scripts or eval — React's production build needs neither.
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"], // Vite injects critical CSS; React inline styles
+        imgSrc: ["'self'", 'data:', 'blob:'],
+        connectSrc: ["'self'"],
+        fontSrc: ["'self'", 'data:'],
+        objectSrc: ["'none'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+        frameAncestors: ["'none'"],
+        upgradeInsecureRequests: null, // allow plain http on localhost dev
+      },
+    },
+    crossOriginEmbedderPolicy: false, // would break blob: image previews
+  }),
+);
 app.use(cors({ origin: ALLOWED_ORIGINS }));
 app.use(express.json({ limit: '8mb' }));
 
@@ -201,7 +224,9 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
   const priorMessages = messages.slice(0, -1);
   const priorUser = [...priorMessages].reverse().find((m) => m.role === 'user')?.content;
   const standalone = !isFollowUp(question) || priorMessages.length === 0;
-  const cacheable = standalone && !image;
+  // Contested/opinion questions are never cached as oracles — each ask gets a fresh,
+  // freshly-grounded answer rather than the first visitor's phrasing served for hours.
+  const cacheable = standalone && !image && questionClass(question) !== 'contested';
   // If this thread already asked the same question, bypass the cache so the user gets a
   // freshly-phrased answer rather than a byte-identical repeat.
   const alreadyAskedInThread = priorMessages.some(
@@ -291,7 +316,10 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
 // Static client (production build)
 // ---------------------------------------------------------------------------
 
-const clientDist = join(__dirname, '..', '..', 'client', 'dist');
+// The client builds into the repo-root public/ folder. On Vercel this whole block is
+// inert (the CDN serves public/ before requests reach the function); it exists so
+// `npm start` keeps serving the SPA on long-running hosts and locally.
+const clientDist = join(__dirname, '..', '..', 'public');
 if (existsSync(clientDist)) {
   app.use(express.static(clientDist));
   // Express 5 / path-to-regexp v8: '*' is invalid; a bare middleware is the SPA fallback.
@@ -322,20 +350,26 @@ mcp.connect().catch((err) => {
   console.warn('[mcp] initial connect failed (will retry in background):', err instanceof Error ? err.message : err);
 });
 
-const httpServer = app.listen(PORT, () => {
-  const tiers = configuredTiers(keys).map((t) => t.id);
-  console.log(`[ask-satoshi] listening on :${PORT}`);
-  console.log(`[ask-satoshi] model tiers configured: ${tiers.length > 0 ? tiers.join(', ') : 'NONE (set API keys in .env)'}`);
-});
+// On Vercel the module is imported as a function handler — listening is the platform's
+// job. Everywhere else (npm start, tsx dev) we bind the port ourselves.
+if (!process.env.VERCEL) {
+  const httpServer = app.listen(PORT, () => {
+    const tiers = configuredTiers(keys).map((t) => t.id);
+    console.log(`[ask-satoshi] listening on :${PORT}`);
+    console.log(`[ask-satoshi] model tiers configured: ${tiers.length > 0 ? tiers.join(', ') : 'NONE (set API keys in .env)'}`);
+  });
 
-httpServer.on('error', (err: NodeJS.ErrnoException) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`[ask-satoshi] port ${PORT} is already in use — stop the other process or set PORT in .env`);
-  } else {
-    console.error('[ask-satoshi] failed to listen:', err.message);
-  }
-  process.exit(1);
-});
+  httpServer.on('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`[ask-satoshi] port ${PORT} is already in use — stop the other process or set PORT in .env`);
+    } else {
+      console.error('[ask-satoshi] failed to listen:', err.message);
+    }
+    process.exit(1);
+  });
 
-process.on('SIGTERM', () => void mcp.close());
-process.on('SIGINT', () => void mcp.close());
+  process.on('SIGTERM', () => void mcp.close());
+  process.on('SIGINT', () => void mcp.close());
+}
+
+export default app;

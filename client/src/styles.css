@@ -531,6 +531,26 @@ button:disabled {
   line-height: 1.5;
   font-size: 0.92rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.msg-error-retry {
+  appearance: none;
+  background: none;
+  border: 1px solid var(--error-border);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.msg-error-retry:hover {
+  background: var(--error-border);
+  border-color: var(--accent);
 }
 
 /* Sources list under an assistant answer */
@@ -592,10 +612,41 @@ button:disabled {
   /* Keep wrapped titles aligned under the first line, not under the number. */
   flex: 1;
   min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  flex-wrap: wrap;
 }
 .source-link:hover {
   color: var(--accent);
   border-bottom-color: var(--accent);
+}
+
+/* Provenance chip: shows where a source sits in the evidentiary hierarchy. */
+.source-chip {
+  flex-shrink: 0;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.source-chip--satoshi-primary {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.source-chip--spec {
+  color: var(--text-muted);
+}
+.source-chip--later-commentary {
+  color: #b8860b;
+  border-color: color-mix(in srgb, #b8860b 45%, transparent);
+  background: color-mix(in srgb, #b8860b 8%, transparent);
 }
 
 /* Citation detail panel: docked side panel on desktop, floating sheet on mobile. */

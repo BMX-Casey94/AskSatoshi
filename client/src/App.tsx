@@ -13,6 +13,7 @@ import { Suggestions } from './components/Suggestions';
 import { ThemeToggle } from './components/ThemeToggle';
 import { MenuIcon } from './components/icons';
 import { getStatus, streamChat } from './lib/api';
+import { exportThreadMarkdown } from './lib/exportThread';
 import { createRecogniser } from './lib/speech';
 import { clearStore, loadStore, saveStore } from './lib/storage';
 import type { AttachedImage, AwakeState, Message, Thread } from './types';
@@ -293,6 +294,21 @@ export function App() {
     window.setTimeout(() => send(lastUser.content), 0);
   };
 
+  // Retry a failed exchange: drop the error answer and its question, then resend the question.
+  const handleRetry = (failedAssistantId: string) => {
+    if (!activeThread || sending || asleep) return;
+    const msgs = activeThread.messages;
+    const idx = msgs.findIndex((m) => m.id === failedAssistantId && m.errorCode);
+    if (idx < 0) return;
+    const question = [...msgs.slice(0, idx)].reverse().find((m) => m.role === 'user');
+    if (!question) return;
+    updateActiveThread((t) => ({
+      ...t,
+      messages: t.messages.filter((m) => m.id !== failedAssistantId && m.id !== question.id),
+    }));
+    window.setTimeout(() => send(question.content), 0);
+  };
+
   // ---- thread management -----------------------------------------------------------
 
   const handleNewChat = () => {
@@ -324,6 +340,27 @@ export function App() {
     clearStore();
     setStore({ version: 1, theme, threads: [], activeThreadId: null });
     setDrawerOpen(false);
+  };
+
+  // ---- export -------------------------------------------------------------------------
+
+  const handleExport = () => {
+    if (!activeThread || activeThread.messages.length === 0) return;
+    const md = exportThreadMarkdown(activeThread);
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const slug = activeThread.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 48) || 'ask-satoshi';
+    a.href = url;
+    a.download = `${slug}.md`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   };
 
   // ---- render -----------------------------------------------------------------------
@@ -376,7 +413,8 @@ export function App() {
             <Suggestions onPick={(q) => send(q)} disabled={asleep || sending} />
           </div>
           <footer className="landing-footer">
-            Free to use. No sign-up required. Chats are saved locally on your device.
+            An AI speaking in Satoshi's voice — not Satoshi Nakamoto. Free to use; chats are saved
+            locally on your device.
           </footer>
         </main>
       ) : (
@@ -389,6 +427,7 @@ export function App() {
           onSubmit={() => send()}
           onStop={handleStop}
           onRegenerate={handleRegenerate}
+          onRetry={handleRetry}
           canRegenerate={canRegenerate}
           asleep={asleep}
           retryAfter={retryAfter}
@@ -403,6 +442,7 @@ export function App() {
           onThemeToggle={() => setTheme(theme === 'light' ? 'dark' : 'light')}
           onOpenHistory={() => setDrawerOpen(true)}
           onNewChat={handleNewChat}
+          onExport={handleExport}
           showStorageNotice={!store.storageNoticeSeen}
           onDismissStorageNotice={() => setStore((s) => ({ ...s, storageNoticeSeen: true }))}
         />

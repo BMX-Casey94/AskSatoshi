@@ -5,6 +5,8 @@
  */
 
 import { existsSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import MiniSearch from 'minisearch';
 
 export interface CorpusDoc {
@@ -62,14 +64,32 @@ export class SatoshiCorpus {
   }
 }
 
-/** Load the pinned corpus; returns null (fail-open to MCP-only) when it has not been built. */
-export function loadCorpus(path: string): SatoshiCorpus | null {
-  if (!existsSync(path)) {
-    console.warn(`[corpus] ${path} not found — run \`npm run fetch-corpus\`. Quote fallback disabled.`);
-    return null;
+/**
+ * Load the pinned corpus; returns null (fail-open to MCP-only) when it has not been built.
+ * The default branch reads via a const assigned from a literal join() relative to this
+ * module — the one pattern Vercel's file tracer (@vercel/nft) can resolve statically,
+ * so the corpus JSON is bundled into the serverless function.
+ */
+export function loadCorpus(path?: string): SatoshiCorpus | null {
+  let corpusPath: string;
+  let raw: string;
+  if (path) {
+    corpusPath = path;
+    if (!existsSync(corpusPath)) {
+      console.warn(`[corpus] ${corpusPath} not found — run \`npm run fetch-corpus\`. Quote fallback disabled.`);
+      return null;
+    }
+    raw = readFileSync(corpusPath, 'utf8');
+  } else {
+    corpusPath = join(dirname(fileURLToPath(import.meta.url)), '..', 'data', 'satoshi-corpus.json');
+    if (!existsSync(corpusPath)) {
+      console.warn(`[corpus] ${corpusPath} not found — run \`npm run fetch-corpus\`. Quote fallback disabled.`);
+      return null;
+    }
+    raw = readFileSync(corpusPath, 'utf8');
   }
   try {
-    const parsed = JSON.parse(readFileSync(path, 'utf8')) as CorpusFile;
+    const parsed = JSON.parse(raw) as CorpusFile;
     if (!Array.isArray(parsed.documents) || parsed.documents.length === 0) {
       console.warn('[corpus] corpus file has no documents — quote fallback disabled.');
       return null;

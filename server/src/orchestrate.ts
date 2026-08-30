@@ -15,6 +15,9 @@
 import type { McpBridge } from './mcp.js';
 import type { SatoshiCorpus, CorpusDoc } from './satoshiCorpus.js';
 
+/** Where a source sits in the evidentiary hierarchy. */
+export type SourceClass = 'satoshi-primary' | 'spec' | 'later-commentary';
+
 export interface Citation {
   label: string;
   /** Human-readable source title, when known. */
@@ -25,6 +28,8 @@ export interface Citation {
   excerpt?: string;
   /** ISO date (YYYY-MM-DD) when known — used for Quoted remarks in the panel. */
   date?: string;
+  /** Evidentiary class — drives the provenance chip in the UI. */
+  sourceClass?: SourceClass;
 }
 
 export interface Grounding {
@@ -301,6 +306,7 @@ function buildMcpGrounding(evidence: NormalisedEvidence): Grounding {
       title,
       url,
       excerpt: panelSource ? cleanSlice(panelSource, PANEL_EXCERPT_CHARS) : undefined,
+      sourceClass: 'spec',
     });
     const n = citations.length;
     refNumbers.set(ref, n);
@@ -381,6 +387,7 @@ function buildCorpusGrounding(docs: CorpusDoc[]): Grounding {
       url: d.url,
       date: isQuote && d.date ? d.date : undefined,
       excerpt: isQuote ? wrapAsQuotation(sliced) : sliced,
+      sourceClass: 'satoshi-primary',
     };
   });
   const evidenceText = docs
@@ -423,27 +430,29 @@ async function hydrateBodies(evidence: NormalisedEvidence, mcp: McpBridge): Prom
   );
 }
 
-/** Build a grounding bundle directly from search_knowledge hits (essay/conceptual path). */
+/**
+ * Build a grounding bundle for conceptual questions by BLENDING sources: Satoshi's own
+ * 2008–2011 writings (primary) come first, then later essays/principles (commentary).
+ * Primary sources must never be preempted by a later essayist's interpretation.
+ */
 async function searchGrounding(
   question: string,
   mcp: McpBridge,
+  corpus: SatoshiCorpus | null,
 ): Promise<Grounding | null> {
-  let raw: unknown;
-  try {
-    raw = await mcp.searchKnowledge(
-      question,
-      { kind: ['essay', 'principle'], authority_max: 4 },
-      30,
-    );
-  } catch {
-    return null;
-  }
-  const hits = (typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>).hits : undefined);
-  if (!Array.isArray(hits) || hits.length === 0) return null;
+  // Pull later commentary (essays) and Satoshi's own writings in parallel.
+  const essayPromise = mcp
+    .searchKnowledge(question, { kind: ['essay', 'principle'], authority_max: 4 }, 30)
+    .catch(() => null);
+  const primaryDocs = corpus ? corpus.search(question, 2) : [];
+  const raw = await essayPromise;
 
-  // Keep only hits that resolve to a real, clickable URL.
+  const hits = (typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>).hits : undefined);
+  const essayHits = Array.isArray(hits) ? hits : [];
+
+  // Keep only essay hits that resolve to a real, clickable URL.
   const picked: { title: string; url: string; locator: string }[] = [];
-  for (const h of hits) {
+  for (const h of essayHits) {
     if (typeof h !== 'object' || h === null) continue;
     const hit = h as Record<string, unknown>;
     const locator = typeof hit.locator === 'string' ? hit.locator : '';
@@ -454,15 +463,17 @@ async function searchGrounding(
       url,
       locator,
     });
-    if (picked.length >= MAX_CITATIONS) break;
+    if (picked.length >= 3) break; // leave room for primary sources
   }
-  if (picked.length === 0) return null;
 
-  // Fetch full bodies for evidence + panel excerpts.
-  const citations: Citation[] = [];
-  const evidenceParts: string[] = [];
+  // Nothing from either tier — fail closed so the caller can fall back.
+  if (picked.length === 0 && primaryDocs.length === 0) return null;
+
+  // Fetch full bodies for the essay hits (evidence + panel excerpts).
+  const essayCitations: Citation[] = [];
+  const essayParts: string[] = [];
   await Promise.all(
-    picked.map(async (p, i) => {
+    picked.map(async (p) => {
       let body: string | undefined;
       try {
         body = resourceText(await mcp.getResource(p.locator));
@@ -471,22 +482,63 @@ async function searchGrounding(
       }
       const text = body ? cleanSlice(body, MAX_EXCERPT_CHARS) : '';
       const title = cleanTitle(p.title) ?? p.title;
-      citations.push({
+      essayCitations.push({
         label: title,
         title,
         url: p.url,
         excerpt: body ? cleanSlice(body, PANEL_EXCERPT_CHARS) : undefined,
+        sourceClass: 'later-commentary',
       });
-      evidenceParts.push(`[${i + 1}] ${title}\n${text}`);
+      essayParts.push(`${title}\n${text}`);
     }),
   );
+
+  // Primary sources (Satoshi's own writings) are numbered FIRST.
+  const citations: Citation[] = [];
+  const primaryParts: string[] = [];
+  for (const d of primaryDocs) {
+    const sliced = cleanSlice(d.text, MAX_CORPUS_SLICE_CHARS);
+    const isQuote = d.kind === 'quote';
+    citations.push({
+      label: corpusLabel(d),
+      title: isQuote ? 'A historical quote from Satoshi' : cleanTitle(d.title),
+      url: d.url,
+      date: isQuote && d.date ? d.date : undefined,
+      excerpt: isQuote ? wrapAsQuotation(cleanSlice(d.text, PANEL_EXCERPT_CHARS)) : cleanSlice(d.text, PANEL_EXCERPT_CHARS),
+      sourceClass: 'satoshi-primary',
+    });
+    primaryParts.push(`${corpusLabel(d)}\n${sliced}`);
+  }
+
+  // Assemble numbered evidence: primary first, then commentary.
+  const all = [...citations.map((c) => ({ c, primary: true })), ...essayCitations.map((c) => ({ c, primary: false }))];
+  const numbered = all.map((entry, i) => ({ ...entry, n: i + 1 }));
+  const evidenceSections: string[] = [];
+  if (primaryParts.length > 0) {
+    const blocks = numbered
+      .filter((e) => e.primary)
+      .map((e) => `[${e.n}] ${primaryParts[numbered.filter((x) => x.primary).indexOf(e)]}`)
+      .join('\n\n');
+    evidenceSections.push(
+      "PRIMARY SOURCES — your own 2008–2011 writings (these are the authoritative record of your design intent):\n\n" + blocks,
+    );
+  }
+  if (essayParts.length > 0) {
+    const blocks = numbered
+      .filter((e) => !e.primary)
+      .map((e) => `[${e.n}] ${essayParts[numbered.filter((x) => !x.primary).indexOf(e)]}`)
+      .join('\n\n');
+    evidenceSections.push(
+      'LATER COMMENTARY — essays and principles written years after 2011 (one later interpretation, NOT your own words and not a unanimous record; do not present as settled history):\n\n' + blocks,
+    );
+  }
 
   return {
     mode: 'mcp',
     evidenceText:
-      'VIEWPOINT NOTICE: The excerpts below are later commentary and principles (largely essays published years after 2011), not your contemporaneous 2008–2011 writings and not a unanimous technical record. They represent one later interpretation — do not present them as settled history or as "what everyone knows".\n\n' +
-      `RELEVANT ESSAYS / PRINCIPLES (cite only these numbered sources):\n\n${evidenceParts.join('\n\n')}`,
-    citations,
+      'VIEWPOINT NOTICE: Where primary sources and later commentary differ, your own 2008–2011 writings are authoritative. Later essays are one interpretation — acknowledge disagreement rather than presenting them as settled fact.\n\n' +
+      evidenceSections.join('\n\n'),
+    citations: numbered.map((e) => e.c).slice(0, MAX_CITATIONS),
   };
 }
 
@@ -501,7 +553,7 @@ export async function groundQuestion(
       // fails closed. Go straight to the essay/principle corpus for those.
       const canSearch = typeof mcp.searchKnowledge === 'function' && typeof mcp.getResource === 'function';
       if (canSearch && isConceptualQuestion(question)) {
-        const g = await searchGrounding(question, mcp);
+        const g = await searchGrounding(question, mcp, deps.corpus);
         if (g) return g;
       }
 
@@ -513,7 +565,7 @@ export async function groundQuestion(
       }
       // investigate found nothing solid — try the essay corpus before giving up.
       if (canSearch) {
-        const g = await searchGrounding(question, mcp);
+        const g = await searchGrounding(question, mcp, deps.corpus);
         if (g) return g;
       }
     } catch (err) {

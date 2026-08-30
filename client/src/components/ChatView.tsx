@@ -8,7 +8,7 @@ import { Composer } from './Composer';
 import { MessageList } from './MessageList';
 import { SleepBanner } from './SleepBanner';
 import { ThemeToggle } from './ThemeToggle';
-import { CloseIcon, HomeIcon, MenuIcon, PlusIcon, RegenerateIcon } from './icons';
+import { CloseIcon, DownloadIcon, HomeIcon, MenuIcon, PlusIcon, RegenerateIcon } from './icons';
 
 interface Props {
   messages: Message[];
@@ -19,6 +19,7 @@ interface Props {
   onSubmit: () => void;
   onStop: () => void;
   onRegenerate: () => void;
+  onRetry: (failedAssistantId: string) => void;
   canRegenerate: boolean;
   asleep: boolean;
   retryAfter?: string;
@@ -33,6 +34,7 @@ interface Props {
   onThemeToggle: () => void;
   onOpenHistory: () => void;
   onNewChat: () => void;
+  onExport: () => void;
   showStorageNotice: boolean;
   onDismissStorageNotice: () => void;
 }
@@ -54,6 +56,17 @@ export function ChatView(props: Props) {
           <HomeIcon size={18} />
         </button>
         <div className="chat-header-actions">
+          {props.messages.length > 0 && (
+            <button
+              type="button"
+              className="icon-btn"
+              onClick={props.onExport}
+              aria-label="Export chat as Markdown"
+              title="Export chat as Markdown"
+            >
+              <DownloadIcon size={18} />
+            </button>
+          )}
           {props.canRegenerate && !props.sending && (
             <button
               type="button"
@@ -71,7 +84,12 @@ export function ChatView(props: Props) {
           <ThemeToggle theme={props.theme} onToggle={props.onThemeToggle} />
         </div>
       </header>
-      <MessageList messages={props.messages} awaitingFirstToken={props.awaitingFirstToken} />
+      <MessageList
+        messages={props.messages}
+        awaitingFirstToken={props.awaitingFirstToken}
+        onRetry={props.onRetry}
+        sending={props.sending}
+      />
       <div className="chat-dock">
         {props.showStorageNotice && (
           <div className="storage-note" role="note">
@@ -106,7 +124,10 @@ export function ChatView(props: Props) {
           onFocusChange={() => undefined}
         />
         {props.asleep && <SleepBanner retryAfter={props.retryAfter} lines={props.sleepLines} />}
-        <p className="chat-footnote">Free to use. No sign-up required. Chats are saved locally on your device.</p>
+        <p className="chat-footnote">
+          An AI speaking in Satoshi's voice — not Satoshi Nakamoto. Answers are grounded in the cited
+          sources. Free to use; chats are saved locally on your device.
+        </p>
       </div>
     </div>
   );

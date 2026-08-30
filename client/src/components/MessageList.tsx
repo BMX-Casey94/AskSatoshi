@@ -5,18 +5,26 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import type { Citation, Message } from '../types';
+import type { Citation, Message, SourceClass } from '../types';
 import { renderMarkdown } from '../lib/markdown';
 import { TypingIndicator } from './TypingIndicator';
 import { CitationPanel } from './CitationPanel';
 import { BookIcon } from './icons';
 
+const SOURCE_CLASS_LABEL: Record<SourceClass, string> = {
+  'satoshi-primary': 'Satoshi 2008–11',
+  spec: 'Spec',
+  'later-commentary': 'Later commentary',
+};
+
 interface Props {
   messages: Message[];
   awaitingFirstToken: boolean;
+  onRetry?: (failedAssistantId: string) => void;
+  sending?: boolean;
 }
 
-export function MessageList({ messages, awaitingFirstToken }: Props) {
+export function MessageList({ messages, awaitingFirstToken, onRetry, sending }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [pinned, setPinned] = useState(true);
   const [openCite, setOpenCite] = useState<{ citation: Citation; index: number } | null>(null);
@@ -45,7 +53,18 @@ export function MessageList({ messages, awaitingFirstToken }: Props) {
           ) : (
             <div key={m.id} className="msg-row msg-row--assistant">
               {m.errorCode ? (
-                <div className="msg-error">{m.content}</div>
+                <div className="msg-error">
+                  <span className="msg-error-text">{m.content}</span>
+                  {onRetry && !sending && m.errorCode !== 'EXHAUSTED' && (
+                    <button
+                      type="button"
+                      className="msg-error-retry"
+                      onClick={() => onRetry(m.id)}
+                    >
+                      Try again
+                    </button>
+                  )}
+                </div>
               ) : (
                 <>
                   <div
@@ -68,7 +87,12 @@ export function MessageList({ messages, awaitingFirstToken }: Props) {
                                 className="source-link"
                                 onClick={() => setOpenCite({ citation: c, index: i + 1 })}
                               >
-                                {label}
+                                {c.sourceClass && (
+                                  <span className={`source-chip source-chip--${c.sourceClass}`}>
+                                    {SOURCE_CLASS_LABEL[c.sourceClass]}
+                                  </span>
+                                )}
+                                <span className="source-title">{label}</span>
                               </button>
                             </li>
                           );

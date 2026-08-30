@@ -1,3 +1,6 @@
+/** Where a source sits in the evidentiary hierarchy. */
+export type SourceClass = 'satoshi-primary' | 'spec' | 'later-commentary';
+
 export interface Citation {
   label: string;
   /** Human-readable source title, when known. */
@@ -8,6 +11,8 @@ export interface Citation {
   excerpt?: string;
   /** ISO date (YYYY-MM-DD or full) when known — shown above Quoted remarks. */
   date?: string;
+  /** Evidentiary class — drives the provenance chip in the UI. */
+  sourceClass?: SourceClass;
 }
 
 export type MessageRole = 'user' | 'assistant';

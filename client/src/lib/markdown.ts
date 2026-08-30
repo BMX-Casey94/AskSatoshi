@@ -25,6 +25,8 @@ md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
 export function renderMarkdown(text: string): string {
   return DOMPurify.sanitize(md.render(text), {
     USE_PROFILES: { html: true },
-    FORBID_TAGS: ['style', 'form', 'input', 'button'],
+    FORBID_TAGS: ['style', 'form', 'input', 'button', 'svg', 'math'],
+    // Only web-safe link protocols — blocks javascript:, data:, vbscript: etc.
+    ALLOWED_URI_REGEXP: /^(?:https?|mailto):/i,
   });
 }

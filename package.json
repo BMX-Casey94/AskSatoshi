@@ -4,17 +4,23 @@
   "private": true,
   "type": "module",
   "description": "Ask Satoshi — a free, no-sign-up chatbot grounded in the BSV-AIO-MCP knowledge server and Satoshi Nakamoto's historical writings.",
+  "workspaces": [
+    "server",
+    "client"
+  ],
   "engines": {
     "node": ">=22.13"
   },
   "scripts": {
-    "install:all": "npm --prefix server install && npm --prefix client install",
     "dev": "concurrently -n server,client -c blue,magenta --restart-tries 3 --restart-after 1000 \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
     "build": "npm --prefix server run build && npm --prefix client run build",
     "start": "node server/dist/index.js",
     "test": "npm --prefix server run test",
     "typecheck": "npm --prefix server run typecheck && npm --prefix client run typecheck",
     "fetch-corpus": "npm --prefix server run fetch-corpus"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
   },
   "devDependencies": {
     "concurrently": "^10.0.5"

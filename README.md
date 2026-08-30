@@ -63,13 +63,33 @@ automatically.
 ## Production
 
 ```bash
-npm run build
-npm start   # serves client/dist and the API from one Node process
+npm install   # workspaces: installs server + client together
+npm run build # server → server/dist, client → repo-root public/
+npm start     # serves public/ and the API from one Node process
 ```
 
-Deploy to a **long-running Node host** (Railway, Render, Fly, a VPS…). Serverless platforms
-(Vercel/Netlify functions) are unsuitable: the MCP child process needs a persistent process.
-Set `ALLOWED_ORIGIN` to your public origin and `TRUST_PROXY=1` when behind a proxy.
+### Vercel
+
+The repo deploys to Vercel as-is: the client builds into `public/` (served by Vercel's CDN)
+and the Express app is default-exported from the root `index.js`, which Vercel runs as a
+single function on Fluid compute. Import the repo at vercel.com/new — no build settings to
+override — and set your keys under Project → Environment Variables (`GEMINI_API_KEY`,
+`GROQ_API_KEY`, optional `OPENROUTER_API_KEY`). `TRUST_PROXY` is handled automatically.
+
+Caveats of the serverless model:
+
+- The BSV-AIO-MCP child process is best-effort: it lives while an instance is warm but does
+  not survive cold starts. When it is down, answers fall back to Satoshi's own posts and
+  e-mails (the pinned corpus) — the site stays up, grounding is just thinner.
+- Rate limits, the quota breaker and the answer cache are in-memory, so they apply per
+  function instance rather than globally.
+- Function duration caps apply to chat streams (plan-dependent).
+
+### Long-running host (guaranteed MCP)
+
+For an always-on MCP child process, deploy to Railway, Render, Fly or a VPS instead:
+`npm install`, `npm run build`, `npm start`, with `ALLOWED_ORIGIN` set to your public origin
+and `TRUST_PROXY=1` when behind a proxy.
 
 ## Privacy notes
 

@@ -3,7 +3,7 @@
  * from the readable stream. All errors from the server arrive as typed witty events.
  */
 
-import type { AttachedImage, Citation, StatusResponse } from '../types';
+import type { AttachedImage, Citation, SatoshiActivityResponse, StatusResponse } from '../types';
 
 export interface ChatHandlers {
   onDelta: (text: string) => void;
@@ -23,6 +23,37 @@ export async function getStatus(signal?: AbortSignal): Promise<StatusResponse> {
   const res = await fetch('/api/status', { signal });
   if (!res.ok) throw new Error(`status ${res.status}`);
   return (await res.json()) as StatusResponse;
+}
+
+function isSatoshiActivityResponse(value: unknown): value is SatoshiActivityResponse {
+  if (!value || typeof value !== 'object') return false;
+  const o = value as Record<string, unknown>;
+  const byKind = o.byKind;
+  if (!byKind || typeof byKind !== 'object') return false;
+  const kinds = byKind as Record<string, unknown>;
+  if (typeof o.generatedAt !== 'string' || typeof o.total !== 'number') return false;
+  if (typeof kinds.emails !== 'number' || typeof kinds.posts !== 'number') return false;
+  if (!Array.isArray(o.points)) return false;
+  return o.points.every((p) => {
+    if (!p || typeof p !== 'object') return false;
+    const row = p as Record<string, unknown>;
+    return (
+      typeof row.date === 'string' &&
+      typeof row.kind === 'string' &&
+      typeof row.title === 'string' &&
+      typeof row.url === 'string'
+    );
+  });
+}
+
+export async function getSatoshiActivity(signal?: AbortSignal): Promise<SatoshiActivityResponse> {
+  const res = await fetch('/api/satoshi-activity', { signal });
+  if (!res.ok) throw new Error(`Activity record unavailable (${res.status}).`);
+  const body: unknown = await res.json();
+  if (!isSatoshiActivityResponse(body)) {
+    throw new Error('Activity record was malformed.');
+  }
+  return body;
 }
 
 export async function streamChat(

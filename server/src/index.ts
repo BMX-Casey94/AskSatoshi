@@ -28,6 +28,7 @@ import {
   pickStyleSeed,
   questionClass,
 } from './orchestrate.js';
+import { getSatoshiActivity } from './satoshiActivity.js';
 import { loadCorpus } from './satoshiCorpus.js';
 import { loadCuratedReference } from './curatedReference.js';
 
@@ -185,6 +186,10 @@ app.get('/api/health', (_req, res) => {
     // Diagnostic only — helps explain a down MCP on serverless without leaking internals.
     mcpError: mcp.connected ? null : mcp.lastConnectError,
   });
+});
+
+app.get('/api/satoshi-activity', (_req, res) => {
+  res.json(getSatoshiActivity());
 });
 
 // ---------------------------------------------------------------------------

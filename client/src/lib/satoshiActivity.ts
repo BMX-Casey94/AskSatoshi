@@ -1,0 +1,197 @@
+/**
+ * Aggregate Satoshi activity points for the two chart views.
+ * Dates are treated as UTC (ISO, sorted ascending from the API).
+ */
+
+import type { ActivityKind, ActivityPoint } from '../types';
+
+export interface MonthBucket {
+  key: string;
+  label: string;
+  posts: number;
+  emails: number;
+}
+
+export interface HourHistogram {
+  hours: number[];
+  /** True when no timed posts existed and e-mails (or other kinds) were used instead. */
+  usedAllKinds: boolean;
+  timedCount: number;
+}
+
+export interface ActiveWindow {
+  startHour: number;
+  endHour: number;
+  total: number;
+  /** UTC offset implied if the peak 4-hour block is local evening 19:00–23:00. */
+  impliedOffsetHours: number;
+}
+
+export function normaliseKind(kind: string): ActivityKind | 'other' {
+  const k = kind.trim().toLowerCase();
+  if (k === 'post' || k === 'posts') return 'posts';
+  if (k === 'email' || k === 'emails' || k === 'e-mail' || k === 'e-mails') return 'emails';
+  return 'other';
+}
+
+export function hasClock(iso: string): boolean {
+  return /T\d{2}/.test(iso);
+}
+
+function parseUtc(iso: string): Date | null {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function monthKey(d: Date): string {
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+  return `${y}-${m}`;
+}
+
+function monthLabel(key: string, includeYear: boolean): string {
+  const [ys, ms] = key.split('-');
+  const y = Number(ys);
+  const m = Number(ms);
+  if (!Number.isFinite(y) || !Number.isFinite(m)) return key;
+  const month = new Date(Date.UTC(y, m - 1, 1)).toLocaleString('en-GB', {
+    month: 'short',
+    timeZone: 'UTC',
+  });
+  return includeYear ? `${month} ${y}` : month;
+}
+
+/** Continuous UTC months from the first dated point to the last, gaps filled with zeros. */
+export function monthlyBuckets(points: ActivityPoint[]): MonthBucket[] {
+  const dated: { key: string; kind: ActivityKind }[] = [];
+  for (const p of points) {
+    const d = parseUtc(p.date);
+    if (!d) continue;
+    const kind = normaliseKind(p.kind);
+    if (kind === 'other') continue;
+    dated.push({ key: monthKey(d), kind });
+  }
+  if (dated.length === 0) return [];
+
+  const keys = dated.map((row) => row.key).sort();
+  const first = keys[0]!;
+  const last = keys[keys.length - 1]!;
+
+  const counts = new Map<string, { posts: number; emails: number }>();
+  for (const row of dated) {
+    const cur = counts.get(row.key) ?? { posts: 0, emails: 0 };
+    cur[row.kind] += 1;
+    counts.set(row.key, cur);
+  }
+
+  const firstParts = first.split('-');
+  const lastParts = last.split('-');
+  let y = Number(firstParts[0]);
+  let m = Number(firstParts[1]);
+  const endY = Number(lastParts[0]);
+  const endM = Number(lastParts[1]);
+  if (![y, m, endY, endM].every(Number.isFinite)) return [];
+
+  const result: MonthBucket[] = [];
+  while (y < endY || (y === endY && m <= endM)) {
+    const key = `${y}-${String(m).padStart(2, '0')}`;
+    const c = counts.get(key) ?? { posts: 0, emails: 0 };
+    const showYear = m === 1 || result.length === 0;
+    result.push({
+      key,
+      label: monthLabel(key, showYear),
+      posts: c.posts,
+      emails: c.emails,
+    });
+    m += 1;
+    if (m > 12) {
+      m = 1;
+      y += 1;
+    }
+  }
+  return result;
+}
+
+/** Posts by UTC hour (0–23). Falls back to every timed point if no timed posts exist. */
+export function hourHistogram(points: ActivityPoint[]): HourHistogram {
+  const timedPosts = points.filter((p) => normaliseKind(p.kind) === 'posts' && hasClock(p.date));
+  const source = timedPosts.length > 0 ? timedPosts : points.filter((p) => hasClock(p.date));
+  const hours = Array.from({ length: 24 }, () => 0);
+  for (const p of source) {
+    const d = parseUtc(p.date);
+    if (!d) continue;
+    const h = d.getUTCHours();
+    hours[h] = (hours[h] ?? 0) + 1;
+  }
+  return {
+    hours,
+    usedAllKinds: timedPosts.length === 0 && source.length > 0,
+    timedCount: source.length,
+  };
+}
+
+/** Highest-count 4-hour block, wrapping midnight. */
+export function peakFourHourBlock(hours: readonly number[]): ActiveWindow | null {
+  if (hours.length !== 24) return null;
+  let bestStart = 0;
+  let bestTotal = -1;
+  for (let start = 0; start < 24; start++) {
+    let total = 0;
+    for (let i = 0; i < 4; i++) {
+      total += hours[(start + i) % 24] ?? 0;
+    }
+    if (total > bestTotal) {
+      bestTotal = total;
+      bestStart = start;
+    }
+  }
+  if (bestTotal <= 0) return null;
+
+  // Assume the block is local evening 19:00–23:00; local = UTC + offset.
+  let implied = 19 - bestStart;
+  while (implied > 12) implied -= 24;
+  while (implied < -12) implied += 24;
+
+  return {
+    startHour: bestStart,
+    endHour: (bestStart + 4) % 24,
+    total: bestTotal,
+    impliedOffsetHours: implied,
+  };
+}
+
+export function formatUtcOffset(hours: number): string {
+  if (hours === 0) return 'UTC';
+  const sign = hours > 0 ? '+' : '−';
+  const abs = Math.abs(hours);
+  const whole = Math.trunc(abs);
+  const mins = Math.round((abs - whole) * 60);
+  if (mins === 0) return `UTC${sign}${whole}`;
+  return `UTC${sign}${whole}:${String(mins).padStart(2, '0')}`;
+}
+
+export function formatHourLabel(hour: number): string {
+  return `${String(((hour % 24) + 24) % 24).padStart(2, '0')}:00`;
+}
+
+export function niceMax(n: number): number {
+  if (n <= 0) return 1;
+  const pow = 10 ** Math.floor(Math.log10(n));
+  const nrm = n / pow;
+  const nice = nrm <= 1 ? 1 : nrm <= 2 ? 2 : nrm <= 5 ? 5 : 10;
+  return nice * pow;
+}
+
+export function formatGeneratedAt(iso: string): string | null {
+  const d = parseUtc(iso);
+  if (!d) return null;
+  return d.toLocaleString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'UTC',
+    timeZoneName: 'short',
+  });
+}

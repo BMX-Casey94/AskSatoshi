@@ -53,3 +53,19 @@ export interface StatusResponse {
   retryAfter?: string;
   sleepLines?: string[];
 }
+
+export type ActivityKind = 'posts' | 'emails';
+
+export interface ActivityPoint {
+  date: string;
+  kind: string;
+  title: string;
+  url: string;
+}
+
+export interface SatoshiActivityResponse {
+  generatedAt: string;
+  total: number;
+  byKind: { emails: number; posts: number };
+  points: ActivityPoint[];
+}

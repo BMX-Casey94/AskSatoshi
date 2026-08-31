@@ -13,6 +13,7 @@ import { Suggestions } from './components/Suggestions';
 import { ThemeToggle } from './components/ThemeToggle';
 import { MenuIcon } from './components/icons';
 import { getStatus, streamChat } from './lib/api';
+import { Link } from './lib/router';
 import { exportThreadMarkdown } from './lib/exportThread';
 import { createRecogniser } from './lib/speech';
 import { clearStore, loadStore, saveStore } from './lib/storage';
@@ -389,8 +390,13 @@ export function App() {
             <Suggestions onPick={(q) => send(q)} disabled={asleep || sending} />
           </div>
           <footer className="landing-footer">
-            Grounded in the writings and the protocol record. Free to use; chats stay on your
-            device.
+            <p className="landing-footer-copy">
+              Grounded in the writings and the protocol record. Free to use; chats stay on your
+              device.
+            </p>
+            <Link href="/satoshi-activity" className="landing-footer-link">
+              Satoshi activity
+            </Link>
           </footer>
         </main>
       ) : (

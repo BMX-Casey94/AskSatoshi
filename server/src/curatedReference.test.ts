@@ -5,12 +5,13 @@ import { join } from 'node:path';
 import {
   CuratedReference,
   isIdentityQuestion,
+  isImplementationQuestion,
   isScalingQuestion,
   loadCuratedReference,
   type DossierEntry,
   type ScalingRecord,
 } from './curatedReference.js';
-import { groundQuestion } from './orchestrate.js';
+import { groundQuestion, questionClass } from './orchestrate.js';
 import type { McpBridge } from './mcp.js';
 
 const ENTRY = (over: Partial<DossierEntry>): DossierEntry => ({
@@ -32,6 +33,19 @@ const SCALING: ScalingRecord = {
       title: 'Horizontal Scaling of UTXO-Based Transaction Processing',
       url: 'https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7219719',
       excerpt: '79.09 billion TPS peak.',
+    },
+  ],
+};
+
+const IMPLEMENTATION: ScalingRecord = {
+  evidenceText:
+    'IMPLEMENTATION STACK — BSV-only: prescribe BRC-100, native script, OP_RETURN and SPV. Never prescribe Taproot, SegWit or Lightning.',
+  citations: [
+    {
+      label: 'BRC-100 — Wallet Interface',
+      title: 'BRC-100 Wallet-to-Application Interface',
+      url: 'https://github.com/bsv-blockchain/BRCs/blob/master/wallet/0100.md',
+      excerpt: 'The wallet-to-application interface.',
     },
   ],
 };
@@ -67,6 +81,29 @@ describe('isIdentityQuestion', () => {
     expect(isIdentityQuestion('How many satoshis are in one bitcoin?')).toBe(false);
     expect(isIdentityQuestion('How do private keys work?')).toBe(false);
     expect(isIdentityQuestion('What is OP_CHECKSIG?')).toBe(false);
+  });
+});
+
+describe('isImplementationQuestion', () => {
+  it('matches builder and application frames', () => {
+    expect(
+      isImplementationQuestion(
+        'If I were to make an application for a charity that can be transparent and ran on-chain, what would you choose to implement and why?',
+      ),
+    ).toBe(true);
+    expect(isImplementationQuestion('How do I build a wallet that talks to the chain?')).toBe(true);
+    expect(isImplementationQuestion('What stack should I use for an on-chain donation platform?')).toBe(true);
+  });
+
+  it('lets critique and definition of BTC features through as non-builder questions', () => {
+    expect(isImplementationQuestion('What is Taproot?')).toBe(false);
+    expect(isImplementationQuestion('Why is SegWit a problem?')).toBe(false);
+    expect(isImplementationQuestion('Explain Lightning Network')).toBe(false);
+    expect(isImplementationQuestion('How do I know if Bitcoin is private?')).toBe(false);
+  });
+
+  it('classifies builder questions as facts so the answer does not hedge', () => {
+    expect(questionClass('How do I build a charity app on chain?')).toBe('fact');
   });
 });
 
@@ -196,5 +233,17 @@ describe('groundQuestion with curated reference', () => {
     const g = await groundQuestion('zxqwv unrelated gibberish', { mcp: thinMcp(), corpus: null, curated });
     expect(g.mode).toBe('none');
     expect(g.evidenceText).toBe('');
+  });
+
+  it('appends the BSV implementation stack to builder questions', async () => {
+    const curated = new CuratedReference([], null, IMPLEMENTATION);
+    const g = await groundQuestion(
+      'If I were to make an application for a charity that ran on-chain, what would you choose to implement?',
+      { mcp: thinMcp(), corpus: null, curated },
+    );
+    expect(g.evidenceText).toContain('IMPLEMENTATION STACK');
+    expect(g.evidenceText).toContain('BRC-100');
+    expect(g.citations.some((c) => c.url?.includes('0100.md'))).toBe(true);
+    expect(g.citations.find((c) => c.url?.includes('0100.md'))?.sourceClass).toBe('historical-record');
   });
 });

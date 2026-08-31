@@ -23,6 +23,7 @@ const PLATFORM_SUFFIXES: ReadonlyArray<readonly [string, string]> = [
   ['gizmodo.com', 'Gizmodo'],
   ['bsvassociation.org', 'BSV Association'],
   ['bsvblockchain.org', 'BSV Blockchain'],
+  ['bitgenius.net', 'BitGenius'],
   ['amazon.com', 'AWS'],
 ];
 

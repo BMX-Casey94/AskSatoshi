@@ -114,7 +114,9 @@ fi
 log "Installing systemd unit…"
 install -m 0644 "$APP_DIR/deploy/ask-satoshi.service" "/etc/systemd/system/$SERVICE_NAME.service"
 systemctl daemon-reload
-systemctl enable --now "$SERVICE_NAME"
+systemctl enable "$SERVICE_NAME"
+# enable --now only starts a stopped unit; a rebuild must replace the running process.
+systemctl restart "$SERVICE_NAME"
 
 # --- 8. Caddy reverse proxy --------------------------------------------------
 # This VPS may already serve other sites from Caddy. Never overwrite an existing

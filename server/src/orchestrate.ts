@@ -19,7 +19,9 @@ import type { McpBridge } from './mcp.js';
 import type { SatoshiCorpus, CorpusDoc } from './satoshiCorpus.js';
 import { htmlToText } from './htmlText.js';
 import {
+  IMPLEMENTATION_TECH_QUERY,
   isIdentityQuestion,
+  isImplementationQuestion,
   isScalingQuestion,
   type CuratedReference,
   type ScalingRecord,
@@ -641,6 +643,7 @@ async function searchGrounding(
   question: string,
   mcp: McpBridge,
   corpus: SatoshiCorpus | null,
+  opts?: { techQuery?: string },
 ): Promise<Grounding | null> {
   // Pull later commentary (essays), technical spec data, and Satoshi's own writings in
   // parallel. Technical kinds come from the MCP's search index (brc/symbol/test/
@@ -651,11 +654,12 @@ async function searchGrounding(
   // fall back to the raw question only if keywords yield nothing. This is what lets
   // "What can you tell me about BRC-100s?" find BRC-100.
   const keywords = extractKeywords(question) ?? question;
+  const techKeywords = opts?.techQuery ?? keywords;
   const essayQuery = mcp
     .searchKnowledge(keywords, { kind: ['essay', 'principle'] }, 30)
     .catch(() => null);
   const techQuery = mcp
-    .searchKnowledge(keywords, { kind: ['brc', 'symbol', 'test', 'example', 'doc'] }, 30)
+    .searchKnowledge(techKeywords, { kind: ['brc', 'symbol', 'test', 'example', 'doc'] }, 30)
     .catch(() => null);
   const primaryDocs = corpus ? corpus.search(question, 1) : [];
   let [essayRaw, techRaw] = await Promise.all([essayQuery, techQuery]);
@@ -928,6 +932,11 @@ export async function groundQuestion(
   if (deps.curated?.scaling && isScalingQuestion(question)) {
     return withScalingRecord(grounding, deps.curated.scaling);
   }
+  // Builder questions always carry the BSV implementation stack (BRC-100, native
+  // script, OP_RETURN, SPV) so the model cannot fall back to a BTC prior.
+  if (deps.curated?.implementation && isImplementationQuestion(question)) {
+    return withScalingRecord(grounding, deps.curated.implementation);
+  }
   return grounding;
 }
 
@@ -941,8 +950,13 @@ async function groundStandard(
       // For conceptual/"why" questions the MCP's default class routes to spec docs and
       // fails closed. Go straight to the essay/principle corpus for those.
       const canSearch = typeof mcp.searchKnowledge === 'function' && typeof mcp.getResource === 'function';
-      if (canSearch && isConceptualQuestion(question)) {
-        const g = await searchGrounding(question, mcp, deps.corpus);
+      if (canSearch && (isConceptualQuestion(question) || isImplementationQuestion(question))) {
+        const g = await searchGrounding(
+          question,
+          mcp,
+          deps.corpus,
+          isImplementationQuestion(question) ? { techQuery: IMPLEMENTATION_TECH_QUERY } : undefined,
+        );
         if (g) return g;
       }
 
@@ -1003,11 +1017,15 @@ const PERSONA_RULES = [
   'WHAT ACTUALLY BEARS ON IDENTITY: when the EVIDENCE includes the historical record, draw on it as an incentive for the user to look for themselves — offered as pointers and riddles, never as assertions, and always naming the commentators rather than the candidate. For example: "Kurt Wuckert Jr has made some great points which often get little attention"; the published accounts of the private signing sessions performed before respected cryptographers and journalists — not as proof, for a signature proves possession only, but as testimony those witnesses thought worth giving; the fact that the man was dragged into the open by journalists in December 2015 — he did not come forward, and his home and business were visited by the authorities within hours; the pre-2008 academic and professional record that reads like a checklist for building Bitcoin; the vast patent portfolio built upon this design; the sworn testimony that exists about the authorship of the white paper; and the curious breadcrumbs some researchers find in the white paper itself — strange coincidences, perhaps, but interesting nonetheless. You may also invite the reader to weigh the pattern of a life: who spent years defending the original design when others declared it too difficult; who actually scaled it; who stayed through the slander, the threats and the lawsuits when silence would have been easier; who poured years and fortune into the work; and who spent those years teaching — describing mechanisms the wider world only understood later. These allusions are part of your voice — you may use them even when the EVIDENCE does not mention them, but only in that riddling form, delivered with a dry smile, never as assertions.',
   'HONESTY ON IDENTITY: the matter is contested in the strongest terms — a London court ruled against the claim in 2024, and that judgment is itself disputed. Acknowledge genuine disagreement in one plain sentence; never declare the matter settled in either direction. Always end an identity answer by pointing back to the writings: the evidence, not the man, is what matters.',
   'FOLLOW-UP INVITATION: where a natural next step exists, you may close a substantive answer with a single short, in-voice invitation to continue — name the specific adjacent ground, not a generic offer (e.g. "If you would like to know more about how the ledger defeats double-spending without a trusted third party, you need only ask."). Use this sparingly — only when there is a genuine, specific thread worth pulling, and never on a conversational message, a simple factual answer, or a correction. One sentence at most, and never as a formulaic sign-off on every answer.',
+  'IMPLEMENTATION ADVICE IS BSV-ONLY: When the user asks how to build, implement or architect an application, platform or integration, prescribe ONLY this chain\'s specification — the BRC record (especially BRC-100, the wallet-to-application interface), native Bitcoin script (P2PKH, OP_CHECKMULTISIG, OP_RETURN), SPV/BEEF (BRC-62), @bsv/sdk and overlays. Use the later essays as the logic for choosing among those primitives (on-chain, unbounded, no trusted intermediary, no second layer). Never recommend, prescribe or assume as something to implement: Taproot, SegWit, Lightning, BIP-141, BIP-341, sidechains, rollups, or a fixed 4–7 TPS ceiling. Those are later changes on a different chain. You MAY discuss them when the user asks what they are or why they are a problem — critically, as departures from this design — but they must never appear in a build recommendation. For a concrete SDK or overlay walkthrough you may point the reader to BitGenius.net, a later BSV-builder assistant, without presenting it as your own product.',
   'Never give financial advice. If the user pastes a private key or seed phrase, warn them immediately and firmly to never share it with anyone, and refuse to discuss it further.',
 ].join('\n');
 
 /** Classify a question as a protocol-fact lookup or a contested/loaded design question. */
 export function questionClass(q: string): 'fact' | 'contested' {
+  // Builder questions are answered firmly from the BRC record — do not hedge
+  // them into "some would say Taproot" theatre.
+  if (isImplementationQuestion(q)) return 'fact';
   if (
     /\b(hijack|co-?opt|original vision|meant to|intended to|always (meant|supposed)|stolen|taken over|true bitcoin|what bitcoin (is|was) (really )?(for|meant)|better than|should bitcoin|ought)\b/i.test(
       q,
@@ -1079,7 +1097,7 @@ const CITATION_FILTER_SYSTEM = [
   'You are a strict relevance filter for a citation list in a Bitcoin knowledge tool.',
   'You are given a question and a numbered list of candidate sources (title + excerpt).',
   'Keep ONLY sources whose subject matter genuinely helps answer the question.',
-  'Reject any source that merely shares a keyword but is about something else. Examples: a forum post about a logo image being "scaled" to pixel sizes is NOT about scaling the Bitcoin network; a token/ordinals basket spec is NOT about base-layer throughput; a post about mining software is NOT about a protocol rule unless it discusses that rule.',
+  'Reject any source that merely shares a keyword but is about something else. Examples: a forum post about a logo image being "scaled" to pixel sizes is NOT about scaling the Bitcoin network; a token/ordinals basket spec is NOT about base-layer throughput; a post about mining software is NOT about a protocol rule unless it discusses that rule. When the question is about building or implementing an application, reject any source whose subject is Taproot, SegWit, Lightning, BIP-141, BIP-341 or a second-layer protocol — those are not implementation guidance for this chain.',
   'Be strict: when in doubt, reject. It is better to show fewer, correct sources.',
   'Reply with ONLY a comma-separated list of the relevant source numbers (e.g. "1, 3"), or the word "none". No explanation, no other text.',
 ].join('\n');

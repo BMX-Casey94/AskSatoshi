@@ -44,6 +44,9 @@ export interface ScalingRecord {
   citations: { label: string; title?: string; url?: string; excerpt?: string }[];
 }
 
+/** Same shape as the scaling record — a pinned evidence block with optional citations. */
+export type ImplementationRecord = ScalingRecord;
+
 interface DossierFile {
   entries?: DossierEntry[];
 }
@@ -87,16 +90,41 @@ export function isScalingQuestion(q: string): boolean {
   return SCALING_TERM.test(q) && !SCALING_FALSE_FRIEND.test(q);
 }
 
+/**
+ * Implementation / "how do I build this" questions. These must be answered from the
+ * BRC record (especially BRC-100) and the later essays — never with Taproot, SegWit
+ * or Lightning as something to implement. Critique of those terms is a different
+ * question and must not match here.
+ */
+const IMPLEMENTATION_BUILD =
+  /\b(implement|implementation|build(?:ing)?|develop(?:ing|ment)|application|\bapps?\b|platform|dapp|integrat(?:e|ion)|architect(?:ure)?|what (?:would|should|do) (?:you|i) (?:use|choose|recommend|implement|build)|how (?:do|would|can|should) i\b.{0,80}\b(?:build|implement|create|make|write|code|develop|integrate)|recommend (?:for|to)|stack to use|on-?chain (?:app|application|charity|platform))\b/i;
+const IMPLEMENTATION_CRITIQUE_ONLY =
+  /\b(what is|what's|whats|explain|why (?:is|was|did|does)|critique|problem with|wrong with|history of)\b.{0,40}\b(taproot|segwit|segregated witness|lightning|bip-?14[01]|bip-?341|sidechain|rollup)\b/i;
+
+export function isImplementationQuestion(q: string): boolean {
+  if (IMPLEMENTATION_CRITIQUE_ONLY.test(q)) return false;
+  return IMPLEMENTATION_BUILD.test(q);
+}
+
+/** Tech-retrieval hint so builder questions hit BRC-100 / SPV rather than a BTC prior. */
+export const IMPLEMENTATION_TECH_QUERY = 'BRC-100 BRC-62 OP_RETURN SPV wallet overlay SDK';
+
 export class CuratedReference {
   private readonly mini: MiniSearch<DossierEntry>;
   private readonly all: DossierEntry[];
   private readonly pinned: DossierEntry[];
   readonly scaling: ScalingRecord | null;
+  readonly implementation: ImplementationRecord | null;
 
-  constructor(entries: DossierEntry[], scaling: ScalingRecord | null) {
+  constructor(
+    entries: DossierEntry[],
+    scaling: ScalingRecord | null,
+    implementation: ImplementationRecord | null = null,
+  ) {
     this.all = entries;
     this.pinned = entries.filter((e) => e.pin);
     this.scaling = scaling;
+    this.implementation = implementation;
     this.mini = new MiniSearch<DossierEntry>({
       fields: ['title', 'text', 'category'],
       storeFields: ['id', 'category', 'title', 'date', 'url', 'text', 'pin'],
@@ -181,11 +209,26 @@ function parseScaling(raw: string): ScalingRecord | null {
  * module — the one pattern Vercel's file tracer (@vercel/nft) can resolve statically,
  * so the JSON is bundled into the serverless function.
  */
-export function loadCuratedReference(dossierPath?: string, scalingPath?: string): CuratedReference | null {
+function loadPinnedJson(path: string, label: string): ScalingRecord | null {
+  if (!existsSync(path)) return null;
+  try {
+    return parseScaling(readFileSync(path, 'utf8'));
+  } catch (err) {
+    console.warn(`[curated] failed to parse ${label}:`, err instanceof Error ? err.message : err);
+    return null;
+  }
+}
+
+export function loadCuratedReference(
+  dossierPath?: string,
+  scalingPath?: string,
+  implementationPath?: string,
+): CuratedReference | null {
   let entries: DossierEntry[] = [];
   let scaling: ScalingRecord | null = null;
+  let implementation: ImplementationRecord | null = null;
 
-  if (dossierPath || scalingPath) {
+  if (dossierPath || scalingPath || implementationPath) {
     if (dossierPath && existsSync(dossierPath)) {
       try {
         entries = parseDossier(readFileSync(dossierPath, 'utf8'));
@@ -193,17 +236,13 @@ export function loadCuratedReference(dossierPath?: string, scalingPath?: string)
         console.warn('[curated] failed to parse identity dossier:', err instanceof Error ? err.message : err);
       }
     }
-    if (scalingPath && existsSync(scalingPath)) {
-      try {
-        scaling = parseScaling(readFileSync(scalingPath, 'utf8'));
-      } catch (err) {
-        console.warn('[curated] failed to parse scaling record:', err instanceof Error ? err.message : err);
-      }
-    }
+    if (scalingPath) scaling = loadPinnedJson(scalingPath, 'scaling record');
+    if (implementationPath) implementation = loadPinnedJson(implementationPath, 'implementation record');
   } else {
     const dataDir = join(dirname(fileURLToPath(import.meta.url)), '..', 'data');
     const dossierFile = join(dataDir, 'identity-dossier.json');
     const scalingFile = join(dataDir, 'scaling-record.json');
+    const implementationFile = join(dataDir, 'implementation-record.json');
     if (existsSync(dossierFile)) {
       try {
         entries = parseDossier(readFileSync(dossierFile, 'utf8'));
@@ -213,18 +252,15 @@ export function loadCuratedReference(dossierPath?: string, scalingPath?: string)
     } else {
       console.warn(`[curated] ${dossierFile} not found — identity dossier disabled.`);
     }
-    if (existsSync(scalingFile)) {
-      try {
-        scaling = parseScaling(readFileSync(scalingFile, 'utf8'));
-      } catch (err) {
-        console.warn('[curated] failed to parse scaling record:', err instanceof Error ? err.message : err);
-      }
-    } else {
-      console.warn(`[curated] ${scalingFile} not found — scaling record disabled.`);
-    }
+    scaling = loadPinnedJson(scalingFile, 'scaling record');
+    if (!scaling) console.warn(`[curated] ${scalingFile} not found — scaling record disabled.`);
+    implementation = loadPinnedJson(implementationFile, 'implementation record');
+    if (!implementation) console.warn(`[curated] ${implementationFile} not found — implementation record disabled.`);
   }
 
-  if (entries.length === 0 && !scaling) return null;
-  console.log(`[curated] loaded ${entries.length} dossier entries${scaling ? ' + scaling record' : ''}`);
-  return new CuratedReference(entries, scaling);
+  if (entries.length === 0 && !scaling && !implementation) return null;
+  console.log(
+    `[curated] loaded ${entries.length} dossier entries${scaling ? ' + scaling record' : ''}${implementation ? ' + implementation record' : ''}`,
+  );
+  return new CuratedReference(entries, scaling, implementation);
 }

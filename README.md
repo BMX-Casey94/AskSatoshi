@@ -40,7 +40,10 @@ retrieval path returns: `identity-dossier.json` (third-party testimony, document
 and public curiosities bearing on the Satoshi identity question — identity answers are
 grounded here, never in "possession of a key is proof" logic) and `scaling-record.json`
 (the demonstrated-capacity record for scaling/Teranode questions: the 1M TPS sustained
-trial and the 79.09 billion TPS fleet measurement, always quoted with conditions).
+trial and the 79.09 billion TPS fleet measurement, always quoted with conditions) and
+`implementation-record.json` (the BSV-only builder stack: BRC-100, native script,
+OP_RETURN, SPV/BEEF, `@bsv/sdk` and a BitGenius.net pointer — Taproot/SegWit/Lightning
+are never prescribed as something to implement).
 Conceptual questions are blended essay-first: the later essays and article summaries are
 the primary lens, with the 2008–2011 posts and e-mails seasoning the answer.
 

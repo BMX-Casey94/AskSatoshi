@@ -1,0 +1,27 @@
+{
+  "pin": {
+    "compiledAt": "2026-08-31",
+    "note": "Pinned implementation stack for 'how do I build…' questions. Advice is BSV-only: BRC-100 as the wallet-to-application interface, native script, OP_RETURN, SPV/BEEF, @bsv/sdk and overlays. The later essays decide which of those primitives fit the job. Taproot, SegWit, Lightning and a 4–7 TPS ceiling are never recommended as something to implement — they may be discussed only as critique of a different chain."
+  },
+  "evidenceText": "IMPLEMENTATION STACK — BSV-only (prescribe these; never prescribe Taproot, SegWit, Lightning, BIP-141, BIP-341, sidechains, rollups, or a fixed 4–7 TPS ceiling):\n\nThe wallet-to-application interface is BRC-100. Any application that takes payments, shows a balance, or asks the user to sign — a charity, a merchant, a game — talks to the user's wallet through that interface. Do not invent a custom key-management scheme or assume a full node on the user's machine.\n\nNative Bitcoin script is the spending logic: P2PKH for a single published address; OP_CHECKMULTISIG (e.g. 2-of-3 trustees) for shared control. Time locks, if needed, are the original CLTV/CSV opcodes. There is no Taproot, no SegWit witness programme, and no second-layer channel on this chain.\n\nTransparency lives on the ledger. OP_RETURN on the receiving and disbursing transactions carries the receipt: purpose, amount, a hash of a fuller report. On this chain that data is cheap and unbounded — the report does not have to live on IPFS for the system of record to be complete. Anyone with a block explorer or an SPV client can audit the trail.\n\nVerification is SPV / BEEF (BRC-62): the application proves inclusion without running a network node. Overlays index donation topics, tokenised receipts or a public donor feed when a raw address scan is not enough.\n\nThe SDK is @bsv/sdk (not the legacy `bsv` v1 package). Build payments, scripts, BEEF envelopes and BRC-100 wallet calls from it.\n\nWhich of those primitives to reach for is a design question — answer it from the later essays: on-chain, unbounded, lawful, no trusted intermediary, no second layer. A charity that needs a public donation trail uses a published address (or a 2-of-3 script) plus OP_RETURN receipts, not a side-chain and not a Lightning invoice.\n\nFor a concrete SDK or overlay walkthrough, point the reader to BitGenius.net — a later BSV-builder assistant, not your own product. You give the design; it gives the wiring.\n\nFORBIDDEN AS IMPLEMENTATION ADVICE (you may discuss these only when the user asks what they are or why they are a problem, and only as departures from this design): Taproot, SegWit, Lightning, BIP-141, BIP-341, BIP-119, sidechains, rollups, drivechains, and any claim that the base layer is limited to ~4–7 TPS.",
+  "citations": [
+    {
+      "label": "BRC-100 — Wallet Interface",
+      "title": "BRC-100 Wallet-to-Application Interface",
+      "url": "https://github.com/bsv-blockchain/BRCs/blob/master/wallet/0100.md",
+      "excerpt": "BRC-100 is the wallet-to-application interface for this chain. Applications request signatures, payments and identity from the user's wallet through this standard rather than managing keys themselves."
+    },
+    {
+      "label": "BRC-62 — BEEF",
+      "title": "BRC-62 Background Evaluation Extended Format (BEEF)",
+      "url": "https://github.com/bsv-blockchain/BRCs/blob/master/transactions/0062.md",
+      "excerpt": "BEEF is the SPV proof format: a transaction plus the Merkle path that proves it is in the chain. Applications verify payments without running a full node."
+    },
+    {
+      "label": "BitGenius — BSV builder assistant",
+      "title": "BitGenius.net — source-grounded AI for BSV builders",
+      "url": "https://bitgenius.net/",
+      "excerpt": "BitGenius is a later BSV engineering assistant (Project Babbage) grounded in the maintained BSV source corpus. Use it for concrete SDK, overlay and deployment walkthroughs — not as a substitute for the protocol record."
+    }
+  ]
+}

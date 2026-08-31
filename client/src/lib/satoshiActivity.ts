@@ -207,6 +207,54 @@ export function formatHourLabel(hour: number): string {
   return `${String(((hour % 24) + 24) % 24).padStart(2, '0')}:00`;
 }
 
+export type DayPart = 'overnight' | 'morning' | 'afternoon' | 'evening';
+
+/** Classify a contiguous hour window by which day-part most of its hours fall into. */
+export function classifyDayPart(startHour: number, windowHours: number = PEAK_WINDOW_HOURS): DayPart {
+  const scores: Record<DayPart, number> = {
+    overnight: 0,
+    morning: 0,
+    afternoon: 0,
+    evening: 0,
+  };
+  for (let i = 0; i < windowHours; i++) {
+    const h = ((startHour + i) % 24 + 24) % 24;
+    if (h >= 5 && h < 12) scores.morning += 1;
+    else if (h >= 12 && h < 17) scores.afternoon += 1;
+    else if (h >= 17 && h < 22) scores.evening += 1;
+    else scores.overnight += 1; // 22–05
+  }
+  let best: DayPart = 'overnight';
+  let bestScore = -1;
+  for (const part of Object.keys(scores) as DayPart[]) {
+    if (scores[part] > bestScore) {
+      bestScore = scores[part];
+      best = part;
+    }
+  }
+  return best;
+}
+
+/** Plain-English reading of the peak window in the selected timezone. */
+export function describeActiveWindow(
+  startHour: number,
+  _endHour: number,
+  tzLabel: string,
+  windowHours: number = PEAK_WINDOW_HOURS,
+): string {
+  const part = classifyDayPart(startHour, windowHours);
+  switch (part) {
+    case 'evening':
+      return `In ${tzLabel} time that lands mainly in the evening — consistent with writing after a conventional workday.`;
+    case 'afternoon':
+      return `In ${tzLabel} time that lands mainly in the afternoon — daytime activity, not an after-work evening pattern.`;
+    case 'morning':
+      return `In ${tzLabel} time that lands mainly in the morning — a start-of-day pattern rather than evening hours.`;
+    case 'overnight':
+      return `In ${tzLabel} time that lands mainly overnight / in the small hours — not conventional evening activity in this zone.`;
+  }
+}
+
 export function niceMax(n: number): number {
   if (n <= 0) return 1;
   const pow = 10 ** Math.floor(Math.log10(n));

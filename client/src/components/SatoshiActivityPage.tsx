@@ -14,6 +14,7 @@ import {
   hourHistogram,
   monthlyBuckets,
   PEAK_WINDOW_HOURS,
+  describeActiveWindow,
   peakHourBlock,
 } from '../lib/satoshiActivity';
 import type { KindFilter, TimeZone } from '../lib/satoshiActivity';
@@ -260,9 +261,12 @@ export function SatoshiActivityPage() {
                         ({activeWindow.total} timed item{activeWindow.total === 1 ? '' : 's'}).
                       </p>
                       <p>
-                        {tz.offset === 0
-                          ? 'In UTC, that stretch sits in the early hours — consistent with someone active late at night or in the small hours.'
-                          : `In ${tz.label} time, that stretch falls between ${formatHourLabel(activeWindow.startHour)} and ${formatHourLabel(activeWindow.endHour)} local. If he kept conventional evening hours, this is where the bulk of his writing landed.`}
+                        {describeActiveWindow(
+                          activeWindow.startHour,
+                          activeWindow.endHour,
+                          tz.label,
+                          PEAK_WINDOW_HOURS,
+                        )}
                       </p>
                     </div>
                   ) : (

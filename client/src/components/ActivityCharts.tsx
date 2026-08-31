@@ -181,11 +181,12 @@ export function MonthlyChart({ buckets, mode }: MonthlyProps) {
 interface HourlyProps {
   histogram: HourHistogram;
   windowStart: number | null;
+  windowHours: number;
   tz: TimeZone;
   mode: 'bar' | 'line';
 }
 
-export function HourlyChart({ histogram, windowStart, tz, mode }: HourlyProps) {
+export function HourlyChart({ histogram, windowStart, windowHours, tz, mode }: HourlyProps) {
   const [tip, setTip] = useState<Tip | null>(null);
   const { hours, timedCount } = histogram;
   if (timedCount === 0) {
@@ -208,7 +209,7 @@ export function HourlyChart({ histogram, windowStart, tz, mode }: HourlyProps) {
 
   const inWindow = (h: number) => {
     if (windowStart === null) return false;
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < windowHours; i++) {
       if ((windowStart + i) % 24 === h) return true;
     }
     return false;

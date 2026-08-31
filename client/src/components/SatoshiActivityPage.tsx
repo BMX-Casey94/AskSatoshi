@@ -13,7 +13,8 @@ import {
   formatHourLabel,
   hourHistogram,
   monthlyBuckets,
-  peakFourHourBlock,
+  PEAK_WINDOW_HOURS,
+  peakHourBlock,
 } from '../lib/satoshiActivity';
 import type { KindFilter, TimeZone } from '../lib/satoshiActivity';
 import { HourlyChart, MonthlyChart } from './ActivityCharts';
@@ -71,7 +72,7 @@ export function SatoshiActivityPage() {
     () => (data ? hourHistogram(data.points, tz.offset, kindFilter) : null),
     [data, tz, kindFilter],
   );
-  const activeWindow = useMemo(() => (hourly ? peakFourHourBlock(hourly.hours) : null), [hourly]);
+  const activeWindow = useMemo(() => (hourly ? peakHourBlock(hourly.hours) : null), [hourly]);
   const compiled = data ? formatGeneratedAt(data.generatedAt) : null;
   const stats = useMemo(() => {
     if (!data) return { total: 0, emails: 0, posts: 0 };
@@ -226,7 +227,13 @@ export function SatoshiActivityPage() {
                     </p>
                   )}
                   {hourly && (
-                    <HourlyChart histogram={hourly} windowStart={activeWindow?.startHour ?? null} tz={tz} mode={chartMode} />
+                    <HourlyChart
+                      histogram={hourly}
+                      windowStart={activeWindow?.startHour ?? null}
+                      windowHours={PEAK_WINDOW_HOURS}
+                      tz={tz}
+                      mode={chartMode}
+                    />
                   )}
 
                   <div className="activity-tz" role="group" aria-label="Timezone">
@@ -246,7 +253,7 @@ export function SatoshiActivityPage() {
                     <div className="activity-window">
                       <h3 className="activity-window-title">Likely active window</h3>
                       <p>
-                        Peak four-hour block:{' '}
+                        Peak {PEAK_WINDOW_HOURS}-hour block:{' '}
                         <strong>
                           {formatHourLabel(activeWindow.startHour)}–{formatHourLabel(activeWindow.endHour)} {tz.label}
                         </strong>{' '}

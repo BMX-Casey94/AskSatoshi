@@ -163,14 +163,20 @@ export function hourHistogram(
   };
 }
 
-/** Highest-count 4-hour block, wrapping midnight. */
-export function peakFourHourBlock(hours: readonly number[]): ActiveWindow | null {
-  if (hours.length !== 24) return null;
+/** Width of the sliding peak-activity window (hours). */
+export const PEAK_WINDOW_HOURS = 8;
+
+/** Highest-count contiguous hour block, wrapping midnight. */
+export function peakHourBlock(
+  hours: readonly number[],
+  windowHours: number = PEAK_WINDOW_HOURS,
+): ActiveWindow | null {
+  if (hours.length !== 24 || windowHours < 1 || windowHours > 24) return null;
   let bestStart = 0;
   let bestTotal = -1;
   for (let start = 0; start < 24; start++) {
     let total = 0;
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < windowHours; i++) {
       total += hours[(start + i) % 24] ?? 0;
     }
     if (total > bestTotal) {
@@ -182,7 +188,7 @@ export function peakFourHourBlock(hours: readonly number[]): ActiveWindow | null
 
   return {
     startHour: bestStart,
-    endHour: (bestStart + 4) % 24,
+    endHour: (bestStart + windowHours) % 24,
     total: bestTotal,
   };
 }

@@ -8,18 +8,20 @@ import { Link } from '../lib/router';
 import { loadStore, saveStore } from '../lib/storage';
 import type { SatoshiActivityResponse } from '../types';
 import {
+  TIMEZONES,
   formatGeneratedAt,
   formatHourLabel,
-  formatUtcOffset,
   hourHistogram,
   monthlyBuckets,
   peakFourHourBlock,
 } from '../lib/satoshiActivity';
+import type { TimeZone } from '../lib/satoshiActivity';
 import { HourlyChart, MonthlyChart } from './ActivityCharts';
 import { HomeIcon } from './icons';
 import { ThemeToggle } from './ThemeToggle';
 
 type View = 'monthly' | 'hourly';
+type ChartMode = 'bar' | 'line';
 type LoadState = 'loading' | 'ready' | 'error';
 
 export function SatoshiActivityPage() {
@@ -28,6 +30,8 @@ export function SatoshiActivityPage() {
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<SatoshiActivityResponse | null>(null);
   const [view, setView] = useState<View>('monthly');
+  const [chartMode, setChartMode] = useState<ChartMode>('bar');
+  const [tz, setTz] = useState<TimeZone>(TIMEZONES[0]!);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -59,7 +63,7 @@ export function SatoshiActivityPage() {
   }, [load]);
 
   const months = useMemo(() => (data ? monthlyBuckets(data.points) : []), [data]);
-  const hourly = useMemo(() => (data ? hourHistogram(data.points) : null), [data]);
+  const hourly = useMemo(() => (data ? hourHistogram(data.points, tz.offset) : null), [data, tz]);
   const activeWindow = useMemo(() => (hourly ? peakFourHourBlock(hourly.hours) : null), [hourly]);
   const compiled = data ? formatGeneratedAt(data.generatedAt) : null;
 
@@ -77,9 +81,8 @@ export function SatoshiActivityPage() {
 
       <main className="activity-main">
         <p className="activity-lead">
-          Posts and e-mails from the public record, plotted over time and by hour of day
-          (UTC). The hour view is a heuristic for when he was awake — not a proof of
-          location.
+          Posts and e-mails from the public record, plotted over time and by hour of day.
+          The hour view is a heuristic for when he was awake — not a proof of location.
         </p>
 
         {state === 'loading' && (
@@ -106,36 +109,59 @@ export function SatoshiActivityPage() {
             </section>
             {compiled && <p className="activity-meta">Compiled {compiled}</p>}
 
-            <div className="activity-toggle" role="tablist" aria-label="Chart view">
-              <button
-                type="button"
-                role="tab"
-                aria-selected={view === 'monthly'}
-                className={`activity-toggle-btn${view === 'monthly' ? ' activity-toggle-btn--on' : ''}`}
-                onClick={() => setView('monthly')}
-              >
-                Over time
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={view === 'hourly'}
-                className={`activity-toggle-btn${view === 'hourly' ? ' activity-toggle-btn--on' : ''}`}
-                onClick={() => setView('hourly')}
-              >
-                By hour
-              </button>
+            <div className="activity-controls">
+              <div className="activity-toggle" role="tablist" aria-label="Chart view">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={view === 'monthly'}
+                  className={`activity-toggle-btn${view === 'monthly' ? ' activity-toggle-btn--on' : ''}`}
+                  onClick={() => setView('monthly')}
+                >
+                  Over time
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={view === 'hourly'}
+                  className={`activity-toggle-btn${view === 'hourly' ? ' activity-toggle-btn--on' : ''}`}
+                  onClick={() => setView('hourly')}
+                >
+                  By hour
+                </button>
+              </div>
+
+              <div className="activity-toggle" role="tablist" aria-label="Chart style">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={chartMode === 'bar'}
+                  className={`activity-toggle-btn${chartMode === 'bar' ? ' activity-toggle-btn--on' : ''}`}
+                  onClick={() => setChartMode('bar')}
+                >
+                  Bar
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={chartMode === 'line'}
+                  className={`activity-toggle-btn${chartMode === 'line' ? ' activity-toggle-btn--on' : ''}`}
+                  onClick={() => setChartMode('line')}
+                >
+                  Line
+                </button>
+              </div>
             </div>
 
             <section className="activity-panel" aria-live="polite">
               {view === 'monthly' ? (
                 <>
                   <h2 className="activity-panel-title">Posts and e-mails per month</h2>
-                  <MonthlyChart buckets={months} />
+                  <MonthlyChart buckets={months} mode={chartMode} />
                 </>
               ) : (
                 <>
-                  <h2 className="activity-panel-title">Posts by hour of day (UTC)</h2>
+                  <h2 className="activity-panel-title">Posts by hour of day ({tz.label})</h2>
                   {hourly?.usedAllKinds && (
                     <p className="activity-note">
                       Timed forum posts were scarce, so e-mails and other dated items are
@@ -143,24 +169,36 @@ export function SatoshiActivityPage() {
                     </p>
                   )}
                   {hourly && (
-                    <HourlyChart histogram={hourly} windowStart={activeWindow?.startHour ?? null} />
+                    <HourlyChart histogram={hourly} windowStart={activeWindow?.startHour ?? null} tz={tz} mode={chartMode} />
                   )}
+
+                  <div className="activity-tz" role="group" aria-label="Timezone">
+                    {TIMEZONES.map((z) => (
+                      <button
+                        key={z.id}
+                        type="button"
+                        className={`activity-tz-btn${tz.id === z.id ? ' activity-tz-btn--on' : ''}`}
+                        onClick={() => setTz(z)}
+                      >
+                        {z.label}
+                      </button>
+                    ))}
+                  </div>
+
                   {activeWindow ? (
                     <div className="activity-window">
                       <h3 className="activity-window-title">Likely active window</h3>
                       <p>
                         Peak four-hour block:{' '}
                         <strong>
-                          {formatHourLabel(activeWindow.startHour)}–{formatHourLabel(activeWindow.endHour)} UTC
+                          {formatHourLabel(activeWindow.startHour)}–{formatHourLabel(activeWindow.endHour)} {tz.label}
                         </strong>{' '}
                         ({activeWindow.total} timed item{activeWindow.total === 1 ? '' : 's'}).
                       </p>
                       <p>
-                        If that stretch was evening (19:00–23:00 local time), it implies
-                        roughly <strong>{formatUtcOffset(activeWindow.impliedOffsetHours)}</strong>.
-                        That assumption is the usual “he wrote after work” reading — a
-                        morning person, or someone posting on a schedule, would land
-                        elsewhere.
+                        {tz.offset === 0
+                          ? 'In UTC, that stretch sits in the early hours — consistent with someone active late at night or in the small hours.'
+                          : `In ${tz.label} time, that stretch falls between ${formatHourLabel(activeWindow.startHour)} and ${formatHourLabel(activeWindow.endHour)} local. If he kept conventional evening hours, this is where the bulk of his writing landed.`}
                       </p>
                     </div>
                   ) : (

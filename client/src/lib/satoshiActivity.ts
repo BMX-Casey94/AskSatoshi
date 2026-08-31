@@ -19,12 +19,26 @@ export interface HourHistogram {
   timedCount: number;
 }
 
+export interface TimeZone {
+  id: string;
+  label: string;
+  /** UTC offset in whole hours (standard time; no DST shifting). */
+  offset: number;
+}
+
+export const TIMEZONES: TimeZone[] = [
+  { id: 'utc', label: 'UTC', offset: 0 },
+  { id: 'uk', label: 'UK', offset: 0 },
+  { id: 'us-east', label: 'US East', offset: -5 },
+  { id: 'us-west', label: 'US West', offset: -8 },
+  { id: 'aus-east', label: 'Australia (Sydney)', offset: 10 },
+  { id: 'japan', label: 'Japan', offset: 9 },
+];
+
 export interface ActiveWindow {
   startHour: number;
   endHour: number;
   total: number;
-  /** UTC offset implied if the peak 4-hour block is local evening 19:00–23:00. */
-  impliedOffsetHours: number;
 }
 
 export function normaliseKind(kind: string): ActivityKind | 'other' {
@@ -112,15 +126,15 @@ export function monthlyBuckets(points: ActivityPoint[]): MonthBucket[] {
   return result;
 }
 
-/** Posts by UTC hour (0–23). Falls back to every timed point if no timed posts exist. */
-export function hourHistogram(points: ActivityPoint[]): HourHistogram {
+/** Posts by hour (0–23) in the given UTC offset. Falls back to every timed point if no timed posts exist. */
+export function hourHistogram(points: ActivityPoint[], utcOffset = 0): HourHistogram {
   const timedPosts = points.filter((p) => normaliseKind(p.kind) === 'posts' && hasClock(p.date));
   const source = timedPosts.length > 0 ? timedPosts : points.filter((p) => hasClock(p.date));
   const hours = Array.from({ length: 24 }, () => 0);
   for (const p of source) {
     const d = parseUtc(p.date);
     if (!d) continue;
-    const h = d.getUTCHours();
+    const h = ((d.getUTCHours() + utcOffset) % 24 + 24) % 24;
     hours[h] = (hours[h] ?? 0) + 1;
   }
   return {
@@ -147,16 +161,10 @@ export function peakFourHourBlock(hours: readonly number[]): ActiveWindow | null
   }
   if (bestTotal <= 0) return null;
 
-  // Assume the block is local evening 19:00–23:00; local = UTC + offset.
-  let implied = 19 - bestStart;
-  while (implied > 12) implied -= 24;
-  while (implied < -12) implied += 24;
-
   return {
     startHour: bestStart,
     endHour: (bestStart + 4) % 24,
     total: bestTotal,
-    impliedOffsetHours: implied,
   };
 }
 

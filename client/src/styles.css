@@ -1363,13 +1363,19 @@ button:disabled {
   color: var(--text-muted);
 }
 
+.activity-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
 .activity-toggle {
   display: inline-flex;
   padding: 3px;
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   background: var(--panel);
-  margin-bottom: 16px;
   gap: 2px;
 }
 
@@ -1495,6 +1501,53 @@ button:disabled {
 
 .activity-bar--peak {
   fill: var(--accent);
+}
+
+.activity-line {
+  stroke: var(--accent);
+}
+
+.activity-dot {
+  fill: var(--accent);
+  stroke: var(--panel);
+  stroke-width: 1.5;
+}
+
+.activity-dot--peak {
+  fill: var(--chart-peak, var(--accent));
+  r: 5;
+}
+
+.activity-tz {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.activity-tz-btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: var(--radius-pill);
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.activity-tz-btn:hover:not(.activity-tz-btn--on) {
+  color: var(--text);
+  background: var(--hover);
+}
+
+.activity-tz-btn--on {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
 }
 
 .activity-legend {

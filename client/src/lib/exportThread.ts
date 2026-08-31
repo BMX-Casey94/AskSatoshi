@@ -10,6 +10,7 @@ const CLASS_LABEL: Record<string, string> = {
   'satoshi-primary': "Satoshi's writings (2008–2011)",
   spec: 'Protocol specification',
   'later-commentary': 'Later commentary',
+  'historical-record': 'Historical record & testimony',
 };
 
 function fmtDate(ts: number): string {

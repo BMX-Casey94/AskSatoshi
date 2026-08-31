@@ -29,6 +29,7 @@ import {
   questionClass,
 } from './orchestrate.js';
 import { loadCorpus } from './satoshiCorpus.js';
+import { loadCuratedReference } from './curatedReference.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // Prefer the repo-root .env (documented location); allow server/.env to override.
@@ -74,6 +75,7 @@ const breaker = new Breaker();
 const cache = new AnswerCache();
 const mcp = new McpBridge();
 const corpus = loadCorpus();
+const curated = loadCuratedReference();
 
 /**
  * When a warm-up wait last timed out. A child that cannot come up (e.g. a frozen
@@ -179,6 +181,7 @@ app.get('/api/health', (_req, res) => {
     ok: true,
     mcp: mcp.connected,
     corpus: corpus !== null,
+    curated: curated !== null,
     // Diagnostic only — helps explain a down MCP on serverless without leaking internals.
     mcpError: mcp.connected ? null : mcp.lastConnectError,
   });
@@ -283,7 +286,7 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
       sseWrite(res, 'status', { phase: 'grounding' });
     }
     const retrievalQuery = contextualQuery(question, priorUser);
-    const grounding = await groundQuestion(retrievalQuery, { mcp, corpus });
+    const grounding = await groundQuestion(retrievalQuery, { mcp, corpus, curated });
     if (grounding.mode === 'none') {
       sseWrite(res, 'delta', { text: noKnowledgeLine(question) });
       sseWrite(res, 'meta', { mode: 'none', citations: [] });

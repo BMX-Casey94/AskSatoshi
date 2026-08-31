@@ -18,6 +18,9 @@ Browser (Vite + React)                Node.js backend (Express)
 │ localStorage threads     │ ◀──────▶ │   └─▶ orchestrator                     │
 │ dictation, image attach  │          │         ├─▶ BSV-AIO-MCP (stdio child)  │
 └──────────────────────────┘          │         ├─▶ Satoshi corpus (BM25)      │
+                                      │         ├─▶ Curated reference (BM25): │
+                                      │         │   identity dossier +        │
+                                      │         │   scaling record            │
                                       │         └─▶ LLM chain:               │
                                       │             gemini-3.6-flash          │
                                       │             gemini-3.5-flash          │
@@ -31,6 +34,15 @@ The MCP server is stdio-only, so the backend starts it as a child process and sp
 with the official MCP SDK. On a long-running host that child stays up. On Vercel it is
 started when an instance wakes and is gone again after idle — when it is not ready, answers
 fall back to Satoshi's own writings. All model API keys stay server-side.
+
+Two curated reference files under `server/data/` anchor specific topics whatever the
+retrieval path returns: `identity-dossier.json` (third-party testimony, documented events
+and public curiosities bearing on the Satoshi identity question — identity answers are
+grounded here, never in "possession of a key is proof" logic) and `scaling-record.json`
+(the demonstrated-capacity record for scaling/Teranode questions: the 1M TPS sustained
+trial and the 79.09 billion TPS fleet measurement, always quoted with conditions).
+Conceptual questions are blended essay-first: the later essays and article summaries are
+the primary lens, with the 2008–2011 posts and e-mails seasoning the answer.
 
 ## Setup
 

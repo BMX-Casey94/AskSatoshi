@@ -15,6 +15,15 @@ const PLATFORM_SUFFIXES: ReadonlyArray<readonly [string, string]> = [
   ['github.com', 'GitHub'],
   ['github.io', 'GitHub'],
   ['bitcoin.org', 'Bitcoin.org'],
+  ['ramonquesada.com', 'Ramon Quesada'],
+  ['coingeek.com', 'CoinGeek'],
+  ['lrb.co.uk', 'London Review of Books'],
+  ['ssrn.com', 'SSRN'],
+  ['wired.com', 'Wired'],
+  ['gizmodo.com', 'Gizmodo'],
+  ['bsvassociation.org', 'BSV Association'],
+  ['bsvblockchain.org', 'BSV Blockchain'],
+  ['amazon.com', 'AWS'],
 ];
 
 /** Common multi-part public suffixes so the fallback doesn't pick "co" from co.uk. */

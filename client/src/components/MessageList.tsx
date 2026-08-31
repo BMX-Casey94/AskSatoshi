@@ -15,6 +15,7 @@ const SOURCE_CLASS_LABEL: Record<SourceClass, string> = {
   'satoshi-primary': 'Satoshi 2008–11',
   spec: 'Spec',
   'later-commentary': 'Later commentary',
+  'historical-record': 'Historical record',
 };
 
 interface Props {

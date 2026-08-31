@@ -1,5 +1,5 @@
 /** Where a source sits in the evidentiary hierarchy. */
-export type SourceClass = 'satoshi-primary' | 'spec' | 'later-commentary';
+export type SourceClass = 'satoshi-primary' | 'spec' | 'later-commentary' | 'historical-record';
 
 export interface Citation {
   label: string;

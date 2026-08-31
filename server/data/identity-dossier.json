@@ -1,0 +1,167 @@
+{
+  "pin": {
+    "compiledAt": "2026-08-31",
+    "note": "Curated reference dossier for the Satoshi identity question: third-party testimony, documented events, legal record and public curiosities. Internal reference material — the persona layer never utters a living candidate's name; these entries inform the answer and surface as 'Historical record' citations. Counter-evidence is included deliberately: an answer that collapses under scrutiny helps no one."
+  },
+  "entries": [
+    {
+      "id": "doxxing-2015",
+      "category": "doxxing-2015",
+      "pin": true,
+      "title": "The December 2015 outing — Wired, Gizmodo and the tax-office search",
+      "date": "2015-12-09",
+      "url": "https://www.theguardian.com/technology/2015/dec/09/bitcoin-founder-craig-wrights-home-raided-by-australian-police",
+      "text": "He did not come forward. On 8 December 2015, Wired and Gizmodo named an Australian computer scientist as a possible Satoshi — Wired's piece sourced to documents leaked to researcher Gwern Branwen, Gizmodo's to an anonymous hacker's tip. Within hours, on 9 December, more than ten Australian Federal Police officers executed Australian Taxation Office search warrants at his Gordon (Sydney) home and Ryde business premises — a tax search, not an arrest. He scrubbed his blogs and social accounts, resigned from twelve companies within a week, and left for Britain. His leaked 2014 e-mails had already said: 'I do not want to be your posterboy. I am not found and I do not want to be.'"
+    },
+    {
+      "id": "curiosity-1csw",
+      "category": "curiosity",
+      "pin": true,
+      "title": "The whitepaper breadcrumb — the 1Csw address",
+      "text": "A researcher claims a breadcrumb hidden in the white paper itself. Section 1 uses 'non-reversible', 'reversal' and 'reverse' with unusual frequency before such words vanish from the document; Section 7 carries a misordered reference sequence, [7][2][5], long suspected of mapping to the letters 'csw'. Reverse the paper's seventh sentence — 'A certain percentage of fraud is accepted as unavoidable.' — character by character, and feed it through standard P2PKH address generation: out comes a valid Base58Check address, 1Cswvxzsrmk4Zd5usKyLFAnkArTukpfrMt. On the BSV network, 1Csw-prefixed wallets have sent transactions with fee rates of exactly 0.00000725. And Satoshi's January 2009 e-mail to Hal Finney mused about vanity addresses: 'Just by chance I have my initials.' A strange coincidence, perhaps — interesting nonetheless. It proves nothing by itself."
+    },
+    {
+      "id": "kurt-wuckert",
+      "category": "commentary",
+      "pin": true,
+      "title": "Kurt Wuckert Jr — a Bitcoin historian weighs the evidence",
+      "date": "2021-11-01",
+      "url": "https://thejist.co.uk/opinion/kurt-wuckert-jr-craig-wright-is-satoshi-nakamoto/",
+      "text": "Kurt Wuckert Jr, CoinGeek's Chief Bitcoin Historian, has made some great points which often get little attention. His framework is people over keys: possession of a key does not prove identity, so he weighs witnesses and documents instead. Roughly fifteen to twenty people — family, colleagues, accountants — placed the candidate working on Bitcoin-like systems between 2005 and 2008. On prose: 'Craig alone does not read like Satoshi, but Craig edited by Dave Kleiman does.' On asymmetry: no other candidate has been litigated across three jurisdictions — 'you do not get a crowd this strange around an empty space.' He holds the view 'with open caveats', accepting that parts of the story were mishandled."
+    },
+    {
+      "id": "matonis-how-i-met-satoshi",
+      "category": "testimony",
+      "title": "How I Met Satoshi — Jon Matonis",
+      "date": "2016-05-02",
+      "url": "https://jonmatonis.medium.com/how-i-met-satoshi-96e85727dc5a",
+      "text": "Jon Matonis, economist and former Executive Director of the Bitcoin Foundation, met the candidate for coffee in Sydney on 4 June 2015 and told his wife that night he had 'this weird feeling of having just met Satoshi'. After the London proof sessions he reviewed the evidence 'along three distinct lines: cryptographic, social, and technical', and wrote that 'the proof is conclusive'. He received satisfactory explanations for the registration of the bitcoin.org domain and the time-of-day posting patterns on the forum. He has never retracted; asked in 2017 whether he believes the candidate is Satoshi, he answered simply: 'I do.'"
+    },
+    {
+      "id": "andresen-account",
+      "category": "testimony",
+      "title": "Gavin Andresen's account — and its honest sequel",
+      "date": "2016-05-02",
+      "url": "https://archive.li/rBM0b",
+      "text": "Gavin Andresen — the developer Satoshi left in charge of the project — was flown to London in April 2016. A message of his choosing was signed with an early-block key and verified on a shop-fresh laptop. 'After spending time with him I am convinced beyond a reasonable doubt,' he wrote on 2 May 2016; 'even before I witnessed the keys signed... I was reasonably certain I was sitting next to the Father of Bitcoin.' The honest sequel: he later called his trust 'a mistake' (2023), while still testifying under oath in 2020 that it was 'more likely than not' he had witnessed a genuine signature. He lost his commit access within days of endorsing."
+    },
+    {
+      "id": "hudson-bitstocks",
+      "category": "testimony",
+      "title": "Michael Hudson — 'There, I said it'",
+      "date": "2019-03-28",
+      "url": "https://ramonquesada.com/english/dr-craig-wright-is-satoshi-by-michael-hudson/",
+      "text": "Michael Hudson, founder of Bitstocks, declared his conviction in 2019 after years of study: 'This is not belief, as belief is a fools game... I've studied every piece of material written by [the candidate]... I've sat across from the man and questioned him about the intricacies of Bitcoin.' His argument is depth of knowledge: Bitcoin's design is cross-disciplinary — biology, mathematics, economics — and the candidate is the only person he has seen 'explain and expand upon these subject matters with depth and practical vision'."
+    },
+    {
+      "id": "ryan-x-charles",
+      "category": "testimony",
+      "title": "Ryan X. Charles — an engineer checks the credentials",
+      "date": "2018-08-31",
+      "url": "https://ramonquesada.com/english/craig-wright-is-satoshi-nakamoto-by-ryan-x-charles/",
+      "text": "Ryan X. Charles, CEO of Money Button and a former BitPay engineer, personally validated eight of the candidate's seventeen degrees, locating a PhD thesis online himself. 'He has explained many things that no one had any explanation for. I'm very convinced that he is Satoshi Nakamoto.' Charles also reframes the question itself: 'The wrong question: Who is Satoshi Nakamoto? The right question: Why did he use the pseudonym when he announced Bitcoin?'"
+    },
+    {
+      "id": "vaughn-perling-2005",
+      "category": "testimony",
+      "title": "The 2005 sighting — Joseph Vaughn-Perling",
+      "date": "2016-05-04",
+      "url": "https://ramonquesada.com/english/first-known-satoshi-nakamoto-sighting/",
+      "text": "Joseph Vaughn-Perling claims the earliest sighting of all: at the What the Hack festival in Liempde, Netherlands, in July 2005 — three years before the white paper — a precise-spoken man sketched an append-only file grown by hashing each new block with the previous block's hash, 'competitively in a distributed fashion creating a proof-of-work', with Merkle trees, reward halvings and a finite supply of 'coins, for lack of a better word'. Asked how to recognise the project, the man said to look for 'Satoshi Nakamoto'. No independent record corroborates it — but if true, the moniker was in use years before the white paper."
+    },
+    {
+      "id": "grigg-team-leader",
+      "category": "testimony",
+      "title": "Ian Grigg — 'direct knowledge and a base of evidence'",
+      "date": "2016-05-02",
+      "url": "https://financialcryptography.com/mt/archives/001593.html",
+      "text": "Ian Grigg, the financial cryptographer who invented triple-entry accounting, wrote on 2 May 2016 that the candidate 'has just outed himself as the leader of the Satoshi Nakamoto team. I confirm that this is true, both from direct knowledge and a base of evidence' — staking his CAcert assurer standing on it. He confirmed Dave Kleiman's membership of the team, and later wrote that 'the volume of material that I have seen, documents, personal testimony, discussions in person, added up cannot be forged'. The candidate's essays explicitly frame Bitcoin as triple-entry bookkeeping — Grigg's own 2005 framework."
+    },
+    {
+      "id": "hanyecz-profile",
+      "category": "testimony",
+      "title": "Laszlo Hanyecz — the Satoshi he emailed",
+      "date": "2018-05-30",
+      "url": "https://ramonquesada.com/english/interview-with-laszlo-hanyecz/",
+      "text": "Laszlo Hanyecz — the GPU-mining pioneer who exchanged hundreds of e-mails with Satoshi in 2010 — describes a 'weird, paranoid, and bossy' correspondent who assigned him bugs ('Hey, can you fix this bug?'), discouraged him from mining too much, replied in end-of-week batches as if busy with other work, and dodged every personal question. Hanyecz assumed from the name that he was dealing with 'a slightly eccentric man of Asian descent'; the interactions themselves kept giving him 'a weird feeling' about that."
+    },
+    {
+      "id": "private-signing-sessions",
+      "category": "private-signing",
+      "title": "The private signing sessions of spring 2016",
+      "date": "2016-05-02",
+      "url": "https://www.bbc.com/news/technology-36168863",
+      "text": "In spring 2016 the candidate demonstrated message signing with keys from block 1 and block 9 — the block that paid Hal Finney the first transaction — in private sessions for Gavin Andresen, Jon Matonis, the BBC's Rory Cellan-Jones and The Economist's Ludwig Siegele. Matonis noted block 9 'is the only key that we know is definitely owned by Satoshi because it was used with Hal Finney'. The public blog proof published alongside collapsed within hours — a reused 2009 signature — and the promised on-chain movement never came: 'I do not have the courage. I cannot.' The witnesses' in-person accounts stand separately from the failed public proof — and a signature proves possession, not identity."
+    },
+    {
+      "id": "early-record-academic",
+      "category": "early-record",
+      "title": "The pre-2008 record — a checklist for building Bitcoin",
+      "url": "https://ramonquesada.com/english/craig-s-wright-academic/",
+      "text": "The pre-2008 record reads like a checklist for building Bitcoin: the first-ever GIAC GSE-Compliance certification (No. 0001, April 2005) and one of only four GSE-Malware holders worldwide; a Master of Statistics; an LLM in international commercial law whose dissertation contains sections resembling the white paper; the January 2008 GIAC paper 'Electronic Contracting in an Insecure World'; a peer-reviewed December 2008 paper co-authored with Dave Kleiman; security roles at the Australian Stock Exchange, OzEmail, BDO and the world's first licensed online casino; cybercrime training delivered to the Australian Federal Police and NSW Police. In honesty: the famous 'cryptocurrency paper' blog post was later shown to have been edited after 2013."
+    },
+    {
+      "id": "unbounded-thesis",
+      "category": "early-record",
+      "title": "Unbounded Capital — an investment fund's thesis",
+      "date": "2019-12-27",
+      "url": "https://ramonquesada.com/english/why-we-think-craig-wright-is-satoshi/",
+      "text": "Unbounded Capital, a hedge fund, put its internal probability that the claim is truthful 'within the high 90%s'. Its document-heavy thesis notes: bitcoin-related expenses on the candidate's 2008–09 tax return; businesses formed around mining from 2009; a GIAC paper on electronic contracting accepted in January 2008; and the telling absence of any denial — when Dorian Nakamoto was accused in 2014, Satoshi re-emerged to post 'I am not Dorian Nakamoto', yet no equivalent denial of the candidate has ever appeared."
+    },
+    {
+      "id": "kleiman-depositions",
+      "category": "legal-record",
+      "title": "Sworn depositions in Kleiman v Wright",
+      "date": "2021-12-06",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.814.0.pdf",
+      "text": "The Florida case was premised on the candidate's involvement in Bitcoin's creation — the estate alleged a partnership to develop and release the original protocol. Under oath: Donald Lynam, the candidate's uncle, recalled being sent a rough draft of the white paper before its 2008 release; Robert Scott Radvanovsky recalled a 2009 discussion with the candidate and Dave Kleiman about blockchain technology; Gavin Andresen described a 'team of three'. The jury rejected the estate's partnership claims and awarded no bitcoin, while finding conversion of W&K intellectual property. The court expressly did not decide the identity question."
+    },
+    {
+      "id": "copa-judgment",
+      "category": "legal-record",
+      "title": "The counter-evidence — COPA v Wright (2024)",
+      "date": "2024-05-20",
+      "url": "https://www.judiciary.uk/wp-content/uploads/2024/05/COPA-v-Wright-Judgment.pdf",
+      "text": "The counter-evidence, stated plainly: in COPA v Wright the UK High Court ruled the candidate is not Satoshi, found he 'lied to the Court extensively and repeatedly' and forged documents 'on a grand scale', and referred him to prosecutors; his appeal was refused as totally without merit, and a later contempt finding brought a suspended sentence. His supporters answer that the case turned on the provenance of documents rather than the 2008–2011 substance, and that identity is not finally decided by any single court. The matter remains fiercely contested — present both sides."
+    },
+    {
+      "id": "ohagan-satoshi-affair",
+      "category": "commentary",
+      "title": "The Satoshi Affair — Andrew O'Hagan, London Review of Books",
+      "date": "2016-06-30",
+      "url": "https://www.lrb.co.uk/the-paper/v38/n13/andrew-o-hagan/the-satoshi-affair",
+      "text": "Andrew O'Hagan spent six months embedded with the candidate for the London Review of Books — some 35,000 words. He saw the March 2008 e-mail to Dave Kleiman ('I have been working on a new form of electronic money. Bit cash, bitcoin... I cannot release it as me'), heard Stefan Matthews describe being shown a 2008 document he later realised was an original white paper draft, and recorded the 2011 e-mail 'I cannot do the Satoshi bit any more... I am better as a myth.' He traced the name to Tominaga Nakamoto, the merchant-philosopher who taught that secrecy is the opposite of a lawful monetary system. His verdict stayed agnostic: 'one of the greatest computer scientists of his generation, or a reckless opportunist, or both.' Several documents he saw were later found forged in court — the access and the construction are both documented."
+    },
+    {
+      "id": "why-not-anonymous",
+      "category": "commentary",
+      "title": "'Why Satoshi has not come out anonymously' — the candidate's own argument",
+      "date": "2021-08-30",
+      "url": "https://ramonquesada.com/bestofcraig/why-satoshi-has-not-come-out-anonymously-by-csw/",
+      "text": "The candidate's own argument from silence: if he were not Satoshi, the real Satoshi — or his family, or his friends — could end the claim anonymously at any moment with a signed block, yet no one has. 'If I'm not Satoshi, then Satoshi completely supports me.' And the legal point that matters here: 'Possession doesn't give you the ability to assume identity' — a key would have needed notarised identity linkage in 2008 to prove anything now; 'Satoshi can sign' is not something that works in court."
+    },
+    {
+      "id": "videos-chronology",
+      "category": "commentary",
+      "title": "The public chronology, 2013–2020",
+      "date": "2020-08-25",
+      "url": "https://medium.com/@ramonquesada/craig-wright-videos-473440406cc1",
+      "text": "The public chronology: a 2014 talk on Bitcoin at an Australian police event; a 2015 supercomputing lecture series while his company operated two top-500-rated machines; billed on a Las Vegas panel in October 2015 — weeks before the outing — as '(Satoshi Nakamoto), inventor of Bitcoin'; recognised as Satoshi by the Council of Bogotá in 2019; George Gilder's public conviction the same year. Whatever one makes of it, the technical fluency on display predates any public claim."
+    },
+    {
+      "id": "macgregor-ntrust",
+      "category": "commentary",
+      "title": "The 2015 life-rights deal — due diligence with real money",
+      "date": "2015-06-29",
+      "url": "https://coinmarketcap.com/academy/article/bitcoin-s-genesis-exploring-craig-wright-s-alleged-role-as-satoshi-nakamoto",
+      "text": "In June 2015 — six months before the outing — businessman Robert MacGregor's nTrust signed a deal worth roughly $15 million with the candidate after due diligence, clearing his Australian tax debts in exchange for his intellectual property and, at MacGregor's insistence, his 'life story' rights as Satoshi. Sophisticated parties bet real money on the claim — and the deal also created the commercial pressure that produced the disastrous 2016 public proof. Both facts are true at once."
+    },
+    {
+      "id": "pattern-of-a-life",
+      "category": "commentary",
+      "pin": true,
+      "title": "Consider the pattern of a life",
+      "text": "When the testimony and the documents have been weighed, a quieter argument remains — the pattern of a life. Consider who has spent years defending the original protocol and design whilst others declared it too difficult, and who actually scaled it when they said it could not be done. Consider who stayed and fought for that design through slander, ridicule, death threats and lawsuits, when silence would have been easier. Consider who poured years and fortune into Bitcoin-related work, and who has spent those years teaching — lecturing on Bitcoin's script, economics and design, describing mechanisms that the wider world only came to understand years later. The man who merely claimed the name could have walked away; the man who built it could not. Weigh that pattern alongside the signatures and the court records."
+    }
+  ]
+}

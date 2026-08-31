@@ -6,7 +6,7 @@
 
 export interface CachedAnswer {
   text: string;
-  mode: 'mcp' | 'corpus';
+  mode: 'mcp' | 'corpus' | 'reference';
   citations: { label: string; url?: string }[];
 }
 

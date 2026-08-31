@@ -3,7 +3,7 @@
  */
 
 import { useState, type MouseEvent } from 'react';
-import type { HourHistogram, MonthBucket, TimeZone } from '../lib/satoshiActivity';
+import type { HourHistogram, KindFilter, MonthBucket, TimeZone } from '../lib/satoshiActivity';
 import { formatHourLabel, niceMax } from '../lib/satoshiActivity';
 
 interface Tip {
@@ -34,9 +34,10 @@ function yTicks(max: number): number[] {
 interface MonthlyProps {
   buckets: MonthBucket[];
   mode: 'bar' | 'line';
+  kindFilter?: KindFilter;
 }
 
-export function MonthlyChart({ buckets, mode }: MonthlyProps) {
+export function MonthlyChart({ buckets, mode, kindFilter = 'both' }: MonthlyProps) {
   const [tip, setTip] = useState<Tip | null>(null);
   if (buckets.length === 0) {
     return <p className="activity-empty">No dated posts or e-mails to plot.</p>;
@@ -161,14 +162,18 @@ export function MonthlyChart({ buckets, mode }: MonthlyProps) {
       </svg>
       <ChartTip tip={tip} />
       <ul className="activity-legend" aria-label="Series">
-        <li>
-          <span className="activity-swatch activity-swatch--posts" aria-hidden="true" />
-          Posts
-        </li>
-        <li>
-          <span className="activity-swatch activity-swatch--emails" aria-hidden="true" />
-          E-mails
-        </li>
+        {kindFilter !== 'emails' && (
+          <li>
+            <span className="activity-swatch activity-swatch--posts" aria-hidden="true" />
+            Posts
+          </li>
+        )}
+        {kindFilter !== 'posts' && (
+          <li>
+            <span className="activity-swatch activity-swatch--emails" aria-hidden="true" />
+            E-mails
+          </li>
+        )}
       </ul>
     </div>
   );

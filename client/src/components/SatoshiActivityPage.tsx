@@ -94,7 +94,9 @@ export function SatoshiActivityPage() {
   const hourlyTitle =
     kindFilter === 'emails'
       ? `E-mails by hour of day (${tz.label})`
-      : `Posts by hour of day (${tz.label})`;
+      : kindFilter === 'posts'
+        ? `Forum posts by hour of day (${tz.label})`
+        : `Posts and e-mails by hour of day (${tz.label})`;
 
   return (
     <div className="activity">
@@ -216,15 +218,14 @@ export function SatoshiActivityPage() {
               {view === 'monthly' ? (
                 <>
                   <h2 className="activity-panel-title">{monthlyTitle}</h2>
-                  <MonthlyChart buckets={months} mode={chartMode} />
+                  <MonthlyChart buckets={months} mode={chartMode} kindFilter={kindFilter} />
                 </>
               ) : (
                 <>
                   <h2 className="activity-panel-title">{hourlyTitle}</h2>
                   {hourly?.usedAllKinds && (
                     <p className="activity-note">
-                      Timed forum posts were scarce, so e-mails and other dated items are
-                      included in this histogram.
+                      This histogram includes both timed forum posts and e-mails.
                     </p>
                   )}
                   {hourly && (

@@ -87,28 +87,39 @@ export function filterActivityPoints(
   return points.filter((p) => normaliseKind(p.kind) === kindFilter);
 }
 
-/** Continuous UTC months from the first dated point to the last, gaps filled with zeros. */
-export function monthlyBuckets(points: ActivityPoint[], kindFilter: KindFilter = 'both'): MonthBucket[] {
+/**
+ * Continuous UTC months from the first dated point to the last, gaps filled with zeros.
+ * The x-axis range always spans `rangePoints` (defaults to `points`) so toggling
+ * E-mails / Forum posts keeps the same months and makes empty stretches obvious.
+ */
+export function monthlyBuckets(
+  points: ActivityPoint[],
+  kindFilter: KindFilter = 'both',
+  rangePoints: ActivityPoint[] = points,
+): MonthBucket[] {
   const scoped = filterActivityPoints(points, kindFilter);
-  const dated: { key: string; kind: ActivityKind }[] = [];
+  const rangeKeys: string[] = [];
+  for (const p of rangePoints) {
+    const d = parseUtc(p.date);
+    if (!d) continue;
+    if (normaliseKind(p.kind) === 'other') continue;
+    rangeKeys.push(monthKey(d));
+  }
+  if (rangeKeys.length === 0) return [];
+  rangeKeys.sort();
+  const first = rangeKeys[0]!;
+  const last = rangeKeys[rangeKeys.length - 1]!;
+
+  const counts = new Map<string, { posts: number; emails: number }>();
   for (const p of scoped) {
     const d = parseUtc(p.date);
     if (!d) continue;
     const kind = normaliseKind(p.kind);
     if (kind === 'other') continue;
-    dated.push({ key: monthKey(d), kind });
-  }
-  if (dated.length === 0) return [];
-
-  const keys = dated.map((row) => row.key).sort();
-  const first = keys[0]!;
-  const last = keys[keys.length - 1]!;
-
-  const counts = new Map<string, { posts: number; emails: number }>();
-  for (const row of dated) {
-    const cur = counts.get(row.key) ?? { posts: 0, emails: 0 };
-    cur[row.kind] += 1;
-    counts.set(row.key, cur);
+    const key = monthKey(d);
+    const cur = counts.get(key) ?? { posts: 0, emails: 0 };
+    cur[kind] += 1;
+    counts.set(key, cur);
   }
 
   const firstParts = first.split('-');
@@ -139,18 +150,21 @@ export function monthlyBuckets(points: ActivityPoint[], kindFilter: KindFilter =
   return result;
 }
 
-/** Posts by hour (0–23) in the given UTC offset. Falls back to every timed point if no timed posts exist. */
+/**
+ * Timed items by hour (0–23) in the given UTC offset.
+ * "Both" sums e-mails and forum posts — it must not drop e-mails when timed posts exist.
+ */
 export function hourHistogram(
   points: ActivityPoint[],
   utcOffset = 0,
   kindFilter: KindFilter = 'both',
 ): HourHistogram {
   const scoped = filterActivityPoints(points, kindFilter);
-  const timedPosts = scoped.filter((p) => normaliseKind(p.kind) === 'posts' && hasClock(p.date));
   const timed = scoped.filter((p) => hasClock(p.date));
-  const source = kindFilter === 'both' ? (timedPosts.length > 0 ? timedPosts : timed) : timed;
+  const timedPosts = timed.filter((p) => normaliseKind(p.kind) === 'posts');
+  const timedEmails = timed.filter((p) => normaliseKind(p.kind) === 'emails');
   const hours = Array.from({ length: 24 }, () => 0);
-  for (const p of source) {
+  for (const p of timed) {
     const d = parseUtc(p.date);
     if (!d) continue;
     const h = ((d.getUTCHours() + utcOffset) % 24 + 24) % 24;
@@ -158,8 +172,8 @@ export function hourHistogram(
   }
   return {
     hours,
-    usedAllKinds: kindFilter === 'both' && timedPosts.length === 0 && source.length > 0,
-    timedCount: source.length,
+    usedAllKinds: kindFilter === 'both' && timedEmails.length > 0 && timedPosts.length > 0,
+    timedCount: timed.length,
   };
 }
 

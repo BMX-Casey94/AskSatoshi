@@ -25,6 +25,13 @@ export interface CorpusFile {
     commit: string;
     fetchedAt: string;
     counts: { emails: number; posts: number; quotes: number };
+    privateEmails?: {
+      malmi: number;
+      hearn: number;
+      finney: number;
+      weidai: number;
+      total: number;
+    };
   };
   documents: CorpusDoc[];
 }

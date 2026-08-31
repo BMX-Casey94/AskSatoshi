@@ -15,7 +15,7 @@ import {
   monthlyBuckets,
   peakFourHourBlock,
 } from '../lib/satoshiActivity';
-import type { TimeZone } from '../lib/satoshiActivity';
+import type { KindFilter, TimeZone } from '../lib/satoshiActivity';
 import { HourlyChart, MonthlyChart } from './ActivityCharts';
 import { HomeIcon } from './icons';
 import { ThemeToggle } from './ThemeToggle';
@@ -32,6 +32,7 @@ export function SatoshiActivityPage() {
   const [view, setView] = useState<View>('monthly');
   const [chartMode, setChartMode] = useState<ChartMode>('bar');
   const [tz, setTz] = useState<TimeZone>(TIMEZONES[0]!);
+  const [kindFilter, setKindFilter] = useState<KindFilter>('both');
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -62,10 +63,36 @@ export function SatoshiActivityPage() {
     return () => controller.abort();
   }, [load]);
 
-  const months = useMemo(() => (data ? monthlyBuckets(data.points) : []), [data]);
-  const hourly = useMemo(() => (data ? hourHistogram(data.points, tz.offset) : null), [data, tz]);
+  const months = useMemo(
+    () => (data ? monthlyBuckets(data.points, kindFilter) : []),
+    [data, kindFilter],
+  );
+  const hourly = useMemo(
+    () => (data ? hourHistogram(data.points, tz.offset, kindFilter) : null),
+    [data, tz, kindFilter],
+  );
   const activeWindow = useMemo(() => (hourly ? peakFourHourBlock(hourly.hours) : null), [hourly]);
   const compiled = data ? formatGeneratedAt(data.generatedAt) : null;
+  const stats = useMemo(() => {
+    if (!data) return { total: 0, emails: 0, posts: 0 };
+    if (kindFilter === 'emails') {
+      return { total: data.byKind.emails, emails: data.byKind.emails, posts: 0 };
+    }
+    if (kindFilter === 'posts') {
+      return { total: data.byKind.posts, emails: 0, posts: data.byKind.posts };
+    }
+    return { total: data.total, emails: data.byKind.emails, posts: data.byKind.posts };
+  }, [data, kindFilter]);
+  const monthlyTitle =
+    kindFilter === 'emails'
+      ? 'E-mails per month'
+      : kindFilter === 'posts'
+        ? 'Posts per month'
+        : 'Posts and e-mails per month';
+  const hourlyTitle =
+    kindFilter === 'emails'
+      ? `E-mails by hour of day (${tz.label})`
+      : `Posts by hour of day (${tz.label})`;
 
   return (
     <div className="activity">
@@ -103,9 +130,9 @@ export function SatoshiActivityPage() {
         {state === 'ready' && data && (
           <>
             <section className="activity-stats" aria-label="Totals">
-              <Stat label="Total" value={data.total} />
-              <Stat label="Posts" value={data.byKind.posts} />
-              <Stat label="E-mails" value={data.byKind.emails} />
+              <Stat label="Total" value={stats.total} />
+              <Stat label="Posts" value={stats.posts} />
+              <Stat label="E-mails" value={stats.emails} />
             </section>
             {compiled && <p className="activity-meta">Compiled {compiled}</p>}
 
@@ -151,17 +178,47 @@ export function SatoshiActivityPage() {
                   Line
                 </button>
               </div>
+
+              <div className="activity-toggle" role="tablist" aria-label="Kind filter">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={kindFilter === 'both'}
+                  className={`activity-toggle-btn${kindFilter === 'both' ? ' activity-toggle-btn--on' : ''}`}
+                  onClick={() => setKindFilter('both')}
+                >
+                  Both
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={kindFilter === 'emails'}
+                  className={`activity-toggle-btn${kindFilter === 'emails' ? ' activity-toggle-btn--on' : ''}`}
+                  onClick={() => setKindFilter('emails')}
+                >
+                  E-mails
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={kindFilter === 'posts'}
+                  className={`activity-toggle-btn${kindFilter === 'posts' ? ' activity-toggle-btn--on' : ''}`}
+                  onClick={() => setKindFilter('posts')}
+                >
+                  Forum posts
+                </button>
+              </div>
             </div>
 
             <section className="activity-panel" aria-live="polite">
               {view === 'monthly' ? (
                 <>
-                  <h2 className="activity-panel-title">Posts and e-mails per month</h2>
+                  <h2 className="activity-panel-title">{monthlyTitle}</h2>
                   <MonthlyChart buckets={months} mode={chartMode} />
                 </>
               ) : (
                 <>
-                  <h2 className="activity-panel-title">Posts by hour of day ({tz.label})</h2>
+                  <h2 className="activity-panel-title">{hourlyTitle}</h2>
                   {hourly?.usedAllKinds && (
                     <p className="activity-note">
                       Timed forum posts were scarce, so e-mails and other dated items are

@@ -5,6 +5,8 @@
 
 import type { ActivityKind, ActivityPoint } from '../types';
 
+export type KindFilter = 'both' | 'emails' | 'posts';
+
 export interface MonthBucket {
   key: string;
   label: string;
@@ -77,10 +79,19 @@ function monthLabel(key: string, includeYear: boolean): string {
   return includeYear ? `${month} ${y}` : month;
 }
 
+export function filterActivityPoints(
+  points: readonly ActivityPoint[],
+  kindFilter: KindFilter = 'both',
+): ActivityPoint[] {
+  if (kindFilter === 'both') return [...points];
+  return points.filter((p) => normaliseKind(p.kind) === kindFilter);
+}
+
 /** Continuous UTC months from the first dated point to the last, gaps filled with zeros. */
-export function monthlyBuckets(points: ActivityPoint[]): MonthBucket[] {
+export function monthlyBuckets(points: ActivityPoint[], kindFilter: KindFilter = 'both'): MonthBucket[] {
+  const scoped = filterActivityPoints(points, kindFilter);
   const dated: { key: string; kind: ActivityKind }[] = [];
-  for (const p of points) {
+  for (const p of scoped) {
     const d = parseUtc(p.date);
     if (!d) continue;
     const kind = normaliseKind(p.kind);
@@ -129,9 +140,15 @@ export function monthlyBuckets(points: ActivityPoint[]): MonthBucket[] {
 }
 
 /** Posts by hour (0–23) in the given UTC offset. Falls back to every timed point if no timed posts exist. */
-export function hourHistogram(points: ActivityPoint[], utcOffset = 0): HourHistogram {
-  const timedPosts = points.filter((p) => normaliseKind(p.kind) === 'posts' && hasClock(p.date));
-  const source = timedPosts.length > 0 ? timedPosts : points.filter((p) => hasClock(p.date));
+export function hourHistogram(
+  points: ActivityPoint[],
+  utcOffset = 0,
+  kindFilter: KindFilter = 'both',
+): HourHistogram {
+  const scoped = filterActivityPoints(points, kindFilter);
+  const timedPosts = scoped.filter((p) => normaliseKind(p.kind) === 'posts' && hasClock(p.date));
+  const timed = scoped.filter((p) => hasClock(p.date));
+  const source = kindFilter === 'both' ? (timedPosts.length > 0 ? timedPosts : timed) : timed;
   const hours = Array.from({ length: 24 }, () => 0);
   for (const p of source) {
     const d = parseUtc(p.date);
@@ -141,7 +158,7 @@ export function hourHistogram(points: ActivityPoint[], utcOffset = 0): HourHisto
   }
   return {
     hours,
-    usedAllKinds: timedPosts.length === 0 && source.length > 0,
+    usedAllKinds: kindFilter === 'both' && timedPosts.length === 0 && source.length > 0,
     timedCount: source.length,
   };
 }

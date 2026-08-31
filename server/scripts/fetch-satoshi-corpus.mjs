@@ -13,6 +13,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { countPrivateEmails, fetchPrivateEmails } from './privateEmails.mjs';
 
 const REPO = 'NakamotoInstitute/nakamotoinstitute.org';
 const RAW = `https://raw.githubusercontent.com/${REPO}/master/server/data`;
@@ -154,6 +155,11 @@ async function main() {
     });
   }
 
+  console.log('[fetch] fetching private Satoshi-authored emails…');
+  const privateEmails = await fetchPrivateEmails();
+  documents.push(...privateEmails);
+  const privateEmailCounts = countPrivateEmails(privateEmails);
+
   for (const p of posts) {
     if (p.satoshi_id === undefined || p.satoshi_id === null) continue;
     const text = cleanText(p.text);
@@ -205,14 +211,16 @@ async function main() {
         posts: documents.filter((d) => d.kind === 'post').length,
         quotes: quoteCount,
       },
+      privateEmails: privateEmailCounts,
     },
     documents,
   };
 
   mkdirSync(dirname(OUT), { recursive: true });
   writeFileSync(OUT, `${JSON.stringify(corpus, null, 2)}\n`);
+  const pe = corpus.pin.privateEmails;
   console.log(
-    `[fetch] wrote ${OUT} — ${corpus.pin.counts.posts} posts, ${corpus.pin.counts.emails} emails, ${corpus.pin.counts.quotes} quotes (${documents.length} documents)`,
+    `[fetch] wrote ${OUT} — ${corpus.pin.counts.posts} posts, ${corpus.pin.counts.emails} emails (${pe.total} private: malmi ${pe.malmi}, hearn ${pe.hearn}, finney ${pe.finney}, weidai ${pe.weidai}), ${corpus.pin.counts.quotes} quotes (${documents.length} documents)`,
   );
 }
 

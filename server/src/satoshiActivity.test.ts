@@ -76,9 +76,9 @@ describe('getSatoshiActivity', () => {
 
     expect(again).toBe(activity);
     expect(activity.total).toBe(activity.byKind.emails + activity.byKind.posts);
-    expect(activity.byKind.emails).toBe(38);
-    expect(activity.byKind.posts).toBe(543);
-    expect(activity.points).toHaveLength(581);
+    expect(activity.byKind.emails).toBe(213);
+    expect(activity.byKind.posts).toBe(532);
+    expect(activity.points).toHaveLength(745);
     expect(activity.points.every((p) => p.kind === 'email' || p.kind === 'post')).toBe(true);
     expect(activity.points.some((p) => (p as { kind: string }).kind === 'quote')).toBe(false);
 

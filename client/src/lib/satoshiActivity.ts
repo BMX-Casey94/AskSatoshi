@@ -28,11 +28,13 @@ export interface TimeZone {
 
 export const TIMEZONES: TimeZone[] = [
   { id: 'utc', label: 'UTC', offset: 0 },
-  { id: 'uk', label: 'UK', offset: 0 },
+  { id: 'europe', label: 'Europe (CET)', offset: 1 },
   { id: 'us-east', label: 'US East', offset: -5 },
   { id: 'us-west', label: 'US West', offset: -8 },
-  { id: 'aus-east', label: 'Australia (Sydney)', offset: 10 },
+  { id: 'singapore', label: 'Singapore', offset: 8 },
   { id: 'japan', label: 'Japan', offset: 9 },
+  { id: 'aus-east', label: 'Australia (Sydney)', offset: 10 },
+  { id: 'nz', label: 'New Zealand', offset: 12 },
 ];
 
 export interface ActiveWindow {

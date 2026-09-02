@@ -28,11 +28,17 @@ export interface ModelTier {
 export const DEFAULT_MAX_OUTPUT_TOKENS = 4_096;
 /** Free-tier output cap: keeps a grounded request under Groq's 8K TPM ceiling. */
 export const FREE_MAX_OUTPUT_TOKENS = 2_048;
+/**
+ * Paid-primary output cap. Long comparative answers were hitting the 4096 default and
+ * truncating mid-sentence; 8192 gives generous headroom while still bounding spend
+ * (at $1.50/1M, a full 8K answer costs about a penny).
+ */
+export const PAID_MAX_OUTPUT_TOKENS = 8_192;
 
 export const MODEL_CHAIN: ModelTier[] = [
   // Paid workhorse: GA until ≥May 2027, $0.25/1M in + $1.50/1M out, 1M context, vision.
   // A funded OpenRouter key makes this the reliable primary; free tiers are overflow.
-  { id: 'openrouter-flash-lite', provider: 'openrouter', model: 'google/gemini-3.1-flash-lite', vision: true },
+  { id: 'openrouter-flash-lite', provider: 'openrouter', model: 'google/gemini-3.1-flash-lite', vision: true, maxOutputTokens: PAID_MAX_OUTPUT_TOKENS },
   // Free Gemini (unpaid AI Studio keys): newest Flash confirmed GA.
   { id: 'gemini-3.6-flash', provider: 'gemini', model: 'gemini-3.6-flash', vision: true, free: true, maxOutputTokens: FREE_MAX_OUTPUT_TOKENS },
   // Same-key Gemini failover (quotas are per model, so this multiplies daily capacity).

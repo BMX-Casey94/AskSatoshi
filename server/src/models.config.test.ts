@@ -5,6 +5,7 @@ import {
   evidenceBudgetFor,
   FREE_EVIDENCE_CHARS,
   FREE_MAX_OUTPUT_TOKENS,
+  PAID_MAX_OUTPUT_TOKENS,
 } from './models.config.js';
 
 const allKeys = { gemini: 'g', groq: 'q', openrouter: 'o' };
@@ -38,8 +39,9 @@ describe('model chain configuration', () => {
 
   it('caps output lower on free tiers than on the paid tier', () => {
     const byId = new Map(eligibleTiers(allKeys, false).map((t) => [t.id, t]));
-    expect(byId.get('openrouter-flash-lite')!.maxOutputTokens).toBeUndefined();
+    expect(byId.get('openrouter-flash-lite')!.maxOutputTokens).toBe(PAID_MAX_OUTPUT_TOKENS);
     expect(byId.get('groq-gpt-oss-120b')!.maxOutputTokens).toBe(FREE_MAX_OUTPUT_TOKENS);
+    expect(PAID_MAX_OUTPUT_TOKENS).toBeGreaterThan(FREE_MAX_OUTPUT_TOKENS);
   });
 
   it('excludes vision-only tiers from text requests', () => {

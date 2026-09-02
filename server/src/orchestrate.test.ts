@@ -609,6 +609,15 @@ describe('prompt construction', () => {
     expect(sys).toMatch(/[Nn]ever invent or guess an acronym/);
   });
 
+  it('leads contested frames with a firm first-person lean, not a hedged referee', () => {
+    const sys = buildSystemPrompt('mcp');
+    expect(sys).toMatch(/It would seem so/);
+    expect(sys).toMatch(/Evidence suggests that is the case/);
+    expect(sys).toMatch(/My argument would be yes — absolutely/);
+    expect(sys).toMatch(/never bury the lean behind/);
+    expect(sys).not.toMatch(/Some would argue so, whilst others would not/);
+  });
+
   it('forbids Taproot, SegWit and Lightning as implementation advice', () => {
     const sys = buildSystemPrompt('mcp');
     expect(sys).toMatch(/IMPLEMENTATION ADVICE IS BSV-ONLY/);

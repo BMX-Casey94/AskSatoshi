@@ -2,15 +2,15 @@
   "pin": {
     "repo": "curated-research",
     "commit": "manual",
-    "fetchedAt": "2026-09-02T13:37:55.172Z",
+    "fetchedAt": "2026-09-02T13:45:04.814Z",
     "counts": {
-      "emails": 296,
-      "posts": 34,
+      "emails": 274,
+      "posts": 7,
       "quotes": 0
     },
     "bulk": {
       "seclists": {
-        "note": "SecurityFocus / SecLists / MARC archives are the bulk of Kleiman’s dated public record; a deep pass (2003–2013) is now included. Court-exhibit emails from Kleiman v Wright are marked as such; estate-produced items are reliable, Wright-produced mundane operational emails are included for activity patterning only. Nothing after his death on 2013-04-26."
+        "note": "Only items Dave Kleiman himself sent or published: mailing-list posts (MARC / SecLists / Metzdowd), USENET / Google Groups replies, and his two WordPress blog posts. Court exhibits, book credits, conference appearances, interviews, Wayback captures and company filings are excluded. Nothing after his death on 2013-04-26."
       }
     }
   },
@@ -976,14 +976,6 @@
       "text": "Mailing-list post (MARC archive)."
     },
     {
-      "id": "kleiman-post-20050210-microsoft-log-parser-toolkit-published-contribut",
-      "kind": "post",
-      "title": "Microsoft Log Parser Toolkit published (contributing author)",
-      "date": "2005-02-10",
-      "url": "https://shop.elsevier.com/books/microsoft-log-parser-toolkit/giuseppini/978-1-932266-52-6",
-      "text": "Syngress/Elsevier. ISBN 1-932266-52-6. Court expert report lists 24 Feb 2005; publisher listings also give 10 Feb 2005."
-    },
-    {
       "id": "kleiman-email-20050214-re-nmapwin-v1-3-1",
       "kind": "email",
       "title": "RE: NMapWin v1.3.1",
@@ -1552,14 +1544,6 @@
       "text": "Mailing-list post (MARC archive)."
     },
     {
-      "id": "kleiman-post-20051225-perfect-passwords-technical-editor",
-      "kind": "post",
-      "title": "Perfect Passwords — technical editor",
-      "date": "2005-12-25",
-      "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
-      "text": "Syngress. ISBN 1-59749-041-5. Date from Kleiman v Wright expert report (ECF 509-4)."
-    },
-    {
       "id": "kleiman-email-20060119-re-windows-log",
       "kind": "email",
       "title": "RE: Windows Log",
@@ -1632,22 +1616,6 @@
       "text": "Mailing-list post (MARC archive)."
     },
     {
-      "id": "kleiman-post-20060413-security-log-management-identifying-patterns-in-",
-      "kind": "post",
-      "title": "Security Log Management: Identifying Patterns in the Chaos (contributing author)",
-      "date": "2006-04-13",
-      "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
-      "text": "Syngress. ISBN 1-59749-042-3."
-    },
-    {
-      "id": "kleiman-post-20060519-wayback-s-doc-management-page-listing-kleiman-as",
-      "kind": "post",
-      "title": "Wayback: S-doc management page listing Kleiman as CISO",
-      "date": "2006-05-19",
-      "url": "https://web.archive.org/web/20060519093230/http://s-doc.com/company/management.asp",
-      "text": "Biography: CISO and S-Lok product manager; InfraGard; ISSMP, ISSAP, CISSP, CIFI, CISM, CAS, CCE, MCSE. Capture cited in Kleiman v Wright ECF 509-4. Site copyright 2005."
-    },
-    {
       "id": "kleiman-email-20060523-re-ms-audit-logs",
       "kind": "email",
       "title": "RE: MS Audit logs",
@@ -1694,22 +1662,6 @@
       "date": "2006-07-29T12:57:00-04:00",
       "url": "https://marc.info/?l=focus-ms&m=115419725116743&w=2",
       "text": "Mailing-list post (MARC archive)."
-    },
-    {
-      "id": "kleiman-post-20060904-winternals-defragmentation-recovery-and-administ",
-      "kind": "post",
-      "title": "Winternals Defragmentation, Recovery, and Administration Field Guide — technical editor",
-      "date": "2006-09-04",
-      "url": "https://shop.elsevier.com/books/winternals-defragmentation-recovery-and-administration-field-guide/kleiman/978-1-59749-079-5",
-      "text": "Syngress. ISBN 1-59749-079-2."
-    },
-    {
-      "id": "kleiman-post-20060915-how-to-cheat-at-windows-system-administration-co",
-      "kind": "post",
-      "title": "How to Cheat at Windows System Administration — contributing author",
-      "date": "2006-09-15",
-      "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
-      "text": "Syngress. ISBN 1-59749-105-5."
     },
     {
       "id": "kleiman-email-20061018-re-password-statistics-and-standards",
@@ -1792,22 +1744,6 @@
       "text": "Mailing-list post (MARC archive)."
     },
     {
-      "id": "kleiman-post-20070107-enemy-at-the-water-cooler-technical-reviewer",
-      "kind": "post",
-      "title": "Enemy at the Water Cooler — technical reviewer",
-      "date": "2007-01-07",
-      "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
-      "text": "Syngress. ISBN 1-59749-129-2."
-    },
-    {
-      "id": "kleiman-post-20070130-rootkits-for-dummies-forensics-advisor-technical",
-      "kind": "post",
-      "title": "Rootkits for Dummies — forensics advisor / technical editor",
-      "date": "2007-01-30",
-      "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
-      "text": "Wiley. ISBN 978-0-471-91710-6."
-    },
-    {
       "id": "kleiman-email-20070203-re-pci-efs-and-the-future",
       "kind": "email",
       "title": "RE: PCI, EFS and the future?",
@@ -1822,14 +1758,6 @@
       "date": "2007-02-08T01:04:38-05:00",
       "url": "https://seclists.org/basics/2007/Feb/116",
       "text": "Forwards Symantec blog on CastleCops PIRT phishing project and $50,000 contest. Signed davekleiman.com/about.php."
-    },
-    {
-      "id": "kleiman-post-20070312-cd-and-dvd-forensics-technical-editor",
-      "kind": "post",
-      "title": "CD and DVD Forensics — technical editor",
-      "date": "2007-03-12",
-      "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
-      "text": "Syngress. ISBN 1-59749-128-4."
     },
     {
       "id": "kleiman-email-20070317-cybercrime-summit",
@@ -1854,14 +1782,6 @@
       "date": "2007-04-13T18:29:17-04:00",
       "url": "https://marc.info/?l=security-basics&m=117665427126226&w=2",
       "text": "Mailing-list post (MARC archive)."
-    },
-    {
-      "id": "kleiman-post-20070508-windows-forensic-analysis-including-dvd-toolkit-",
-      "kind": "post",
-      "title": "Windows Forensic Analysis Including DVD Toolkit — technical editor",
-      "date": "2007-05-08",
-      "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
-      "text": "Syngress. ISBN 1-59749-156-X."
     },
     {
       "id": "kleiman-email-20070522-re-retrieving-deleted-sms-mms-from-nokia-symbian",
@@ -1894,14 +1814,6 @@
       "date": "2007-07-19T13:06:41-04:00",
       "url": "https://marc.info/?l=security-basics&m=118486688627562&w=2",
       "text": "Mailing-list post (MARC archive)."
-    },
-    {
-      "id": "kleiman-post-20070827-taught-htcia-international-conference-lab-san-dieg",
-      "kind": "post",
-      "title": "Taught HTCIA International Conference lab, San Diego (erasure-trace demonstration; class materials later posted as HTCIA_2007_LogFileForensics-n-Tools_Tricks.zip)",
-      "date": "2007-08-27",
-      "url": "https://web.archive.org/web/20110719202636/http://www.davekleiman.com/computer-forensics-expert-florida-miami-palm-beach-lauderdale-dave-kleiman-forensic-training-files/HTCIA_2007_LogFileForensics-n-Tools_Tricks.zip",
-      "text": "Conference / training engagement."
     },
     {
       "id": "kleiman-email-20070912-re-advice-regarding-servers-and-wiping-drives-afte",
@@ -1952,22 +1864,6 @@
       "text": "Mailing-list post (MARC archive)."
     },
     {
-      "id": "kleiman-post-20070927-wayback-first-successful-capture-of-davekleiman-",
-      "kind": "post",
-      "title": "Wayback: first successful capture of davekleiman.com homepage",
-      "date": "2007-09-27",
-      "url": "https://web.archive.org/web/20070927045755/http://www.davekleiman.com/",
-      "text": "Earliest 200-status CDX hit for the personal site. Later captures: 2008-07-05, 2009-03-24, 2009-04-12, 2010-05-01, 2011-02-01, 2012-02-04, 2012-07-13."
-    },
-    {
-      "id": "kleiman-post-20071008-the-official-chfi-study-guide-exam-312-49-main-a",
-      "kind": "post",
-      "title": "The Official CHFI Study Guide (Exam 312-49) — main author",
-      "date": "2007-10-08",
-      "url": "https://shop.elsevier.com/books/the-official-chfi-study-guide-exam-312-49/kleiman/978-1-59749-197-6",
-      "text": "Syngress/Elsevier. ISBN 1-59749-197-7. Goodreads lists first published 7 Nov 2007."
-    },
-    {
       "id": "kleiman-email-20071024-re-bootable-flash-usb-thumb-drive",
       "kind": "email",
       "title": "RE: Bootable flash/USB/thumb drive",
@@ -1990,14 +1886,6 @@
       "date": "2008-03-12T03:25:13-04:00",
       "url": "https://seclists.org/basics/2008/Mar/147",
       "text": "Public reply to Craig Wright: 'Sometimes you amaze me....I literally today just took on a case today dealing exactly with this.' Praises Wright as a 'Knowledge Junkie'. Distinct from the later disputed private 'Bit cash, Bitcoin' email that reused this subject line."
-    },
-    {
-      "id": "kleiman-email-20080422-email-to-craig-wright-fw-authorship-offer-isc-2-is",
-      "kind": "email",
-      "title": "Email to Craig Wright: FW: Authorship offer (ISC)2 ISSMP textbook chapter — declined, 'I have not been doing too well lately'",
-      "date": "2008-04-22T15:37:15-04:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.65.pdf",
-      "text": "Email produced as an exhibit in Kleiman v Wright."
     },
     {
       "id": "kleiman-email-20080423-new-remote-forensics-and-ediscovery-tool-f-respo",
@@ -2032,14 +1920,6 @@
       "text": "Mailing-list post (MARC archive)."
     },
     {
-      "id": "kleiman-email-20080603-email-to-craig-wright-re-isaca-ethics-issue-darn-i",
-      "kind": "email",
-      "title": "Email to Craig Wright: RE: ISACA ethics issue — 'Darn it!!! I plagiarize you all the time!!'",
-      "date": "2008-06-03T21:53:00-04:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.38.pdf",
-      "text": "Email produced as an exhibit in Kleiman v Wright."
-    },
-    {
       "id": "kleiman-email-20080728-re-log-reader",
       "kind": "email",
       "title": "RE: Log reader",
@@ -2048,36 +1928,12 @@
       "text": "Mailing-list post (SecLists archive)."
     },
     {
-      "id": "kleiman-post-20080729-presented-facci-2008-live-preview-tools-tricks-and",
-      "kind": "post",
-      "title": "Presented FACCI 2008: Live Preview — Tools, Tricks, and Traps; Log File Forensics with Microsoft Log Parser (Sarasota; materials posted as FACCI-2008_LivePreview-n-LogParser.rar)",
-      "date": "2008-07-29",
-      "url": "https://web.archive.org/web/20081120181724/http://www.davekleiman.com/computer-forensics-expert-florida-miami-palm-beach-lauderdale-dave-kleiman-forensic-training-files/FACCI-2008_LivePreview-n-LogParser.rar",
-      "text": "Conference / training engagement."
-    },
-    {
-      "id": "kleiman-post-20080828-wayback-davekleiman-com-services-page-forensics-",
-      "kind": "post",
-      "title": "Wayback: davekleiman.com services page (forensics offerings)",
-      "date": "2008-08-28",
-      "url": "https://web.archive.org/web/20080828000000/http://davekleiman.com/computer-forensics-expert-florida-miami-palm-beach-lauderdale-dave-kle",
-      "text": "Court exhibit archive window 28 Aug 2008–5 Feb 2012. Lists e-discovery, expert witness, incident response. Signed CAS, CCE, CEECS, CIFI, CISM, CISSP, ISSAP, ISSMP, MCSE, MVP."
-    },
-    {
       "id": "kleiman-email-20080828-downloads-from-facci-2008",
       "kind": "email",
       "title": "Downloads from FACCI 2008",
       "date": "2008-08-28T07:37:08-04:00",
       "url": "https://seclists.org/basics/2008/Aug/213",
       "text": "Posts FACCI 2008 lab files: Live Preview and Log File Forensics with Microsoft Log Parser. computerforensicexaminer.com."
-    },
-    {
-      "id": "kleiman-email-20080909-email-to-craig-wright-and-shyaam-re-our-paper-let-",
-      "kind": "email",
-      "title": "Email to Craig Wright and Shyaam: RE: Our Paper — 'Let me know what you need me to do, and it will be done!' (ICISS wiping paper)",
-      "date": "2008-09-09T06:49:00-04:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.87.pdf",
-      "text": "Email produced as an exhibit in Kleiman v Wright."
     },
     {
       "id": "kleiman-email-20081103-aba-resolution-on-digital-forensics-and-the-dfcb",
@@ -2094,30 +1950,6 @@
       "date": "2008-11-12T12:36:24-05:00",
       "url": "https://seclists.org/basics/2008/Nov/110",
       "text": "Mailing-list post (SecLists archive)."
-    },
-    {
-      "id": "kleiman-post-20081216-overwriting-hard-drive-data-the-great-wiping-con",
-      "kind": "post",
-      "title": "Overwriting Hard Drive Data: The Great Wiping Controversy (ICISS 2008)",
-      "date": "2008-12-16",
-      "url": "https://doi.org/10.1007/978-3-540-89862-7_21",
-      "text": "Wright, Kleiman, Sundhar R.S. LNCS 5352 pp. 243–257. Conference Hyderabad 16–20 Dec 2008. Argues a single overwrite is sufficient on modern drives."
-    },
-    {
-      "id": "kleiman-post-20081216-iciss-2008-paper-presented-wright-kleiman-sundhar-",
-      "kind": "post",
-      "title": "ICISS 2008 paper presented: Wright, Kleiman, Sundhar — Overwriting Hard Drive Data: The Great Wiping Controversy (Hyderabad, 16–20 Dec 2008)",
-      "date": "2008-12-16",
-      "url": "https://link.springer.com/chapter/10.1007/978-3-540-89862-7_21",
-      "text": "Conference / training engagement."
-    },
-    {
-      "id": "kleiman-email-20090106-email-to-craig-wright-re-happy-new-year-holiday-wi",
-      "kind": "email",
-      "title": "Email to Craig Wright: RE: Happy new year — holiday wishes; asked whether a package was sent on his FedEx number",
-      "date": "2009-01-06T11:29:00-05:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.64.pdf",
-      "text": "Email produced as an exhibit in Kleiman v Wright."
     },
     {
       "id": "kleiman-email-20090119-seagate-7200-11-drives",
@@ -2160,14 +1992,6 @@
       "text": "Blog post."
     },
     {
-      "id": "kleiman-email-20090309-email-from-dave-kleiman-mobile-to-craig-wright-wel",
-      "kind": "email",
-      "title": "Email from Dave Kleiman - Mobile to Craig Wright: Welcome! — SMS follow-up, proposed Wednesday dinner",
-      "date": "2009-03-09T17:49:16-04:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.77.pdf",
-      "text": "Email produced as an exhibit in Kleiman v Wright."
-    },
-    {
       "id": "kleiman-email-20090401-federally-mandated-certification-of-cybersecurity-",
       "kind": "email",
       "title": "Federally Mandated Certification of cybersecurity professionals?",
@@ -2206,38 +2030,6 @@
       "date": "2009-05-06T03:34:39-04:00",
       "url": "https://seclists.org/basics/2009/May/96",
       "text": "Recommends F-Response, X-Ways, EnCase, AccessData; free conference lab files; upcoming CEIC Orlando (PowerShell, Log Parser, Perl, Sysinternals)."
-    },
-    {
-      "id": "kleiman-email-20090506-email-to-dex561-yahoo-com-dex561-aol-com-better-bu",
-      "kind": "email",
-      "title": "Email to dex561@yahoo.com / dex561@aol.com: Better buy some twitter stock (Kleiman estate production KLEIMAN_00027940)",
-      "date": "2009-05-06T08:19:00-04:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.41.pdf",
-      "text": "Email produced as an exhibit in Kleiman v Wright."
-    },
-    {
-      "id": "kleiman-post-20090517-ceic-2009-orlando-scripting-network-forensics-powe",
-      "kind": "post",
-      "title": "CEIC 2009 Orlando — Scripting Network Forensics (PowerShell, Log Parser, Perl, Sysinternals); materials later posted as 2009_CEIC_Conference_Forensics zip",
-      "date": "2009-05-17",
-      "url": "https://web.archive.org/web/20110719202758/http://www.davekleiman.com/computer-forensics-expert-florida-miami-palm-beach-lauderdale-dave-kleiman-forensic-training-files/2009_CEIC_Conference_Forensics-Featuring_Powershell_LogParser_Perl_Sysinternals.zip",
-      "text": "Conference / training engagement."
-    },
-    {
-      "id": "kleiman-post-20090530-wayback-davekleiman-com-services-page-reviewed-i",
-      "kind": "post",
-      "title": "Wayback: davekleiman.com services page reviewed in court (30 May 2009)",
-      "date": "2009-05-30",
-      "url": "https://web.archive.org/web/20090530000000/http://davekleiman.com/",
-      "text": "ECF 509-4 cites a 30 May 2009 archive: litigation support, no programming/Bitcoin/C++ mentioned. Threat ticker on the exhibit is dated 29 May 2009."
-    },
-    {
-      "id": "kleiman-post-20090706-sans-whatworks-summit-in-forensics-and-incident-re",
-      "kind": "post",
-      "title": "SANS WhatWorks Summit in Forensics and Incident Response, Fairmont Washington DC (6–7 Jul 2009) — panelist, Forensic Challenges from the Court Room",
-      "date": "2009-07-06",
-      "url": "https://web.archive.org/web/20100126005820/http://www.sans.org/forensics09_summit/speakers.php#kleiman",
-      "text": "Conference / training engagement."
     },
     {
       "id": "kleiman-post-20090925-google-groups-overwritten-data-can-apparently-be",
@@ -2328,22 +2120,6 @@
       "text": "Mailing-list post (SecLists archive)."
     },
     {
-      "id": "kleiman-email-20100315-email-from-mobile-to-craig-wright-and-bob-radvanov",
-      "kind": "email",
-      "title": "Email from mobile to Craig Wright and Bob Radvanovsky: RE: A paper — would read IEEE Globecom draft that night; 55 minutes from house to Miami",
-      "date": "2010-03-15T11:55:35-04:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.48.pdf",
-      "text": "Email produced as an exhibit in Kleiman v Wright."
-    },
-    {
-      "id": "kleiman-email-20100318-email-to-craig-wright-re-so-comments-on-unix-comma",
-      "kind": "email",
-      "title": "Email to Craig Wright: RE: So... — comments on UNIX commands and criminal-specialisation papers; agreed to work on a book",
-      "date": "2010-03-18T01:49:34-04:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.45.pdf",
-      "text": "Email produced as an exhibit in Kleiman v Wright."
-    },
-    {
       "id": "kleiman-email-20100325-new-research-suggests-that-governments-may-fake-",
       "kind": "email",
       "title": "New Research Suggests That Governments May Fake SSL Certificates",
@@ -2358,158 +2134,6 @@
       "date": "2010-04-16T16:27:36-04:00",
       "url": "https://seclists.org/basics/2010/Apr/94",
       "text": "Mailing-list post (SecLists archive)."
-    },
-    {
-      "id": "kleiman-email-20100419-email-to-craig-wright-re-papers-so-far-i-was-wonde",
-      "kind": "email",
-      "title": "Email to Craig Wright: RE: Papers so far — 'I was wondering if you quit sleeping ...'",
-      "date": "2010-04-19T04:38:43-04:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.83.pdf",
-      "text": "Email produced as an exhibit in Kleiman v Wright."
-    },
-    {
-      "id": "kleiman-post-20100420-cnn-in-session-interview-with-vinnie-politan-on-sa",
-      "kind": "post",
-      "title": "CNN In Session interview with Vinnie Politan on Sarah Palin / David Kernell Yahoo email-hack case (air date inferred from Kernell trial opening statements; uploaded on YouTube channel Dave Kleiman)",
-      "date": "2010-04-20",
-      "url": "https://www.youtube.com/watch?v=jkN4Qr4uz4w",
-      "text": "Media interview."
-    },
-    {
-      "id": "kleiman-post-20100520-wpbf-25-abc-news-interview-quoted-on-copier-hard-d",
-      "kind": "post",
-      "title": "WPBF 25 / ABC News interview quoted on copier hard-drive identity-theft risk (Security Info Watch reprint)",
-      "date": "2010-05-20",
-      "url": "https://www.securityinfowatch.com/home/news/10500266/copy-machines-could-put-sensitive-data-at-risk",
-      "text": "Media interview."
-    },
-    {
-      "id": "kleiman-email-20100524-email-to-craig-wright-re-some-more-reading-asked-w",
-      "kind": "email",
-      "title": "Email to Craig Wright: RE: Some more reading — asked whether papers had been accepted and where Wright would speak",
-      "date": "2010-05-24T05:03:57-04:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.47.pdf",
-      "text": "Email produced as an exhibit in Kleiman v Wright."
-    },
-    {
-      "id": "kleiman-email-20101009-email-from-d-kleiman-to-i-kleiman-and-others-cited",
-      "kind": "email",
-      "title": "Email from D. Kleiman to I. Kleiman and others (cited as Exhibit P in Kleiman v Wright; signature-block address evidence)",
-      "date": "2010-10-09",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.488.0.pdf",
-      "text": "Email produced as an exhibit in Kleiman v Wright."
-    },
-    {
-      "id": "kleiman-email-20110202-re-dhs-cyber-r-d-grants-40mm",
-      "kind": "email",
-      "title": "RE: [DHS Cyber R&D Grants $40MM]",
-      "date": "2011-02-02T07:26:00+00:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.935.2.pdf",
-      "text": "To craig.wright@information-defense.com, cc Lynn Wright. Discusses DHS BAA areas (software assurance, etc.). Exhibit in Kleiman v Wright. Authenticity of some Wright-produced emails is contested; this thread is operational DHS-grant correspondence."
-    },
-    {
-      "id": "kleiman-email-20110214-re-link-to-r-d-site-llc-must-be-mailed",
-      "kind": "email",
-      "title": "RE: Link to R&D site (LLC must be mailed)",
-      "date": "2011-02-14T17:07:00-05:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.22.pdf",
-      "text": "Notes Florida LLC forms must be posted, not e-filed."
-    },
-    {
-      "id": "kleiman-email-20110214-re-link-to-r-d-site-fictitious-names",
-      "kind": "email",
-      "title": "RE: Link to R&D site (fictitious names)",
-      "date": "2011-02-14T19:13:00-05:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.22.pdf",
-      "text": "Cannot file LLC/nonprofit in time; lists existing Sunbiz fictitious names G06303900172 and G98287000005."
-    },
-    {
-      "id": "kleiman-email-20110215-email-to-craig-and-lynn-wright-re-registration-tta",
-      "kind": "email",
-      "title": "Email to Craig and Lynn Wright: RE: Registration - TTAI — asked if they had already created a username",
-      "date": "2011-02-15T06:35:00-05:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.30.pdf",
-      "text": "Email produced as an exhibit in Kleiman v Wright."
-    },
-    {
-      "id": "kleiman-email-20110215-link-to-r-d-site-duns-fbo-gov",
-      "kind": "email",
-      "title": "Link to R&D site (DUNS / FBO.gov)",
-      "date": "2011-02-15T08:32:00+00:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.22.pdf",
-      "text": "To Lynn Wright, cc Craig. Needs DUNS to register on FBO.gov; asks whether to form LLC or use a fictitious name."
-    },
-    {
-      "id": "kleiman-email-20110215-re-link-to-r-d-site",
-      "kind": "email",
-      "title": "RE: Link to R&D site",
-      "date": "2011-02-15T11:35:31-05:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.22.pdf",
-      "text": "Follow-up in the same DHS vendor-registration thread."
-    },
-    {
-      "id": "kleiman-email-20110215-re-registration-tta1",
-      "kind": "email",
-      "title": "RE: Registration - TTA1",
-      "date": "2011-02-15T23:19:00-05:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.23.pdf",
-      "text": "DHS TTA registration thread with Craig Wright."
-    },
-    {
-      "id": "kleiman-post-20110216-articles-of-organization-w-k-info-defense-resear",
-      "kind": "post",
-      "title": "Articles of Organization: W&K Info Defense Research LLC",
-      "date": "2011-02-16",
-      "url": "https://search.sunbiz.org/Inquiry/CorporationSearch/SearchResultDetail?aggregateId=flal-l11000019904-dce79b55-176a-4442-93a7-3c8896316aa2&searchTerm=W%26K+Info+",
-      "text": "Florida L11000019904, filed 16 Feb 2011 08:00, effective 14 Feb 2011. Electronic signature DAVE KLEIMAN. Registered agent David A Kleiman, 3119 Contego Lane, Palm Beach Gardens. Managing member 4371 Northlake Blvd #314. PDF: https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.102.pdf"
-    },
-    {
-      "id": "kleiman-email-20110216-re-registration-tta1-cover-sheets-a-and-b",
-      "kind": "email",
-      "title": "RE: Registration - TTA1 (cover sheets A and B)",
-      "date": "2011-02-16T05:24:00-05:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.23.pdf",
-      "text": "Attaches BAA 11-02-TTA 05-0155 SCADA cover sheets listing deficiencies. Same-day thread also discusses infodefenseresearch.com / info-defense-research.com and which TTA is 'SCADA Isolation'."
-    },
-    {
-      "id": "kleiman-post-20110217-cnn-insession-appearance-as-computer-forensics-e",
-      "kind": "post",
-      "title": "CNN InSession appearance as computer forensics expert",
-      "date": "2011-02-17",
-      "url": "https://es.ramonquesada.com/espanol-es/dave-kleiman-1967-2013-satoshi/",
-      "text": "Contemporaneous YouTube/Facebook listing: '2011/02/17 Computer Forensics Expert Dave Kleiman on CNN News InSession'. Also reported as ABC News commentary on a City of Lake Worth breach."
-    },
-    {
-      "id": "kleiman-email-20110623-email-to-craig-wright-craig-panopticrypt-com",
-      "kind": "email",
-      "title": "Email to Craig Wright <craig@panopticrypt.com>",
-      "date": "2011-06-23T21:03:48-05:00",
-      "url": "https://www.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.268.8.pdf",
-      "text": "Email produced as an exhibit in Kleiman v Wright (operational thread)."
-    },
-    {
-      "id": "kleiman-email-20111017-email-to-craig-wright-re-using-checklists-to-make-",
-      "kind": "email",
-      "title": "Email to Craig Wright: RE: Using Checklists to make better best.docx — first-pass review of draft paper",
-      "date": "2011-10-17T02:56:19-04:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.46.pdf",
-      "text": "Email produced as an exhibit in Kleiman v Wright."
-    },
-    {
-      "id": "kleiman-post-20120213-articles-of-organization-computer-forensics-llc",
-      "kind": "post",
-      "title": "Articles of Organization: Computer Forensics LLC",
-      "date": "2012-02-13",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.16.pdf",
-      "text": "Florida L12000020457, filed 13 Feb 2012, effective 6 Feb 2012. Managing members Dave Kleiman, Carter V Conrad, Patrick Paige. Amended/name-changed 11 Jun 2012."
-    },
-    {
-      "id": "kleiman-post-20120602-computer-forensics-llc-blog-launch-note-company-po",
-      "kind": "post",
-      "title": "Computer Forensics LLC blog launch note (company post; reprints Kleiman 2009-02-25 data-recovery article to test the system)",
-      "date": "2012-06-02",
-      "url": "https://web.archive.org/web/20130228173845/http://www.computerforensicsllc.com/experts-florida-miami-palm-beach-lauderdale-blog.php",
-      "text": "Blog post."
     },
     {
       "id": "kleiman-email-20120604-re-building-a-surveillance-system-for-a-house-wi",
@@ -2638,22 +2262,6 @@
       "date": "2012-10-31T10:26:30-04:00",
       "url": "https://marc.info/?l=security-basics&m=135169718420812&w=2",
       "text": "Mailing-list post (MARC archive)."
-    },
-    {
-      "id": "kleiman-post-20130118-wayback-first-capture-of-computerforensicsllc-co",
-      "kind": "post",
-      "title": "Wayback: first capture of computerforensicsllc.com",
-      "date": "2013-01-18",
-      "url": "https://web.archive.org/web/20130118073803/http://www.computerforensicsllc.com/",
-      "text": "Partnership site with Paige and Conrad. Further 200-status captures 24 Mar, 29 May, 16 Jun 2013 (after death) and through 2014."
-    },
-    {
-      "id": "kleiman-email-20130131-computer-forensics-llc-accounting-to-cpa-david-k",
-      "kind": "email",
-      "title": "Computer Forensics LLC Accounting (to CPA David Kuharcik)",
-      "date": "2013-01-31T18:43:00-05:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.16.pdf",
-      "text": "From dave@davekleiman.com. Introduces accounting@computerforensicsllc.com; attaches Sunbiz paperwork, 2012 P&L, 2013 P&L and GL through 30 Jan 2013. Address 2465 Mercer Ave, Suite 203, West Palm Beach. Among the last dated emails from Kleiman in the public record."
     }
   ]
 }

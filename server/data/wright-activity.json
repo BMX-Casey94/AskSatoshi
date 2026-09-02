@@ -2,10 +2,10 @@
   "pin": {
     "repo": "curated-research",
     "commit": "manual",
-    "fetchedAt": "2026-09-02T14:00:00.000Z",
+    "fetchedAt": "2026-09-02T13:45:04.843Z",
     "counts": {
       "emails": 5,
-      "posts": 514,
+      "posts": 451,
       "quotes": 0
     },
     "bulk": {
@@ -13,131 +13,11 @@
         "2008": 262,
         "2009": 77,
         "2013": 37,
-        "note": "Wayback sidebar totals for gse-compliance.blogspot.com. Posts are now individually dated."
+        "note": "Only items Craig Wright himself sent or published: gse-compliance blog posts, The Conversation articles and comments, SANS forensics blog posts, one Security Basics mailing-list post, and emails he sent. Court hearings, filings, interviews, company events and publisher-dated papers are excluded."
       }
     }
   },
   "documents": [
-    {
-      "id": "wright-post-20040726-ryan-v-wright-nswsc-contempt-hearing-day-1",
-      "kind": "post",
-      "title": "Ryan v Wright — NSWSC contempt hearing (day 1)",
-      "date": "2004-07-26",
-      "url": "http://www.austlii.edu.au/au/cases/nsw/NSWSC/2004/749.html",
-      "text": "Hearing dates 26–27 July and 28 August 2004. Wright alleged to have breached non-compete undertakings given after leaving DeMorgan Information Security Systems."
-    },
-    {
-      "id": "wright-post-20040831-ryan-v-wright-2004-nswsc-749-contempt-conviction",
-      "kind": "post",
-      "title": "Ryan v Wright [2004] NSWSC 749 — contempt conviction",
-      "date": "2004-08-31",
-      "url": "http://www.austlii.edu.au/au/cases/nsw/NSWSC/2004/749.html",
-      "text": "Gzell J found Craig Wright guilty of contempt for breaching undertakings not to compete with or approach DeMorgan customers. Defence included a claim that emails were sent by a hacker."
-    },
-    {
-      "id": "wright-post-20041115-ryan-v-wright-no-2-2004-nswsc-1019-sentence",
-      "kind": "post",
-      "title": "Ryan v Wright (No 2) [2004] NSWSC 1019 — sentence",
-      "date": "2004-11-15",
-      "url": "http://www.austlii.edu.au/au/cases/nsw/NSWSC/2004/1019.html",
-      "text": "Sentenced to 28 days' imprisonment, suspended on condition of 250 hours' community service; ordered to pay costs."
-    },
-    {
-      "id": "wright-post-20050403-giac-gse-compliance-certification-no-0001",
-      "kind": "post",
-      "title": "GIAC GSE-Compliance certification (No. 0001)",
-      "date": "2005-04-03",
-      "url": "https://www.giac.org/certified-professional/craig-wright/107335",
-      "text": "Certified since April 2005; first GIAC Compliance and Audits (GSE) holder. Related GIAC ISO-17799 Specialist dated 30 April 2005."
-    },
-    {
-      "id": "wright-post-20050425-giac-gold-paper-implementing-an-isms-training-pr",
-      "kind": "post",
-      "title": "GIAC Gold paper: Implementing an ISMS Training Process",
-      "date": "2005-04-25",
-      "url": "https://www.giac.org/paper/g2700/39/implementing-information-security-management-system-isms-training-process/107335",
-      "text": "Craig S Wright, BDO. Also circulated with a 3 September 2005 SANS Reading Room date."
-    },
-    {
-      "id": "wright-post-20050903-sans-reading-room-implementing-an-information-se",
-      "kind": "post",
-      "title": "SANS Reading Room: Implementing an Information Security Management System (ISMS)",
-      "date": "2005-09-03",
-      "url": "https://www.giac.org/paper/g2700/39/implementing-information-security-management-system-isms-training-process/107335",
-      "text": "First widely cited SANS paper; ~60–100 pages depending on edition."
-    },
-    {
-      "id": "wright-post-20051027-wright-v-ryan-anor-2005-nswca-368-appeal-dismiss",
-      "kind": "post",
-      "title": "Wright v Ryan & Anor [2005] NSWCA 368 — appeal dismissed",
-      "date": "2005-10-27",
-      "url": "http://www8.austlii.edu.au/cgi-bin/viewdoc/au/cases/nsw/NSWCA/2005/368.html",
-      "text": "NSW Court of Appeal upheld the contempt conviction. Handley JA: circumstantial evidence established repetitive competitive conduct; fresh-evidence application failed."
-    },
-    {
-      "id": "wright-post-20060109-electronic-contracting-new-wine-in-old-bottles",
-      "kind": "post",
-      "title": "Electronic Contracting, New Wine in Old Bottles",
-      "date": "2006-01-09",
-      "url": "https://www.researchgate.net/publication/316502742_Electronic_Contracting_New_Wine_in_Old_Bottles",
-      "text": "SSRN/academic paper on electronic contracting. Later re-posted to SSRN in 2017 with a 2006 written date."
-    },
-    {
-      "id": "wright-post-20060331-extending-control-api-hooking-hakin9",
-      "kind": "post",
-      "title": "Extending Control, API Hooking (Hakin9)",
-      "date": "2006-03-31",
-      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3153494",
-      "text": "Hakin9 magazine article; SSRN later copy dated 31 March 2006."
-    },
-    {
-      "id": "wright-post-20060615-wright-v-ryan-anor-2006-hcatrans-307-high-court-",
-      "kind": "post",
-      "title": "Wright v Ryan & Anor [2006] HCATrans 307 — High Court special leave",
-      "date": "2006-06-15",
-      "url": "http://www.austlii.edu.au/au/cases/cth/HCATrans/2006/307.html",
-      "text": "High Court of Australia special-leave hearing arising from the DeMorgan/Ryan contempt litigation."
-    },
-    {
-      "id": "wright-post-20061001-a-quantitative-time-series-analysis-of-malware-a",
-      "kind": "post",
-      "title": "A Quantitative Time Series Analysis of Malware and Vulnerability Trends",
-      "date": "2006-10-01",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "BDO-era paper listed in Wright bibliographies for 1 October 2006."
-    },
-    {
-      "id": "wright-post-20070101-beyond-automated-tools-and-frameworks-the-shellc",
-      "kind": "post",
-      "title": "Beyond Automated Tools and Frameworks — the shellcode injection process (Hakin9)",
-      "date": "2007-01-01",
-      "url": "https://www.researchgate.net/publication/324637776_Beyond_Automated_Tools_and_Frameworks_The_Shellcode_Injection_Process",
-      "text": "Hakin9 article; later SSRN/ResearchGate copies exist."
-    },
-    {
-      "id": "wright-post-20070331-taking-control-functions-to-dll-injection-hakin9",
-      "kind": "post",
-      "title": "Taking Control, Functions to DLL Injection (Hakin9)",
-      "date": "2007-03-31",
-      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3153492",
-      "text": "Hakin9 article dated 31 March 2007."
-    },
-    {
-      "id": "wright-post-20070620-a-taxonomy-of-information-systems-audits-assessm",
-      "kind": "post",
-      "title": "A Taxonomy of Information Systems Audits, Assessments and Reviews",
-      "date": "2007-06-20",
-      "url": "https://www.sans.edu/cyber-research/1801",
-      "text": "SANS Institute paper, 20 June 2007. Also listed as 16 July 2007 in some bibliographies."
-    },
-    {
-      "id": "wright-post-20070801-the-problem-with-document-destruction-the-iia-us",
-      "kind": "post",
-      "title": "The Problem With Document Destruction (The IIA, USA)",
-      "date": "2007-08-01",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "Institute of Internal Auditors publication, Vol. 10, August 2007."
-    },
     {
       "id": "wright-post-20071107-co-author-credit-the-official-chfi-study-guide-e",
       "kind": "post",
@@ -209,14 +89,6 @@
       "date": "2008-01-13T16:38:00+11:00",
       "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/and-back-in-burbs.html",
       "text": "GSE Compliance blog post"
-    },
-    {
-      "id": "wright-post-20080114-electronic-contracting-in-an-insecure-world-giac",
-      "kind": "post",
-      "title": "Electronic Contracting in an Insecure World (GIAC GLEG)",
-      "date": "2008-01-14",
-      "url": "https://www.giac.org/paper/gleg/6/electronic-contracting-insecure-world/107335",
-      "text": "Accepted 14 January 2008. Author: Craig S Wright, craig.wright@bdo.com.au. Legal issues in electronic contracts and digital signatures."
     },
     {
       "id": "wright-post-20080114-systems-review",
@@ -353,14 +225,6 @@
       "date": "2008-01-29T19:36:00+11:00",
       "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/e-mail-and-electronic-contracts.html",
       "text": "GSE Compliance blog post"
-    },
-    {
-      "id": "wright-post-20080130-sans-paper-trusting-electronically-signed-docume",
-      "kind": "post",
-      "title": "SANS paper: Trusting electronically signed documents",
-      "date": "2008-01-30T12:51:00+11:00",
-      "url": "https://meetsatoshi.org/about/timeline/",
-      "text": "Listed on multiple Wright timelines as 30 January 2008."
     },
     {
       "id": "wright-post-20080131-the-postal-acceptance-rule",
@@ -907,14 +771,6 @@
       "text": "GSE Compliance blog post"
     },
     {
-      "id": "wright-post-20080410-interview-craig-wright-security-hero-giac-techni",
-      "kind": "post",
-      "title": "Interview: Craig Wright, Security Hero — GIAC Technical Director",
-      "date": "2008-04-10",
-      "url": "https://ramonquesada.com/english/craig-s-wright-academic/",
-      "text": "GIAC/SANS 'Security Hero' interview dated 10 April 2008."
-    },
-    {
       "id": "wright-post-20080410-data-protection",
       "kind": "post",
       "title": "Data Protection",
@@ -961,14 +817,6 @@
       "date": "2008-04-16T15:42:00+10:00",
       "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/has-security-of-dns-infrastructure.html",
       "text": "GSE Compliance blog post"
-    },
-    {
-      "id": "wright-post-20080417-the-impact-of-internet-intermediary-liability",
-      "kind": "post",
-      "title": "The Impact of Internet Intermediary Liability",
-      "date": "2008-04-17",
-      "url": "https://meetsatoshi.org/about/timeline/",
-      "text": "SANS/GIAC-length paper (~90 pages) dated April 2008."
     },
     {
       "id": "wright-post-20080417-testing-the-security-of-the-dns-infrastructure-h",
@@ -1403,14 +1251,6 @@
       "text": "GSE Compliance blog post"
     },
     {
-      "id": "wright-post-20080620-book-the-it-regulatory-and-standards-compliance-",
-      "kind": "post",
-      "title": "Book: The IT Regulatory and Standards Compliance Handbook",
-      "date": "2008-06-20",
-      "url": "https://shop.elsevier.com/books/the-it-regulatory-and-standards-compliance-handbook/wright/978-1-59749-266-9",
-      "text": "Elsevier/Syngress, ISBN 9781597492669. Published 20 June 2008 (some lists use 4 July 2008)."
-    },
-    {
       "id": "wright-post-20080620-craig-wright-security-advisory-0002",
       "kind": "post",
       "title": "Craig Wright Security Advisory 0002",
@@ -1553,14 +1393,6 @@
       "date": "2008-07-02T15:20:00+10:00",
       "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/thinking-of-getting-gift.html",
       "text": "GSE Compliance blog post"
-    },
-    {
-      "id": "wright-post-20080703-detecting-hydan-statistical-methods-for-classify",
-      "kind": "post",
-      "title": "Detecting Hydan: Statistical Methods for Classifying Hydan-Based Steganography",
-      "date": "2008-07-03",
-      "url": "https://www.sans.org/white-papers/32839",
-      "text": "SANS white paper published 3 July 2008. Also at https://www.giac.org/paper/gcih/6896/detecting-hydan-statistical-methods-classifying-hydan-based-stegonagraphy-executable-files/107335"
     },
     {
       "id": "wright-post-20080703-actors-who-define-the-internet",
@@ -2251,14 +2083,6 @@
       "text": "GSE Compliance blog post"
     },
     {
-      "id": "wright-post-20081216-overwriting-hard-drive-data-the-great-wiping-con",
-      "kind": "post",
-      "title": "Overwriting Hard Drive Data: The Great Wiping Controversy (ICISS 2008)",
-      "date": "2008-12-16",
-      "url": "https://doi.org/10.1007/978-3-540-89862-7_21",
-      "text": "Craig Wright, Dave Kleiman, Shyaam Sundhar R.S. ICISS 2008, Hyderabad, 16–20 December 2008. LNCS 5352, pp. 243–257. ACM records published 16 December 2008."
-    },
-    {
       "id": "wright-post-20081229-images-from-india",
       "kind": "post",
       "title": "Images from India",
@@ -2289,14 +2113,6 @@
       "date": "2008-12-29T08:06:00+11:00",
       "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/and-part-3-final-images-from-india.html",
       "text": "GSE Compliance blog post"
-    },
-    {
-      "id": "wright-post-20081230-current-issues-in-dns-giac-gcia",
-      "kind": "post",
-      "title": "Current Issues in DNS (GIAC GCIA)",
-      "date": "2008-12-30",
-      "url": "https://www.giac.org/paper/gcia/2913/current-issues-dns/107335",
-      "text": "Craig S. Wright, craigswright@acm.org. DNS spoofing, MiTM, Unicode homograph issues."
     },
     {
       "id": "wright-post-20081231-current-issues-with-dns",
@@ -2361,14 +2177,6 @@
       "date": "2009-01-22T07:27:00+11:00",
       "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/01/return-to-consulting.html",
       "text": "GSE Compliance blog post"
-    },
-    {
-      "id": "wright-post-20090129-incorporation-of-information-defense-pty-ltd",
-      "kind": "post",
-      "title": "Incorporation of Information Defense Pty Ltd",
-      "date": "2009-01-29",
-      "url": "https://mylegacykit.medium.com/faketoshi-the-early-years-part-1-9964fc1639e3",
-      "text": "Australian company incorporated 29 January 2009. Integyrs Pty Ltd followed 11 May 2009."
     },
     {
       "id": "wright-post-20090207-information-defense-updated-2014",
@@ -3035,14 +2843,6 @@
       "text": "GSE Compliance blog post"
     },
     {
-      "id": "wright-post-20100406-craig-stephen-wright-anor-v-de-morgan-informatio",
-      "kind": "post",
-      "title": "Craig Stephen Wright & Anor v De Morgan Information Security Systems Pty Ltd (In Liquidation)",
-      "date": "2010-04-06",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "NSW proceeding dated 6 April 2010 involving Wright and the liquidated DeMorgan entity."
-    },
-    {
       "id": "wright-post-20100413-auditing-to-determine-what-went-wrong",
       "kind": "post",
       "title": "Auditing to Determine What Went Wrong",
@@ -3139,14 +2939,6 @@
       "text": "GSE Compliance blog post"
     },
     {
-      "id": "wright-post-20101101-issre-2010-san-jose-charles-sturt-university-aff",
-      "kind": "post",
-      "title": "ISSRE 2010 — San Jose (Charles Sturt University affiliation)",
-      "date": "2010-11-01",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "Listed as attending/presenting ISSRE 2010, 1–4 November 2010, San Jose, CA."
-    },
-    {
       "id": "wright-post-20101107-programming-verification",
       "kind": "post",
       "title": "Programming Verification",
@@ -3163,60 +2955,12 @@
       "text": "GSE Compliance blog post"
     },
     {
-      "id": "wright-post-20101201-software-vendors-and-reputation-intrust-2010-bei",
-      "kind": "post",
-      "title": "Software, Vendors and Reputation (INTRUST 2010, Beijing)",
-      "date": "2010-12-01",
-      "url": "https://dblp.org/db/conf/intrust/intrust2010.html#Wright10",
-      "text": "Craig S. Wright, INTRUST 2010, pp. 346–360. Analysis of incentives in creating secure software."
-    },
-    {
-      "id": "wright-post-20110101-using-checklists-to-make-better-best-with-tanvee",
-      "kind": "post",
-      "title": "Using Checklists to Make Better Best (with Tanveer A. Zia)",
-      "date": "2011-01-01",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "Paper dated 1 January 2011; also presented 5–7 December 2011 at the 9th Australian Information Security Management Conference, ECU Perth."
-    },
-    {
       "id": "wright-post-20110204-proposal-for-an-online-gold-trading-paypal-like-",
       "kind": "post",
       "title": "Proposal for an online gold trading / PayPal-like system",
       "date": "2011-02-04",
       "url": "https://web.archive.org/web/20150525051150/http://gse-compliance.blogspot.com/2011_01_30_archive.html",
       "text": "'I am interested in talking with others who may be interested in starting an online gold trading system along the lines of a PayPal.'"
-    },
-    {
-      "id": "wright-post-20110216-w-k-info-defense-research-llc-filed-in-florida-d",
-      "kind": "post",
-      "title": "W&K Info Defense Research LLC filed in Florida (Dave Kleiman, registered agent)",
-      "date": "2011-02-16",
-      "url": "http://search.sunbiz.org/Inquiry/CorporationSearch/ConvertTiffToPDF?storagePath=COR%5C2011%5C0216%5C90321539.tif&documentNumber=L11000019904",
-      "text": "Florida LLC filed 16 February 2011 by Dave Kleiman. Wright later claimed a 50% interest; the original filing does not name him. Included because it is the corporate vehicle in later Wright filings and emails."
-    },
-    {
-      "id": "wright-post-20110303-incorporation-of-cloudcroft-pty-ltd",
-      "kind": "post",
-      "title": "Incorporation of Cloudcroft Pty Ltd",
-      "date": "2011-03-03",
-      "url": "https://mylegacykit.medium.com/faketoshi-the-early-years-part-1-9964fc1639e3",
-      "text": "Australian company; later the 'supercomputer' vehicle. Panopticrypt Pty Ltd 20 June 2011; Strasan Pty Ltd 21 July 2011 (renamed C01n Pty Ltd 14 February 2014)."
-    },
-    {
-      "id": "wright-post-20110610-cisis-2011-papers-with-tanveer-a-zia-m-laga",
-      "kind": "post",
-      "title": "CISIS 2011 papers with Tanveer A. Zia (Málaga)",
-      "date": "2011-06-10",
-      "url": "https://dblp.org/db/conf/cisis-spain/cisis2011.html#WrightZ11",
-      "text": "Two papers: 'A Quantitative Analysis into the Economics of Correcting Software Bugs' (pp. 198–205) and 'Rationally Opting for the Insecure Alternative' (pp. 206–213). Also ACISP 2011 poster 'Compliance or Security, What Cost?' pp. 412–416."
-    },
-    {
-      "id": "wright-post-20110714-what-makes-an-expert",
-      "kind": "post",
-      "title": "What makes an expert?",
-      "date": "2011-07-14",
-      "url": "https://ramonquesada.com/english/craig-s-wright-academic/",
-      "text": "Dated 14 July 2011 in Wright bibliographies. Fifth Conversation-era piece; URL on theconversation.com not recovered (may be a blog post rather than a Conversation article)."
     },
     {
       "id": "wright-post-20110726-why-didnt-google-catch-the-norway-killer",
@@ -3771,14 +3515,6 @@
       "text": "The Conversation comment"
     },
     {
-      "id": "wright-post-20110824-hakin9-starting-to-write-your-own-shellcode-form",
-      "kind": "post",
-      "title": "Hakin9: Starting to Write Your Own Shellcode / Format Strings / DPA Exploitation",
-      "date": "2011-08-24",
-      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3153487",
-      "text": "Cluster of Hakin9 pieces dated 24 August 2011. SSRN copy of the shellcode article gives written date 31 March 2008, posted 17 April 2018."
-    },
-    {
       "id": "wright-post-20110825-comment-6901-lulzsec-anonymous-freedom-fighters",
       "kind": "post",
       "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
@@ -3803,38 +3539,6 @@
       "text": "The Conversation comment"
     },
     {
-      "id": "wright-post-20111010-datacon-sydney-speech-hilton-gicsr-vice-presiden",
-      "kind": "post",
-      "title": "DATACON Sydney speech (Hilton) — GICSR Vice President",
-      "date": "2011-10-10",
-      "url": "http://web.archive.org/web/20130914033439/http://www.cebit.com.au/datacon",
-      "text": "Cybersecurity talk advertised via Hotwire/CeBIT. Wright billed as VP Australia–Asia Pacific, Global Institute for Cybersecurity & Research."
-    },
-    {
-      "id": "wright-post-20111101-of-black-swans-platypii-and-bunyips-cacs-2011",
-      "kind": "post",
-      "title": "Of Black Swans, Platypii and Bunyips — CACS 2011",
-      "date": "2011-11-01",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "Conference paper on outliers in risk management, CACS 2011, Australia."
-    },
-    {
-      "id": "wright-post-20111213-modeling-system-audit-as-a-sequential-test-icbif",
-      "kind": "post",
-      "title": "Modeling System Audit as a Sequential Test (ICBIFE 2011, Hong Kong)",
-      "date": "2011-12-13",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "Wright & Zia, International Conference on Business Intelligence and Financial Engineering, 13 December 2011."
-    },
-    {
-      "id": "wright-post-20120316-misconceptions-surrounding-copyright",
-      "kind": "post",
-      "title": "Misconceptions surrounding copyright",
-      "date": "2012-03-16",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "Blog post dated 16 March 2012; later republished on later Wright blogs."
-    },
-    {
       "id": "wright-post-20120529-a-world-of-data-a-geeks-eye-view-of-a-home-augme",
       "kind": "post",
       "title": "A world of data — a geek's eye view of a home augmented-reality project",
@@ -3851,60 +3555,12 @@
       "text": "21 July 2012 gse-compliance post in which Wright discusses metadata (cited in van Pelt, Early Years Part 1)."
     },
     {
-      "id": "wright-post-20120824-group-selection-and-cyber-terror",
-      "kind": "post",
-      "title": "Group Selection and Cyber Terror",
-      "date": "2012-08-24",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "Short paper dated 24 August 2012 (~5 pages)."
-    },
-    {
-      "id": "wright-post-20121018-denariuz-ltd-incorporated-uk-doncaster",
-      "kind": "post",
-      "title": "Denariuz Ltd incorporated (UK, Doncaster)",
-      "date": "2012-10-18",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "Private company limited, 18 October 2012. Later the name of the proposed Bitcoin bank."
-    },
-    {
-      "id": "wright-post-20121205-territorial-behavior-and-the-economics-of-botnet",
-      "kind": "post",
-      "title": "Territorial behavior and the economics of Botnets",
-      "date": "2012-12-05",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "10th Australian Information Security Management Conference, Perth, 3–5 December 2012."
-    },
-    {
-      "id": "wright-post-20130108-jamie-wilson-hired-as-cfo-hotwire-group",
-      "kind": "post",
-      "title": "Jamie Wilson hired as CFO (Hotwire group)",
-      "date": "2013-01-08",
-      "url": "https://mylegacykit.medium.com/faketoshi-the-early-years-part-1-9964fc1639e3",
-      "text": "Wilson later testified (Kleiman v Wright, 8 Nov 2019) that employment began 8 January 2013; resigned 23 October 2013."
-    },
-    {
-      "id": "wright-post-20130123-cyber-security-centre-planned-to-target-growing-",
-      "kind": "post",
-      "title": "Cyber Security Centre planned to target growing threat",
-      "date": "2013-01-23",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "Media/academic item dated 23 January 2013 in Wright bibliographies."
-    },
-    {
       "id": "wright-post-20130412-risk",
       "kind": "post",
       "title": "Risk",
       "date": "2013-04-12",
       "url": "https://web.archive.org/web/20151122224143/http://gse-compliance.blogspot.com/2013/04/risk.html",
       "text": "gse-compliance post, Friday 12 April 2013."
-    },
-    {
-      "id": "wright-post-20130417-coin-exch-pty-ltd-incorporated-coin-exch-com-reg",
-      "kind": "post",
-      "title": "Coin-Exch Pty Ltd incorporated; coin-exch.com registered",
-      "date": "2013-04-17",
-      "url": "https://pastebin.com/cBqQ2DTK",
-      "text": "First of the 2013 Bitcoin-related Australian companies. Wright also traded BTC on Mt. Gox 22–27 April 2013 (leaked Mt. Gox logs; peak holding on the order of ~50 BTC)."
     },
     {
       "id": "wright-post-20130427-a-diatribe-on-bitcoin",
@@ -3963,36 +3619,12 @@
       "text": "Posted by Craig Wright, Monday 27 May 2013."
     },
     {
-      "id": "wright-post-20130602-hotwire-preemptive-intelligence-pty-ltd-incorpor",
-      "kind": "post",
-      "title": "Hotwire Preemptive Intelligence Pty Ltd incorporated",
-      "date": "2013-06-02",
-      "url": "https://mylegacykit.medium.com/faketoshi-the-early-years-part-1-9964fc1639e3",
-      "text": "Holding company for the 2013 Bitcoin-banking / R&D group. Further companies in August: Integyrz, W&K Company Pty Ltd, Interconnected Research, Pholus, Denariuz Pty Ltd, Zuhl, Wright Family Trust."
-    },
-    {
-      "id": "wright-post-20130612-self-education-cap-risks-cyber-security-charles-",
-      "kind": "post",
-      "title": "Self-education cap risks cyber-security (Charles Sturt University)",
-      "date": "2013-06-12",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "CSU media comment dated 12 June 2013. Followed by 'Huge interest in CSU cyber security course', 17 July 2013."
-    },
-    {
       "id": "wright-email-20130718-email-to-ato-cc-jamie-wilson-listing-alleged-btc",
       "kind": "email",
       "title": "Email to ATO (cc Jamie Wilson) listing alleged BTC holdings",
       "date": "2013-07-18",
       "url": "https://www.courtlistener.com/docket/6309656/547/3/kleiman-v-wright/",
       "text": "Wilson Exhibit 11. Subject 'Evidence'. Lists Coin Exchange 438,000 BTC and 'CSW Personal' 57,000 BTC, valued ~A$53.8m on Mt. Gox. Wallet screenshots later shown not to match the chain."
-    },
-    {
-      "id": "wright-post-20130725-nsw-supreme-court-claim-a-28m-against-w-k-info-d",
-      "kind": "post",
-      "title": "NSW Supreme Court claim (~A$28m) against W&K Info Defense Research LLC",
-      "date": "2013-07-25",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.24.11.pdf",
-      "text": "First of two 2013 default claims. Alleges contract labour and a contract dated 27 October 2008. Second claim ~A$29m filed 13 August 2013 (Bitcoin SDK/exchange). Default judgment 6 November 2013."
     },
     {
       "id": "wright-post-20130915-announcement-of-the-hotwire-group",
@@ -4011,84 +3643,12 @@
       "text": "To Jamie Wilson and Roger Manu of Rubik. Wilson later testified he believed the claim. No lock-up/trust story at that time."
     },
     {
-      "id": "wright-post-20130930-r-d-tax-credit-filing-a-3-7m-for-hotwire-group-s",
-      "kind": "post",
-      "title": "R&D tax-credit filing (~A$3.7m) for Hotwire-group software spend",
-      "date": "2013-09-30",
-      "url": "https://www.scribd.com/document/372445140/Exhibit-12",
-      "text": "AusIndustry/ATO claim based on alleged bitcoin-funded R&D. Later the subject of ATO refund-integrity action."
-    },
-    {
-      "id": "wright-post-20131005-registration-of-c01n-co-and-related-bitcoin-doma",
-      "kind": "post",
-      "title": "Registration of c01n.co and related Bitcoin domains",
-      "date": "2013-10-05",
-      "url": "https://pastebin.com/cBqQ2DTK",
-      "text": "WHOIS-verified domain cluster including later tuliptrading.net (17 October 2013)."
-    },
-    {
-      "id": "wright-post-20131031-nswsc-affidavit-on-w-k-trusts-and-bitcoin-addres",
-      "kind": "post",
-      "title": "NSWSC affidavit on W&K, trusts and bitcoin addresses",
-      "date": "2013-10-31",
-      "url": "https://www.scribd.com/document/379265751/Kleiman-Lawsuit-Exhibit-4",
-      "text": "Sworn claims including 50% of W&K and control of addresses later identified as Mt. Gox-related. IP licence 'funding agreement' publicly filed 4 November 2013 (purportedly operative from 1 July 2011)."
-    },
-    {
-      "id": "wright-post-20131106-default-judgment-on-the-august-w-k-claim",
-      "kind": "post",
-      "title": "Default judgment on the August W&K claim",
-      "date": "2013-11-06",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.24.22.pdf",
-      "text": "NSW default judgment used in later tax-refund claims. W&K was dissolved and not represented."
-    },
-    {
-      "id": "wright-post-20131123-marriage-to-ramona-watts",
-      "kind": "post",
-      "title": "Marriage to Ramona Watts",
-      "date": "2013-11-23",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "Second marriage, 23 November 2013 (biographical, timestamped)."
-    },
-    {
-      "id": "wright-post-20140107-companies-house-craig-steven-wright-appointed-di",
-      "kind": "post",
-      "title": "Companies House: Craig Steven Wright appointed director of C01N Ltd",
-      "date": "2014-01-07",
-      "url": "https://find-and-update.company-information.service.gov.uk/company/08248988/filing-history",
-      "text": "UK company 08248988. Annual return 8 January 2014 lists Ramona Watts among shareholders. Later filings (Apr 2014) add Uyen T Nguyen and David Kleiman with backdated appointment dates."
-    },
-    {
       "id": "wright-email-20140211-email-to-dave-kleimans-father-claiming-satoshi-i",
       "kind": "email",
       "title": "Email to Dave Kleiman's father claiming Satoshi involvement",
       "date": "2014-02-11",
       "url": "https://cryptoast.fr/wp-content/uploads/2020/06/Proc%C3%A8s-Wright-Kleiman.pdf",
       "text": "11 February 2014 from craig.wright@hotwirepe.com. Followed 14 February by email to Ira Kleiman on W&K ownership."
-    },
-    {
-      "id": "wright-post-20140212-public-announcement-of-denariuz-bank-hotwire-pe",
-      "kind": "post",
-      "title": "Public announcement of Denariuz Bank (Hotwire PE)",
-      "date": "2014-02-12",
-      "url": "http://freedomwat.ch/2014/02/15/australian-bitcoin-bank-seeks-regulatory-approval/",
-      "text": "Wright said Denariuz would take Bitcoin deposits in H2 2014 and that Hotwire was working with the ATO, ASIC and toward an APRA banking licence. He confirmed an ATO meeting in Canberra that week."
-    },
-    {
-      "id": "wright-post-20140218-ato-record-of-interview-sydney",
-      "kind": "post",
-      "title": "ATO record of interview — Sydney",
-      "date": "2014-02-18",
-      "url": "https://s3.documentcloud.org/documents/2644012/20140218-Transcript-Redacted.pdf",
-      "text": "Interviewers Des McMaster, Marina Dolevski, Hoa Doa; Wright, John Chester, Andrew Sommer. Refund retention on Hotwire, Coin-Exch and Cloudcroft BASs. First detailed public discussion of alleged bitcoin mining."
-    },
-    {
-      "id": "wright-post-20140226-ato-meeting-minutes-hotwire-group-w-k-ferrier",
-      "kind": "post",
-      "title": "ATO meeting minutes — Hotwire group / W&K / Ferrier",
-      "date": "2014-02-26",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.1.8.pdf",
-      "text": "Issues: Wright, Hotwire, Wright Family Trust (DeMorgan), Coin-Exch, Cloudcroft, Strasan, Pholus. Discussion of Mark Ferrier correspondence and NSW judgments on W&K."
     },
     {
       "id": "wright-email-20140301-email-exchange-with-ira-kleiman-bond-villains-70",
@@ -4099,76 +3659,12 @@
       "text": "Ira Kleiman 1 March 2014 19:42 UTC; Wright reply from craig.wright@hotwirepe.com. Wright wrote that at least 300,000 of 1,000,000+ BTC in trust belonged to Dave."
     },
     {
-      "id": "wright-post-20140307-investordaily-bitcoin-bank-hits-ato-roadblock-ja",
-      "kind": "post",
-      "title": "InvestorDaily: Bitcoin bank hits ATO roadblock (James Mitchell)",
-      "date": "2014-03-07",
-      "url": "https://en.wikipedia.org/wiki/Craig_Steven_Wright",
-      "text": "Contemporary press on Denariuz/ATO (article dated 7 March 2014). Venture failed after refunds were withheld."
-    },
-    {
-      "id": "wright-post-20140328-w-k-info-defense-reinstated-with-a-new-registere",
-      "kind": "post",
-      "title": "W&K Info Defense reinstated with a new registered agent",
-      "date": "2014-03-28",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.24.25.pdf",
-      "text": "Florida LLC reinstated 28 March 2014 after 2012 administrative dissolution."
-    },
-    {
       "id": "wright-email-20140422-email-to-ira-kleiman-on-the-nsw-w-k-actions",
       "kind": "email",
       "title": "Email to Ira Kleiman on the NSW W&K actions",
       "date": "2014-04-22",
       "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.24.20.pdf",
       "text": "After ATO contacted Ira (15 April), Ira queried discrepancies. Wright 22–23 April: 'I did the actions to make sure that the court signed off on what Dave and I planned.'"
-    },
-    {
-      "id": "wright-post-20140526-mcgrathnicol-circular-to-hotwire-creditors",
-      "kind": "post",
-      "title": "McGrathNicol circular to Hotwire creditors",
-      "date": "2014-05-26",
-      "url": "https://www.inlineadvisory.com/app/uploads/D14-140526-Hotwire439AReport-BFK.pdf",
-      "text": "s439A report. Insolvency tied to ATO withholding ~A$3.7m credits and claimed Mt. Gox losses (actual traded volume on leaked logs was under 50 BTC)."
-    },
-    {
-      "id": "wright-post-20140603-video-interview-with-martin-b-new-on-code-war",
-      "kind": "post",
-      "title": "Video interview with Martin B. New on 'code war'",
-      "date": "2014-06-03",
-      "url": "https://ramonquesada.com/english/compilation-craig-wright/",
-      "text": "Dated 3 June 2014 in Wright video compilations."
-    },
-    {
-      "id": "wright-post-20140710-radio-interview-while-ceo-of-hotwire-pe",
-      "kind": "post",
-      "title": "Radio interview while CEO of Hotwire PE",
-      "date": "2014-07-10",
-      "url": "https://ramonquesada.com/english/craig-wright-videos/",
-      "text": "Audio: bst_2014-07-10_0819.mp3, archived on ramonquesada.com."
-    },
-    {
-      "id": "wright-post-20140713-the-bitcoin-doco-interview-dale-dickins",
-      "kind": "post",
-      "title": "The Bitcoin Doco interview (Dale Dickins)",
-      "date": "2014-07-13",
-      "url": "https://www.youtube.com/watch?v=gYskRI0ynAM",
-      "text": "Filmed around the July 2014 Sydney Informa/police-attended conference. Also https://www.youtube.com/watch?v=1PtAqNpEm7w (Informa panel on what Bitcoin is). Wright discusses DACs, micropayments, property rights and tracing."
-    },
-    {
-      "id": "wright-post-20140811-ato-interview-greg-omahoney-andrew-sommers",
-      "kind": "post",
-      "title": "ATO interview — Greg O'Mahoney / Andrew Sommers",
-      "date": "2014-08-18T16:31:00+10:00",
-      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.547.5.pdf",
-      "text": "Discusses Panama bitcoin, Coin-Exch, Hotwire and rights to call on overseas bitcoin. Follow-up interview 18 August 2014 16:31: https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.547.4.pdf"
-    },
-    {
-      "id": "wright-post-20140901-becomes-ceo-of-demorgan-limited-pre-ipo-alternat",
-      "kind": "post",
-      "title": "Becomes CEO of DeMorgan Limited (pre-IPO alternative-currency group)",
-      "date": "2014-09-01",
-      "url": "https://ramonquesada.com/english/craig-wright-videos/",
-      "text": "DeMorgan billed as focused on alternative currency and next-generation banking. Cloudcroft 'supercomputer' publicity followed in late 2014 (30 October / December claims)."
     }
   ]
 }

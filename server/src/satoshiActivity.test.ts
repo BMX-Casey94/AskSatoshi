@@ -120,13 +120,13 @@ describe('getActivity', () => {
     expect(byId.satoshi!.byKind).toEqual({ emails: 213, posts: 532 });
     expect(byId.satoshi!.points).toHaveLength(745);
 
-    expect(byId.wright!.total).toBe(519);
-    expect(byId.wright!.byKind).toEqual({ emails: 5, posts: 514 });
-    expect(byId.wright!.points).toHaveLength(519);
+    expect(byId.wright!.total).toBe(456);
+    expect(byId.wright!.byKind).toEqual({ emails: 5, posts: 451 });
+    expect(byId.wright!.points).toHaveLength(456);
 
-    expect(byId.kleiman!.total).toBe(330);
-    expect(byId.kleiman!.byKind).toEqual({ emails: 296, posts: 34 });
-    expect(byId.kleiman!.points).toHaveLength(330);
+    expect(byId.kleiman!.total).toBe(281);
+    expect(byId.kleiman!.byKind).toEqual({ emails: 274, posts: 7 });
+    expect(byId.kleiman!.points).toHaveLength(281);
   });
 
   it('caches each subject payload independently', () => {

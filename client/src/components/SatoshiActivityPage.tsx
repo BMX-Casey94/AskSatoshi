@@ -10,8 +10,10 @@ import type { ActivityResponse, SubjectActivity } from '../types';
 import {
   TIMEZONES,
   SUBJECT_FILTERS,
+  availableYears,
   formatGeneratedAt,
   formatHourLabel,
+  filterActivityPoints,
   hourHistogram,
   monthlyBuckets,
   PEAK_WINDOW_HOURS,
@@ -21,7 +23,7 @@ import {
   overlayHourSeries,
   analyseActivity,
 } from '../lib/satoshiActivity';
-import type { ActivityAnalysis, KindFilter, SubjectFilter, TimeZone } from '../lib/satoshiActivity';
+import type { ActivityAnalysis, KindFilter, SubjectFilter, TimeZone, YearFilter } from '../lib/satoshiActivity';
 import { HourlyChart, MonthlyChart } from './ActivityCharts';
 import { HomeIcon } from './icons';
 import { ThemeToggle } from './ThemeToggle';
@@ -40,6 +42,7 @@ export function SatoshiActivityPage() {
   const [tz, setTz] = useState<TimeZone>(TIMEZONES[0]!);
   const [kindFilter, setKindFilter] = useState<KindFilter>('both');
   const [subjectFilter, setSubjectFilter] = useState<SubjectFilter>('satoshi');
+  const [yearFilter, setYearFilter] = useState<YearFilter>('all');
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -75,26 +78,33 @@ export function SatoshiActivityPage() {
     data && !overlay ? getSubjectActivity(subjectFilter, data) : undefined;
   const subjects = data?.subjects ?? [];
 
+  const years = useMemo(
+    () => availableYears(...subjects.map((s) => s.points)),
+    [subjects],
+  );
   const months = useMemo(
-    () => (subject ? monthlyBuckets(subject.points, kindFilter) : []),
-    [subject, kindFilter],
+    () => (subject ? monthlyBuckets(subject.points, kindFilter, subject.points, yearFilter) : []),
+    [subject, kindFilter, yearFilter],
   );
   const monthOverlay = useMemo(
-    () => (overlay && subjects.length > 0 ? alignedMonthlyOverlay(subjects, kindFilter) : null),
-    [overlay, subjects, kindFilter],
+    () => (overlay && subjects.length > 0 ? alignedMonthlyOverlay(subjects, kindFilter, yearFilter) : null),
+    [overlay, subjects, kindFilter, yearFilter],
   );
   const hourly = useMemo(
-    () => (subject ? hourHistogram(subject.points, tz.offset, kindFilter) : null),
-    [subject, tz, kindFilter],
+    () => (subject ? hourHistogram(subject.points, tz.offset, kindFilter, yearFilter) : null),
+    [subject, tz, kindFilter, yearFilter],
   );
   const hourOverlay = useMemo(
-    () => (overlay && subjects.length > 0 ? overlayHourSeries(subjects, tz.offset, kindFilter) : null),
-    [overlay, subjects, tz, kindFilter],
+    () =>
+      overlay && subjects.length > 0
+        ? overlayHourSeries(subjects, tz.offset, kindFilter, yearFilter)
+        : null,
+    [overlay, subjects, tz, kindFilter, yearFilter],
   );
   const activeWindow = useMemo(() => (hourly ? peakHourBlock(hourly.hours) : null), [hourly]);
   const analysis = useMemo(
-    () => (subjects.length > 0 ? analyseActivity(subjects, tz.offset, kindFilter) : null),
-    [subjects, tz, kindFilter],
+    () => (subjects.length > 0 ? analyseActivity(subjects, tz.offset, kindFilter, yearFilter) : null),
+    [subjects, tz, kindFilter, yearFilter],
   );
   const compiled = data ? formatGeneratedAt(data.generatedAt) : null;
   const stats = useMemo(() => {
@@ -102,31 +112,32 @@ export function SatoshiActivityPage() {
     let emails = 0;
     let posts = 0;
     for (const row of rows) {
-      emails += row.byKind.emails;
-      posts += row.byKind.posts;
+      for (const p of filterActivityPoints(row.points, kindFilter, yearFilter)) {
+        if (p.kind === 'email' || p.kind === 'emails') emails += 1;
+        else posts += 1;
+      }
     }
-    if (kindFilter === 'emails') return { total: emails, emails, posts: 0 };
-    if (kindFilter === 'posts') return { total: posts, emails: 0, posts };
     return { total: emails + posts, emails, posts };
-  }, [overlay, subjects, subject, kindFilter]);
+  }, [overlay, subjects, subject, kindFilter, yearFilter]);
 
   const emptyHistogram = useMemo(
     () => ({ hours: Array.from({ length: 24 }, () => 0), usedAllKinds: false, timedCount: 0 }),
     [],
   );
 
+  const yearSuffix = yearFilter === 'all' ? '' : ` · ${yearFilter}`;
   const monthlyTitle =
     kindFilter === 'emails'
-      ? 'E-mails per month'
+      ? `E-mails per month${yearSuffix}`
       : kindFilter === 'posts'
-        ? 'Posts per month'
-        : 'Posts and e-mails per month';
+        ? `Posts per month${yearSuffix}`
+        : `Posts and e-mails per month${yearSuffix}`;
   const hourlyTitle =
     kindFilter === 'emails'
-      ? `E-mails by hour of day (${tz.label})`
+      ? `E-mails by hour of day (${tz.label})${yearSuffix}`
       : kindFilter === 'posts'
-        ? `Forum posts by hour of day (${tz.label})`
-        : `Posts and e-mails by hour of day (${tz.label})`;
+        ? `Forum posts by hour of day (${tz.label})${yearSuffix}`
+        : `Posts and e-mails by hour of day (${tz.label})${yearSuffix}`;
 
   const ready = state === 'ready' && data && (overlay || subject);
 
@@ -263,6 +274,32 @@ export function SatoshiActivityPage() {
               </div>
             </div>
 
+            {years.length > 0 && (
+              <div className="activity-years" role="tablist" aria-label="Year">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={yearFilter === 'all'}
+                  className={`activity-tz-btn${yearFilter === 'all' ? ' activity-tz-btn--on' : ''}`}
+                  onClick={() => setYearFilter('all')}
+                >
+                  All years
+                </button>
+                {years.map((year) => (
+                  <button
+                    key={year}
+                    type="button"
+                    role="tab"
+                    aria-selected={yearFilter === year}
+                    className={`activity-tz-btn${yearFilter === year ? ' activity-tz-btn--on' : ''}`}
+                    onClick={() => setYearFilter(year)}
+                  >
+                    {year}
+                  </button>
+                ))}
+              </div>
+            )}
+
             <section className="activity-panel" aria-live="polite">
               {view === 'monthly' ? (
                 <>
@@ -337,7 +374,7 @@ export function SatoshiActivityPage() {
               )}
             </section>
 
-            {analysis && <ActivityAnalysisPanel analysis={analysis} tz={tz} />}
+            {analysis && <ActivityAnalysisPanel analysis={analysis} tz={tz} yearFilter={yearFilter} />}
           </>
         )}
       </main>
@@ -382,7 +419,15 @@ function OverlayActiveWindows({
   );
 }
 
-function ActivityAnalysisPanel({ analysis, tz }: { analysis: ActivityAnalysis; tz: TimeZone }) {
+function ActivityAnalysisPanel({
+  analysis,
+  tz,
+  yearFilter,
+}: {
+  analysis: ActivityAnalysis;
+  tz: TimeZone;
+  yearFilter: YearFilter;
+}) {
   return (
     <details className="activity-analysis">
       <summary className="activity-analysis-summary">Activity analysis</summary>
@@ -390,7 +435,8 @@ function ActivityAnalysisPanel({ analysis, tz }: { analysis: ActivityAnalysis; t
         <section className="activity-analysis-block">
           <h3>Peak hours</h3>
           <p className="activity-analysis-lead">
-            Highest-count {PEAK_WINDOW_HOURS}-hour block in {tz.label}.
+            Highest-count {PEAK_WINDOW_HOURS}-hour block in {tz.label}
+            {yearFilter === 'all' ? '' : ` for ${yearFilter}`}.
           </p>
           <ul className="activity-analysis-list">
             {analysis.peaks.map((p) => (

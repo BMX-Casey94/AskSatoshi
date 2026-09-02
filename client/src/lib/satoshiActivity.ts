@@ -6,6 +6,7 @@
 import type { ActivityKind, ActivityPoint, SubjectActivity, SubjectId } from '../types';
 
 export type KindFilter = 'both' | 'emails' | 'posts';
+export type YearFilter = 'all' | number;
 
 export interface MonthBucket {
   key: string;
@@ -79,12 +80,32 @@ function monthLabel(key: string, includeYear: boolean): string {
   return includeYear ? `${month} ${y}` : month;
 }
 
+export function activityYear(iso: string): number | null {
+  const d = parseUtc(iso);
+  return d ? d.getUTCFullYear() : null;
+}
+
+export function availableYears(...groups: readonly (readonly ActivityPoint[])[]): number[] {
+  const years = new Set<number>();
+  for (const points of groups) {
+    for (const p of points) {
+      const y = activityYear(p.date);
+      if (y != null) years.add(y);
+    }
+  }
+  return [...years].sort((a, b) => a - b);
+}
+
 export function filterActivityPoints(
   points: readonly ActivityPoint[],
   kindFilter: KindFilter = 'both',
+  yearFilter: YearFilter = 'all',
 ): ActivityPoint[] {
-  if (kindFilter === 'both') return [...points];
-  return points.filter((p) => normaliseKind(p.kind) === kindFilter);
+  return points.filter((p) => {
+    if (kindFilter !== 'both' && normaliseKind(p.kind) !== kindFilter) return false;
+    if (yearFilter !== 'all' && activityYear(p.date) !== yearFilter) return false;
+    return true;
+  });
 }
 
 /**
@@ -96,8 +117,13 @@ export function monthlyBuckets(
   points: ActivityPoint[],
   kindFilter: KindFilter = 'both',
   rangePoints: ActivityPoint[] = points,
+  yearFilter: YearFilter = 'all',
 ): MonthBucket[] {
-  const scoped = filterActivityPoints(points, kindFilter);
+  const scoped = filterActivityPoints(points, kindFilter, yearFilter);
+  if (yearFilter !== 'all') {
+    const counts = countByMonth(scoped);
+    return monthsInRange(`${yearFilter}-01`, `${yearFilter}-12`, counts);
+  }
   const rangeKeys: string[] = [];
   for (const p of rangePoints) {
     const d = parseUtc(p.date);
@@ -110,8 +136,12 @@ export function monthlyBuckets(
   const first = rangeKeys[0]!;
   const last = rangeKeys[rangeKeys.length - 1]!;
 
+  return monthsInRange(first, last, countByMonth(scoped));
+}
+
+function countByMonth(points: readonly ActivityPoint[]): Map<string, { posts: number; emails: number }> {
   const counts = new Map<string, { posts: number; emails: number }>();
-  for (const p of scoped) {
+  for (const p of points) {
     const d = parseUtc(p.date);
     if (!d) continue;
     const kind = normaliseKind(p.kind);
@@ -121,7 +151,14 @@ export function monthlyBuckets(
     cur[kind] += 1;
     counts.set(key, cur);
   }
+  return counts;
+}
 
+function monthsInRange(
+  first: string,
+  last: string,
+  counts: Map<string, { posts: number; emails: number }>,
+): MonthBucket[] {
   const firstParts = first.split('-');
   const lastParts = last.split('-');
   let y = Number(firstParts[0]);
@@ -158,8 +195,9 @@ export function hourHistogram(
   points: ActivityPoint[],
   utcOffset = 0,
   kindFilter: KindFilter = 'both',
+  yearFilter: YearFilter = 'all',
 ): HourHistogram {
-  const scoped = filterActivityPoints(points, kindFilter);
+  const scoped = filterActivityPoints(points, kindFilter, yearFilter);
   const timed = scoped.filter((p) => hasClock(p.date));
   const timedPosts = timed.filter((p) => normaliseKind(p.kind) === 'posts');
   const timedEmails = timed.filter((p) => normaliseKind(p.kind) === 'emails');
@@ -373,8 +411,9 @@ export function weekdaySplit(
   points: readonly ActivityPoint[],
   utcOffset = 0,
   kindFilter: KindFilter = 'both',
+  yearFilter: YearFilter = 'all',
 ): WeekdaySplit {
-  const scoped = filterActivityPoints(points, kindFilter);
+  const scoped = filterActivityPoints(points, kindFilter, yearFilter);
   let weekday = 0;
   let weekend = 0;
   for (const p of scoped) {
@@ -501,14 +540,15 @@ export function assessJointEffort(
 export function alignedMonthlyOverlay(
   subjects: readonly SubjectActivity[],
   kindFilter: KindFilter = 'both',
+  yearFilter: YearFilter = 'all',
 ): AlignedMonthlyOverlay {
   const rangePoints = subjects.flatMap((s) => s.points);
-  const frame = monthlyBuckets(rangePoints, kindFilter, rangePoints);
+  const frame = monthlyBuckets(rangePoints, kindFilter, rangePoints, yearFilter);
   return {
     keys: frame.map((b) => b.key),
     labels: frame.map((b) => b.label),
     series: subjects.map((s) => {
-      const buckets = monthlyBuckets(s.points, kindFilter, rangePoints);
+      const buckets = monthlyBuckets(s.points, kindFilter, rangePoints, yearFilter);
       const byKey = new Map(buckets.map((b) => [b.key, b.posts + b.emails]));
       return {
         id: s.id,
@@ -523,9 +563,10 @@ export function overlayHourSeries(
   subjects: readonly SubjectActivity[],
   utcOffset = 0,
   kindFilter: KindFilter = 'both',
+  yearFilter: YearFilter = 'all',
 ): OverlayHourSeries[] {
   return subjects.map((s) => {
-    const hist = hourHistogram(s.points, utcOffset, kindFilter);
+    const hist = hourHistogram(s.points, utcOffset, kindFilter, yearFilter);
     return {
       id: s.id,
       label: s.label,
@@ -540,34 +581,40 @@ export function analyseActivity(
   subjects: readonly SubjectActivity[],
   utcOffset = 0,
   kindFilter: KindFilter = 'both',
+  yearFilter: YearFilter = 'all',
 ): ActivityAnalysis {
   const peaks: SubjectPeak[] = subjects.map((s) => {
-    const hist = hourHistogram(s.points, utcOffset, kindFilter);
+    const hist = hourHistogram(s.points, utcOffset, kindFilter, yearFilter);
     return {
       id: s.id,
       label: s.label,
       window: peakHourBlock(hist.hours),
-      weekday: weekdaySplit(s.points, utcOffset, kindFilter),
+      weekday: weekdaySplit(s.points, utcOffset, kindFilter, yearFilter),
     };
   });
 
   const satoshi = subjects.find((s) => s.id === 'satoshi');
-  const satoshiHours = satoshi ? hourHistogram(satoshi.points, utcOffset, kindFilter).hours : Array.from({ length: 24 }, () => 0);
+  const satoshiHours = satoshi
+    ? hourHistogram(satoshi.points, utcOffset, kindFilter, yearFilter).hours
+    : Array.from({ length: 24 }, () => 0);
 
   const overlaps: OverlapRow[] = subjects
     .filter((s) => s.id !== 'satoshi')
     .map((s) => ({
       id: s.id,
       label: s.label,
-      pct: sharedPeakOverlapPct(satoshiHours, hourHistogram(s.points, utcOffset, kindFilter).hours),
+      pct: sharedPeakOverlapPct(
+        satoshiHours,
+        hourHistogram(s.points, utcOffset, kindFilter, yearFilter).hours,
+      ),
     }));
 
   const wright = subjects.find((s) => s.id === 'wright');
   const kleiman = subjects.find((s) => s.id === 'kleiman');
   const jointEffort = assessJointEffort(
     satoshiHours,
-    wright ? hourHistogram(wright.points, utcOffset, kindFilter).hours : Array.from({ length: 24 }, () => 0),
-    kleiman ? hourHistogram(kleiman.points, utcOffset, kindFilter).hours : Array.from({ length: 24 }, () => 0),
+    wright ? hourHistogram(wright.points, utcOffset, kindFilter, yearFilter).hours : Array.from({ length: 24 }, () => 0),
+    kleiman ? hourHistogram(kleiman.points, utcOffset, kindFilter, yearFilter).hours : Array.from({ length: 24 }, () => 0),
   );
 
   return { peaks, overlaps, jointEffort };

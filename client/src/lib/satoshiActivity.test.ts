@@ -3,6 +3,10 @@ import type { ActivityPoint, SubjectActivity } from '../types';
 import {
   alignedMonthlyOverlay,
   analyseActivity,
+  availableYears,
+  filterActivityPoints,
+  hourHistogram,
+  monthlyBuckets,
   overlayHourSeries,
   sharedPeakOverlapPct,
   weekdaySplit,
@@ -145,5 +149,40 @@ describe('analyseActivity', () => {
     );
     expect(analysis.jointEffort.looksComposite).toBe(true);
     expect(analysis.jointEffort.summary).toMatch(/more than one person|composite/i);
+  });
+});
+
+describe('year filter', () => {
+  const mixed = [
+    pt('2008-11-01T12:00:00Z', 'email'),
+    pt('2009-01-15T18:00:00Z', 'post'),
+    pt('2009-06-02T09:00:00Z', 'email'),
+    pt('2010-03-01T12:00:00Z', 'post'),
+  ];
+
+  it('lists unique years in order', () => {
+    expect(availableYears(mixed)).toEqual([2008, 2009, 2010]);
+  });
+
+  it('filters points to one calendar year', () => {
+    expect(filterActivityPoints(mixed, 'both', 2009).map((p) => p.date)).toEqual([
+      '2009-01-15T18:00:00Z',
+      '2009-06-02T09:00:00Z',
+    ]);
+  });
+
+  it('pins the monthly axis to January–December of the selected year', () => {
+    const buckets = monthlyBuckets(mixed, 'both', mixed, 2009);
+    expect(buckets).toHaveLength(12);
+    expect(buckets[0]?.key).toBe('2009-01');
+    expect(buckets[11]?.key).toBe('2009-12');
+    expect(buckets.reduce((n, b) => n + b.posts + b.emails, 0)).toBe(2);
+  });
+
+  it('limits the hour histogram to that year', () => {
+    const hist = hourHistogram(mixed, 0, 'both', 2009);
+    expect(hist.timedCount).toBe(2);
+    expect(hist.hours[18]).toBe(1);
+    expect(hist.hours[9]).toBe(1);
   });
 });

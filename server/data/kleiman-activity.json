@@ -1,0 +1,547 @@
+{
+  "pin": {
+    "repo": "curated-research",
+    "commit": "manual",
+    "fetchedAt": "2026-09-02T13:00:00.000Z",
+    "counts": {
+      "emails": 42,
+      "posts": 24,
+      "quotes": 0
+    },
+    "bulk": {
+      "seclists": {
+        "note": "SecurityFocus / seclists.org is the bulk of Kleiman’s dated public record. All listed posts are included; a full crawl of seclists.org/basics 2004–2012 would likely yield further replies in the same threads. Nothing after his death on 2013-04-26."
+      }
+    }
+  },
+  "documents": [
+    {
+      "id": "kleiman-email-20040213-re-proving-a-wireless-router-is-shared-open",
+      "kind": "email",
+      "title": "RE: proving a wireless router is shared/open",
+      "date": "2004-02-13T23:28:39-05:00",
+      "url": "https://seclists.org/basics/2004/Feb/261",
+      "text": "SecurityFocus Security Basics. Signed Dave Kleiman, CISSP, MCSE, CISM, CIFI; www.SecurityBreachResponse.com. Thread index also lists a follow-up on 16 Feb 2004."
+    },
+    {
+      "id": "kleiman-email-20040719-re-minimum-password-requirements-first-reply",
+      "kind": "email",
+      "title": "RE: Minimum password requirements (first reply)",
+      "date": "2004-07-19T19:37:00-04:00",
+      "url": "https://seclists.org/basics/2004/Jul/255",
+      "text": "From dave@isecureu.com: users could cycle passwords 10 times back to the original; recommends 3–5 day minimum age and ALT characters for admin accounts."
+    },
+    {
+      "id": "kleiman-email-20040720-re-minimum-password-requirements-follow-up",
+      "kind": "email",
+      "title": "RE: Minimum password requirements (follow-up)",
+      "date": "2004-07-20T12:45:02-04:00",
+      "url": "https://seclists.org/basics/2004/Jul/255",
+      "text": "Further reply in the same password-policy thread. Thread lists additional Kleiman posts the same day."
+    },
+    {
+      "id": "kleiman-email-20040727-re-successful-anonymous-login",
+      "kind": "email",
+      "title": "RE: successful anonymous login",
+      "date": "2004-07-27T23:36:53-04:00",
+      "url": "https://seclists.org/webappsec/2004/q3/156",
+      "text": "WebApp Sec list. Explains NtLmSsp / DCOM anonymous logons on Windows 2003. Signed www.SecurityBreachResponse.com."
+    },
+    {
+      "id": "kleiman-email-20041109-re-simple-but-effective-disk-wipe-software",
+      "kind": "email",
+      "title": "RE: Simple but effective Disk Wipe Software",
+      "date": "2004-11-09T01:02:00+00:00",
+      "url": "https://seclists.org/basics/2004/Nov/191",
+      "text": "From dave@isecureu.com. Points to SourceForge Eraser and DBAN; offers to email an in-house wiper (no warranty)."
+    },
+    {
+      "id": "kleiman-email-20041109-re-simple-but-effective-disk-wipe-software-follo",
+      "kind": "email",
+      "title": "RE: Simple but effective Disk Wipe Software (follow-up)",
+      "date": "2004-11-09T17:33:10-05:00",
+      "url": "https://seclists.org/basics/2004/Nov/191",
+      "text": "Same-day follow-up in the disk-wipe thread."
+    },
+    {
+      "id": "kleiman-email-20041118-re-how-secure-is-vpn-access",
+      "kind": "email",
+      "title": "RE: How secure is VPN access?",
+      "date": "2004-11-18T00:11:58-05:00",
+      "url": "https://seclists.org/basics/2004/Nov/377",
+      "text": "Advises against home PCs on corporate VPN: 'you should have complete control of the systems that do access via VPN'."
+    },
+    {
+      "id": "kleiman-post-20050210-microsoft-log-parser-toolkit-published-contribut",
+      "kind": "post",
+      "title": "Microsoft Log Parser Toolkit published (contributing author)",
+      "date": "2005-02-10",
+      "url": "https://shop.elsevier.com/books/microsoft-log-parser-toolkit/giuseppini/978-1-932266-52-6",
+      "text": "Syngress/Elsevier. ISBN 1-932266-52-6. Court expert report lists 24 Feb 2005; publisher listings also give 10 Feb 2005."
+    },
+    {
+      "id": "kleiman-email-20050308-re-career-choice",
+      "kind": "email",
+      "title": "RE: Career Choice",
+      "date": "2005-03-08T22:11:53-05:00",
+      "url": "https://seclists.org/basics/2005/Mar/190",
+      "text": "Career advice on Security Basics. Signed CIFI, CISM, CISSP, ISSAP, ISSMP, MCSE; SecurityBreachResponse.com and ComputerForensicInvestigations.com."
+    },
+    {
+      "id": "kleiman-email-20050830-re-computer-forensics-to-uncover-illegal-interne",
+      "kind": "email",
+      "title": "RE: Computer forensics to uncover illegal internet use",
+      "date": "2005-08-30T22:33:02-04:00",
+      "url": "https://seclists.org/basics/2005/Aug/553",
+      "text": "From dave@isecureu.com. Argues CP investigations must go to law enforcement immediately; company counsel viewing the material would be possession/distribution."
+    },
+    {
+      "id": "kleiman-email-20050831-re-computer-forensics-to-uncover-illegal-interne",
+      "kind": "email",
+      "title": "RE: Computer forensics to uncover illegal internet use (follow-up)",
+      "date": "2005-08-31T08:17:27-04:00",
+      "url": "https://seclists.org/basics/2005/Aug/553",
+      "text": "Next-day follow-up in the same thread. Thread index lists a further Kleiman reply the same day."
+    },
+    {
+      "id": "kleiman-email-20051003-re-careless-law-enforcement-computer-forensics-l",
+      "kind": "email",
+      "title": "RE: Careless Law Enforcement Computer Forensics Lacking InfoSec Expertise Causes Suicides",
+      "date": "2005-10-03T14:51:49-04:00",
+      "url": "https://seclists.org/fulldisclosure/2005/Oct/65",
+      "text": "Full Disclosure reply to Jason Coombs. Signed CAS, CIFI, CISM, CISSP, ISSAP, ISSMP, MCSE; www.SecurityBreachResponse.com."
+    },
+    {
+      "id": "kleiman-post-20051225-perfect-passwords-technical-editor",
+      "kind": "post",
+      "title": "Perfect Passwords — technical editor",
+      "date": "2005-12-25",
+      "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
+      "text": "Syngress. ISBN 1-59749-041-5. Date from Kleiman v Wright expert report (ECF 509-4)."
+    },
+    {
+      "id": "kleiman-email-20060207-re-spam-re-forensic-cyber-crime-investigator",
+      "kind": "email",
+      "title": "RE: Spam: RE: Forensic/Cyber Crime Investigator",
+      "date": "2006-02-07T09:00:24-05:00",
+      "url": "https://seclists.org/basics/2006/Feb/111",
+      "text": "Thread with Craig Wright and Jason Coombs on forensic investigator qualifications. Signed CAS, CCE, CIFI, CISM, CISSP, ISSAP, ISSMP, MCSE; davekleiman.com/about.php."
+    },
+    {
+      "id": "kleiman-email-20060209-re-forensic-cyber-crime-investigator",
+      "kind": "email",
+      "title": "RE: Forensic/Cyber Crime Investigator",
+      "date": "2006-02-09T11:44:21-05:00",
+      "url": "https://seclists.org/basics/2006/Feb/169",
+      "text": "Continuation of the investigator-qualifications thread. Thread index lists another Kleiman post on 10 Feb 2006."
+    },
+    {
+      "id": "kleiman-email-20060218-re-security-forensics-conference",
+      "kind": "email",
+      "title": "RE: Security / forensics conference",
+      "date": "2006-02-18T00:24:27-05:00",
+      "url": "https://seclists.org/basics/2006/Feb/251",
+      "text": "Points to CyberCrime Summit 27 Feb–3 Mar 2006 and his own class; lists events.castlecops.com. Signed forensicsflorida.com/services.php."
+    },
+    {
+      "id": "kleiman-post-20060413-security-log-management-identifying-patterns-in-",
+      "kind": "post",
+      "title": "Security Log Management: Identifying Patterns in the Chaos (contributing author)",
+      "date": "2006-04-13",
+      "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
+      "text": "Syngress. ISBN 1-59749-042-3."
+    },
+    {
+      "id": "kleiman-post-20060519-wayback-s-doc-management-page-listing-kleiman-as",
+      "kind": "post",
+      "title": "Wayback: S-doc management page listing Kleiman as CISO",
+      "date": "2006-05-19",
+      "url": "https://web.archive.org/web/20060519093230/http://s-doc.com/company/management.asp",
+      "text": "Biography: CISO and S-Lok product manager; InfraGard; ISSMP, ISSAP, CISSP, CIFI, CISM, CAS, CCE, MCSE. Capture cited in Kleiman v Wright ECF 509-4. Site copyright 2005."
+    },
+    {
+      "id": "kleiman-post-20060904-winternals-defragmentation-recovery-and-administ",
+      "kind": "post",
+      "title": "Winternals Defragmentation, Recovery, and Administration Field Guide — technical editor",
+      "date": "2006-09-04",
+      "url": "https://shop.elsevier.com/books/winternals-defragmentation-recovery-and-administration-field-guide/kleiman/978-1-59749-079-5",
+      "text": "Syngress. ISBN 1-59749-079-2."
+    },
+    {
+      "id": "kleiman-post-20060915-how-to-cheat-at-windows-system-administration-co",
+      "kind": "post",
+      "title": "How to Cheat at Windows System Administration — contributing author",
+      "date": "2006-09-15",
+      "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
+      "text": "Syngress. ISBN 1-59749-105-5."
+    },
+    {
+      "id": "kleiman-email-20061026-are-laptop-search-seizures-increasing-use-of-dis",
+      "kind": "email",
+      "title": "Are laptop search & seizures increasing use of disk crypto?",
+      "date": "2006-10-26T14:15:14-04:00",
+      "url": "https://www.metzdowd.com/pipermail/cryptography/2006-October/011690.html",
+      "text": "Metzdowd cryptography list. Cites NYT 'At U.S. Borders, Laptops Have No Right to Privacy'. Signed davekleiman.com/about.php."
+    },
+    {
+      "id": "kleiman-email-20061107-can-you-keep-a-secret-this-encrypted-drive-can",
+      "kind": "email",
+      "title": "Can you keep a secret? This encrypted drive can...",
+      "date": "2006-11-07T14:01:15-05:00",
+      "url": "https://www.metzdowd.com/pipermail/cryptography/2006-November/011724.html",
+      "text": "Explains Windows noatime / Log Parser to avoid access-time updates; links HTCIA CyberCrime Summit class zip on davekleiman.com/Files."
+    },
+    {
+      "id": "kleiman-post-20070107-enemy-at-the-water-cooler-technical-reviewer",
+      "kind": "post",
+      "title": "Enemy at the Water Cooler — technical reviewer",
+      "date": "2007-01-07",
+      "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
+      "text": "Syngress. ISBN 1-59749-129-2."
+    },
+    {
+      "id": "kleiman-post-20070130-rootkits-for-dummies-forensics-advisor-technical",
+      "kind": "post",
+      "title": "Rootkits for Dummies — forensics advisor / technical editor",
+      "date": "2007-01-30",
+      "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
+      "text": "Wiley. ISBN 978-0-471-91710-6."
+    },
+    {
+      "id": "kleiman-email-20070208-castlecops-5-year-anniversary-and-contest",
+      "kind": "email",
+      "title": "CastleCops 5-Year Anniversary and Contest",
+      "date": "2007-02-08T01:04:38-05:00",
+      "url": "https://seclists.org/basics/2007/Feb/116",
+      "text": "Forwards Symantec blog on CastleCops PIRT phishing project and $50,000 contest. Signed davekleiman.com/about.php."
+    },
+    {
+      "id": "kleiman-post-20070312-cd-and-dvd-forensics-technical-editor",
+      "kind": "post",
+      "title": "CD and DVD Forensics — technical editor",
+      "date": "2007-03-12",
+      "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
+      "text": "Syngress. ISBN 1-59749-128-4."
+    },
+    {
+      "id": "kleiman-post-20070508-windows-forensic-analysis-including-dvd-toolkit-",
+      "kind": "post",
+      "title": "Windows Forensic Analysis Including DVD Toolkit — technical editor",
+      "date": "2007-05-08",
+      "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
+      "text": "Syngress. ISBN 1-59749-156-X."
+    },
+    {
+      "id": "kleiman-email-20070522-re-retrieving-deleted-sms-mms-from-nokia-symbian",
+      "kind": "email",
+      "title": "Re: Retrieving deleted SMS/MMS from Nokia (Symbian S60)",
+      "date": "2007-05-22T06:11:43-04:00",
+      "url": "https://seclists.org/fulldisclosure/2007/May/402",
+      "text": "Full Disclosure. Challenges claim that carriers keep SMS bodies forever; says Verisign inter-carrier messaging kept headers only."
+    },
+    {
+      "id": "kleiman-email-20070912-re-advice-regarding-servers-and-wiping-drives-af",
+      "kind": "email",
+      "title": "RE: Advice regarding servers and Wiping Drives after testing",
+      "date": "2007-09-12T14:24:31-04:00",
+      "url": "https://seclists.org/basics/2007/Sep/87",
+      "text": "Says he teaches wipe-trace labs at InfraGard and HTCIA San Diego; has never seen recovery after a proper wipe except via ESM. Thread lists a 13 Sep 2007 follow-up."
+    },
+    {
+      "id": "kleiman-post-20070927-wayback-first-successful-capture-of-davekleiman-",
+      "kind": "post",
+      "title": "Wayback: first successful capture of davekleiman.com homepage",
+      "date": "2007-09-27T04:57:55+00:00",
+      "url": "https://web.archive.org/web/20070927045755/http://www.davekleiman.com/",
+      "text": "Earliest 200-status CDX hit for the personal site. Later captures: 2008-07-05, 2009-03-24, 2009-04-12, 2010-05-01, 2011-02-01, 2012-02-04, 2012-07-13."
+    },
+    {
+      "id": "kleiman-post-20071008-the-official-chfi-study-guide-exam-312-49-main-a",
+      "kind": "post",
+      "title": "The Official CHFI Study Guide (Exam 312-49) — main author",
+      "date": "2007-10-08",
+      "url": "https://shop.elsevier.com/books/the-official-chfi-study-guide-exam-312-49/kleiman/978-1-59749-197-6",
+      "text": "Syngress/Elsevier. ISBN 1-59749-197-7. Goodreads lists first published 7 Nov 2007."
+    },
+    {
+      "id": "kleiman-email-20071024-re-bootable-flash-usb-thumb-drive",
+      "kind": "email",
+      "title": "RE: Bootable flash/USB/thumb drive",
+      "date": "2007-10-24T12:37:55-04:00",
+      "url": "https://seclists.org/basics/2007/Oct/241",
+      "text": "From 'dave kleiman - mobile'. Points to davekleiman.com/Files; 'From Dave's Phone!'"
+    },
+    {
+      "id": "kleiman-email-20080312-re-defamation-and-the-difficulties-of-law-on-the",
+      "kind": "email",
+      "title": "RE: Defamation and the difficulties of law on the Internet",
+      "date": "2008-03-12T03:25:13-04:00",
+      "url": "https://seclists.org/basics/2008/Mar/147",
+      "text": "Public reply to Craig Wright: 'Sometimes you amaze me....I literally today just took on a case today dealing exactly with this.' Praises Wright as a 'Knowledge Junkie'. Distinct from the later disputed private 'Bit cash, Bitcoin' email that reused this subject line."
+    },
+    {
+      "id": "kleiman-email-20080423-new-remote-forensics-and-ediscovery-tool-f-respo",
+      "kind": "email",
+      "title": "New Remote Forensics and eDiscovery Tool F-Response",
+      "date": "2008-04-23T10:47:51-04:00",
+      "url": "https://seclists.org/basics/2008/Apr/276",
+      "text": "Unaffiliated product intro: F-Response USB-over-TCP, read-only remote disks. Signed davekleiman.com, 4371 Northlake Blvd #314, Palm Beach Gardens, FL."
+    },
+    {
+      "id": "kleiman-post-20080828-wayback-davekleiman-com-services-page-forensics-",
+      "kind": "post",
+      "title": "Wayback: davekleiman.com services page (forensics offerings)",
+      "date": "2008-08-28",
+      "url": "https://web.archive.org/web/20080828000000/http://davekleiman.com/computer-forensics-expert-florida-miami-palm-beach-lauderdale-dave-kle",
+      "text": "Court exhibit archive window 28 Aug 2008–5 Feb 2012. Lists e-discovery, expert witness, incident response. Signed CAS, CCE, CEECS, CIFI, CISM, CISSP, ISSAP, ISSMP, MCSE, MVP."
+    },
+    {
+      "id": "kleiman-email-20080828-downloads-from-facci-2008",
+      "kind": "email",
+      "title": "Downloads from FACCI 2008",
+      "date": "2008-08-28T07:37:08-04:00",
+      "url": "https://seclists.org/basics/2008/Aug/213",
+      "text": "Posts FACCI 2008 lab files: Live Preview and Log File Forensics with Microsoft Log Parser. computerforensicexaminer.com."
+    },
+    {
+      "id": "kleiman-email-20081103-aba-resolution-on-digital-forensics-and-the-dfcb",
+      "kind": "email",
+      "title": "ABA Resolution on Digital Forensics and the DFCB",
+      "date": "2008-11-03T08:54:55-05:00",
+      "url": "https://seclists.org/basics/2008/Nov/3",
+      "text": "Announces BrightTALK webcast and IASIR Orlando talk with Jody Westby on 6 Nov 2008."
+    },
+    {
+      "id": "kleiman-post-20081216-overwriting-hard-drive-data-the-great-wiping-con",
+      "kind": "post",
+      "title": "Overwriting Hard Drive Data: The Great Wiping Controversy (ICISS 2008)",
+      "date": "2008-12-16",
+      "url": "https://doi.org/10.1007/978-3-540-89862-7_21",
+      "text": "Wright, Kleiman, Sundhar R.S. LNCS 5352 pp. 243–257. Conference Hyderabad 16–20 Dec 2008. Argues a single overwrite is sufficient on modern drives."
+    },
+    {
+      "id": "kleiman-email-20090120-heise-online-uk-secure-deletion-a-single-overwri",
+      "kind": "email",
+      "title": "[heise online UK] Secure deletion: a single overwrite will do it",
+      "date": "2009-01-20T19:18:39-05:00",
+      "url": "https://www.metzdowd.com/pipermail/cryptography/2009-January/015029.html",
+      "text": "Metzdowd. 'And yes, I am the same Dave Kleiman from the paper.'"
+    },
+    {
+      "id": "kleiman-email-20090223-solving-password-problems-one-at-a-time-re-the-p",
+      "kind": "email",
+      "title": "Solving password problems one at a time, Re: The password-reset paradox",
+      "date": "2009-02-23T13:41:45-05:00",
+      "url": "https://www.metzdowd.com/pipermail/cryptography/2009-February/015181.html",
+      "text": "Metzdowd. Signed ComputerForensicExaminer.com, Palm Beach Gardens."
+    },
+    {
+      "id": "kleiman-email-20090401-federally-mandated-certification-of-cybersecurit",
+      "kind": "email",
+      "title": "Federally Mandated Certification of cybersecurity professionals?",
+      "date": "2009-04-01T22:17:34-04:00",
+      "url": "https://seclists.org/pen-test/2009/Apr/5",
+      "text": "Pen-Test list. Forwards Washington Post on Rockefeller–Snowe cybersecurity bill and NIST licensing of professionals."
+    },
+    {
+      "id": "kleiman-email-20090506-re-security-checklist",
+      "kind": "email",
+      "title": "RE: Security Checklist",
+      "date": "2009-05-06T01:53:51-04:00",
+      "url": "https://seclists.org/basics/2009/May/95",
+      "text": "Asks whether the requester is bound by SOX, HIPAA, or PCI. Signed DigitalForensicExpert.com / ComputerForensicExaminer.com / DigitalForensicAnalyst.com."
+    },
+    {
+      "id": "kleiman-email-20090506-re-forensics-procedure-for-pc-analysis",
+      "kind": "email",
+      "title": "RE: forensics procedure for PC analysis",
+      "date": "2009-05-06T03:34:39-04:00",
+      "url": "https://seclists.org/basics/2009/May/96",
+      "text": "Recommends F-Response, X-Ways, EnCase, AccessData; free conference lab files; upcoming CEIC Orlando (PowerShell, Log Parser, Perl, Sysinternals)."
+    },
+    {
+      "id": "kleiman-post-20090530-wayback-davekleiman-com-services-page-reviewed-i",
+      "kind": "post",
+      "title": "Wayback: davekleiman.com services page reviewed in court (30 May 2009)",
+      "date": "2009-05-30",
+      "url": "https://web.archive.org/web/20090530000000/http://davekleiman.com/",
+      "text": "ECF 509-4 cites a 30 May 2009 archive: litigation support, no programming/Bitcoin/C++ mentioned. Threat ticker on the exhibit is dated 29 May 2009."
+    },
+    {
+      "id": "kleiman-post-20090925-google-groups-overwritten-data-can-apparently-be",
+      "kind": "post",
+      "title": "Google Groups: Overwritten data can apparently be recovered (snake oil)",
+      "date": "2009-09-25T17:21:53-04:00",
+      "url": "https://groups.google.com/g/datarecoverycertification/c/0X81plKNE2Y",
+      "text": "datarecoverycertification. Calls TechFusion CEO claim 'Snake Oil!!!!'"
+    },
+    {
+      "id": "kleiman-post-20090925-google-groups-cites-iciss-wiping-paper",
+      "kind": "post",
+      "title": "Google Groups: cites ICISS wiping paper",
+      "date": "2009-09-25T21:30:23-04:00",
+      "url": "https://groups.google.com/g/datarecoverycertification/c/0X81plKNE2Y",
+      "text": "'Do you mean this paper Chuck? ;)' — cites Wright/Kleiman/Sundhar LNCS 5352."
+    },
+    {
+      "id": "kleiman-post-20090925-google-groups-follow-up-to-chuck-snipes",
+      "kind": "post",
+      "title": "Google Groups: follow-up to Chuck Snipes",
+      "date": "2009-09-25T22:48:18-04:00",
+      "url": "https://groups.google.com/g/datarecoverycertification/c/0X81plKNE2Y",
+      "text": "'I probably devalued it for you now Chuck ;)'"
+    },
+    {
+      "id": "kleiman-post-20090925-google-groups-joke-about-florida-mountain-house",
+      "kind": "post",
+      "title": "Google Groups: joke about Florida mountain house",
+      "date": "2009-09-25T22:49:40-04:00",
+      "url": "https://groups.google.com/g/datarecoverycertification/c/0X81plKNE2Y",
+      "text": "'That is funny because it just so happens I have my house on top of a mountain here in Florida....'"
+    },
+    {
+      "id": "kleiman-post-20090925-google-groups-physical-wipe-vs-file-erasers",
+      "kind": "post",
+      "title": "Google Groups: physical wipe vs file erasers",
+      "date": "2009-09-25T22:50:50-04:00",
+      "url": "https://groups.google.com/g/datarecoverycertification/c/0X81plKNE2Y",
+      "text": "'As long as it wipes the Physical drive, it does not make a difference. Now some file erasers and such are not so efficient.'"
+    },
+    {
+      "id": "kleiman-email-20100325-new-research-suggests-that-governments-may-fake-",
+      "kind": "email",
+      "title": "New Research Suggests That Governments May Fake SSL Certificates",
+      "date": "2010-03-25T08:05:26-04:00",
+      "url": "https://www.metzdowd.com/pipermail/cryptography/2010-March/016029.html",
+      "text": "Metzdowd. Signed ComputerForensicExaminer.com / DigitalForensicExpert.com."
+    },
+    {
+      "id": "kleiman-email-20110202-re-dhs-cyber-r-d-grants-40mm",
+      "kind": "email",
+      "title": "RE: [DHS Cyber R&D Grants $40MM]",
+      "date": "2011-02-02T07:26:00+00:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.935.2.pdf",
+      "text": "To craig.wright@information-defense.com, cc Lynn Wright. Discusses DHS BAA areas (software assurance, etc.). Exhibit in Kleiman v Wright. Authenticity of some Wright-produced emails is contested; this thread is operational DHS-grant correspondence."
+    },
+    {
+      "id": "kleiman-email-20110214-re-link-to-r-d-site-llc-must-be-mailed",
+      "kind": "email",
+      "title": "RE: Link to R&D site (LLC must be mailed)",
+      "date": "2011-02-14T17:07:00-05:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.22.pdf",
+      "text": "Notes Florida LLC forms must be posted, not e-filed."
+    },
+    {
+      "id": "kleiman-email-20110214-re-link-to-r-d-site-fictitious-names",
+      "kind": "email",
+      "title": "RE: Link to R&D site (fictitious names)",
+      "date": "2011-02-14T19:13:00-05:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.22.pdf",
+      "text": "Cannot file LLC/nonprofit in time; lists existing Sunbiz fictitious names G06303900172 and G98287000005."
+    },
+    {
+      "id": "kleiman-email-20110215-link-to-r-d-site-duns-fbo-gov",
+      "kind": "email",
+      "title": "Link to R&D site (DUNS / FBO.gov)",
+      "date": "2011-02-15T08:32:00+00:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.22.pdf",
+      "text": "To Lynn Wright, cc Craig. Needs DUNS to register on FBO.gov; asks whether to form LLC or use a fictitious name."
+    },
+    {
+      "id": "kleiman-email-20110215-re-link-to-r-d-site",
+      "kind": "email",
+      "title": "RE: Link to R&D site",
+      "date": "2011-02-15T11:35:31-05:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.22.pdf",
+      "text": "Follow-up in the same DHS vendor-registration thread."
+    },
+    {
+      "id": "kleiman-email-20110215-re-registration-tta1",
+      "kind": "email",
+      "title": "RE: Registration - TTA1",
+      "date": "2011-02-15T23:19:00-05:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.23.pdf",
+      "text": "DHS TTA registration thread with Craig Wright."
+    },
+    {
+      "id": "kleiman-post-20110216-articles-of-organization-w-k-info-defense-resear",
+      "kind": "post",
+      "title": "Articles of Organization: W&K Info Defense Research LLC",
+      "date": "2011-02-16",
+      "url": "https://search.sunbiz.org/Inquiry/CorporationSearch/SearchResultDetail?aggregateId=flal-l11000019904-dce79b55-176a-4442-93a7-3c8896316aa2&searchTerm=W%26K+Info+",
+      "text": "Florida L11000019904, filed 16 Feb 2011 08:00, effective 14 Feb 2011. Electronic signature DAVE KLEIMAN. Registered agent David A Kleiman, 3119 Contego Lane, Palm Beach Gardens. Managing member 4371 Northlake Blvd #314. PDF: https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.102.pdf"
+    },
+    {
+      "id": "kleiman-email-20110216-re-registration-tta1-cover-sheets-a-and-b",
+      "kind": "email",
+      "title": "RE: Registration - TTA1 (cover sheets A and B)",
+      "date": "2011-02-16T05:24:00-05:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.23.pdf",
+      "text": "Attaches BAA 11-02-TTA 05-0155 SCADA cover sheets listing deficiencies. Same-day thread also discusses infodefenseresearch.com / info-defense-research.com and which TTA is 'SCADA Isolation'."
+    },
+    {
+      "id": "kleiman-post-20110217-cnn-insession-appearance-as-computer-forensics-e",
+      "kind": "post",
+      "title": "CNN InSession appearance as computer forensics expert",
+      "date": "2011-02-17",
+      "url": "https://es.ramonquesada.com/espanol-es/dave-kleiman-1967-2013-satoshi/",
+      "text": "Contemporaneous YouTube/Facebook listing: '2011/02/17 Computer Forensics Expert Dave Kleiman on CNN News InSession'. Also reported as ABC News commentary on a City of Lake Worth breach."
+    },
+    {
+      "id": "kleiman-post-20120213-articles-of-organization-computer-forensics-llc",
+      "kind": "post",
+      "title": "Articles of Organization: Computer Forensics LLC",
+      "date": "2012-02-13",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.16.pdf",
+      "text": "Florida L12000020457, filed 13 Feb 2012, effective 6 Feb 2012. Managing members Dave Kleiman, Carter V Conrad, Patrick Paige. Amended/name-changed 11 Jun 2012."
+    },
+    {
+      "id": "kleiman-email-20120604-re-building-a-surveillance-system-for-a-house-wi",
+      "kind": "email",
+      "title": "RE: Building a surveillance system for a house with a DIY NVR",
+      "date": "2012-06-04",
+      "url": "https://seclists.org/basics/2012/Jun/39",
+      "text": "First Kleiman reply in the NVR/Wi-Fi surveillance thread (thread index: Jun 04). Follow-ups 5–6 Jun 2012 from dave@davekleiman.com."
+    },
+    {
+      "id": "kleiman-email-20120606-re-building-a-surveillance-system-wi-fi-risks",
+      "kind": "email",
+      "title": "RE: Building a surveillance system (Wi-Fi risks)",
+      "date": "2012-06-06T16:24:27-05:00",
+      "url": "https://seclists.org/basics/2012/Jun/39",
+      "text": "Warns of inherent risks with Wi-Fi cameras. Thread lists three Kleiman posts on 4 and 6 Jun 2012."
+    },
+    {
+      "id": "kleiman-email-20120608-re-write-blockers",
+      "kind": "email",
+      "title": "RE: Write blockers",
+      "date": "2012-06-08T11:37:45-05:00",
+      "url": "https://seclists.org/basics/2012/Jun/53",
+      "text": "Recommends Tableau write-blockers and free Tableau imaging software. Thread lists a further reply 11 Jun 2012."
+    },
+    {
+      "id": "kleiman-email-20120711-re-recommendation-for-a-comprehensive-security-a",
+      "kind": "email",
+      "title": "RE: Recommendation for a comprehensive security audit",
+      "date": "2012-07-11T07:21:48-05:00",
+      "url": "https://seclists.org/basics/2012/Jul/60",
+      "text": "Last clearly dated Security Basics post found. Signed ComputerForensicsLLC.com / DaveKleiman.com."
+    },
+    {
+      "id": "kleiman-post-20130118-wayback-first-capture-of-computerforensicsllc-co",
+      "kind": "post",
+      "title": "Wayback: first capture of computerforensicsllc.com",
+      "date": "2013-01-18T07:38:03+00:00",
+      "url": "https://web.archive.org/web/20130118073803/http://www.computerforensicsllc.com/",
+      "text": "Partnership site with Paige and Conrad. Further 200-status captures 24 Mar, 29 May, 16 Jun 2013 (after death) and through 2014."
+    },
+    {
+      "id": "kleiman-email-20130131-computer-forensics-llc-accounting-to-cpa-david-k",
+      "kind": "email",
+      "title": "Computer Forensics LLC Accounting (to CPA David Kuharcik)",
+      "date": "2013-01-31T18:43:00-05:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.16.pdf",
+      "text": "From dave@davekleiman.com. Introduces accounting@computerforensicsllc.com; attaches Sunbiz paperwork, 2012 P&L, 2013 P&L and GL through 30 Jan 2013. Address 2465 Mercer Ave, Suite 203, West Palm Beach. Among the last dated emails from Kleiman in the public record."
+    }
+  ]
+}

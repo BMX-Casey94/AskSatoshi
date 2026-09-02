@@ -3,7 +3,7 @@
  * Dates are treated as UTC (ISO, sorted ascending from the API).
  */
 
-import type { ActivityKind, ActivityPoint } from '../types';
+import type { ActivityKind, ActivityPoint, SubjectActivity, SubjectId } from '../types';
 
 export type KindFilter = 'both' | 'emails' | 'posts';
 
@@ -289,4 +289,286 @@ export function formatGeneratedAt(iso: string): string | null {
     timeZone: 'UTC',
     timeZoneName: 'short',
   });
+}
+
+export type SubjectFilter = SubjectId | 'all';
+
+export const SUBJECT_FILTERS: readonly { id: SubjectFilter; label: string }[] = [
+  { id: 'satoshi', label: 'Satoshi' },
+  { id: 'wright', label: 'Craig Wright' },
+  { id: 'kleiman', label: 'Dave Kleiman' },
+  { id: 'all', label: 'All' },
+];
+
+/** CSS custom-property names used to colour each subject on overlay charts. */
+export const SUBJECT_COLOUR_VAR: Record<SubjectId, string> = {
+  satoshi: 'var(--accent)',
+  wright: 'var(--chart-wright)',
+  kleiman: 'var(--chart-kleiman)',
+};
+
+export interface WeekdaySplit {
+  weekday: number;
+  weekend: number;
+  weekdayPct: number;
+  weekendPct: number;
+}
+
+export interface OverlayMonthSeries {
+  id: SubjectId;
+  label: string;
+  totals: number[];
+}
+
+export interface AlignedMonthlyOverlay {
+  keys: string[];
+  labels: string[];
+  series: OverlayMonthSeries[];
+}
+
+export interface OverlayHourSeries {
+  id: SubjectId;
+  label: string;
+  hours: number[];
+  timedCount: number;
+  usedAllKinds: boolean;
+}
+
+export interface SubjectPeak {
+  id: SubjectId;
+  label: string;
+  window: ActiveWindow | null;
+  weekday: WeekdaySplit;
+}
+
+export interface OverlapRow {
+  id: SubjectId;
+  label: string;
+  pct: number | null;
+}
+
+export interface JointEffortAssessment {
+  looksComposite: boolean;
+  summary: string;
+}
+
+export interface ActivityAnalysis {
+  peaks: SubjectPeak[];
+  overlaps: OverlapRow[];
+  jointEffort: JointEffortAssessment;
+}
+
+function shiftUtc(iso: string, utcOffset: number): Date | null {
+  const d = parseUtc(iso);
+  if (!d) return null;
+  return new Date(d.getTime() + utcOffset * 3_600_000);
+}
+
+function pct(part: number, total: number): number {
+  if (total <= 0) return 0;
+  return Math.round((part / total) * 100);
+}
+
+export function weekdaySplit(
+  points: readonly ActivityPoint[],
+  utcOffset = 0,
+  kindFilter: KindFilter = 'both',
+): WeekdaySplit {
+  const scoped = filterActivityPoints(points, kindFilter);
+  let weekday = 0;
+  let weekend = 0;
+  for (const p of scoped) {
+    const d = shiftUtc(p.date, utcOffset);
+    if (!d) continue;
+    const day = d.getUTCDay();
+    if (day === 0 || day === 6) weekend += 1;
+    else weekday += 1;
+  }
+  const total = weekday + weekend;
+  return {
+    weekday,
+    weekend,
+    weekdayPct: pct(weekday, total),
+    weekendPct: pct(weekend, total),
+  };
+}
+
+export function hoursInWindow(startHour: number, windowHours: number = PEAK_WINDOW_HOURS): number[] {
+  return Array.from({ length: windowHours }, (_, i) => (startHour + i) % 24);
+}
+
+export function sharedPeakOverlapPct(
+  satoshiHours: readonly number[],
+  candidateHours: readonly number[],
+  windowHours: number = PEAK_WINDOW_HOURS,
+): number | null {
+  const satoshi = peakHourBlock(satoshiHours, windowHours);
+  const candidate = peakHourBlock(candidateHours, windowHours);
+  if (!satoshi || !candidate) return null;
+  const theirs = new Set(hoursInWindow(candidate.startHour, windowHours));
+  let shared = 0;
+  for (const h of hoursInWindow(satoshi.startHour, windowHours)) {
+    if (theirs.has(h)) shared += 1;
+  }
+  return pct(shared, windowHours);
+}
+
+function unionPeakOverlapPct(
+  satoshiHours: readonly number[],
+  wrightHours: readonly number[],
+  kleimanHours: readonly number[],
+  windowHours: number = PEAK_WINDOW_HOURS,
+): number | null {
+  const satoshi = peakHourBlock(satoshiHours, windowHours);
+  const wright = peakHourBlock(wrightHours, windowHours);
+  const kleiman = peakHourBlock(kleimanHours, windowHours);
+  if (!satoshi || (!wright && !kleiman)) return null;
+  const union = new Set<number>();
+  if (wright) for (const h of hoursInWindow(wright.startHour, windowHours)) union.add(h);
+  if (kleiman) for (const h of hoursInWindow(kleiman.startHour, windowHours)) union.add(h);
+  let shared = 0;
+  for (const h of hoursInWindow(satoshi.startHour, windowHours)) {
+    if (union.has(h)) shared += 1;
+  }
+  return pct(shared, windowHours);
+}
+
+/** Distinct high-activity bands (circular), used to judge one person vs several. */
+export function countSignificantHourClusters(hours: readonly number[]): number {
+  if (hours.length !== 24) return 0;
+  const max = hours.reduce((m, n) => Math.max(m, n), 0);
+  if (max <= 0) return 0;
+  const thresh = max * 0.35;
+  const active = hours.map((n) => n >= thresh);
+  if (!active.some(Boolean)) return 0;
+  let runs = 0;
+  for (let i = 0; i < 24; i++) {
+    const prev = active[(i + 23) % 24]!;
+    if (active[i] && !prev) runs += 1;
+  }
+  return runs === 0 ? 1 : runs;
+}
+
+export function assessJointEffort(
+  satoshiHours: readonly number[],
+  wrightHours: readonly number[],
+  kleimanHours: readonly number[],
+): JointEffortAssessment {
+  const satoshiPeak = peakHourBlock(satoshiHours);
+  if (!satoshiPeak) {
+    return {
+      looksComposite: false,
+      summary:
+        'There is not enough timed Satoshi activity to judge whether the pattern is one person or several.',
+    };
+  }
+
+  const timed = satoshiHours.reduce((sum, n) => sum + n, 0);
+  const concentration = timed > 0 ? satoshiPeak.total / timed : 0;
+  const clusters = countSignificantHourClusters(satoshiHours);
+  const spread = concentration < 0.5 || clusters >= 2;
+
+  const wOverlap = sharedPeakOverlapPct(satoshiHours, wrightHours);
+  const kOverlap = sharedPeakOverlapPct(satoshiHours, kleimanHours);
+  const unionOverlap = unionPeakOverlapPct(satoshiHours, wrightHours, kleimanHours);
+  const bestSolo = Math.max(wOverlap ?? 0, kOverlap ?? 0);
+  const unionBeatsBoth =
+    unionOverlap != null && wOverlap != null && kOverlap != null && unionOverlap >= bestSolo + 25;
+
+  const looksComposite = spread || unionBeatsBoth;
+
+  if (unionBeatsBoth) {
+    return {
+      looksComposite: true,
+      summary:
+        "Wright and Kleiman's peak hours together cover more of Satoshi's active window than either does alone, so a joint effort is not ruled out.",
+    };
+  }
+  if (looksComposite) {
+    return {
+      looksComposite: true,
+      summary:
+        "Satoshi's timed activity is spread across more than one cluster of hours, which is what you would expect if more than one person was writing under the name — or if one person kept irregular hours.",
+    };
+  }
+  return {
+    looksComposite: false,
+    summary:
+      "Satoshi's timed activity clusters in one stretch of the day — consistent with a single person's sleeping pattern.",
+  };
+}
+
+export function alignedMonthlyOverlay(
+  subjects: readonly SubjectActivity[],
+  kindFilter: KindFilter = 'both',
+): AlignedMonthlyOverlay {
+  const rangePoints = subjects.flatMap((s) => s.points);
+  const frame = monthlyBuckets(rangePoints, kindFilter, rangePoints);
+  return {
+    keys: frame.map((b) => b.key),
+    labels: frame.map((b) => b.label),
+    series: subjects.map((s) => {
+      const buckets = monthlyBuckets(s.points, kindFilter, rangePoints);
+      const byKey = new Map(buckets.map((b) => [b.key, b.posts + b.emails]));
+      return {
+        id: s.id,
+        label: s.label,
+        totals: frame.map((b) => byKey.get(b.key) ?? 0),
+      };
+    }),
+  };
+}
+
+export function overlayHourSeries(
+  subjects: readonly SubjectActivity[],
+  utcOffset = 0,
+  kindFilter: KindFilter = 'both',
+): OverlayHourSeries[] {
+  return subjects.map((s) => {
+    const hist = hourHistogram(s.points, utcOffset, kindFilter);
+    return {
+      id: s.id,
+      label: s.label,
+      hours: hist.hours,
+      timedCount: hist.timedCount,
+      usedAllKinds: hist.usedAllKinds,
+    };
+  });
+}
+
+export function analyseActivity(
+  subjects: readonly SubjectActivity[],
+  utcOffset = 0,
+  kindFilter: KindFilter = 'both',
+): ActivityAnalysis {
+  const peaks: SubjectPeak[] = subjects.map((s) => {
+    const hist = hourHistogram(s.points, utcOffset, kindFilter);
+    return {
+      id: s.id,
+      label: s.label,
+      window: peakHourBlock(hist.hours),
+      weekday: weekdaySplit(s.points, utcOffset, kindFilter),
+    };
+  });
+
+  const satoshi = subjects.find((s) => s.id === 'satoshi');
+  const satoshiHours = satoshi ? hourHistogram(satoshi.points, utcOffset, kindFilter).hours : Array.from({ length: 24 }, () => 0);
+
+  const overlaps: OverlapRow[] = subjects
+    .filter((s) => s.id !== 'satoshi')
+    .map((s) => ({
+      id: s.id,
+      label: s.label,
+      pct: sharedPeakOverlapPct(satoshiHours, hourHistogram(s.points, utcOffset, kindFilter).hours),
+    }));
+
+  const wright = subjects.find((s) => s.id === 'wright');
+  const kleiman = subjects.find((s) => s.id === 'kleiman');
+  const jointEffort = assessJointEffort(
+    satoshiHours,
+    wright ? hourHistogram(wright.points, utcOffset, kindFilter).hours : Array.from({ length: 24 }, () => 0),
+    kleiman ? hourHistogram(kleiman.points, utcOffset, kindFilter).hours : Array.from({ length: 24 }, () => 0),
+  );
+
+  return { peaks, overlaps, jointEffort };
 }

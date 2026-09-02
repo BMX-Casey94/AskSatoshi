@@ -7,6 +7,8 @@
   --radius-pill: 999px;
   --max-col: 768px;
   --accent: #f7931a;
+  --chart-wright: #3d7dd6;
+  --chart-kleiman: #2a9d6e;
 }
 
 :root[data-theme='light'] {
@@ -25,6 +27,8 @@
   --cite-grad-from: #ececec;
   --chart-emails: #5b7fbf;
   --chart-hour: #8a8a8a;
+  --chart-wright: #3d7dd6;
+  --chart-kleiman: #2a9d6e;
   color-scheme: light;
 }
 
@@ -44,6 +48,8 @@
   --cite-grad-from: #2c2c2c;
   --chart-emails: #7a93c7;
   --chart-hour: #6a6a6a;
+  --chart-wright: #6ba3e8;
+  --chart-kleiman: #4cbe88;
   color-scheme: dark;
 }
 
@@ -1372,6 +1378,7 @@ button:disabled {
 
 .activity-toggle {
   display: inline-flex;
+  flex-wrap: wrap;
   padding: 3px;
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
@@ -1389,9 +1396,14 @@ button:disabled {
   font-size: 0.86rem;
 }
 
-.activity-toggle-btn:hover:not(.activity-toggle-btn--on) {
+.activity-toggle-btn:hover:not(.activity-toggle-btn--on):not(:disabled) {
   color: var(--text);
   background: var(--hover);
+}
+
+.activity-toggle-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .activity-toggle-btn--on {
@@ -1487,12 +1499,21 @@ button:disabled {
   font-family: var(--font);
 }
 
-.activity-bar--posts {
+.activity-bar--posts,
+.activity-bar--satoshi {
   fill: var(--accent);
 }
 
 .activity-bar--emails {
   fill: var(--chart-emails);
+}
+
+.activity-bar--wright {
+  fill: var(--chart-wright);
+}
+
+.activity-bar--kleiman {
+  fill: var(--chart-kleiman);
 }
 
 .activity-bar--hour {
@@ -1503,12 +1524,34 @@ button:disabled {
   fill: var(--accent);
 }
 
-.activity-line {
+.activity-line,
+.activity-line--satoshi {
   stroke: var(--accent);
 }
 
-.activity-dot {
+.activity-line--wright {
+  stroke: var(--chart-wright);
+}
+
+.activity-line--kleiman {
+  stroke: var(--chart-kleiman);
+}
+
+.activity-dot,
+.activity-dot--satoshi {
   fill: var(--accent);
+  stroke: var(--panel);
+  stroke-width: 1.5;
+}
+
+.activity-dot--wright {
+  fill: var(--chart-wright);
+  stroke: var(--panel);
+  stroke-width: 1.5;
+}
+
+.activity-dot--kleiman {
+  fill: var(--chart-kleiman);
   stroke: var(--panel);
   stroke-width: 1.5;
 }
@@ -1572,12 +1615,21 @@ button:disabled {
   border-radius: 2px;
 }
 
-.activity-swatch--posts {
+.activity-swatch--posts,
+.activity-swatch--satoshi {
   background: var(--accent);
 }
 
 .activity-swatch--emails {
   background: var(--chart-emails);
+}
+
+.activity-swatch--wright {
+  background: var(--chart-wright);
+}
+
+.activity-swatch--kleiman {
+  background: var(--chart-kleiman);
 }
 
 .activity-tip {
@@ -1625,6 +1677,96 @@ button:disabled {
   font-weight: 650;
 }
 
+.activity-analysis {
+  margin-top: 16px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 4px 20px 4px;
+}
+
+.activity-analysis-summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 14px 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.activity-analysis-summary::-webkit-details-marker {
+  display: none;
+}
+
+.activity-analysis-summary::before {
+  content: '';
+  display: inline-block;
+  width: 0.45em;
+  height: 0.45em;
+  margin-right: 10px;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+  transform: rotate(-45deg);
+  translate: 0 -0.1em;
+}
+
+.activity-analysis[open] .activity-analysis-summary::before {
+  transform: rotate(45deg);
+  translate: 0 -0.2em;
+}
+
+.activity-analysis-summary:hover {
+  color: var(--accent);
+}
+
+.activity-analysis-body {
+  padding: 0 0 16px;
+  border-top: 1px solid var(--border);
+}
+
+.activity-analysis-block {
+  padding-top: 14px;
+}
+
+.activity-analysis-block h3 {
+  margin: 0 0 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.activity-analysis-lead,
+.activity-analysis-block p {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.activity-analysis-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.activity-analysis-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.activity-analysis-list .activity-swatch {
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
 @media (max-width: 600px) {
   .activity-stats {
     grid-template-columns: 1fr;
@@ -1632,5 +1774,14 @@ button:disabled {
 
   .activity-panel {
     padding: 16px 12px 12px;
+  }
+
+  .activity-analysis {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .activity-toggle-btn {
+    padding: 7px 12px;
   }
 }

@@ -56,6 +56,8 @@ export interface StatusResponse {
 
 export type ActivityKind = 'posts' | 'emails';
 
+export type SubjectId = 'satoshi' | 'wright' | 'kleiman';
+
 export interface ActivityPoint {
   date: string;
   kind: string;
@@ -63,9 +65,18 @@ export interface ActivityPoint {
   url: string;
 }
 
-export interface SatoshiActivityResponse {
-  generatedAt: string;
+export interface SubjectActivity {
+  id: SubjectId;
+  label: string;
   total: number;
   byKind: { emails: number; posts: number };
   points: ActivityPoint[];
 }
+
+export interface ActivityResponse {
+  generatedAt: string;
+  subjects: SubjectActivity[];
+}
+
+/** @deprecated Use ActivityResponse. Kept as an alias for existing imports. */
+export type SatoshiActivityResponse = ActivityResponse;

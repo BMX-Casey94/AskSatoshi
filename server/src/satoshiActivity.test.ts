@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { CorpusDoc } from './satoshiCorpus.js';
-import { buildSatoshiActivity, getSatoshiActivity } from './satoshiActivity.js';
+import { buildSatoshiActivity, getActivity, getSatoshiActivity } from './satoshiActivity.js';
 
 const DOCS: CorpusDoc[] = [
   {
@@ -84,6 +84,60 @@ describe('getSatoshiActivity', () => {
 
     for (let i = 1; i < activity.points.length; i++) {
       expect(activity.points[i]!.date >= activity.points[i - 1]!.date).toBe(true);
+    }
+  });
+
+  it('remains a backward-compatible wrapper for the satoshi subject', () => {
+    const legacy = getSatoshiActivity();
+    const satoshi = getActivity().subjects.find((s) => s.id === 'satoshi');
+
+    expect(satoshi).toBeDefined();
+    expect(legacy.total).toBe(satoshi!.total);
+    expect(legacy.byKind).toEqual(satoshi!.byKind);
+    expect(legacy.points).toBe(satoshi!.points);
+    expect(legacy.total).toBe(745);
+    expect(legacy.byKind).toEqual({ emails: 213, posts: 532 });
+  });
+});
+
+describe('getActivity', () => {
+  it('returns all three subjects in a stable order', () => {
+    const activity = getActivity();
+
+    expect(activity.generatedAt).toEqual(expect.any(String));
+    expect(activity.subjects.map((s) => s.id)).toEqual(['satoshi', 'wright', 'kleiman']);
+    expect(activity.subjects.map((s) => s.label)).toEqual([
+      'Satoshi Nakamoto',
+      'Craig Wright',
+      'Dave Kleiman',
+    ]);
+  });
+
+  it('reports the correct counts for each subject', () => {
+    const byId = Object.fromEntries(getActivity().subjects.map((s) => [s.id, s]));
+
+    expect(byId.satoshi!.total).toBe(745);
+    expect(byId.satoshi!.byKind).toEqual({ emails: 213, posts: 532 });
+    expect(byId.satoshi!.points).toHaveLength(745);
+
+    expect(byId.wright!.total).toBe(100);
+    expect(byId.wright!.byKind).toEqual({ emails: 5, posts: 95 });
+    expect(byId.wright!.points).toHaveLength(100);
+
+    expect(byId.kleiman!.total).toBe(66);
+    expect(byId.kleiman!.byKind).toEqual({ emails: 42, posts: 24 });
+    expect(byId.kleiman!.points).toHaveLength(66);
+  });
+
+  it('caches each subject payload independently', () => {
+    const first = getActivity();
+    const second = getActivity();
+
+    for (const id of ['satoshi', 'wright', 'kleiman'] as const) {
+      const a = first.subjects.find((s) => s.id === id)!;
+      const b = second.subjects.find((s) => s.id === id)!;
+      expect(a.points).toBe(b.points);
+      expect(a.byKind).toBe(b.byKind);
     }
   });
 });

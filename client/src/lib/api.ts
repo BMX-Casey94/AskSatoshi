@@ -3,7 +3,7 @@
  * from the readable stream. All errors from the server arrive as typed witty events.
  */
 
-import type { AttachedImage, Citation, SatoshiActivityResponse, StatusResponse } from '../types';
+import type { AttachedImage, Citation, ActivityResponse, StatusResponse, SubjectActivity, SubjectId } from '../types';
 
 export interface ChatHandlers {
   onDelta: (text: string) => void;
@@ -25,35 +25,51 @@ export async function getStatus(signal?: AbortSignal): Promise<StatusResponse> {
   return (await res.json()) as StatusResponse;
 }
 
-function isSatoshiActivityResponse(value: unknown): value is SatoshiActivityResponse {
+const SUBJECT_IDS = new Set<SubjectId>(['satoshi', 'wright', 'kleiman']);
+
+function isActivityPoint(value: unknown): boolean {
+  if (!value || typeof value !== 'object') return false;
+  const row = value as Record<string, unknown>;
+  return (
+    typeof row.date === 'string' &&
+    typeof row.kind === 'string' &&
+    typeof row.title === 'string' &&
+    typeof row.url === 'string'
+  );
+}
+
+function isSubjectActivity(value: unknown): value is SubjectActivity {
   if (!value || typeof value !== 'object') return false;
   const o = value as Record<string, unknown>;
   const byKind = o.byKind;
   if (!byKind || typeof byKind !== 'object') return false;
   const kinds = byKind as Record<string, unknown>;
-  if (typeof o.generatedAt !== 'string' || typeof o.total !== 'number') return false;
+  if (typeof o.id !== 'string' || !SUBJECT_IDS.has(o.id as SubjectId)) return false;
+  if (typeof o.label !== 'string' || typeof o.total !== 'number') return false;
   if (typeof kinds.emails !== 'number' || typeof kinds.posts !== 'number') return false;
   if (!Array.isArray(o.points)) return false;
-  return o.points.every((p) => {
-    if (!p || typeof p !== 'object') return false;
-    const row = p as Record<string, unknown>;
-    return (
-      typeof row.date === 'string' &&
-      typeof row.kind === 'string' &&
-      typeof row.title === 'string' &&
-      typeof row.url === 'string'
-    );
-  });
+  return o.points.every(isActivityPoint);
 }
 
-export async function getSatoshiActivity(signal?: AbortSignal): Promise<SatoshiActivityResponse> {
+function isActivityResponse(value: unknown): value is ActivityResponse {
+  if (!value || typeof value !== 'object') return false;
+  const o = value as Record<string, unknown>;
+  if (typeof o.generatedAt !== 'string' || !Array.isArray(o.subjects)) return false;
+  return o.subjects.every(isSubjectActivity);
+}
+
+export async function getSatoshiActivity(signal?: AbortSignal): Promise<ActivityResponse> {
   const res = await fetch('/api/satoshi-activity', { signal });
   if (!res.ok) throw new Error(`Activity record unavailable (${res.status}).`);
   const body: unknown = await res.json();
-  if (!isSatoshiActivityResponse(body)) {
+  if (!isActivityResponse(body)) {
     throw new Error('Activity record was malformed.');
   }
   return body;
+}
+
+export function getSubjectActivity(subjectId: SubjectId, response: ActivityResponse): SubjectActivity | undefined {
+  return response.subjects.find((s) => s.id === subjectId);
 }
 
 export async function streamChat(

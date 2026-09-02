@@ -28,7 +28,7 @@ import {
   pickStyleSeed,
   questionClass,
 } from './orchestrate.js';
-import { getSatoshiActivity } from './satoshiActivity.js';
+import { getActivity } from './satoshiActivity.js';
 import { loadCorpus } from './satoshiCorpus.js';
 import { loadCuratedReference } from './curatedReference.js';
 
@@ -189,7 +189,7 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.get('/api/satoshi-activity', (_req, res) => {
-  res.json(getSatoshiActivity());
+  res.json(getActivity());
 });
 
 // ---------------------------------------------------------------------------

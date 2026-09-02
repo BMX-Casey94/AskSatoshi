@@ -3,12 +3,13 @@
  */
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { getSatoshiActivity } from '../lib/api';
+import { getSatoshiActivity, getSubjectActivity } from '../lib/api';
 import { Link } from '../lib/router';
 import { loadStore, saveStore } from '../lib/storage';
-import type { SatoshiActivityResponse } from '../types';
+import type { ActivityResponse, SubjectActivity } from '../types';
 import {
   TIMEZONES,
+  SUBJECT_FILTERS,
   formatGeneratedAt,
   formatHourLabel,
   hourHistogram,
@@ -16,8 +17,11 @@ import {
   PEAK_WINDOW_HOURS,
   describeActiveWindow,
   peakHourBlock,
+  alignedMonthlyOverlay,
+  overlayHourSeries,
+  analyseActivity,
 } from '../lib/satoshiActivity';
-import type { KindFilter, TimeZone } from '../lib/satoshiActivity';
+import type { ActivityAnalysis, KindFilter, SubjectFilter, TimeZone } from '../lib/satoshiActivity';
 import { HourlyChart, MonthlyChart } from './ActivityCharts';
 import { HomeIcon } from './icons';
 import { ThemeToggle } from './ThemeToggle';
@@ -30,11 +34,12 @@ export function SatoshiActivityPage() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => loadStore().theme ?? 'light');
   const [state, setState] = useState<LoadState>('loading');
   const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<SatoshiActivityResponse | null>(null);
+  const [data, setData] = useState<ActivityResponse | null>(null);
   const [view, setView] = useState<View>('monthly');
   const [chartMode, setChartMode] = useState<ChartMode>('bar');
   const [tz, setTz] = useState<TimeZone>(TIMEZONES[0]!);
   const [kindFilter, setKindFilter] = useState<KindFilter>('both');
+  const [subjectFilter, setSubjectFilter] = useState<SubjectFilter>('satoshi');
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -65,26 +70,51 @@ export function SatoshiActivityPage() {
     return () => controller.abort();
   }, [load]);
 
+  const overlay = subjectFilter === 'all';
+  const subject: SubjectActivity | undefined =
+    data && !overlay ? getSubjectActivity(subjectFilter, data) : undefined;
+  const subjects = data?.subjects ?? [];
+
   const months = useMemo(
-    () => (data ? monthlyBuckets(data.points, kindFilter) : []),
-    [data, kindFilter],
+    () => (subject ? monthlyBuckets(subject.points, kindFilter) : []),
+    [subject, kindFilter],
+  );
+  const monthOverlay = useMemo(
+    () => (overlay && subjects.length > 0 ? alignedMonthlyOverlay(subjects, kindFilter) : null),
+    [overlay, subjects, kindFilter],
   );
   const hourly = useMemo(
-    () => (data ? hourHistogram(data.points, tz.offset, kindFilter) : null),
-    [data, tz, kindFilter],
+    () => (subject ? hourHistogram(subject.points, tz.offset, kindFilter) : null),
+    [subject, tz, kindFilter],
+  );
+  const hourOverlay = useMemo(
+    () => (overlay && subjects.length > 0 ? overlayHourSeries(subjects, tz.offset, kindFilter) : null),
+    [overlay, subjects, tz, kindFilter],
   );
   const activeWindow = useMemo(() => (hourly ? peakHourBlock(hourly.hours) : null), [hourly]);
+  const analysis = useMemo(
+    () => (subjects.length > 0 ? analyseActivity(subjects, tz.offset, kindFilter) : null),
+    [subjects, tz, kindFilter],
+  );
   const compiled = data ? formatGeneratedAt(data.generatedAt) : null;
   const stats = useMemo(() => {
-    if (!data) return { total: 0, emails: 0, posts: 0 };
-    if (kindFilter === 'emails') {
-      return { total: data.byKind.emails, emails: data.byKind.emails, posts: 0 };
+    const rows = overlay ? subjects : subject ? [subject] : [];
+    let emails = 0;
+    let posts = 0;
+    for (const row of rows) {
+      emails += row.byKind.emails;
+      posts += row.byKind.posts;
     }
-    if (kindFilter === 'posts') {
-      return { total: data.byKind.posts, emails: 0, posts: data.byKind.posts };
-    }
-    return { total: data.total, emails: data.byKind.emails, posts: data.byKind.posts };
-  }, [data, kindFilter]);
+    if (kindFilter === 'emails') return { total: emails, emails, posts: 0 };
+    if (kindFilter === 'posts') return { total: posts, emails: 0, posts };
+    return { total: emails + posts, emails, posts };
+  }, [overlay, subjects, subject, kindFilter]);
+
+  const emptyHistogram = useMemo(
+    () => ({ hours: Array.from({ length: 24 }, () => 0), usedAllKinds: false, timedCount: 0 }),
+    [],
+  );
+
   const monthlyTitle =
     kindFilter === 'emails'
       ? 'E-mails per month'
@@ -97,6 +127,8 @@ export function SatoshiActivityPage() {
       : kindFilter === 'posts'
         ? `Forum posts by hour of day (${tz.label})`
         : `Posts and e-mails by hour of day (${tz.label})`;
+
+  const ready = state === 'ready' && data && (overlay || subject);
 
   return (
     <div className="activity">
@@ -131,7 +163,7 @@ export function SatoshiActivityPage() {
           </div>
         )}
 
-        {state === 'ready' && data && (
+        {ready && data && (
           <>
             <section className="activity-stats" aria-label="Totals">
               <Stat label="Total" value={stats.total} />
@@ -141,6 +173,21 @@ export function SatoshiActivityPage() {
             {compiled && <p className="activity-meta">Compiled {compiled}</p>}
 
             <div className="activity-controls">
+              <div className="activity-toggle" role="tablist" aria-label="Subject">
+                {SUBJECT_FILTERS.map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={subjectFilter === opt.id}
+                    className={`activity-toggle-btn${subjectFilter === opt.id ? ' activity-toggle-btn--on' : ''}`}
+                    onClick={() => setSubjectFilter(opt.id)}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+
               <div className="activity-toggle" role="tablist" aria-label="Chart view">
                 <button
                   type="button"
@@ -166,8 +213,10 @@ export function SatoshiActivityPage() {
                 <button
                   type="button"
                   role="tab"
-                  aria-selected={chartMode === 'bar'}
-                  className={`activity-toggle-btn${chartMode === 'bar' ? ' activity-toggle-btn--on' : ''}`}
+                  aria-selected={chartMode === 'bar' && !(overlay && view === 'hourly')}
+                  aria-disabled={overlay && view === 'hourly'}
+                  disabled={overlay && view === 'hourly'}
+                  className={`activity-toggle-btn${chartMode === 'bar' && !(overlay && view === 'hourly') ? ' activity-toggle-btn--on' : ''}`}
                   onClick={() => setChartMode('bar')}
                 >
                   Bar
@@ -175,8 +224,8 @@ export function SatoshiActivityPage() {
                 <button
                   type="button"
                   role="tab"
-                  aria-selected={chartMode === 'line'}
-                  className={`activity-toggle-btn${chartMode === 'line' ? ' activity-toggle-btn--on' : ''}`}
+                  aria-selected={chartMode === 'line' || (overlay && view === 'hourly')}
+                  className={`activity-toggle-btn${chartMode === 'line' || (overlay && view === 'hourly') ? ' activity-toggle-btn--on' : ''}`}
                   onClick={() => setChartMode('line')}
                 >
                   Line
@@ -218,25 +267,32 @@ export function SatoshiActivityPage() {
               {view === 'monthly' ? (
                 <>
                   <h2 className="activity-panel-title">{monthlyTitle}</h2>
-                  <MonthlyChart buckets={months} mode={chartMode} kindFilter={kindFilter} />
+                  <MonthlyChart
+                    buckets={months}
+                    mode={chartMode}
+                    kindFilter={kindFilter}
+                    overlay={monthOverlay}
+                  />
                 </>
               ) : (
                 <>
                   <h2 className="activity-panel-title">{hourlyTitle}</h2>
-                  {hourly?.usedAllKinds && (
+                  {(hourly?.usedAllKinds || hourOverlay?.some((s) => s.usedAllKinds)) && (
                     <p className="activity-note">
                       This histogram includes both timed forum posts and e-mails.
                     </p>
                   )}
-                  {hourly && (
-                    <HourlyChart
-                      histogram={hourly}
-                      windowStart={activeWindow?.startHour ?? null}
-                      windowHours={PEAK_WINDOW_HOURS}
-                      tz={tz}
-                      mode={chartMode}
-                    />
+                  {overlay && view === 'hourly' && (
+                    <p className="activity-note">Hourly overlay uses lines so the three series stay readable.</p>
                   )}
+                  <HourlyChart
+                    histogram={hourly ?? emptyHistogram}
+                    windowStart={activeWindow?.startHour ?? null}
+                    windowHours={PEAK_WINDOW_HOURS}
+                    tz={tz}
+                    mode={chartMode}
+                    overlay={hourOverlay}
+                  />
 
                   <div className="activity-tz" role="group" aria-label="Timezone">
                     {TIMEZONES.map((z) => (
@@ -251,7 +307,9 @@ export function SatoshiActivityPage() {
                     ))}
                   </div>
 
-                  {activeWindow ? (
+                  {overlay ? (
+                    <OverlayActiveWindows analysis={analysis} tz={tz} />
+                  ) : activeWindow ? (
                     <div className="activity-window">
                       <h3 className="activity-window-title">Likely active window</h3>
                       <p>
@@ -278,6 +336,8 @@ export function SatoshiActivityPage() {
                 </>
               )}
             </section>
+
+            {analysis && <ActivityAnalysisPanel analysis={analysis} tz={tz} />}
           </>
         )}
       </main>
@@ -291,5 +351,108 @@ function Stat({ label, value }: { label: string; value: number }) {
       <span className="activity-stat-value">{value.toLocaleString('en-GB')}</span>
       <span className="activity-stat-label">{label}</span>
     </div>
+  );
+}
+
+function OverlayActiveWindows({
+  analysis,
+  tz,
+}: {
+  analysis: ActivityAnalysis | null;
+  tz: TimeZone;
+}) {
+  if (!analysis) return null;
+  return (
+    <div className="activity-window">
+      <h3 className="activity-window-title">Likely active windows</h3>
+      <ul className="activity-analysis-list">
+        {analysis.peaks.map((p) => (
+          <li key={p.id}>
+            <span className={`activity-swatch activity-swatch--${p.id}`} aria-hidden="true" />
+            <span>
+              <strong>{p.label}:</strong>{' '}
+              {p.window
+                ? `${formatHourLabel(p.window.startHour)}–${formatHourLabel(p.window.endHour)} ${tz.label} (${p.window.total} timed item${p.window.total === 1 ? '' : 's'})`
+                : 'not enough timed items'}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ActivityAnalysisPanel({ analysis, tz }: { analysis: ActivityAnalysis; tz: TimeZone }) {
+  return (
+    <details className="activity-analysis">
+      <summary className="activity-analysis-summary">Activity analysis</summary>
+      <div className="activity-analysis-body">
+        <section className="activity-analysis-block">
+          <h3>Peak hours</h3>
+          <p className="activity-analysis-lead">
+            Highest-count {PEAK_WINDOW_HOURS}-hour block in {tz.label}.
+          </p>
+          <ul className="activity-analysis-list">
+            {analysis.peaks.map((p) => (
+              <li key={p.id}>
+                <span className={`activity-swatch activity-swatch--${p.id}`} aria-hidden="true" />
+                <span>
+                  <strong>{p.label}:</strong>{' '}
+                  {p.window
+                    ? `${formatHourLabel(p.window.startHour)}–${formatHourLabel(p.window.endHour)} (${p.window.total} timed item${p.window.total === 1 ? '' : 's'})`
+                    : 'not enough timed items'}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="activity-analysis-block">
+          <h3>Day of week</h3>
+          <p className="activity-analysis-lead">Weekday versus weekend split in {tz.label}.</p>
+          <ul className="activity-analysis-list">
+            {analysis.peaks.map((p) => {
+              const total = p.weekday.weekday + p.weekday.weekend;
+              return (
+                <li key={p.id}>
+                  <span className={`activity-swatch activity-swatch--${p.id}`} aria-hidden="true" />
+                  <span>
+                    <strong>{p.label}:</strong>{' '}
+                    {total === 0
+                      ? 'no dated items'
+                      : `${p.weekday.weekdayPct}% weekday · ${p.weekday.weekendPct}% weekend (${total.toLocaleString('en-GB')} item${total === 1 ? '' : 's'})`}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+
+        <section className="activity-analysis-block">
+          <h3>Overlap with Satoshi</h3>
+          <p className="activity-analysis-lead">
+            Share of Satoshi&apos;s peak hours that also fall in each candidate&apos;s peak window.
+          </p>
+          <ul className="activity-analysis-list">
+            {analysis.overlaps.map((row) => (
+              <li key={row.id}>
+                <span className={`activity-swatch activity-swatch--${row.id}`} aria-hidden="true" />
+                <span>
+                  <strong>{row.label}:</strong>{' '}
+                  {row.pct == null
+                    ? 'cannot be scored — no timed record'
+                    : `${row.pct}% of Satoshi's peak hours`}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="activity-analysis-block">
+          <h3>Joint effort</h3>
+          <p>{analysis.jointEffort.summary}</p>
+        </section>
+      </div>
+    </details>
   );
 }

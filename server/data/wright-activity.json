@@ -2,10 +2,10 @@
   "pin": {
     "repo": "curated-research",
     "commit": "manual",
-    "fetchedAt": "2026-09-02T13:00:00.000Z",
+    "fetchedAt": "2026-09-02T14:00:00.000Z",
     "counts": {
       "emails": 5,
-      "posts": 95,
+      "posts": 514,
       "quotes": 0
     },
     "bulk": {
@@ -13,7 +13,7 @@
         "2008": 262,
         "2009": 77,
         "2013": 37,
-        "note": "Wayback sidebar totals for gse-compliance.blogspot.com. Individually dated posts are in documents; the remainder of the blog corpus is not expanded."
+        "note": "Wayback sidebar totals for gse-compliance.blogspot.com. Posts are now individually dated."
       }
     }
   },
@@ -147,6 +147,70 @@
       "text": "Wright listed as co-author of the CHFI study guide (Dave Kleiman lead). Conversation profile and bibliographies date this to 2007."
     },
     {
+      "id": "wright-post-20080107-denial-of-service-dos",
+      "kind": "post",
+      "title": "Denial of Service (DoS)",
+      "date": "2008-01-07T18:39:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/denial-of-service-dos.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080108-quantitative-risk-models-in-malware-research",
+      "kind": "post",
+      "title": "Quantitative Risk models in Malware Research",
+      "date": "2008-01-08T22:22:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/quantitative-risk-models-in-malware.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080109-more-investigation-needed",
+      "kind": "post",
+      "title": "More investigation needed...",
+      "date": "2008-01-09T21:13:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/more-investigation-needed.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080110-more-pi-fud",
+      "kind": "post",
+      "title": "More PI FUD",
+      "date": "2008-01-10T09:29:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/more-pi-fud.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080110-texas-p-i-fud",
+      "kind": "post",
+      "title": "Texas P.I. FUD",
+      "date": "2008-01-10T19:50:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/texas-pi-fud.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080111-finance-system-security",
+      "kind": "post",
+      "title": "Finance System Security",
+      "date": "2008-01-11T14:05:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/finance-system-security.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080113-weekend-work",
+      "kind": "post",
+      "title": "Weekend Work",
+      "date": "2008-01-13T16:12:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/weekend-work.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080113-and-back-in-the-burbs",
+      "kind": "post",
+      "title": "And back in the Burb's",
+      "date": "2008-01-13T16:38:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/and-back-in-burbs.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
       "id": "wright-post-20080114-electronic-contracting-in-an-insecure-world-giac",
       "kind": "post",
       "title": "Electronic Contracting in an Insecure World (GIAC GLEG)",
@@ -155,28 +219,692 @@
       "text": "Accepted 14 January 2008. Author: Craig S Wright, craig.wright@bdo.com.au. Legal issues in electronic contracts and digital signatures."
     },
     {
+      "id": "wright-post-20080114-systems-review",
+      "kind": "post",
+      "title": "Systems Review",
+      "date": "2008-01-14T13:56:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/systems-review.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080115-critical-readings-a-must-for-all",
+      "kind": "post",
+      "title": "Critical Readings... A must for all",
+      "date": "2008-01-15T13:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/critical-readings-must-for-all.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080116-stored-proceedures-and-sql-injection",
+      "kind": "post",
+      "title": "Stored Proceedures and SQL injection",
+      "date": "2008-01-16T12:57:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/stored-proceedures-and-sql-injection.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080117-why-do-companies-fail-their-pci-dss-audits",
+      "kind": "post",
+      "title": "Why do companies fail their PCI-DSS Audits",
+      "date": "2008-01-17T14:26:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/why-do-companies-fail-their-pci-dss.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080119-are-we-free-or-is-it-all-a-deterministic-illusio",
+      "kind": "post",
+      "title": "Are we free or is it all a deterministic illusion?",
+      "date": "2008-01-19T13:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/are-we-free-or-is-it-all-deterministic.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080119-buddas-finger",
+      "kind": "post",
+      "title": "Budda's Finger",
+      "date": "2008-01-19T15:55:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/buddas-finder.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080120-for-what-has-been-happening",
+      "kind": "post",
+      "title": "For what has been happening",
+      "date": "2008-01-20T14:33:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/for-what-has-been-happening.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080121-data-mining-and-intrusion-detection",
+      "kind": "post",
+      "title": "Data Mining and Intrusion Detection",
+      "date": "2008-01-21T15:05:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/data-mining-and-intrusion-detection.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080123-latest-sans-paper",
+      "kind": "post",
+      "title": "Latest SANS Paper",
+      "date": "2008-01-23T17:35:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/latest-sans-paper.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080124-decryption-key-decision",
+      "kind": "post",
+      "title": "Decryption Key Decision",
+      "date": "2008-01-24T08:39:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/decryption-key-decision.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080125-recomended-reading-for-the-week",
+      "kind": "post",
+      "title": "Recomended Reading for the week",
+      "date": "2008-01-25T12:24:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/recomended-reading-for-week.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080126-the-internet-intermediary-framework",
+      "kind": "post",
+      "title": "The internet intermediary framework",
+      "date": "2008-01-26T13:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/internet-intermediary-framework.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080126-my-other-hobby",
+      "kind": "post",
+      "title": "My other hobby",
+      "date": "2008-01-26T16:59:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/my-other-hobby.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080127-the-adventures-of-kermit-the-great",
+      "kind": "post",
+      "title": "The adventures of Kermit the great",
+      "date": "2008-01-27T08:05:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/adventures-of-kermit-great.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080127-spare-time",
+      "kind": "post",
+      "title": "Spare Time",
+      "date": "2008-01-27T13:37:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/spare-time.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080129-what-is-an-electronic-contract",
+      "kind": "post",
+      "title": "What is an “Electronic Contract”",
+      "date": "2008-01-29T19:29:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/what-is-electronic-contract.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080129-e-mail-and-electronic-contracts",
+      "kind": "post",
+      "title": "E-mail and electronic contracts",
+      "date": "2008-01-29T19:36:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/e-mail-and-electronic-contracts.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
       "id": "wright-post-20080130-sans-paper-trusting-electronically-signed-docume",
       "kind": "post",
       "title": "SANS paper: Trusting electronically signed documents",
-      "date": "2008-01-30",
+      "date": "2008-01-30T12:51:00+11:00",
       "url": "https://meetsatoshi.org/about/timeline/",
       "text": "Listed on multiple Wright timelines as 30 January 2008."
+    },
+    {
+      "id": "wright-post-20080131-the-postal-acceptance-rule",
+      "kind": "post",
+      "title": "The postal acceptance rule",
+      "date": "2008-01-31T19:39:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/01/postal-acceptance-rule.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080201-auditing-data-conversion",
+      "kind": "post",
+      "title": "Auditing Data Conversion",
+      "date": "2008-02-01T11:28:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/auditing-data-conversion.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080204-the-fun-of-telstra",
+      "kind": "post",
+      "title": "The fun of Telstra",
+      "date": "2008-02-04T11:32:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/fun-of-telstra.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080205-vicarious-liability",
+      "kind": "post",
+      "title": "Vicarious Liability",
+      "date": "2008-02-05T08:54:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/vicarious-liability.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080206-apra-and-protecting-finacial-records",
+      "kind": "post",
+      "title": "APRA and protecting Finacial Records.",
+      "date": "2008-02-06T14:56:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/apra-and-protecting-finacial-records.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080208-sweet-relief",
+      "kind": "post",
+      "title": "Sweet relief",
+      "date": "2008-02-08T12:20:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/sweet-relief.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080208-pci-requires-more-then-an-external-scan",
+      "kind": "post",
+      "title": "PCI requires more then an external scan...",
+      "date": "2008-02-08T12:23:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/pci-requires-more-then-external-scan.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080208-generic-unix-log-parsing-tools",
+      "kind": "post",
+      "title": "Generic Unix Log Parsing Tools",
+      "date": "2008-02-08T14:30:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/generic-unix-log-parsing-tools.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080209-compliance-project",
+      "kind": "post",
+      "title": "Compliance project",
+      "date": "2008-02-09T16:26:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/compliance-project.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080210-wet-wet-wet",
+      "kind": "post",
+      "title": "Wet, Wet, Wet ...",
+      "date": "2008-02-10T02:49:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/wet-wet-wet.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080211-liability-for-distributing-a-virus-or-other-malw",
+      "kind": "post",
+      "title": "Liability for Distributing a Virus or other Malware",
+      "date": "2008-02-11T18:31:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/liability-for-distributing-virus-or.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080212-internet-piracy-contraband-and-counterfeit-produ",
+      "kind": "post",
+      "title": "Internet Piracy, Contraband and Counterfeit Products",
+      "date": "2008-02-12T16:29:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/1-internet-piracy-contraband-and.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080213-the-changing-nature-of-it",
+      "kind": "post",
+      "title": "The changing nature of IT.",
+      "date": "2008-02-13T11:53:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/changing-nature-of-it.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080213-issues-with-electronic-contracting",
+      "kind": "post",
+      "title": "Issues with electronic contracting",
+      "date": "2008-02-13T17:06:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/issues-with-electronic-contracting.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080214-document-destruction-in-victoria",
+      "kind": "post",
+      "title": "Document destruction in Victoria.",
+      "date": "2008-02-14T07:46:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/document-destruction-in-victoria.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080216-electronic-espionage",
+      "kind": "post",
+      "title": "Electronic Espionage",
+      "date": "2008-02-16T10:33:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/electronic-espionage.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080216-the-farm-again",
+      "kind": "post",
+      "title": "The farm again.",
+      "date": "2008-02-16T21:09:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/farm-again.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080218-john-stuart-mill-1859-on-liberty",
+      "kind": "post",
+      "title": "John Stuart Mill (1859) \"On Liberty\".",
+      "date": "2008-02-18T07:47:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/john-stuart-mill-1859-on-liberty.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080218-dns-rebinding-attacks",
+      "kind": "post",
+      "title": "DNS rebinding attacks",
+      "date": "2008-02-18T16:14:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/dns-rebinding-attacks.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080220-isps-to-take-the-brunt",
+      "kind": "post",
+      "title": "ISPs to take the brunt",
+      "date": "2008-02-20T10:23:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/isps-to-take-brunt.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080222-ignorance-of-the-law",
+      "kind": "post",
+      "title": "Ignorance of the law...",
+      "date": "2008-02-22T11:42:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/ignorance-of-law.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080222-snaps-at-night",
+      "kind": "post",
+      "title": "Snaps at night.",
+      "date": "2008-02-22T22:40:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/snaps-at-night.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080223-internet-offenses-illegal-dissemination-of-conte",
+      "kind": "post",
+      "title": "Internet Offenses: Illegal Dissemination of Content",
+      "date": "2008-02-23T19:36:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/internet-offenses-illegal-dissemination.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080223-government-and-regulators-on-the-internet",
+      "kind": "post",
+      "title": "Government and Regulators on the Internet",
+      "date": "2008-02-23T19:38:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/government-and-regulators-on-internet.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080224-todays-images",
+      "kind": "post",
+      "title": "Today's Images",
+      "date": "2008-02-24T15:31:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/todays-images.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080225-remedy-in-tort-and-civil-suits-internet-intermed",
+      "kind": "post",
+      "title": "Remedy in Tort and Civil Suits (Internet Intermediaries)",
+      "date": "2008-02-25T19:13:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/remedy-in-tort-and-civil-suits-internet.html",
+      "text": "GSE Compliance blog post"
     },
     {
       "id": "wright-post-20080226-enforcing-law-on-the-internet",
       "kind": "post",
       "title": "Enforcing Law on the Internet",
-      "date": "2008-02-26",
+      "date": "2008-02-26T13:45:00+11:00",
       "url": "https://ramonquesada.com/english/compilation-craig-wright/",
       "text": "Blog post dated 26 February 2008 in Wright bibliographies (gse-compliance / related security blog)."
+    },
+    {
+      "id": "wright-post-20080227-the-latest-insecurity-and-non-compliance-statist",
+      "kind": "post",
+      "title": "The latest Insecurity and NON-Compliance Statistics",
+      "date": "2008-02-27T15:56:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/latest-insecurity-and-non-compliance.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080228-practice",
+      "kind": "post",
+      "title": "Practice",
+      "date": "2008-02-28T10:48:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/practice.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080228-current-statistics-on-insecurity",
+      "kind": "post",
+      "title": "Current Statistics on InSecurity",
+      "date": "2008-02-28T14:18:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/current-statistics-on-insecurity.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080228-current-statistics-on-insecurity-ids",
+      "kind": "post",
+      "title": "Current Statistics on InSecurity - IDS",
+      "date": "2008-02-28T14:54:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/current-statistics-on-insecurity-ids.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080229-current-statistics-on-insecurity-the-real-issue",
+      "kind": "post",
+      "title": "Current Statistics on InSecurity - The REAL Issue!",
+      "date": "2008-02-29T08:03:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/02/current-statistics-on-insecurity-real.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080301-security-stats-and-how-i-got-them",
+      "kind": "post",
+      "title": "Security Stats and how I got them.",
+      "date": "2008-03-01T06:41:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/security-stats-and-how-i-got-them.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080301-sunday-again",
+      "kind": "post",
+      "title": "Sunday again",
+      "date": "2008-03-01T21:14:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/sunday-again.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080303-not-a-great-amount-tonight",
+      "kind": "post",
+      "title": "Not a great amount tonight",
+      "date": "2008-03-03T20:33:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/not-great-amount-tonight.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080303-as-a-post-script",
+      "kind": "post",
+      "title": "As a post script",
+      "date": "2008-03-03T20:37:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/as-post-script.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080304-unnecessary-services",
+      "kind": "post",
+      "title": "Unnecessary Services",
+      "date": "2008-03-04T20:23:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/unnecessary-services.html",
+      "text": "GSE Compliance blog post"
     },
     {
       "id": "wright-post-20080305-defamation-and-the-difficulties-of-law-on-the-in",
       "kind": "post",
       "title": "Defamation and the difficulties of law on the Internet",
-      "date": "2008-03-05",
+      "date": "2008-03-05T12:06:00+11:00",
       "url": "https://ramonquesada.com/english/compilation-craig-wright/",
       "text": "Post addressed to 'those cowards who sit behind anonymity on the web'. A related SANS version is dated 12 March 2008."
+    },
+    {
+      "id": "wright-post-20080306-lies-damned-lies-and-statistics-of-defamation",
+      "kind": "post",
+      "title": "Lies, damned lies and statistics of defamation",
+      "date": "2008-03-06T08:07:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/lies-damned-lies-and-statistics-of.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080306-patching-and-software-installation",
+      "kind": "post",
+      "title": "Patching and Software Installation",
+      "date": "2008-03-06T19:29:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/patching-and-software-installation.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080307-vicarious-liability-and-extrusion-filters",
+      "kind": "post",
+      "title": "Vicarious Liability and Extrusion Filters",
+      "date": "2008-03-07T10:17:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/vicarious-liability-and-extrusion.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080308-microsoft-communications-protocol-program-mcpp",
+      "kind": "post",
+      "title": "Microsoft Communications Protocol Program (MCPP)",
+      "date": "2008-03-08T07:37:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/microsoft-communications-protocol.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080308-virtues",
+      "kind": "post",
+      "title": "Virtues",
+      "date": "2008-03-08T10:24:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/virtues.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080309-sunday-and-something-is-a-little-fowl",
+      "kind": "post",
+      "title": "Sunday and something is a little fowl...",
+      "date": "2008-03-09T17:08:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/sunday-and-something-is-little-fowl.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080310-unnecessary-services",
+      "kind": "post",
+      "title": "Unnecessary Services",
+      "date": "2008-03-10T14:53:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/unnecessary-services_10.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080311-splogging",
+      "kind": "post",
+      "title": "Splogging",
+      "date": "2008-03-11T15:56:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/splogging.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080312-a-call-to-use-hacker-safe-scanning-services",
+      "kind": "post",
+      "title": "A call to use “Hacker Safe” scanning services.",
+      "date": "2008-03-12T13:43:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/call-to-use-hacker-safe-scanning.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080313-its-a-kind-of-magic",
+      "kind": "post",
+      "title": "It's a kind of magic.",
+      "date": "2008-03-13T09:37:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/its-kind-of-magic.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080313-pci-and-hackersafe",
+      "kind": "post",
+      "title": "PCI and HackerSafe",
+      "date": "2008-03-13T10:34:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/pci-and-hackersafe.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080314-problems-with-resets",
+      "kind": "post",
+      "title": "Problems with resets",
+      "date": "2008-03-14T08:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/problems-with-resets.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080314-off-for-the-week",
+      "kind": "post",
+      "title": "Off for the week",
+      "date": "2008-03-14T17:18:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/off-for-week.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080315-frugality-make-no-expense-but-to-do-good-to-othe",
+      "kind": "post",
+      "title": "Frugality: Make no expense but to do good to others or yourself; i.e., waste nothing",
+      "date": "2008-03-15T06:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/frugality-make-no-expense-but-to-do.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080322-industry",
+      "kind": "post",
+      "title": "Industry",
+      "date": "2008-03-22T07:20:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/industry.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080326-monitoring-ports-in-windows",
+      "kind": "post",
+      "title": "Monitoring ports in Windows",
+      "date": "2008-03-26T09:28:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/monitoring-ports-in-windows.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080327-sc-on-windows-service",
+      "kind": "post",
+      "title": "sc on windows SERVICE",
+      "date": "2008-03-27T07:26:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/sc-on-windows-service.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080329-sincerity",
+      "kind": "post",
+      "title": "Sincerity",
+      "date": "2008-03-29T15:29:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/sincerity.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080330-last-week",
+      "kind": "post",
+      "title": "Last week...",
+      "date": "2008-03-30T15:13:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/last-week.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080331-click-fraud-and-related-considerations",
+      "kind": "post",
+      "title": "Click fraud and related considerations",
+      "date": "2008-03-31T17:06:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/03/click-fraud-and-related-considerations.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080401-downloading-infringements",
+      "kind": "post",
+      "title": "Downloading infringements",
+      "date": "2008-04-01T08:46:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/downloading-infringements.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080402-digital-forensics",
+      "kind": "post",
+      "title": "Digital Forensics",
+      "date": "2008-04-02T06:33:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/digital-forensics.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080403-internet-piracy-contraband-and-counterfeit-produ",
+      "kind": "post",
+      "title": "Internet Piracy, Contraband and Counterfeit Products",
+      "date": "2008-04-03T06:41:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/internet-piracy-contraband-and.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080404-where-to-look-for-digital-evidence",
+      "kind": "post",
+      "title": "Where to look for digital evidence",
+      "date": "2008-04-04T06:44:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/where-to-look-for-digital-evidence.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080405-government-and-regulators-and-isps",
+      "kind": "post",
+      "title": "Government and Regulators and ISPs",
+      "date": "2008-04-05T08:40:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/government-and-regulators-and-isps.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080406-going-batty",
+      "kind": "post",
+      "title": "Going Batty",
+      "date": "2008-04-06T18:39:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/going-batty.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080407-an-introduction-to-information-security",
+      "kind": "post",
+      "title": "An Introduction to Information Security",
+      "date": "2008-04-07T17:47:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/introduction-to-information-security.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080407-an-interview",
+      "kind": "post",
+      "title": "An interview",
+      "date": "2008-04-07T20:23:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/interview.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080408-electronic-conveyancing",
+      "kind": "post",
+      "title": "Electronic Conveyancing",
+      "date": "2008-04-08T11:36:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/electronic-conveyancing.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080409-what-is-the-pci-anyway",
+      "kind": "post",
+      "title": "What is the PCI Anyway?",
+      "date": "2008-04-09T08:33:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/what-is-pci-anyway.html",
+      "text": "GSE Compliance blog post"
     },
     {
       "id": "wright-post-20080410-interview-craig-wright-security-hero-giac-techni",
@@ -187,12 +915,52 @@
       "text": "GIAC/SANS 'Security Hero' interview dated 10 April 2008."
     },
     {
+      "id": "wright-post-20080410-data-protection",
+      "kind": "post",
+      "title": "Data Protection",
+      "date": "2008-04-10T15:28:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/data-protection.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080411-rewarding-it-staff-in-a-changing-environment",
+      "kind": "post",
+      "title": "Rewarding IT staff in a changing environment",
+      "date": "2008-04-11T15:33:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/rewarding-it-staff-in-changing.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
       "id": "wright-post-20080413-another-sunday",
       "kind": "post",
       "title": "Another Sunday",
       "date": "2008-04-13",
       "url": "https://web.archive.org/web/20151123175407/http://gse-compliance.blogspot.com/2008/04/another-sunday.html",
       "text": "gse-compliance.blogspot.com. 'And I am spending it writing. But not here.' Posted by Craig Wright, Sunday 13 April 2008."
+    },
+    {
+      "id": "wright-post-20080415-hrm-its-not-just-hiring-for-compliance",
+      "kind": "post",
+      "title": "HRM, it’s not just hiring for compliance",
+      "date": "2008-04-15T15:42:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/hrm-its-not-just-hiring-for-compliance.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080416-research-paper-serial-over-the-next-few-days",
+      "kind": "post",
+      "title": "Research Paper - Serial over the next few days.",
+      "date": "2008-04-16T15:40:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/research-paper-serial-over-next-few.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080416-has-the-security-of-the-dns-infrastructure-impro",
+      "kind": "post",
+      "title": "Has the security of the DNS Infrastructure Improved? (Part 1)",
+      "date": "2008-04-16T15:42:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/has-security-of-dns-infrastructure.html",
+      "text": "GSE Compliance blog post"
     },
     {
       "id": "wright-post-20080417-the-impact-of-internet-intermediary-liability",
@@ -203,12 +971,588 @@
       "text": "SANS/GIAC-length paper (~90 pages) dated April 2008."
     },
     {
+      "id": "wright-post-20080417-testing-the-security-of-the-dns-infrastructure-h",
+      "kind": "post",
+      "title": "Testing the security of the DNS Infrastructure - Has the security of the DNS Infrastructure Improved? (Continued)",
+      "date": "2008-04-17T16:30:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/testing-security-of-dns-infrastructure.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080419-the-application-scope-and-limits-of-letters-of-i",
+      "kind": "post",
+      "title": "The application, scope and limits of Letters of Indemnity",
+      "date": "2008-04-19T07:28:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/application-scope-and-limits-of-letters.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080419-sunday-comes-about-again",
+      "kind": "post",
+      "title": "Sunday comes about again.",
+      "date": "2008-04-19T15:18:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/sunday-comes-about-again.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080421-ucp-500-successful-or-not",
+      "kind": "post",
+      "title": "UCP 500 - successful or not.",
+      "date": "2008-04-21T07:35:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/ucp-500-successful-or-not.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080422-threats",
+      "kind": "post",
+      "title": "Threats",
+      "date": "2008-04-22T19:20:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/threats.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080423-slirpie-proxy",
+      "kind": "post",
+      "title": "Slirpie (Proxy)",
+      "date": "2008-04-23T09:20:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/slirpie-proxy.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080423-whitehats-security-conference",
+      "kind": "post",
+      "title": "Whitehats Security Conference",
+      "date": "2008-04-23T12:13:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/whitehats-security-conference.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080424-removing-malware",
+      "kind": "post",
+      "title": "Removing Malware",
+      "date": "2008-04-24T08:01:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/removing-malware.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080424-proving-absence-of-a-deed",
+      "kind": "post",
+      "title": "Proving absence of a deed",
+      "date": "2008-04-24T08:02:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/proving-absence-of-deed.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080426-security-reviews-of-it-systems",
+      "kind": "post",
+      "title": "Security reviews of IT systems",
+      "date": "2008-04-26T10:27:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/security-reviews-of-it-systems.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080427-a-week-of-water",
+      "kind": "post",
+      "title": "A week of water",
+      "date": "2008-04-27T10:32:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/week-of-water.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080428-online-education-is-good-business",
+      "kind": "post",
+      "title": "ONLINE EDUCATION IS GOOD BUSINESS",
+      "date": "2008-04-28T17:21:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/04/online-education-is-good-business.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080501-sox-and-things-we-forget",
+      "kind": "post",
+      "title": "SOX and things we forget...",
+      "date": "2008-05-01T09:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/sox-and-things-we-forget.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080501-false-rejection-rate-frr",
+      "kind": "post",
+      "title": "False Rejection Rate (FRR)",
+      "date": "2008-05-01T16:58:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/false-rejection-rate-frr.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080502-gpl-and-other-open-source-licenses",
+      "kind": "post",
+      "title": "GPL and other open-source licenses",
+      "date": "2008-05-02T17:14:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/gpl-and-other-open-source-licenses.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080503-insider-risk",
+      "kind": "post",
+      "title": "Insider Risk",
+      "date": "2008-05-03T05:07:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/insider-risk.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080503-security-is-primarily-about-people-and-processes",
+      "kind": "post",
+      "title": "Security is primarily about people and processes",
+      "date": "2008-05-03T17:13:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/security-is-primarily-about-people-and.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080505-the-impact-of-us-law-in-au",
+      "kind": "post",
+      "title": "The Impact of US law in .AU",
+      "date": "2008-05-05T13:05:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/impact-of-us-law-in-au.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080506-the-use-of-irq-and-i-o-ports-in-networking",
+      "kind": "post",
+      "title": "The use of IRQ and I/O Ports in Networking",
+      "date": "2008-05-06T17:16:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/use-of-irq-and-io-ports-in-networking.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080507-qa-and-patching",
+      "kind": "post",
+      "title": "QA and Patching",
+      "date": "2008-05-07T17:08:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/qa-and-patching.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080508-taming-the-wild-wild-web",
+      "kind": "post",
+      "title": "Taming the Wild wild web",
+      "date": "2008-05-08T17:02:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/taming-wild-wild-web.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080509-risk-party-x",
+      "kind": "post",
+      "title": "Risk Party X",
+      "date": "2008-05-09T15:06:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/risk-party-x.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080510-what-can-programmers-can-do-to-avoid-buffer-over",
+      "kind": "post",
+      "title": "What can programmers can do to avoid buffer overflows",
+      "date": "2008-05-10T04:59:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/what-can-programmers-can-do-to-avoid.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080511-hacker-ethnography",
+      "kind": "post",
+      "title": "Hacker Ethnography",
+      "date": "2008-05-11T08:08:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/hacker-ethnography.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080511-just-call-me-gilbert",
+      "kind": "post",
+      "title": "Just call me Gilbert...",
+      "date": "2008-05-11T08:37:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/just-call-me-gilbert.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080516-smart-goals",
+      "kind": "post",
+      "title": "SMART Goals",
+      "date": "2008-05-16T15:47:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/smart-goals.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080518-quantitative-risk-requires-statistics",
+      "kind": "post",
+      "title": "Quantitative risk requires statistics",
+      "date": "2008-05-18T10:26:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/quantitative-risk-requires-statistics.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080520-llm-results",
+      "kind": "post",
+      "title": "LLM Results",
+      "date": "2008-05-20T04:59:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/llm-results.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080520-llm-done-and-dusted",
+      "kind": "post",
+      "title": "LLM Done and Dusted",
+      "date": "2008-05-20T11:43:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/llm-done-and-dusted.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080524-passing-an-audit-is-not-compliance",
+      "kind": "post",
+      "title": "Passing an audit is NOT compliance!",
+      "date": "2008-05-24T08:59:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/passing-audit-is-not-compliance.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080525-soaring-on-eagles-wings",
+      "kind": "post",
+      "title": "Soaring on Eagles wings.",
+      "date": "2008-05-25T10:57:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/soaring-on-eagles-wings.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080526-the-concepts-of-organizational-opsec-operation-s",
+      "kind": "post",
+      "title": "The Concepts of Organizational OPSEC (Operation Security)",
+      "date": "2008-05-26T15:53:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/concepts-of-organizational-opsec.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080528-bluetooth",
+      "kind": "post",
+      "title": "Bluetooth",
+      "date": "2008-05-28T07:48:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/bluetooth.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080529-wlan-and-wi-fi",
+      "kind": "post",
+      "title": "WLAN and Wi-Fi",
+      "date": "2008-05-29T07:57:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/wlan-and-wi-fi.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080530-analyzing-802-11-traffic",
+      "kind": "post",
+      "title": "Analyzing 802.11 traffic",
+      "date": "2008-05-30T07:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/analyzing-80211-traffic.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080531-where-to-go-when-developing-an-it-policy",
+      "kind": "post",
+      "title": "Where to go when developing an IT policy.",
+      "date": "2008-05-31T08:16:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/where-to-go-when-developing-it-policy.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080531-support-vector-machines",
+      "kind": "post",
+      "title": "Support Vector Machines",
+      "date": "2008-05-31T10:11:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/05/support-vector-machines.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080602-giac-net-gnet-certification",
+      "kind": "post",
+      "title": "GIAC .NET (GNET) certification.",
+      "date": "2008-06-02T14:57:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/giac-net-gnet-certification.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080603-plagiarism-steals-ideas",
+      "kind": "post",
+      "title": "Plagiarism Steals Ideas",
+      "date": "2008-06-03T19:57:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/plagiarism-steals-ideas.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080605-musings",
+      "kind": "post",
+      "title": "Musings",
+      "date": "2008-06-05T13:12:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/musings.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080606-but-what-if-they-economics-were-ignored",
+      "kind": "post",
+      "title": "\"But what if they (economics) were ignored?\"",
+      "date": "2008-06-06T11:34:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/but-what-if-they-economics-were-ignored.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080607-pci-compliance-only-covers-in-scope-systems-whic",
+      "kind": "post",
+      "title": "\"PCI compliance only covers in-scope systems which handle, store, or process CC# data.\"",
+      "date": "2008-06-07T06:07:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/pci-compliance-only-covers-in-scope.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080608-the-biggest-issues-with-audit-security-it-etc",
+      "kind": "post",
+      "title": "The biggest issues with Audit, Security IT etc...",
+      "date": "2008-06-08T08:01:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/biggest-issues-with-audit-security-it.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080609-what-is-steganography",
+      "kind": "post",
+      "title": "What is Steganography?",
+      "date": "2008-06-09T15:20:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/what-is-steganography.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080610-prototype-of-machine-that-copies-itself-goes-on",
+      "kind": "post",
+      "title": "Prototype of machine that copies itself goes on show",
+      "date": "2008-06-10T06:25:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/prototype-of-machine-that-copies-itself.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080611-sox-problems",
+      "kind": "post",
+      "title": "SOX Problems",
+      "date": "2008-06-11T06:22:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/sox-problems.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080611-corporate-spies-killing-the-ciamay-8-2008",
+      "kind": "post",
+      "title": "Corporate Spies Killing The CIAMay 8, 2008",
+      "date": "2008-06-11T12:57:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/corporate-spies-killing-ciamay-8-2008.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080612-gps-cows",
+      "kind": "post",
+      "title": "GPS cows",
+      "date": "2008-06-12T08:22:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/gps-cows.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080615-nessus-and-commercialisation",
+      "kind": "post",
+      "title": "Nessus and Commercialisation",
+      "date": "2008-06-15T06:44:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/nessus-and-commercialisation.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080615-looking-for-people-wanting-to-do-the-gse-malware",
+      "kind": "post",
+      "title": "Looking for people wanting to do the GSE-Malware exam!",
+      "date": "2008-06-15T15:46:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/looking-for-people-wanting-to-do-gse.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080616-detecting-hydan",
+      "kind": "post",
+      "title": "Detecting Hydan",
+      "date": "2008-06-16T12:52:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/detecting-hydan.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080617-the-myth-of-global-warming",
+      "kind": "post",
+      "title": "The myth of global warming",
+      "date": "2008-06-17T17:38:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/myth-of-global-warming.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080618-the-latest-java-based-attack",
+      "kind": "post",
+      "title": "The latest Java based attack...",
+      "date": "2008-06-18T05:34:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/latest-java-based-attack.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080619-new-advances-in-java-forensics",
+      "kind": "post",
+      "title": "New Advances in Java Forensics",
+      "date": "2008-06-19T08:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/new-advances-in-java-forensics.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
       "id": "wright-post-20080620-book-the-it-regulatory-and-standards-compliance-",
       "kind": "post",
       "title": "Book: The IT Regulatory and Standards Compliance Handbook",
       "date": "2008-06-20",
       "url": "https://shop.elsevier.com/books/the-it-regulatory-and-standards-compliance-handbook/wright/978-1-59749-266-9",
       "text": "Elsevier/Syngress, ISBN 9781597492669. Published 20 June 2008 (some lists use 4 July 2008)."
+    },
+    {
+      "id": "wright-post-20080620-craig-wright-security-advisory-0002",
+      "kind": "post",
+      "title": "Craig Wright Security Advisory 0002",
+      "date": "2008-06-20T03:05:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/craig-wright-security-advisory-0002.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080620-a-more-detailed-description-of-the-jura-f90-vuln",
+      "kind": "post",
+      "title": "A more detailed description of the Jura F90 vulnerability",
+      "date": "2008-06-20T04:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/more-detailed-description-of-jura-f90.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080621-what-is-this-nac-thing-anyway",
+      "kind": "post",
+      "title": "What is this NAC thing anyway?",
+      "date": "2008-06-21T09:53:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/what-is-this-nac-thing-anyway.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080622-another-week",
+      "kind": "post",
+      "title": "Another week...",
+      "date": "2008-06-22T00:20:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/another-week.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080623-legal-issues-with-reversing",
+      "kind": "post",
+      "title": "Legal issues with Reversing",
+      "date": "2008-06-23T18:07:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/legal-issues-with-reversing.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080624-cant-see-the-tress-because-theres-no-forest",
+      "kind": "post",
+      "title": "Can't see the tress... Because there's no forest",
+      "date": "2008-06-24T18:30:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/cant-see-tress-because-theres-no-forest.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080624-cant-see-the-tress-because-theres-no-forest-part",
+      "kind": "post",
+      "title": "Can't see the tress... Because there's no forest (Part 2)",
+      "date": "2008-06-24T18:30:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/cant-see-tress-because-theres-no-forest_24.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080624-cant-see-the-tress-because-theres-no-forest-2",
+      "kind": "post",
+      "title": "Can't see the tress because there's no forest",
+      "date": "2008-06-24T18:45:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/cant-see-tress-because-theres-no-forest_2894.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080625-risks-of-outsourcing",
+      "kind": "post",
+      "title": "Risks of Outsourcing",
+      "date": "2008-06-25T03:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/risks-of-outsourcing.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080626-random-forests",
+      "kind": "post",
+      "title": "Random Forests",
+      "date": "2008-06-26T04:30:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/random-forests.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080627-competition-law-in-the-uk",
+      "kind": "post",
+      "title": "Competition Law in the UK",
+      "date": "2008-06-27T01:03:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/competition-law-in-uk.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080627-whos-to-blame-you-or-your-isp-ieee-question",
+      "kind": "post",
+      "title": "Who's to Blame - You or Your ISP? [IEEE Question]",
+      "date": "2008-06-27T10:46:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/whos-to-blame-you-or-your-isp-ieee.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080628-security-metrics",
+      "kind": "post",
+      "title": "Security Metrics",
+      "date": "2008-06-28T06:47:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/security-metrics.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080628-more-security-metrics",
+      "kind": "post",
+      "title": "More Security Metrics",
+      "date": "2008-06-28T08:09:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/more-security-metrics.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080629-tisk-tisk-tisk",
+      "kind": "post",
+      "title": "Tisk, tisk, tisk...",
+      "date": "2008-06-29T13:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/06/tisk-tisk-tisk.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080701-comments-from-jura",
+      "kind": "post",
+      "title": "Comments from Jura",
+      "date": "2008-07-01T08:31:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/comments-from-jura.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080702-caatts-and-the-common-issues-to-consider",
+      "kind": "post",
+      "title": "CAATTS and the common issues to consider",
+      "date": "2008-07-02T01:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/caatts-and-common-issues-to-consider.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080702-thinking-of-getting-a-gift",
+      "kind": "post",
+      "title": "Thinking of getting a gift?",
+      "date": "2008-07-02T15:20:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/thinking-of-getting-gift.html",
+      "text": "GSE Compliance blog post"
     },
     {
       "id": "wright-post-20080703-detecting-hydan-statistical-methods-for-classify",
@@ -219,12 +1563,412 @@
       "text": "SANS white paper published 3 July 2008. Also at https://www.giac.org/paper/gcih/6896/detecting-hydan-statistical-methods-classifying-hydan-based-stegonagraphy-executable-files/107335"
     },
     {
+      "id": "wright-post-20080703-actors-who-define-the-internet",
+      "kind": "post",
+      "title": "Actors who define the Internet",
+      "date": "2008-07-03T20:14:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/actors-who-define-internet.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080704-defamation-and-the-internet",
+      "kind": "post",
+      "title": "Defamation and the Internet",
+      "date": "2008-07-04T03:15:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/defamation-and-internet.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080705-p-i-licenses-for-forensic-examination-in-the-us",
+      "kind": "post",
+      "title": "P.I. Licenses for Forensic Examination in the US. The error of the statement.",
+      "date": "2008-07-05T08:56:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/pi-licenses-for-forensic-examination-in.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080705-pi-laws-and-ignorance-as-a-perspective",
+      "kind": "post",
+      "title": "PI laws and ignorance as a perspective.",
+      "date": "2008-07-05T16:20:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/pi-laws-and-ignorance-as-perspective.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080706-considerations-about-exploits-tricks",
+      "kind": "post",
+      "title": "Considerations about exploits tricks",
+      "date": "2008-07-06T04:10:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/considerations-about-exploits-tricks.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080706-issues-on-licensing-in-the-us",
+      "kind": "post",
+      "title": "Issues on licensing in the US",
+      "date": "2008-07-06T11:56:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/issues-on-licensing-in-us.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080707-statistical-methods-to-determine-the-authenticit",
+      "kind": "post",
+      "title": "Statistical Methods to Determine the Authenticity of Data",
+      "date": "2008-07-07T19:16:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/statistical-methods-to-determine.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080709-child-pornography-and-obscenity",
+      "kind": "post",
+      "title": "Child Pornography and Obscenity",
+      "date": "2008-07-09T09:17:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/child-pornography-and-obscenity.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080710-dns-issues",
+      "kind": "post",
+      "title": "DNS Issues",
+      "date": "2008-07-10T10:10:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/dns-issues.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080712-more-on-dns",
+      "kind": "post",
+      "title": "More on DNS",
+      "date": "2008-07-12T09:02:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/more-on-dns.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080713-errors-in-evidence",
+      "kind": "post",
+      "title": "Errors in Evidence",
+      "date": "2008-07-13T09:43:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/errors-in-evidence.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080715-information-systems-auditing-concepts",
+      "kind": "post",
+      "title": "INFORMATION SYSTEMS AUDITING CONCEPTS",
+      "date": "2008-07-15T14:44:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/information-systems-auditing-concepts.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080717-talk-about-an-old-bug",
+      "kind": "post",
+      "title": "Talk about an old Bug...",
+      "date": "2008-07-17T09:33:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/talk-about-old-bug.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080719-notes-on-knowledge-management",
+      "kind": "post",
+      "title": "Notes on Knowledge Management.",
+      "date": "2008-07-19T08:09:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/notes-on-knowledge-management.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080720-early-morning-images",
+      "kind": "post",
+      "title": "Early Morning Images",
+      "date": "2008-07-20T11:07:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/early-morning-images.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080723-what-i-have-been-up-to",
+      "kind": "post",
+      "title": "What I have been up to.",
+      "date": "2008-07-23T14:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/what-i-have-been-up-to.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080723-evidence-collection-and-volitility",
+      "kind": "post",
+      "title": "Evidence Collection and Volitility",
+      "date": "2008-07-23T18:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/evidence-collection-and-volitility.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080725-whats-sudo",
+      "kind": "post",
+      "title": "What's Sudo",
+      "date": "2008-07-25T21:49:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/whats-sudo.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080726-portsentry",
+      "kind": "post",
+      "title": "Portsentry",
+      "date": "2008-07-26T12:40:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/portsentry.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080727-equipment-specific-and-site-licenses",
+      "kind": "post",
+      "title": "Equipment-specific and Site Licenses",
+      "date": "2008-07-27T12:18:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/equipment-specific-and-site-licenses.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080728-checking-active-and-listening-porting-in-windows",
+      "kind": "post",
+      "title": "Checking Active and Listening Porting in Windows",
+      "date": "2008-07-28T18:52:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/checking-active-and-listening-porting.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080729-netcat",
+      "kind": "post",
+      "title": "Netcat",
+      "date": "2008-07-29T05:25:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/netcat.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080729-port-scanning-with-netcat",
+      "kind": "post",
+      "title": "Port Scanning with Netcat",
+      "date": "2008-07-29T17:45:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/port-scanning-with-netcat.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080730-question-of-the-day",
+      "kind": "post",
+      "title": "Question of the day",
+      "date": "2008-07-30T15:52:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/question-of-day.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080730-vulnerability-scanning-with-netcat",
+      "kind": "post",
+      "title": "Vulnerability Scanning with Netcat",
+      "date": "2008-07-30T18:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/vulnerability-scanning-with-netcat.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080731-testing-and-making-connections-to-open-ports-wit",
+      "kind": "post",
+      "title": "Testing and making connections to open ports with Netcat",
+      "date": "2008-07-31T19:30:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/testing-and-making-connections-to-open.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080801-windows-port-scanning-without-a-scanner",
+      "kind": "post",
+      "title": "Windows Port Scanning - Without a Scanner",
+      "date": "2008-08-01T04:35:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/08/windows-port-scanning-without-scanner.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080801-netcat-to-send-files",
+      "kind": "post",
+      "title": "Netcat to send files",
+      "date": "2008-08-01T08:10:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/07/netcat-to-send-files.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080802-netcat-the-simple-port-scan-logger",
+      "kind": "post",
+      "title": "Netcat - the simple port-scan logger",
+      "date": "2008-08-02T19:30:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/08/netcat-simple-port-scan-logger.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080804-determning-dns-version",
+      "kind": "post",
+      "title": "Determning DNS Version",
+      "date": "2008-08-04T19:36:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/08/determning-dns-version.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080805-netcat-as-a-honeypot",
+      "kind": "post",
+      "title": "Netcat as a Honeypot",
+      "date": "2008-08-05T18:30:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/08/netcat-as-honeypot.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
       "id": "wright-post-20080806-what-is-non-repudiation",
       "kind": "post",
       "title": "What is NON-REPUDIATION",
-      "date": "2008-08-06",
+      "date": "2008-08-06T19:27:00+10:00",
       "url": "https://ramonquesada.com/english/compilation-craig-wright/",
       "text": "gse-compliance post: 'Non-repudiation is the process of ensuring that parties to a transaction cannot deny that a transaction occurred.'"
+    },
+    {
+      "id": "wright-post-20080807-what-is-a-click-wrap-contract",
+      "kind": "post",
+      "title": "What is a CLICK-WRAP contract?",
+      "date": "2008-08-07T02:30:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/08/what-is-click-wrap-contract.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080807-what-is-an-invitation-to-treat-in-contracts",
+      "kind": "post",
+      "title": "What is an INVITATION TO TREAT in contracts?",
+      "date": "2008-08-07T19:31:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/08/what-is-invitation-to-treat-in.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080808-what-is-legal-juristiction",
+      "kind": "post",
+      "title": "What is Legal Juristiction?",
+      "date": "2008-08-08T19:32:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/08/what-is-legal-juristiction.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080822-packet-injection-and-replay",
+      "kind": "post",
+      "title": "Packet Injection and Replay",
+      "date": "2008-08-22T13:54:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/08/packet-injection-and-replay.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080825-my-latest-plan",
+      "kind": "post",
+      "title": "My Latest Plan",
+      "date": "2008-08-25T17:58:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/08/my-latest-plan.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080827-naughty-naughty-netcat",
+      "kind": "post",
+      "title": "Naughty, Naughty Netcat",
+      "date": "2008-08-27T00:30:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/08/naughty-naughty-netcat.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080827-naughtier-netcat",
+      "kind": "post",
+      "title": "Naughtier Netcat",
+      "date": "2008-08-27T19:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/08/naughtier-netcat.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080827-netcat-last-but-not-least",
+      "kind": "post",
+      "title": "Netcat - Last but not least",
+      "date": "2008-08-27T19:30:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/08/netcat-last-but-not-least.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080828-the-port-reporter-tool-by-microsoft",
+      "kind": "post",
+      "title": "The \"Port Reporter\" tool by Microsoft.",
+      "date": "2008-08-28T01:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/08/port-reporter-tool-by-microsoft.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080901-advanced-methods-to-remotely-determine-applicati",
+      "kind": "post",
+      "title": "Advanced Methods to remotely determine Application Versions",
+      "date": "2008-09-01T14:37:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/09/advanced-methods-to-remotely-determine.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080902-who-ever-said-white-wine-does-not-age-well",
+      "kind": "post",
+      "title": "Who ever said white wine does not age well.",
+      "date": "2008-09-02T20:12:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/09/who-ever-said-white-wine-does-not-age.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080903-benfords-law-in-r",
+      "kind": "post",
+      "title": "Benford's Law in \"R\"",
+      "date": "2008-09-03T08:30:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/09/benfords-law-in-r.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080903-the-next-tool-dd",
+      "kind": "post",
+      "title": "The next tool - DD",
+      "date": "2008-09-03T21:03:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/09/next-tool-dd.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080904-finding-more",
+      "kind": "post",
+      "title": "Finding more",
+      "date": "2008-09-04T07:31:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/09/finding-more.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080904-my-next-course",
+      "kind": "post",
+      "title": "My next course",
+      "date": "2008-09-04T07:38:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/09/my-next-course.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080906-weekend-images",
+      "kind": "post",
+      "title": "Weekend Images",
+      "date": "2008-09-06T08:42:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/09/weekend-images.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080907-the-next-tool-dd",
+      "kind": "post",
+      "title": "The next tool - DD",
+      "date": "2008-09-07T20:29:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/09/next-tool-dd_02.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080911-posting-will-be-slow",
+      "kind": "post",
+      "title": "Posting will be slow",
+      "date": "2008-09-11T16:59:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/09/posting-will-be-slow.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20080913-for-those-at-sans-ns-2008",
+      "kind": "post",
+      "title": "For those at SANS NS 2008",
+      "date": "2008-09-13T20:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/09/for-those-at-sans-ns-2008.html",
+      "text": "GSE Compliance blog post"
     },
     {
       "id": "wright-post-20081005-blog-post-on-passing-the-gse-malware-exam",
@@ -235,12 +1979,28 @@
       "text": "Wright awarded GSE-Malware 3 October 2008 (1 of 4 worldwide). Blog post 5 October 2008 after returning from the US. Blog was silent 13 September–5 October 2008."
     },
     {
+      "id": "wright-post-20081005-and-i-am-back",
+      "kind": "post",
+      "title": "And I am back",
+      "date": "2008-10-05T11:30:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/10/and-i-am-back.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
       "id": "wright-post-20081009-security-basics-mailing-list-post-announcing-ici",
       "kind": "post",
       "title": "Security Basics mailing-list post announcing ICISS 2008 paper",
       "date": "2008-10-09",
       "url": "https://seclists.org/basics/2008/Oct/142",
       "text": "Craig Wright posted that he, Dave Kleiman and Shyaam Sundhar R.S. had a paper accepted at ICISS 2008: 'Overwriting Hard Drive Data: The Great Wiping Controversy.'"
+    },
+    {
+      "id": "wright-post-20081012-and-first-the-images",
+      "kind": "post",
+      "title": "And first the images",
+      "date": "2008-10-12T16:21:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/10/and-first-images.html",
+      "text": "GSE Compliance blog post"
     },
     {
       "id": "wright-post-20081015-wiping-a-drive-dev-zero-or-dev-urandom-better",
@@ -262,9 +2022,153 @@
       "id": "wright-post-20081101-entropy-pgp-key-mention-on-gse-compliance",
       "kind": "post",
       "title": "Entropy / PGP-key mention on gse-compliance",
-      "date": "2008-11-01",
+      "date": "2008-11-01T16:00:00+11:00",
       "url": "https://meetsatoshi.org/blog/",
       "text": "November 2008 post later said to mention a PGP key. Google Reader caches showed the key was not in the 2013 version of the post."
+    },
+    {
+      "id": "wright-post-20081102-sans-504-by-mentoring",
+      "kind": "post",
+      "title": "SANS 504 by mentoring",
+      "date": "2008-11-02T19:26:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/sans-504-by-mentoring.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081103-new-security-and-forensic-concerns",
+      "kind": "post",
+      "title": "New Security and Forensic Concerns",
+      "date": "2008-11-03T18:26:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/new-security-and-forensic-concerns.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081104-security-risk-metrics",
+      "kind": "post",
+      "title": "Security Risk Metrics",
+      "date": "2008-11-04T17:17:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/security-risk-metrics.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081105-security-economics",
+      "kind": "post",
+      "title": "Security & Economics",
+      "date": "2008-11-05T06:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/security-economics.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081107-the-fundimental-maxims-of-security",
+      "kind": "post",
+      "title": "The Fundimental Maxims of Security",
+      "date": "2008-11-07T08:47:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/fundimental-maxims-of-security.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081112-why-giac-certification-with-sans-training",
+      "kind": "post",
+      "title": "Why GIAC Certification with SANS Training",
+      "date": "2008-11-12T19:47:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/why-giac-certification-with-sans.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081113-text-data-mining-vs-information-retrieval-inform",
+      "kind": "post",
+      "title": "Text Data Mining vs. Information Retrieval / information, Access",
+      "date": "2008-11-13T21:31:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/text-data-mining-vs-information.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081117-so-you-think-that-your-wired-keyboard-is-secure",
+      "kind": "post",
+      "title": "So you think that your wired keyboard is secure?",
+      "date": "2008-11-17T08:54:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/so-you-think-that-your-wired-keyboard.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081118-sql-injection",
+      "kind": "post",
+      "title": "SQL Injection",
+      "date": "2008-11-18T04:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/sql-injection.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081118-leadership",
+      "kind": "post",
+      "title": "Leadership",
+      "date": "2008-11-18T18:47:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/leadership.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081125-ediscovery-and-the-us-federal-rules-of-civil-pro",
+      "kind": "post",
+      "title": "eDiscovery and the US Federal Rules of Civil Procedure (FRCP)",
+      "date": "2008-11-25T08:36:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/ediscovery-and-us-federal-rules-of.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081126-dostoyevsky",
+      "kind": "post",
+      "title": "Dostoyevsky",
+      "date": "2008-11-26T15:11:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/dostoyevsky.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081127-consider-sitting-a-gse",
+      "kind": "post",
+      "title": "Consider sitting a GSE",
+      "date": "2008-11-27T12:47:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/consider-sitting-gse.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081128-the-p-vs-np-problem",
+      "kind": "post",
+      "title": "The “P vs. NP” problem",
+      "date": "2008-11-28T13:36:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/p-vs-np-problem.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081129-anton-piller-civil-search",
+      "kind": "post",
+      "title": "Anton Piller (Civil Search)",
+      "date": "2008-11-29T14:05:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/anton-piller-civil-search.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081130-masters-of-system-development",
+      "kind": "post",
+      "title": "Masters of System Development",
+      "date": "2008-11-30T11:32:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/11/masters-of-system-development.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081201-application-hotspots",
+      "kind": "post",
+      "title": "Application \"HotSpots\"",
+      "date": "2008-12-01T14:06:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/application-hotspots.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081204-sec709-developing-exploits-for-penetration-teste",
+      "kind": "post",
+      "title": "SEC709 - Developing Exploits for Penetration Testers and Security Researchers",
+      "date": "2008-12-04T08:28:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/sec709-developing-exploits-for.html",
+      "text": "GSE Compliance blog post"
     },
     {
       "id": "wright-post-20081205-forensic-mining-sans",
@@ -275,12 +2179,76 @@
       "text": "SANS blog post dated 5 December 2008."
     },
     {
+      "id": "wright-post-20081206-reversing-a-file-with-dd",
+      "kind": "post",
+      "title": "Reversing a file with DD",
+      "date": "2008-12-06T12:40:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/reversing-file-with-dd.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081208-why-care-about-the-ability-to-reverse-a-file",
+      "kind": "post",
+      "title": "Why care about the ability to reverse a file?",
+      "date": "2008-12-08T18:35:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/why-care-about-ability-to-reverse-file.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081209-dats-and-the-future-of-audit-and-assurance",
+      "kind": "post",
+      "title": "DATs and the future of Audit and Assurance",
+      "date": "2008-12-09T11:34:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/dats-and-future-of-audit-and-assurance.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081210-adding-verification-to-a-script",
+      "kind": "post",
+      "title": "Adding verification to a script",
+      "date": "2008-12-10T03:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/adding-verification-to-script.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081212-what-wine",
+      "kind": "post",
+      "title": "What wine?",
+      "date": "2008-12-12T08:22:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/what-wine.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081212-password-changing",
+      "kind": "post",
+      "title": "Password Changing",
+      "date": "2008-12-12T09:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/password-changing.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081214-vacation-plans",
+      "kind": "post",
+      "title": "Vacation plans",
+      "date": "2008-12-14T11:30:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/vacation-plans.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
       "id": "wright-post-20081215-blog-announcement-of-trip-to-india-to-present-th",
       "kind": "post",
       "title": "Blog announcement of trip to India to present the wiping paper",
       "date": "2008-12-15",
       "url": "https://mylegacykit.medium.com/faketoshi-the-early-years-part-1-9964fc1639e3",
       "text": "15 December 2008: Wright announced he would present 'Overwriting Hard Drive Data: The Great Wiping Controversy' in India the next day. Wayback-cited in Arthur van Pelt's Early Years piece."
+    },
+    {
+      "id": "wright-post-20081215-and-off-to-india",
+      "kind": "post",
+      "title": "And off to India",
+      "date": "2008-12-15T13:16:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/and-off-to-india.html",
+      "text": "GSE Compliance blog post"
     },
     {
       "id": "wright-post-20081216-overwriting-hard-drive-data-the-great-wiping-con",
@@ -291,12 +2259,76 @@
       "text": "Craig Wright, Dave Kleiman, Shyaam Sundhar R.S. ICISS 2008, Hyderabad, 16–20 December 2008. LNCS 5352, pp. 243–257. ACM records published 16 December 2008."
     },
     {
+      "id": "wright-post-20081229-images-from-india",
+      "kind": "post",
+      "title": "Images from India",
+      "date": "2008-12-29T07:34:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/images-from-india.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081229-images-from-india-part-2",
+      "kind": "post",
+      "title": "Images from India - Part 2",
+      "date": "2008-12-29T07:53:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/images-from-india-part-2.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081229-images-of-india-at-night",
+      "kind": "post",
+      "title": "Images of India at Night",
+      "date": "2008-12-29T08:01:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/images-of-india-at-night.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20081229-part-3-the-final-images-from-india",
+      "kind": "post",
+      "title": "Part 3 - the final images from India",
+      "date": "2008-12-29T08:06:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/and-part-3-final-images-from-india.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
       "id": "wright-post-20081230-current-issues-in-dns-giac-gcia",
       "kind": "post",
       "title": "Current Issues in DNS (GIAC GCIA)",
       "date": "2008-12-30",
       "url": "https://www.giac.org/paper/gcia/2913/current-issues-dns/107335",
       "text": "Craig S. Wright, craigswright@acm.org. DNS spoofing, MiTM, Unicode homograph issues."
+    },
+    {
+      "id": "wright-post-20081231-current-issues-with-dns",
+      "kind": "post",
+      "title": "Current Issues with DNS",
+      "date": "2008-12-31T11:39:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2008/12/current-issues-with-dns.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090101-ls-lists-the-files-in-a-directory",
+      "kind": "post",
+      "title": "ls   Lists the files in a directory",
+      "date": "2009-01-01T09:49:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/01/ls-lists-files-in-directory.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090106-using-a-cd-dvd-distribution-under-linux-unix",
+      "kind": "post",
+      "title": "Using a CD/DVD Distribution under Linux/Unix",
+      "date": "2009-01-06T21:01:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/01/using-cddvd-distribution-under.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090108-images",
+      "kind": "post",
+      "title": "Images",
+      "date": "2009-01-08T10:30:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2007/01/images.html",
+      "text": "GSE Compliance blog post"
     },
     {
       "id": "wright-post-20090115-overwriting-hard-drive-data-sans-with-dave-kleim",
@@ -307,6 +2339,30 @@
       "text": "Start of a 2009 SANS forensics series (drive wiping, ECC recovery, SQL forensics, Autopsy, HELIX, etc.). Bibliography lists ~20 dated SANS posts Jan–Nov 2009."
     },
     {
+      "id": "wright-post-20090120-a-response-to-dr-gutmann",
+      "kind": "post",
+      "title": "A response to Dr Gutmann",
+      "date": "2009-01-20T07:54:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/01/response-to-dr-gutmann.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090120-command-lsof",
+      "kind": "post",
+      "title": "Command: LSOF",
+      "date": "2009-01-20T13:50:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/01/command-lsof.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090122-a-return-to-consulting",
+      "kind": "post",
+      "title": "A Return to Consulting",
+      "date": "2009-01-22T07:27:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/01/return-to-consulting.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
       "id": "wright-post-20090129-incorporation-of-information-defense-pty-ltd",
       "kind": "post",
       "title": "Incorporation of Information Defense Pty Ltd",
@@ -315,12 +2371,668 @@
       "text": "Australian company incorporated 29 January 2009. Integyrs Pty Ltd followed 11 May 2009."
     },
     {
+      "id": "wright-post-20090207-information-defense-updated-2014",
+      "kind": "post",
+      "title": "Information Defense (updated 2014)",
+      "date": "2009-02-07T21:42:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/02/information-defense.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090219-reasons-why-people-break-copyright",
+      "kind": "post",
+      "title": "Reasons why people break copyright",
+      "date": "2009-02-19T20:45:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/02/reasons-why-people-break-copyright.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090227-off-to-orlando",
+      "kind": "post",
+      "title": "Off to Orlando",
+      "date": "2009-02-27T06:52:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/02/off-to-orlando.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090302-building-systems",
+      "kind": "post",
+      "title": "Building Systems",
+      "date": "2009-03-02T17:25:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/03/building-systems.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090321-want-more",
+      "kind": "post",
+      "title": "Want more?",
+      "date": "2009-03-21T16:10:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/03/want-more.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090324-the-history-of-the-dmz",
+      "kind": "post",
+      "title": "The History of the DMZ",
+      "date": "2009-03-24T12:05:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/03/history-of-dmz.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090405-forensic-recovery-and-the-blackberry",
+      "kind": "post",
+      "title": "Forensic Recovery and the Blackberry",
+      "date": "2009-04-05T15:17:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/04/forensic-recovery-and-blackberry.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090411-the-quantification-of-information-systems-risk",
+      "kind": "post",
+      "title": "The Quantification of Information Systems Risk",
+      "date": "2009-04-11T07:02:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/04/quantification-of-information-systems.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090426-most-postings-for-a-bit",
+      "kind": "post",
+      "title": "Most Postings for a bit",
+      "date": "2009-04-26T10:05:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/04/most-postings-for-bit.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090510-an-introduction-to-sql",
+      "kind": "post",
+      "title": "An Introduction to SQL",
+      "date": "2009-05-10T22:49:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/05/introduction-to-sql.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090524-another-certification-down",
+      "kind": "post",
+      "title": "Another Certification down",
+      "date": "2009-05-24T15:54:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/05/another-certification-down.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090613-monkeys-and-typewriters",
+      "kind": "post",
+      "title": "Monkeys and typewriters",
+      "date": "2009-06-13T12:21:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/06/monkeys-and-typewriters.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090614-sans-sec-709",
+      "kind": "post",
+      "title": "SANS SEC 709",
+      "date": "2009-06-14T09:38:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/06/sans-sec-709.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090614-simplicity-and-complexity-in-security",
+      "kind": "post",
+      "title": "Simplicity and Complexity in Security",
+      "date": "2009-06-14T12:38:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/06/simplicity-and-complexity-in-security.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090615-blackboxes-are-vulnerable",
+      "kind": "post",
+      "title": "Blackboxes are vulnerable!",
+      "date": "2009-06-15T12:41:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/06/blackboxes-are-vulnerable.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090619-ron-lynam",
+      "kind": "post",
+      "title": "Ron Lynam",
+      "date": "2009-06-19T11:31:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/06/ron-lynam.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090703-identifying-network-based-attacks-using-tcpdump",
+      "kind": "post",
+      "title": "Identifying network based attacks using TCPDump",
+      "date": "2009-07-03T13:01:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/07/identifying-network-based-attacks-using.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090703-ngrep",
+      "kind": "post",
+      "title": "NGREP",
+      "date": "2009-07-03T22:48:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/07/ngrep.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090705-more-ngrep",
+      "kind": "post",
+      "title": "More NGrep",
+      "date": "2009-07-05T07:54:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/07/more-ngrep.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090706-using-ngrep",
+      "kind": "post",
+      "title": "Using NGrep",
+      "date": "2009-07-06T21:17:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/07/using-ngrep.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090707-a-dry-run-on-ngrep",
+      "kind": "post",
+      "title": "A dry run on NGrep",
+      "date": "2009-07-07T08:21:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/07/dry-run-on-ngrep.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090707-dnstop",
+      "kind": "post",
+      "title": "DNSTOP",
+      "date": "2009-07-07T20:44:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/07/dnstop.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090713-bpf-berkeley-packet-filter",
+      "kind": "post",
+      "title": "BPF (Berkeley Packet Filter)",
+      "date": "2009-07-13T14:42:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/07/bpf-berkeley-packet-filter.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090720-system-accounting-and-process-accounting",
+      "kind": "post",
+      "title": "System Accounting and Process Accounting",
+      "date": "2009-07-20T11:35:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/07/system-accounting-and-process.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090826-p0f",
+      "kind": "post",
+      "title": "p0f",
+      "date": "2009-08-26T19:23:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/08/p0f.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090827-ettercap",
+      "kind": "post",
+      "title": "Ettercap",
+      "date": "2009-08-27T06:52:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/08/ettercap.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090828-netdude",
+      "kind": "post",
+      "title": "Netdude",
+      "date": "2009-08-28T06:22:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/07/netdude.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090829-security-onion-because-there-are-layers-to-secur",
+      "kind": "post",
+      "title": "Security-Onion, because there are layers to security",
+      "date": "2009-08-29T06:47:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/08/security-onion-because-there-are-layers.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090830-chaosreader",
+      "kind": "post",
+      "title": "ChaosReader",
+      "date": "2009-08-30T09:25:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/08/chaosreader.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090831-arpfreeze",
+      "kind": "post",
+      "title": "ArpFreeze",
+      "date": "2009-08-31T19:30:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/08/arpfreeze.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090901-arpwatch",
+      "kind": "post",
+      "title": "ARPWatch",
+      "date": "2009-09-01T21:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/08/arpwatch.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090903-figure-my-grandfathers-first-it-equipment",
+      "kind": "post",
+      "title": "Figure: My Grandfather’s first IT equipment",
+      "date": "2009-09-03T07:50:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/09/figure-my-grandfathers-first-it.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090903-unix-load",
+      "kind": "post",
+      "title": "Unix Load",
+      "date": "2009-09-03T10:31:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/09/unix-load.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090910-my-jsp",
+      "kind": "post",
+      "title": "My JSP",
+      "date": "2009-09-10T06:53:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/09/my-jsp.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090910-mounting-ntfs-formated-drives-in-rhel5",
+      "kind": "post",
+      "title": "Mounting NTFS Formated drives in RHEL5",
+      "date": "2009-09-10T18:58:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/09/mounting-ntfs-formated-drives-in-rhel5.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090912-off-to-sans-and-gse-3",
+      "kind": "post",
+      "title": "Off to SANS and GSE #3",
+      "date": "2009-09-12T07:30:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/09/off-to-sans-and-gse-3_12.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090917-gse-x3",
+      "kind": "post",
+      "title": "GSE x3",
+      "date": "2009-09-17T00:04:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/09/gse-x3.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20090923-an-australian-gse-exam",
+      "kind": "post",
+      "title": "An Australian GSE Exam",
+      "date": "2009-09-23T06:48:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/09/australian-gse-exam.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091009-a-great-lead-in",
+      "kind": "post",
+      "title": "A great lead in...",
+      "date": "2009-10-09T14:17:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/10/great-lead-in.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091105-user-reactions-to-monitoring",
+      "kind": "post",
+      "title": "User reactions to monitoring",
+      "date": "2009-11-05T20:56:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/11/user-reactions-to-monitoring.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091127-the-ids-mythical-man-month",
+      "kind": "post",
+      "title": "The 'IDS' \"Mythical Man Month\"",
+      "date": "2009-11-27T07:48:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/11/ids-mythical-man-month.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091128-size-and-power-in-a-statistical-study",
+      "kind": "post",
+      "title": "Size and Power in a Statistical Study",
+      "date": "2009-11-28T10:57:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/11/size-and-power-in-statistical-study.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091201-type-i-error-and-monitoring-intrusions",
+      "kind": "post",
+      "title": "Type I error and monitoring intrusions",
+      "date": "2009-12-01T21:31:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/type-i-error-and-monitoring-intrusions.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091204-measures-with-meaning",
+      "kind": "post",
+      "title": "Measures with meaning",
+      "date": "2009-12-04T06:20:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/measures-with-meaning.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091205-people-vs-worms",
+      "kind": "post",
+      "title": "People Vs Worms.",
+      "date": "2009-12-05T12:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/people-vs-worms.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091211-derivations-and-motivations",
+      "kind": "post",
+      "title": "Derivations and Motivations",
+      "date": "2009-12-11T09:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/derivations-and-motivations.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091211-disability-statistics-in-australia",
+      "kind": "post",
+      "title": "Disability statistics in Australia",
+      "date": "2009-12-11T21:15:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/disability-statistics-in-australia.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091212-levene-tests-levene-1-levene-2-levene-3-and-leve",
+      "kind": "post",
+      "title": "Levene Tests (Levene 1, Levene 2, Levene 3 and Levene 4)",
+      "date": "2009-12-12T22:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/levene-tests-levene-1-levene-2-levene-3.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091214-box-test",
+      "kind": "post",
+      "title": "Box Test",
+      "date": "2009-12-14T08:30:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/box-test.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091214-a-quota-for-all",
+      "kind": "post",
+      "title": "A Quota for all...",
+      "date": "2009-12-14T13:24:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/quota-for-all.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091215-cochran-test",
+      "kind": "post",
+      "title": "Cochran Test",
+      "date": "2009-12-15T08:30:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/cochran-test.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091215-climate-and-carbon",
+      "kind": "post",
+      "title": "Climate and carbon",
+      "date": "2009-12-15T18:21:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/climate-and-carbon.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091215-masters-of-forensics",
+      "kind": "post",
+      "title": "Masters of Forensics",
+      "date": "2009-12-15T18:51:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/masters-of-forensics.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091215-obrien-test",
+      "kind": "post",
+      "title": "Obrien Test",
+      "date": "2009-12-15T20:30:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/obrien-test.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091216-balance-of-payments-lie",
+      "kind": "post",
+      "title": "Balance of payments lie",
+      "date": "2009-12-16T08:58:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/balance-of-payments-lie.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091216-bf-and-modified-brown-forsythe-tests",
+      "kind": "post",
+      "title": "BF and Modified Brown-Forsythe Tests",
+      "date": "2009-12-16T09:30:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/bf-and-modified-brown-forsythe-tests.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091216-where-coase-went-wrong",
+      "kind": "post",
+      "title": "Where Coase went wrong",
+      "date": "2009-12-16T21:32:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/where-coase-went-wrong.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091217-size-and-power-study",
+      "kind": "post",
+      "title": "Size and Power Study",
+      "date": "2009-12-17T08:30:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/size-and-power-study.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091219-results-and-discussions-homogeneity-tests",
+      "kind": "post",
+      "title": "Results and Discussions – Homogeneity Tests",
+      "date": "2009-12-19T08:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/results-and-discussions-homogeneity.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091219-quota-based-selection-discrimination-by-any-othe",
+      "kind": "post",
+      "title": "Quota based selection, discrimination by any other name.",
+      "date": "2009-12-19T09:50:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/quota-based-selection-discrimination-by.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20091223-quick-and-nasty-overview-of-finding-truecrypt-vo",
+      "kind": "post",
+      "title": "Quick and Nasty overview of finding TrueCrypt volumes",
+      "date": "2009-12-23T13:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2009/12/quick-and-nasty-overview-of-finding.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100101-a-review-of-trash",
+      "kind": "post",
+      "title": "A review of trash",
+      "date": "2010-01-01T17:49:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/01/review-of-trash.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100102-not-at-any-point",
+      "kind": "post",
+      "title": "Not at any point.",
+      "date": "2010-01-02T10:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/01/not-at-any-point.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100104-why-charge-for-a-personal-guarantee",
+      "kind": "post",
+      "title": "Why charge for a personal guarantee?",
+      "date": "2010-01-04T10:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/01/why-charge-for-personal-guarantee.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100105-software-costs",
+      "kind": "post",
+      "title": "Software costs",
+      "date": "2010-01-05T16:15:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/01/software-costs.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100106-software-vendor-reputation",
+      "kind": "post",
+      "title": "Software Vendor Reputation",
+      "date": "2010-01-06T16:59:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/01/software-vendor-reputation.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100107-software-security-as-a-stag-hunt",
+      "kind": "post",
+      "title": "Software Security as a Stag Hunt",
+      "date": "2010-01-07T17:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/01/software-security-as-stag-hunt.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100108-rsa-768-has-bitten-the-dust",
+      "kind": "post",
+      "title": "RSA 768 has bitten the dust",
+      "date": "2010-01-08T17:23:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/01/rsa-768-has-bitten-dust.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100109-software-program-maintenance",
+      "kind": "post",
+      "title": "Software Program Maintenance",
+      "date": "2010-01-09T06:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/01/software-program-maintenance.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100121-problems-with-keynes",
+      "kind": "post",
+      "title": "Problems with Keynes",
+      "date": "2010-01-21T10:48:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/01/problems-with-keynes.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
       "id": "wright-post-20100209-modelling-risk-gold-backed-paypal-like-system",
       "kind": "post",
       "title": "Modelling Risk / gold-backed PayPal-like system",
-      "date": "2010-02-09",
+      "date": "2010-02-09T10:37:00+11:00",
       "url": "https://web.archive.org/web/20150525051150/http://gse-compliance.blogspot.com/2011_01_30_archive.html",
       "text": "Wright blogged about risk and later (4 Feb 2011 archive of the same blog) proposed 'an online gold trading system along the lines of a PayPal.' Thor (Hammer of God) criticised his risk writing on Full Disclosure the same day: https://seclists.org/fulldisclosure/2010/Feb/144"
+    },
+    {
+      "id": "wright-post-20100212-risk-and-more",
+      "kind": "post",
+      "title": "Risk and more",
+      "date": "2010-02-12T10:26:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/02/risk-and-more.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100213-the-economics-of-information-security-2",
+      "kind": "post",
+      "title": "The economics of information security (2)",
+      "date": "2010-02-13T20:42:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/02/economics-of-information-security.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100214-reliability",
+      "kind": "post",
+      "title": "Reliability",
+      "date": "2010-02-14T21:30:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/02/reliability.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100217-a-response-to-modeling-risk",
+      "kind": "post",
+      "title": "A response to modeling risk",
+      "date": "2010-02-17T05:52:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/02/response-to-modeling-risk.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100217-bayesian-statistics",
+      "kind": "post",
+      "title": "Bayesian Statistics",
+      "date": "2010-02-17T22:35:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/02/bayesian-statistics.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100218-vulnerability-modelling",
+      "kind": "post",
+      "title": "Vulnerability Modelling",
+      "date": "2010-02-18T05:46:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/02/vulnerability-modelling.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100306-unpacking-malicious-executables",
+      "kind": "post",
+      "title": "UnPacking Malicious Executables",
+      "date": "2010-03-06T13:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/03/unpacking-malicious-executables.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100308-unix-authentication-and-validation",
+      "kind": "post",
+      "title": "Unix Authentication and Validation",
+      "date": "2010-03-08T09:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/03/unix-authentication-and-validation.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100309-a-primer-for-to-using-the-r-statistical-package",
+      "kind": "post",
+      "title": "A primer for to using the R statistical package?",
+      "date": "2010-03-09T12:30:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/03/primer-for-to-using-r-statistical.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100311-creating-network-maps",
+      "kind": "post",
+      "title": "Creating Network Maps",
+      "date": "2010-03-11T13:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/03/creating-network-maps.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100315-configuration-of-key-network-services-dns-smtp-e",
+      "kind": "post",
+      "title": "Configuration of key network services (DNS, SMTP, etc.)",
+      "date": "2010-03-15T13:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/03/configuration-of-key-network-services.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100316-property-law-for-it-people",
+      "kind": "post",
+      "title": "Property law for IT people",
+      "date": "2010-03-16T07:14:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/03/property-law-for-it-people.html",
+      "text": "GSE Compliance blog post"
     },
     {
       "id": "wright-post-20100406-craig-stephen-wright-anor-v-de-morgan-informatio",
@@ -331,12 +3043,124 @@
       "text": "NSW proceeding dated 6 April 2010 involving Wright and the liquidated DeMorgan entity."
     },
     {
+      "id": "wright-post-20100413-auditing-to-determine-what-went-wrong",
+      "kind": "post",
+      "title": "Auditing to Determine What Went Wrong",
+      "date": "2010-04-13T18:34:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/04/auditing-to-determine-what-went-wrong.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100415-monitoring-and-logging",
+      "kind": "post",
+      "title": "Monitoring and logging",
+      "date": "2010-04-15T18:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/04/monitoring-and-logging.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100509-what-i-am-up-to",
+      "kind": "post",
+      "title": "What I am up to",
+      "date": "2010-05-09T17:43:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/05/what-i-am-up-to.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100630-ir-responsible-disclosure",
+      "kind": "post",
+      "title": "(Ir)responsible disclosure",
+      "date": "2010-06-30T13:01:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/06/irresponsible-disclosure.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100701-the-fallacy-inherent-in-the-black-swan-theory",
+      "kind": "post",
+      "title": "The fallacy inherent in the \"Black Swan\" Theory",
+      "date": "2010-07-01T08:57:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/07/falacy-inherent-in-black-swan-theory.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100831-grem-paper",
+      "kind": "post",
+      "title": "GREM Paper",
+      "date": "2010-08-31T11:54:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/08/grem-paper.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100903-rent-seeking-in-economics",
+      "kind": "post",
+      "title": "Rent seeking in economics",
+      "date": "2010-09-03T04:49:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/09/rent-seeking-in-economics.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100903-the-legacy-of-keynes",
+      "kind": "post",
+      "title": "The legacy of Keynes.",
+      "date": "2010-09-03T17:05:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/09/legacy-of-keynes.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100904-forget-keynes",
+      "kind": "post",
+      "title": "Forget Keynes.",
+      "date": "2010-09-04T04:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/09/forget-keynes.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100904-rent-seeking-and-economists-part-2",
+      "kind": "post",
+      "title": "Rent seeking and economists - part 2",
+      "date": "2010-09-04T17:00:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/09/rent-seeking-and-economists-part-2.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20100905-the-move-to-agriculture-and-economic-stimulus-an",
+      "kind": "post",
+      "title": "The move to agriculture and economic stimulus and away from savings",
+      "date": "2010-09-05T04:30:00+10:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/09/move-to-agriculture-and-economic.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20101004-justice-is-not-a-measured-quantity",
+      "kind": "post",
+      "title": "Justice is not a measured quantity.",
+      "date": "2010-10-04T11:46:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/10/justice-is-not-measured-quantity.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
       "id": "wright-post-20101101-issre-2010-san-jose-charles-sturt-university-aff",
       "kind": "post",
       "title": "ISSRE 2010 — San Jose (Charles Sturt University affiliation)",
       "date": "2010-11-01",
       "url": "https://ramonquesada.com/english/compilation-craig-wright/",
       "text": "Listed as attending/presenting ISSRE 2010, 1–4 November 2010, San Jose, CA."
+    },
+    {
+      "id": "wright-post-20101107-programming-verification",
+      "kind": "post",
+      "title": "Programming Verification",
+      "date": "2010-11-07T18:07:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/11/programming-verification.html",
+      "text": "GSE Compliance blog post"
+    },
+    {
+      "id": "wright-post-20101109-legal-rules-and-software",
+      "kind": "post",
+      "title": "Legal rules and software",
+      "date": "2010-11-09T18:00:00+11:00",
+      "url": "https://web.archive.org/web/20151208225236/http://gse-compliance.blogspot.com/2010/11/legal-rules-and-software.html",
+      "text": "GSE Compliance blog post"
     },
     {
       "id": "wright-post-20101201-software-vendors-and-reputation-intrust-2010-bei",
@@ -398,49 +3222,553 @@
       "id": "wright-post-20110726-why-didnt-google-catch-the-norway-killer",
       "kind": "post",
       "title": "Why didn’t Google catch the Norway killer?",
-      "date": "2011-07-26",
+      "date": "2011-07-26T14:20:00+10:00",
       "url": "https://theconversation.com/why-didnt-google-catch-the-norway-killer-2514",
       "text": "The Conversation. Published 26 July 2011 12:20am EDT. Wright joined the site the same day. Computer-forensics interview on search-term monitoring after the Utøya attacks."
+    },
+    {
+      "id": "wright-post-20110726-comment-5151-why-didnt-google-catch-the-norway-k",
+      "kind": "post",
+      "title": "Comment on: Why didnt Google catch the Norway killer?",
+      "date": "2011-07-26T17:51:00+10:00",
+      "url": "https://theconversation.com/why-didnt-google-catch-the-norway-killer-2514#comment_5151",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110727-comment-5194-why-didnt-google-catch-the-norway-k",
+      "kind": "post",
+      "title": "Comment on: Why didnt Google catch the Norway killer?",
+      "date": "2011-07-27T08:56:00+10:00",
+      "url": "https://theconversation.com/why-didnt-google-catch-the-norway-killer-2514#comment_5194",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110727-comment-5237-why-didnt-google-catch-the-norway-k",
+      "kind": "post",
+      "title": "Comment on: Why didnt Google catch the Norway killer?",
+      "date": "2011-07-27T14:41:00+10:00",
+      "url": "https://theconversation.com/why-didnt-google-catch-the-norway-killer-2514#comment_5237",
+      "text": "The Conversation comment"
     },
     {
       "id": "wright-post-20110728-are-anonymous-and-lulzsec-about-to-hack-paypal-f",
       "kind": "post",
       "title": "Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
-      "date": "2011-07-28",
+      "date": "2011-07-29T12:19:00+10:00",
       "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582",
       "text": "The Conversation. Published 28 July 2011 10:19pm EDT. Argues hacktivists do not follow a rational economic model. Comments under this article include Wright's first public Bitcoin mentions."
     },
     {
-      "id": "wright-post-20110728-conversation-comment-wikileaks-should-have-used-",
+      "id": "wright-post-20110730-comment-5399-are-anonymous-and-lulzsec-about-to",
       "kind": "post",
-      "title": "Conversation comment: WikiLeaks should have used 'BitCoin'",
-      "date": "2011-07-28",
-      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_6261",
-      "text": "'If you want to look at anything to blame, look to WL's stupidity in selecting PayPal as a provider over BitCoin…' First well-attested public Bitcoin reference. Spells it BitCoin / Bit Coin."
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-07-30T07:42:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_5399",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110730-comment-5412-are-anonymous-and-lulzsec-about-to",
+      "kind": "post",
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-07-30T09:53:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_5412",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110730-comment-5442-are-anonymous-and-lulzsec-about-to",
+      "kind": "post",
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-07-30T19:39:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_5442",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110730-comment-5443-are-anonymous-and-lulzsec-about-to",
+      "kind": "post",
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-07-30T19:43:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_5443",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110730-comment-5457-are-anonymous-and-lulzsec-about-to",
+      "kind": "post",
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-07-30T23:00:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_5457",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110730-comment-5458-are-anonymous-and-lulzsec-about-to",
+      "kind": "post",
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-07-30T23:02:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_5458",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110731-comment-5465-are-anonymous-and-lulzsec-about-to",
+      "kind": "post",
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-07-31T07:32:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_5465",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110731-comment-5468-are-anonymous-and-lulzsec-about-to",
+      "kind": "post",
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-07-31T08:02:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_5468",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110731-comment-5482-are-anonymous-and-lulzsec-about-to",
+      "kind": "post",
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-07-31T12:16:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_5482",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110731-comment-5483-are-anonymous-and-lulzsec-about-to",
+      "kind": "post",
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-07-31T12:17:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_5483",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110731-comment-5502-are-anonymous-and-lulzsec-about-to",
+      "kind": "post",
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-07-31T20:19:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_5502",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110731-comment-5503-are-anonymous-and-lulzsec-about-to",
+      "kind": "post",
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-07-31T21:08:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_5503",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110731-comment-5505-are-anonymous-and-lulzsec-about-to",
+      "kind": "post",
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-07-31T21:30:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_5505",
+      "text": "The Conversation comment"
     },
     {
       "id": "wright-post-20110803-worlds-biggest-ever-cyber-attacks-uncovered-and-",
       "kind": "post",
       "title": "World’s biggest-ever cyber attacks uncovered — and it’s only the beginning",
-      "date": "2011-08-03",
+      "date": "2011-08-04T10:18:00+10:00",
       "url": "https://theconversation.com/worlds-biggest-ever-cyber-attacks-uncovered-and-its-only-the-beginning-2677",
       "text": "The Conversation. Published 3 August 2011 8:18pm EDT. On McAfee's Operation Shady RAT; predicts growth of state espionage and SCADA attacks."
+    },
+    {
+      "id": "wright-post-20110805-comment-5739-worlds-biggest-ever-cyber-attacks-u",
+      "kind": "post",
+      "title": "Comment on: Worlds biggest-ever cyber attacks uncovered",
+      "date": "2011-08-05T10:56:00+10:00",
+      "url": "https://theconversation.com/worlds-biggest-ever-cyber-attacks-uncovered-and-its-only-the-beginning-2677#comment_5739",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110805-comment-5752-worlds-biggest-ever-cyber-attacks-u",
+      "kind": "post",
+      "title": "Comment on: Worlds biggest-ever cyber attacks uncovered",
+      "date": "2011-08-05T14:48:00+10:00",
+      "url": "https://theconversation.com/worlds-biggest-ever-cyber-attacks-uncovered-and-its-only-the-beginning-2677#comment_5752",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110808-comment-5837-worlds-biggest-ever-cyber-attacks-u",
+      "kind": "post",
+      "title": "Comment on: Worlds biggest-ever cyber attacks uncovered",
+      "date": "2011-08-08T18:54:00+10:00",
+      "url": "https://theconversation.com/worlds-biggest-ever-cyber-attacks-uncovered-and-its-only-the-beginning-2677#comment_5837",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110808-comment-5840-worlds-biggest-ever-cyber-attacks-u",
+      "kind": "post",
+      "title": "Comment on: Worlds biggest-ever cyber attacks uncovered",
+      "date": "2011-08-08T19:33:00+10:00",
+      "url": "https://theconversation.com/worlds-biggest-ever-cyber-attacks-uncovered-and-its-only-the-beginning-2677#comment_5840",
+      "text": "The Conversation comment"
     },
     {
       "id": "wright-post-20110808-lulzsec-anonymous-freedom-fighters-or-the-new-fa",
       "kind": "post",
       "title": "LulzSec, Anonymous … freedom fighters or the new face of evil?",
-      "date": "2011-08-08",
+      "date": "2011-08-09T12:09:00+10:00",
       "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605",
       "text": "The Conversation. Published 8 August 2011 10:09pm EDT. Anti-hacktivist, pro-corporate argument that DDoS removes consumer choice."
+    },
+    {
+      "id": "wright-post-20110809-comment-5865-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-09T14:14:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_5865",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110809-comment-5867-worlds-biggest-ever-cyber-attacks-u",
+      "kind": "post",
+      "title": "Comment on: Worlds biggest-ever cyber attacks uncovered",
+      "date": "2011-08-09T14:20:00+10:00",
+      "url": "https://theconversation.com/worlds-biggest-ever-cyber-attacks-uncovered-and-its-only-the-beginning-2677#comment_5867",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110809-comment-5872-worlds-biggest-ever-cyber-attacks-u",
+      "kind": "post",
+      "title": "Comment on: Worlds biggest-ever cyber attacks uncovered",
+      "date": "2011-08-09T15:08:00+10:00",
+      "url": "https://theconversation.com/worlds-biggest-ever-cyber-attacks-uncovered-and-its-only-the-beginning-2677#comment_5872",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110809-comment-5899-worlds-biggest-ever-cyber-attacks-u",
+      "kind": "post",
+      "title": "Comment on: Worlds biggest-ever cyber attacks uncovered",
+      "date": "2011-08-09T19:45:00+10:00",
+      "url": "https://theconversation.com/worlds-biggest-ever-cyber-attacks-uncovered-and-its-only-the-beginning-2677#comment_5899",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110809-comment-5900-worlds-biggest-ever-cyber-attacks-u",
+      "kind": "post",
+      "title": "Comment on: Worlds biggest-ever cyber attacks uncovered",
+      "date": "2011-08-09T19:54:00+10:00",
+      "url": "https://theconversation.com/worlds-biggest-ever-cyber-attacks-uncovered-and-its-only-the-beginning-2677#comment_5900",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110810-comment-5948-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-10T16:16:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_5948",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110810-comment-5955-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-10T17:36:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_5955",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110810-comment-5956-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-10T17:38:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_5956",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110811-comment-5972-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-11T08:45:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_5972",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110811-comment-5986-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-11T10:16:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_5986",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6094-are-anonymous-and-lulzsec-about-to",
+      "kind": "post",
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-08-13T08:24:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_6094",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6100-are-anonymous-and-lulzsec-about-to",
+      "kind": "post",
+      "title": "Comment on: Are Anonymous and LulzSec about to hack PayPal for WikiLeaks?",
+      "date": "2011-08-13T09:25:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_6100",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6101-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T09:57:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6101",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6104-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T10:23:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6104",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6105-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T10:25:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6105",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6106-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T10:28:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6106",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6107-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T10:38:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6107",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6111-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T11:17:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6111",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6112-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T11:17:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6112",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6114-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T11:20:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6114",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6116-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T11:23:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6116",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6117-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T11:27:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6117",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6118-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T11:31:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6118",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6120-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T11:33:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6120",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6121-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T11:35:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6121",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6123-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T11:45:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6123",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6125-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T11:54:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6125",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6130-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T13:14:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6130",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6131-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T13:21:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6131",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6133-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T13:58:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6133",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6134-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T14:13:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6134",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110813-comment-6136-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-13T16:04:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6136",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110814-comment-6157-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-14T10:32:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6157",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110814-comment-6159-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-14T10:36:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6159",
+      "text": "The Conversation comment"
     },
     {
       "id": "wright-post-20110808-conversation-comment-listing-bit-coin-among-payp",
       "kind": "post",
       "title": "Conversation comment listing 'Bit Coin' among PayPal alternatives",
-      "date": "2011-08-08",
+      "date": "2011-08-14T11:30:00+10:00",
       "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6162",
       "text": "'Bit Coin (Bit Coin) is a digital currency. Bit Coin offers a full peer-to-peer currency solution…' Listed after Google Checkout and other alternatives. Among 112 Conversation comments 2011–; only known Bitcoin mentions in that set."
+    },
+    {
+      "id": "wright-post-20110816-comment-6235-worlds-biggest-ever-cyber-attacks-u",
+      "kind": "post",
+      "title": "Comment on: Worlds biggest-ever cyber attacks uncovered",
+      "date": "2011-08-16T06:02:00+10:00",
+      "url": "https://theconversation.com/worlds-biggest-ever-cyber-attacks-uncovered-and-its-only-the-beginning-2677#comment_6235",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110728-conversation-comment-wikileaks-should-have-used-",
+      "kind": "post",
+      "title": "Conversation comment: WikiLeaks should have used 'BitCoin'",
+      "date": "2011-08-16T11:53:00+10:00",
+      "url": "https://theconversation.com/are-anonymous-and-lulzsec-about-to-hack-paypal-for-wikileaks-2582#comment_6261",
+      "text": "'If you want to look at anything to blame, look to WL's stupidity in selecting PayPal as a provider over BitCoin…' First well-attested public Bitcoin reference. Spells it BitCoin / Bit Coin."
+    },
+    {
+      "id": "wright-post-20110817-comment-6313-worlds-biggest-ever-cyber-attacks-u",
+      "kind": "post",
+      "title": "Comment on: Worlds biggest-ever cyber attacks uncovered",
+      "date": "2011-08-17T11:52:00+10:00",
+      "url": "https://theconversation.com/worlds-biggest-ever-cyber-attacks-uncovered-and-its-only-the-beginning-2677#comment_6313",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110817-comment-6348-worlds-biggest-ever-cyber-attacks-u",
+      "kind": "post",
+      "title": "Comment on: Worlds biggest-ever cyber attacks uncovered",
+      "date": "2011-08-17T16:47:00+10:00",
+      "url": "https://theconversation.com/worlds-biggest-ever-cyber-attacks-uncovered-and-its-only-the-beginning-2677#comment_6348",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110818-comment-6463-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-18T10:47:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6463",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110818-comment-6464-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-18T10:49:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6464",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110818-comment-6480-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-18T12:45:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6480",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110819-comment-6571-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-19T09:05:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6571",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110819-comment-6602-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-19T14:48:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6602",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110819-comment-6606-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-19T15:07:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6606",
+      "text": "The Conversation comment"
     },
     {
       "id": "wright-post-20110824-hakin9-starting-to-write-your-own-shellcode-form",
@@ -449,6 +3777,30 @@
       "date": "2011-08-24",
       "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3153487",
       "text": "Cluster of Hakin9 pieces dated 24 August 2011. SSRN copy of the shellcode article gives written date 31 March 2008, posted 17 April 2018."
+    },
+    {
+      "id": "wright-post-20110825-comment-6901-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-25T14:21:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6901",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110825-comment-6908-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-25T16:03:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6908",
+      "text": "The Conversation comment"
+    },
+    {
+      "id": "wright-post-20110825-comment-6928-lulzsec-anonymous-freedom-fighters",
+      "kind": "post",
+      "title": "Comment on: LulzSec, Anonymous - freedom fighters or the new face of evil?",
+      "date": "2011-08-25T21:18:00+10:00",
+      "url": "https://theconversation.com/lulzsec-anonymous-freedom-fighters-or-the-new-face-of-evil-2605#comment_6928",
+      "text": "The Conversation comment"
     },
     {
       "id": "wright-post-20111010-datacon-sydney-speech-hilton-gicsr-vice-presiden",
@@ -742,7 +4094,7 @@
       "id": "wright-email-20140301-email-exchange-with-ira-kleiman-bond-villains-70",
       "kind": "email",
       "title": "Email exchange with Ira Kleiman — 'Bond villains' / ~700,000 BTC",
-      "date": "2014-03-01",
+      "date": "2014-03-01T19:42:00Z",
       "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.24.14.pdf",
       "text": "Ira Kleiman 1 March 2014 19:42 UTC; Wright reply from craig.wright@hotwirepe.com. Wright wrote that at least 300,000 of 1,000,000+ BTC in trust belonged to Dave."
     },
@@ -806,7 +4158,7 @@
       "id": "wright-post-20140811-ato-interview-greg-omahoney-andrew-sommers",
       "kind": "post",
       "title": "ATO interview — Greg O'Mahoney / Andrew Sommers",
-      "date": "2014-08-11",
+      "date": "2014-08-18T16:31:00+10:00",
       "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.547.5.pdf",
       "text": "Discusses Panama bitcoin, Coin-Exch, Hotwire and rights to call on overseas bitcoin. Follow-up interview 18 August 2014 16:31: https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.547.4.pdf"
     },

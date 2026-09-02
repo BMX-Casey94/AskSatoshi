@@ -120,9 +120,9 @@ describe('getActivity', () => {
     expect(byId.satoshi!.byKind).toEqual({ emails: 213, posts: 532 });
     expect(byId.satoshi!.points).toHaveLength(745);
 
-    expect(byId.wright!.total).toBe(100);
-    expect(byId.wright!.byKind).toEqual({ emails: 5, posts: 95 });
-    expect(byId.wright!.points).toHaveLength(100);
+    expect(byId.wright!.total).toBe(519);
+    expect(byId.wright!.byKind).toEqual({ emails: 5, posts: 514 });
+    expect(byId.wright!.points).toHaveLength(519);
 
     expect(byId.kleiman!.total).toBe(66);
     expect(byId.kleiman!.byKind).toEqual({ emails: 42, posts: 24 });

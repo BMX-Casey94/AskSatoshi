@@ -1,5 +1,5 @@
 /**
- * LLM provider chain: gemini-3.6-flash → gemini-3.5-flash → gemini-2.5-flash →
+ * LLM provider chain: gemini-3.6-flash → gemini-3.5-flash →
  * Groq gpt-oss-120b → OpenRouter :free tiers. Streams tokens, fails over on
  * quota/transient errors, and reports day-exhaustion to the circuit breaker so the
  * whole service can go politely "asleep" when every free quota is spent.

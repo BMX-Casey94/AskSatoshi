@@ -111,6 +111,15 @@ export class Breaker {
     return { state: 'asleep', retryAfter: new Date(Math.min(...resets)).toISOString() };
   }
 
+  /**
+   * How many of the configured tiers can take a request right now. Used to decide
+   * whether the service can afford auxiliary LLM calls (query rewrite, citation
+   * filter) or should spend its scarce remaining quota on the answer alone.
+   */
+  usableCount(configuredIds: string[]): number {
+    return configuredIds.filter((id) => this.isUsable(id)).length;
+  }
+
   private state(id: string): TierState {
     let s = this.states.get(id);
     if (!s) {

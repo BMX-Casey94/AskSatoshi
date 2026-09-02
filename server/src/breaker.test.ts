@@ -53,6 +53,17 @@ describe('Breaker', () => {
     b.markOk('a');
     expect(b.isUsable('a')).toBe(true);
   });
+
+  it('usableCount reflects only tiers that can take a request now', () => {
+    const now = Date.now();
+    const b = new Breaker(() => now);
+    expect(b.usableCount(['a', 'b', 'c'])).toBe(3);
+    b.markDayExhausted('a', now + 3_600_000);
+    b.markMinuteLimited('b', 30_000);
+    expect(b.usableCount(['a', 'b', 'c'])).toBe(1);
+    b.markDisabled('c');
+    expect(b.usableCount(['a', 'b', 'c'])).toBe(0);
+  });
 });
 
 describe('quota reset helpers', () => {

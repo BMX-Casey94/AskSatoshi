@@ -18,9 +18,8 @@ export interface ModelTier {
 export const MODEL_CHAIN: ModelTier[] = [
   // Primary: newest Flash confirmed GA + free on unpaid AI Studio keys.
   { id: 'gemini-3.6-flash', provider: 'gemini', model: 'gemini-3.6-flash', vision: true },
-  // Same-key Gemini failovers (quotas are per model, so this multiplies daily capacity).
+  // Same-key Gemini failover (quotas are per model, so this multiplies daily capacity).
   { id: 'gemini-3.5-flash', provider: 'gemini', model: 'gemini-3.5-flash', vision: true },
-  { id: 'gemini-2.5-flash', provider: 'gemini', model: 'gemini-2.5-flash', vision: true },
   // Second tier: Groq production flagship. 30 RPM / 1,000 RPD / 8K TPM free.
   { id: 'groq-gpt-oss-120b', provider: 'groq', model: 'openai/gpt-oss-120b', vision: false },
   // Groq vision preview — image turns only; preview models can vanish, so it is never primary.

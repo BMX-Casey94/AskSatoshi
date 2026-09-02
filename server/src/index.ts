@@ -316,8 +316,19 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
     //     question+context, bounded by a tight timeout; any failure falls back to the
     //     deterministic regex contextualiser.
     const hasKeys = !!(keys.gemini || keys.groq || keys.openrouter);
+    // Constrained mode: when two or fewer tiers can take a request right now, spend the
+    // scarce quota on the answer alone and skip the auxiliary rewrite/filter calls.
+    // Those calls are fail-open enhancements — under a rate squeeze they only multiply
+    // token burn and push the answer itself over the per-minute cap.
+    const tierIds = configuredTiers(keys).map((t) => t.id);
+    const constrained = hasKeys && breaker.usableCount(tierIds) <= 2;
+    if (constrained) {
+      console.info(
+        `[chat] constrained mode (${breaker.usableCount(tierIds)}/${tierIds.length} tiers usable) — skipping rewrite and citation filter`,
+      );
+    }
     let understanding: QueryUnderstanding | undefined;
-    if (hasKeys && !image && !shouldSkipRewrite(question)) {
+    if (hasKeys && !image && !constrained && !shouldSkipRewrite(question)) {
       const cacheKey = rewriteCacheKey(question, priorUser);
       understanding = rewriteCache.get(cacheKey);
       if (!understanding) {
@@ -389,7 +400,7 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
     // garbled reply fails open to the unfiltered list.
     const filterReq = buildCitationFilter(question, grounding.citations);
     const filterPromise: Promise<{ text: string } | null> =
-      filterReq && hasKeys && !image
+      filterReq && hasKeys && !image && !constrained
         ? runChain(
             { system: filterReq.system, history: [], userContent: filterReq.userContent },
             { keys, breaker, signal: controller.signal, onDelta: () => undefined },

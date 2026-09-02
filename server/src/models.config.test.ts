@@ -6,7 +6,7 @@ const allKeys = { gemini: 'g', groq: 'q', openrouter: 'o' };
 describe('model chain configuration', () => {
   it('includes only tiers whose provider key is configured', () => {
     const ids = configuredTiers({ gemini: 'g' }).map((t) => t.id);
-    expect(ids).toEqual(['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-2.5-flash']);
+    expect(ids).toEqual(['gemini-3.6-flash', 'gemini-3.5-flash']);
   });
 
   it('orders the full chain Gemini → Groq → OpenRouter', () => {
@@ -14,7 +14,6 @@ describe('model chain configuration', () => {
     expect(ids).toEqual([
       'gemini-3.6-flash',
       'gemini-3.5-flash',
-      'gemini-2.5-flash',
       'groq-gpt-oss-120b',
       'openrouter-nemotron-super',
       'openrouter-glm-5.2',

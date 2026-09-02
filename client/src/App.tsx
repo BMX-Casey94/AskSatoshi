@@ -394,9 +394,6 @@ export function App() {
               Grounded in the writings and the protocol record. Free to use; chats stay on your
               device.
             </p>
-            <Link href="/satoshi-activity" className="landing-footer-link">
-              Satoshi activity
-            </Link>
           </footer>
         </main>
       ) : (

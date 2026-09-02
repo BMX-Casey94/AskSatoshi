@@ -48,7 +48,7 @@ export type ProviderFn = (
   signal: AbortSignal,
 ) => Promise<string>;
 
-const FIRST_TOKEN_TIMEOUT_MS = 30_000;
+const FIRST_TOKEN_TIMEOUT_MS = 45_000;
 // 1024 was being consumed by hidden "thinking" on Flash / GPT-OSS before any
 // visible token, cutting answers short. 4096 leaves generous room for reasoning +
 // a full answer; the system prompt still caps length, so headroom costs nothing.

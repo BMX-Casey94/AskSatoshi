@@ -11,7 +11,7 @@ import { dirname, join } from 'node:path';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport, getDefaultEnvironment } from '@modelcontextprotocol/sdk/client/stdio.js';
 
-const INVESTIGATE_TIMEOUT_MS = 12_000;
+const INVESTIGATE_TIMEOUT_MS = 20_000;
 const RECONNECT_DELAY_MS = 5_000;
 /**
  * The initialize handshake must outlast the child's first-boot SQLite ingest. On a

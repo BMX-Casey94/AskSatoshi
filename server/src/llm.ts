@@ -80,7 +80,7 @@ export function createGeminiProvider(apiKey: string): ProviderFn {
       config: {
         systemInstruction: req.system,
         temperature: TEMPERATURE,
-        maxOutputTokens: MAX_OUTPUT_TOKENS,
+        maxOutputTokens: tier.maxOutputTokens ?? MAX_OUTPUT_TOKENS,
         // Cap hidden thinking so it can't eat the whole output budget (2.5 series).
         thinkingConfig: { thinkingBudget: 1024 },
         abortSignal: signal,
@@ -128,7 +128,7 @@ export function createOpenAiCompatProvider(provider: 'groq' | 'openrouter', apiK
       model: tier.model,
       stream: true,
       temperature: TEMPERATURE,
-      max_tokens: MAX_OUTPUT_TOKENS,
+      max_tokens: tier.maxOutputTokens ?? MAX_OUTPUT_TOKENS,
       messages: [
         { role: 'system', content: req.system },
         ...req.history,

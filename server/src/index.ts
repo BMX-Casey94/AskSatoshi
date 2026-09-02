@@ -18,7 +18,7 @@ import { AnswerCache } from './cache.js';
 import { noKnowledgeLine, SLEEP_LINES, WITTY, witty, WittyException, type ErrorCode } from './errors.js';
 import { runChain, type ChainRequest } from './llm.js';
 import { McpBridge } from './mcp.js';
-import { configuredTiers, type ProviderKeys } from './models.config.js';
+import { configuredTiers, eligibleTiers, evidenceBudgetFor, type ProviderKeys } from './models.config.js';
 import {
   buildCitationFilter,
   buildSystemPrompt,
@@ -407,11 +407,16 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
           ).catch(() => null)
         : Promise.resolve(null);
 
+    // Trim the evidence block when the request is headed for a free tier, so the whole
+    // grounded prompt fits under that tier's per-minute token ceiling. Paid tiers (the
+    // funded OpenRouter primary) have a 1M context and get the full evidence.
+    const firstUsable = eligibleTiers(keys, !!image).find((t) => breaker.isUsable(t.id));
     const result = await runChain(
       {
         system: buildSystemPrompt(grounding.mode, grounding, {
           questionClass: questionClass(question),
           styleSeed: pickStyleSeed(),
+          evidenceChars: evidenceBudgetFor(firstUsable),
         }),
         history: picked,
         userContent: buildUserContent(question, grounding),

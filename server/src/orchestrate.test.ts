@@ -566,6 +566,20 @@ describe('prompt construction', () => {
     expect(buildSystemPrompt('mcp')).toMatch(/pinned snapshot/);
   });
 
+  it('trims the evidence block to the given budget, keeping the head', () => {
+    const grounding = {
+      mode: 'mcp' as const,
+      evidenceText: 'A'.repeat(100) + 'B'.repeat(100),
+      citations: [],
+    };
+    const full = buildSystemPrompt('mcp', grounding);
+    expect(full).toContain('A'.repeat(100) + 'B'.repeat(100));
+    const trimmed = buildSystemPrompt('mcp', grounding, { evidenceChars: 120 });
+    expect(trimmed).toContain('A'.repeat(100));
+    expect(trimmed).not.toContain('B'.repeat(100));
+    expect(trimmed).toMatch(/…/);
+  });
+
   it('keeps the identity answer mysterious — breadcrumbs, never a candidate’s name', () => {
     const sys = buildSystemPrompt('mcp');
     expect(sys).toMatch(/never confirm, never deny/);

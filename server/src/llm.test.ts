@@ -101,7 +101,8 @@ describe('runChain', () => {
   });
 
   it('routes image requests to a vision-capable tier', async () => {
-    // With only an OpenRouter key, gemma-4-31b is the sole vision tier in the chain.
+    // With only an OpenRouter key, the vision-capable tiers are the paid primary
+    // (flash-lite) then the free gemma-4-31b; the chain tries the paid primary first.
     const seenModels: string[] = [];
     const visionProbe: ProviderFn = async (tier, _req, onDelta) => {
       seenModels.push(tier.model);
@@ -117,7 +118,7 @@ describe('runChain', () => {
         providers: { openrouter: visionProbe },
       },
     );
-    expect(result.tierId).toBe('openrouter-gemma-4-31b');
-    expect(seenModels).toEqual(['google/gemma-4-31b-it:free']);
+    expect(result.tierId).toBe('openrouter-flash-lite');
+    expect(seenModels).toEqual(['google/gemini-3.1-flash-lite']);
   });
 });

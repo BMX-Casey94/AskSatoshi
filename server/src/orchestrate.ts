@@ -1153,6 +1153,13 @@ const EVIDENCE_PROVENANCE: Record<Grounding['mode'], string> = {
 export interface PromptContext {
   questionClass?: 'fact' | 'contested';
   styleSeed?: string;
+  /**
+   * Cap on the evidence block's length. Free tiers pass a smaller budget so the whole
+   * grounded prompt fits under their per-minute token ceilings (Groq's 8K TPM); paid
+   * tiers omit it and get the full evidence. Truncation keeps the head of the block,
+   * where the highest-ranked evidence sits.
+   */
+  evidenceChars?: number;
 }
 
 export function buildSystemPrompt(
@@ -1168,7 +1175,11 @@ export function buildSystemPrompt(
     prompt += `\n\nSTYLE SEED (phrasing only — do not add facts absent from EVIDENCE):\n${ctx.styleSeed}`;
   }
   if (grounding && grounding.evidenceText) {
-    prompt += `\n\nEVIDENCE (for the latest question only; do not reproduce the bracketed numbers in your answer):\n${grounding.evidenceText}`;
+    let evidence = grounding.evidenceText;
+    if (ctx.evidenceChars !== undefined && evidence.length > ctx.evidenceChars) {
+      evidence = `${evidence.slice(0, ctx.evidenceChars)}…`;
+    }
+    prompt += `\n\nEVIDENCE (for the latest question only; do not reproduce the bracketed numbers in your answer):\n${evidence}`;
   }
   return prompt;
 }

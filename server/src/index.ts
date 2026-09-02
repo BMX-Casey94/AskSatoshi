@@ -23,11 +23,20 @@ import {
   buildCitationFilter,
   buildSystemPrompt,
   buildUserContent,
+  filterUnusedCitations,
   groundQuestion,
   parseCitationFilter,
   pickStyleSeed,
   questionClass,
 } from './orchestrate.js';
+import {
+  buildQueryUnderstandingRequest,
+  parseQueryUnderstanding,
+  rewriteCacheKey,
+  RewriteCache,
+  shouldSkipRewrite,
+  type QueryUnderstanding,
+} from './queryUnderstanding.js';
 import { getActivity } from './satoshiActivity.js';
 import { loadCorpus } from './satoshiCorpus.js';
 import { loadCuratedReference } from './curatedReference.js';
@@ -52,6 +61,11 @@ const MAX_HISTORY_CHARS = 12_000;
 const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
 /** Max length of a single user message. Generous — Gemini's context window is huge. */
 const MAX_QUESTION_CHARS = 8_000;
+/**
+ * Bound on the query-understanding pass. It gates grounding, so it must stay cheap:
+ * on timeout the request fails open to the deterministic regex path below.
+ */
+const REWRITE_TIMEOUT_MS = 6_000;
 
 /** Heuristic: is this message a short follow-up that needs the prior question for context? */
 function isFollowUp(text: string): boolean {
@@ -74,6 +88,7 @@ const keys: ProviderKeys = {
 
 const breaker = new Breaker();
 const cache = new AnswerCache();
+const rewriteCache = new RewriteCache();
 const mcp = new McpBridge();
 const corpus = loadCorpus();
 const curated = loadCuratedReference();
@@ -290,8 +305,61 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
       // warm-up line never outlives the actual wait.
       sseWrite(res, 'status', { phase: 'grounding' });
     }
-    const retrievalQuery = contextualQuery(question, priorUser);
-    const grounding = await groundQuestion(retrievalQuery, { mcp, corpus, curated });
+
+    // 2a. Query understanding: one small structured pass turns the latest message (plus
+    //     the recent conversation) into a standalone retrieval query and a few variant
+    //     phrasings in document vocabulary. Retrieval is lexical on both sides (SQLite
+    //     FTS in the MCP, BM25 in the corpus), so this bridges the vocabulary gap —
+    //     "why did you leave Bitcoin" reaches the essay that says "withdrew from public
+    //     view", and "NAR/DAR" reaches "Network Access Rules (NAR)". Best-effort and
+    //     fail-open: skipped for strong protocol identifiers and courtesies, cached per
+    //     question+context, bounded by a tight timeout; any failure falls back to the
+    //     deterministic regex contextualiser.
+    const hasKeys = !!(keys.gemini || keys.groq || keys.openrouter);
+    let understanding: QueryUnderstanding | undefined;
+    if (hasKeys && !image && !shouldSkipRewrite(question)) {
+      const cacheKey = rewriteCacheKey(question, priorUser);
+      understanding = rewriteCache.get(cacheKey);
+      if (!understanding) {
+        const rewriteReq = buildQueryUnderstandingRequest(question, priorMessages);
+        const rewriteRes = await Promise.race([
+          runChain(
+            { system: rewriteReq.system, history: [], userContent: rewriteReq.userContent },
+            { keys, breaker, signal: controller.signal, onDelta: () => undefined },
+          ).catch(() => null),
+          new Promise<null>((resolve) => setTimeout(() => resolve(null), REWRITE_TIMEOUT_MS)),
+        ]);
+        if (rewriteRes) {
+          understanding = parseQueryUnderstanding(rewriteRes.text, question, priorUser);
+          if (understanding) rewriteCache.set(cacheKey, understanding);
+        }
+        // Dev-visible trace for tuning the pass: what the question became for retrieval,
+        // or why the pass produced nothing (timeout/provider error vs. discarded reply).
+        if (understanding) {
+          console.info(
+            `[rewrite] "${question.slice(0, 80)}" → "${understanding.query}"` +
+              (understanding.variants.length ? ` | variants: ${understanding.variants.join(' ‖ ')}` : '') +
+              (understanding.followUp ? ' | followUp' : ''),
+          );
+        } else if (rewriteRes) {
+          console.info(
+            `[rewrite] discarded "${question.slice(0, 60)}" ← ${rewriteRes.text.replace(/\s+/g, ' ').slice(0, 240)}`,
+          );
+        } else {
+          console.info(`[rewrite] no reply (timeout or provider error) for "${question.slice(0, 60)}"`);
+        }
+      }
+    }
+
+    const retrievalQuery = understanding?.query ?? contextualQuery(question, priorUser);
+    const grounding = await groundQuestion(retrievalQuery, { mcp, corpus, curated }, {
+      variants: understanding?.variants,
+      originalQuestion: question,
+      // investigate resolves follow-up references when given the prior turn as context —
+      // but only forward it when this message actually is a follow-up, or unrelated
+      // prior context would pollute a standalone question's retrieval.
+      context: priorUser && (!standalone || understanding?.followUp) ? priorUser : undefined,
+    });
     if (grounding.mode === 'none') {
       sseWrite(res, 'delta', { text: noKnowledgeLine(question) });
       sseWrite(res, 'meta', { mode: 'none', citations: [] });
@@ -319,7 +387,6 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
     // positives (a logo post matching "scaling" in the image sense) survive lexical
     // retrieval; this semantic pass rejects them. Best-effort: any error, timeout, or
     // garbled reply fails open to the unfiltered list.
-    const hasKeys = !!(keys.gemini || keys.groq || keys.openrouter);
     const filterReq = buildCitationFilter(question, grounding.citations);
     const filterPromise: Promise<{ text: string } | null> =
       filterReq && hasKeys && !image
@@ -361,8 +428,13 @@ app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
       // result is treated as a filter miss, not a reason to show zero sources.
       if (keep && keep.length > 0) citations = keep.map((i) => citations[i]!).filter(Boolean);
     }
+    // Usage floor: relevance to the question is not usage in the answer. Drop sources
+    // the written answer does not reflect (deterministic, fail-open — see the function).
+    citations = filterUnusedCitations(result.text, citations);
 
-    if (cacheable) {
+    // A message the understanding pass flagged as a follow-up is never cached as a
+    // standalone oracle: its answer only makes sense against this conversation.
+    if (cacheable && !understanding?.followUp) {
       cache.set(question, { text: result.text, mode: grounding.mode, citations });
     }
     sseWrite(res, 'meta', { mode: grounding.mode, citations, tier: result.tierId });

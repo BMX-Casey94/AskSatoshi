@@ -4,12 +4,14 @@ import {
   buildSystemPrompt,
   buildUserContent,
   extractKeywords,
+  filterUnusedCitations,
   groundQuestion,
   locatorToUrl,
   normaliseEvidence,
   parseCitationFilter,
 } from './orchestrate.js';
 import { SatoshiCorpus, type CorpusDoc } from './satoshiCorpus.js';
+import { CuratedReference } from './curatedReference.js';
 import type { McpBridge } from './mcp.js';
 
 const SPV_DOC: CorpusDoc = {
@@ -587,6 +589,12 @@ describe('prompt construction', () => {
     expect(sys).toMatch(/never on a conversational message/);
   });
 
+  it('forbids inventing acronym expansions the evidence does not give', () => {
+    const sys = buildSystemPrompt('mcp');
+    expect(sys).toMatch(/expanded exactly as the EVIDENCE expands them/);
+    expect(sys).toMatch(/[Nn]ever invent or guess an acronym/);
+  });
+
   it('forbids Taproot, SegWit and Lightning as implementation advice', () => {
     const sys = buildSystemPrompt('mcp');
     expect(sys).toMatch(/IMPLEMENTATION ADVICE IS BSV-ONLY/);
@@ -641,6 +649,23 @@ describe('extractKeywords', () => {
   it('returns undefined for a question with no content words', () => {
     expect(extractKeywords('what is it?')).toBeUndefined();
   });
+
+  it('splits slash-joined acronyms and expands known ecosystem terms', () => {
+    const kw = extractKeywords('Is that comparable to NAR/DAR? Please help me compare the two.');
+    expect(kw).toBeDefined();
+    expect(kw).toContain('NAR');
+    expect(kw).toContain('DAR');
+    expect(kw).toContain('Network Access Rules');
+    expect(kw).toContain('Digital Asset Recovery');
+  });
+
+  it('drops comparison framing words, keeping the subject', () => {
+    const kw = extractKeywords('How does the alert key compare to multisig?');
+    expect(kw).toBeDefined();
+    expect(kw).toContain('alert');
+    expect(kw).toContain('multisig');
+    expect(kw).not.toMatch(/\b(compare|comparable|comparison|help|versus|vs)\b/i);
+  });
 });
 
 describe('citation relevance filter', () => {
@@ -681,5 +706,358 @@ describe('citation relevance filter', () => {
 
   it('drops out-of-range indices', () => {
     expect(parseCitationFilter('1, 9', 3)).toEqual([0]);
+  });
+
+  it('requires a source to offer a specific claim, not just a shared topic', () => {
+    const req = buildCitationFilter('q', CITES);
+    expect(req!.system).toMatch(/specific claim/i);
+  });
+});
+
+describe('citation usage floor', () => {
+  const GAVIN_EMAIL = {
+    label: 'email',
+    title: 'Re: Bitcoin and Wikileaks',
+    url: 'https://x/email',
+    excerpt:
+      'I wish you would not keep talking about me as a mysterious shadowy figure, the press just turns that into a pirate currency angle. Maybe instead make it about the open source project and give more credit to your dev contributors; it helps motivate them.',
+    sourceClass: 'satoshi-primary' as const,
+  };
+  const RUNAR_SPEC = {
+    label: 'spec',
+    title: 'runar-lang README',
+    url: 'https://x/runar',
+    excerpt:
+      'Rúnar is a TypeScript embedded DSL for writing sCrypt-style spending contracts, with compiler targets and package installation instructions.',
+    sourceClass: 'spec' as const,
+  };
+  const ANSWER =
+    'In early 2011 I sent my final message to Gavin Andresen, asking him to stop portraying me as a mysterious shadowy figure because the press was turning it into a pirate currency angle. I urged him to give more credit to the dev contributors, then stepped back.';
+
+  it('drops a citation whose content the answer never reflects', () => {
+    const kept = filterUnusedCitations(ANSWER, [GAVIN_EMAIL, RUNAR_SPEC]);
+    expect(kept.map((c) => c.label)).toEqual(['email']);
+  });
+
+  it('keeps every citation the answer draws on', () => {
+    const answer =
+      'The alert key let a single trusted party broadcast signed emergency warnings; Rúnar is a TypeScript embedded DSL for spending contracts.';
+    const alertPost = {
+      label: 'alert',
+      title: 'Alert system',
+      url: 'https://x/alert',
+      excerpt: 'The alert key lets one trusted party broadcast signed emergency warnings to every node.',
+      sourceClass: 'satoshi-primary' as const,
+    };
+    const kept = filterUnusedCitations(answer, [alertPost, RUNAR_SPEC]);
+    expect(kept.map((c) => c.label)).toEqual(['alert', 'spec']);
+  });
+
+  it('fails open when no citation shows usage — a grounded answer drew on something', () => {
+    const paraphrased = 'I departed because the project needed to stand on its own merits.';
+    const kept = filterUnusedCitations(paraphrased, [GAVIN_EMAIL, RUNAR_SPEC]);
+    expect(kept).toHaveLength(2);
+  });
+
+  it('returns the input unchanged for fewer than two citations or an empty answer', () => {
+    expect(filterUnusedCitations(ANSWER, [GAVIN_EMAIL])).toEqual([GAVIN_EMAIL]);
+    expect(filterUnusedCitations('', [GAVIN_EMAIL, RUNAR_SPEC])).toHaveLength(2);
+  });
+
+  it('treats a shared distinctive phrase as usage even when single tokens are common', () => {
+    const essay = {
+      label: 'essay',
+      title: 'Governance essay',
+      url: 'https://x/nar',
+      excerpt: 'Network access rules define who may transact, under court-order mechanics.',
+      sourceClass: 'later-commentary' as const,
+    };
+    const answer = 'Network access rules are a governance layer, not a base-protocol change.';
+    const kept = filterUnusedCitations(answer, [essay, RUNAR_SPEC]);
+    expect(kept.map((c) => c.label)).toEqual(['essay']);
+  });
+
+  it('does not count domain-common words as usage', () => {
+    const generic = {
+      label: 'generic',
+      title: 'Bitcoin network overview',
+      url: 'https://x/gen',
+      excerpt: 'The Bitcoin network processes transactions through nodes on the blockchain.',
+      sourceClass: 'historical-record' as const,
+    };
+    const kept = filterUnusedCitations(ANSWER, [GAVIN_EMAIL, generic]);
+    expect(kept.map((c) => c.label)).toEqual(['email']);
+  });
+
+  it('matches case-insensitively', () => {
+    const lower = ANSWER.toLowerCase();
+    const kept = filterUnusedCitations(lower, [GAVIN_EMAIL, RUNAR_SPEC]);
+    expect(kept.map((c) => c.label)).toEqual(['email']);
+  });
+});
+
+describe('retrieval plan (query understanding)', () => {
+  it('classifies on the original question while retrieving with the rewritten query', async () => {
+    const calls = { search: 0, investigate: [] as string[] };
+    const mcp = {
+      connected: true,
+      investigate: async (q: string) => {
+        calls.investigate.push(q);
+        return INSUFFICIENT_PKG;
+      },
+      searchKnowledge: async () => {
+        calls.search += 1;
+        return { hits: [] };
+      },
+      getResource: async () => ({ text: undefined }),
+    } as unknown as McpBridge;
+    // The rewritten query carries no conceptual cue word ("why"); only the original does.
+    await groundQuestion(
+      'Satoshi withdrew from public view disillusioned 2010 2011',
+      { mcp, corpus: null },
+      { originalQuestion: 'Why did you leave Bitcoin and move onto other things?' },
+    );
+    // The conceptual blend (searchKnowledge) ran first…
+    expect(calls.search).toBeGreaterThan(0);
+    // …and the investigate fallback received the rewritten query, not the raw question.
+    expect(calls.investigate[0]).toBe('Satoshi withdrew from public view disillusioned 2010 2011');
+  });
+
+  it('tries the rewritten query, then variants, before concluding there is no evidence', async () => {
+    const tried: string[] = [];
+    const mcp = {
+      connected: true,
+      investigate: async (q: string) => {
+        tried.push(q);
+        return q === 'alert key emergency broadcast' ? SUFFICIENT_PKG : INSUFFICIENT_PKG;
+      },
+    } as unknown as McpBridge;
+    const g = await groundQuestion('alert system network-wide warning', { mcp, corpus: null }, {
+      variants: ['alert key emergency broadcast', 'alert key safe mode RPC'],
+    });
+    expect(tried).toEqual(['alert system network-wide warning', 'alert key emergency broadcast']);
+    expect(g.mode).toBe('mcp');
+  });
+
+  it('keeps the question-then-keywords attempt order when no plan is supplied', async () => {
+    const tried: string[] = [];
+    const mcp = {
+      connected: true,
+      investigate: async (q: string) => {
+        tried.push(q);
+        return INSUFFICIENT_PKG;
+      },
+    } as unknown as McpBridge;
+    await groundQuestion('What is the frobnicate opcode?', { mcp, corpus: null });
+    expect(tried).toEqual(['What is the frobnicate opcode?', 'frobnicate opcode']);
+  });
+
+  it('passes conversation context through to investigate when the plan carries it', async () => {
+    const seen: { q: string; ctx?: string }[] = [];
+    const mcp = {
+      connected: true,
+      investigate: async (q: string, ctx?: string) => {
+        seen.push({ q, ctx });
+        return SUFFICIENT_PKG;
+      },
+    } as unknown as McpBridge;
+    await groundQuestion('What is BEEF?', { mcp, corpus: null }, { context: 'Tell me about SPV proofs' });
+    expect(seen[0]).toEqual({ q: 'What is BEEF?', ctx: 'Tell me about SPV proofs' });
+  });
+
+  it('searches each rewrite variant and merges the hits, citing a shared URL once', async () => {
+    const queries: string[] = [];
+    const mcp = {
+      connected: true,
+      investigate: async () => INSUFFICIENT_PKG,
+      searchKnowledge: async (q: string, filters?: { kind?: string[] }) => {
+        queries.push(q);
+        if (!filters?.kind?.includes('essay')) return { hits: [] };
+        if (q.includes('withdrew')) {
+          return {
+            hits: [
+              { id: 'e:1', kind: 'essay', title: 'The myth of forks', locator: 'csw://essay/medium/the-myth-of-forks-be04f8e5fe4a' },
+            ],
+          };
+        }
+        if (q.includes('departure')) {
+          return {
+            hits: [
+              { id: 'e:2', kind: 'principle', title: 'The myth of forks', locator: 'education/medium--the-myth-of-forks-be04f8e5fe4a.md' },
+            ],
+          };
+        }
+        return { hits: [] };
+      },
+      getResource: async () => ({ text: 'I removed myself from public view, rather disillusioned.' }),
+    } as unknown as McpBridge;
+    const g = await groundQuestion('Why did you leave Bitcoin?', { mcp, corpus: null }, {
+      variants: ['Satoshi departure 2010 2011', 'withdrew from public view disillusioned'],
+    });
+    // Both variants were issued to the essay tier.
+    expect(queries).toContain('Satoshi departure 2010 2011');
+    expect(queries).toContain('withdrew from public view disillusioned');
+    // The same essay surfaced under two locators resolves to a single citation.
+    const commentary = g.citations.filter((c) => c.sourceClass === 'later-commentary');
+    expect(commentary).toHaveLength(1);
+    expect(commentary[0]?.url).toBe('https://medium.com/@craig_10243/the-myth-of-forks-be04f8e5fe4a');
+    expect(g.evidenceText).toContain('removed myself from public view');
+  });
+
+  it('interleaves per-query hits so a noisy phrasing cannot crowd out a precise variant', async () => {
+    const mcp = {
+      connected: true,
+      investigate: async () => INSUFFICIENT_PKG,
+      searchKnowledge: async (q: string, filters?: { kind?: string[] }) => {
+        if (!filters?.kind?.includes('essay')) return { hits: [] };
+        // The main query returns four plausible-but-off-topic essays (filling the tier cap)…
+        if (q.includes('leave')) {
+          return {
+            hits: [1, 2, 3, 4].map((i) => ({
+              id: `n:${i}`,
+              kind: 'essay',
+              title: `Noise essay ${i}`,
+              locator: `csw://essay/medium/noise-${i}`,
+            })),
+          };
+        }
+        // …whilst the variant returns the one essay that actually answers the question.
+        if (q.includes('withdrew')) {
+          return {
+            hits: [
+              { id: 'e:1', kind: 'essay', title: 'The myth of forks', locator: 'csw://essay/medium/the-myth-of-forks-be04f8e5fe4a' },
+            ],
+          };
+        }
+        return { hits: [] };
+      },
+      getResource: async () => ({ text: 'I removed myself from public view, rather disillusioned.' }),
+    } as unknown as McpBridge;
+    const g = await groundQuestion('Why did you leave Bitcoin?', { mcp, corpus: null }, {
+      variants: ['withdrew from public view disillusioned'],
+    });
+    const urls = g.citations.map((c) => c.url);
+    // The variant's hit survives alongside the main query's hits — not crowded out at rank 5.
+    expect(urls).toContain('https://medium.com/@craig_10243/the-myth-of-forks-be04f8e5fe4a');
+    expect(urls.filter((u) => u?.includes('noise-')).length).toBeGreaterThan(0);
+  });
+
+  it('searches every kind the MCP indexes, so no section of the knowledge base is filtered out', async () => {
+    const kindSets: string[][] = [];
+    const mcp = {
+      connected: true,
+      investigate: async () => INSUFFICIENT_PKG,
+      searchKnowledge: async (_q: string, filters?: { kind?: string[] }) => {
+        kindSets.push(filters?.kind ?? []);
+        return { hits: [] };
+      },
+      getResource: async () => ({ text: undefined }),
+    } as unknown as McpBridge;
+    await groundQuestion('Why was Bitcoin hijacked?', { mcp, corpus: null });
+    const searched = new Set(kindSets.flat());
+    for (const kind of [
+      'brc', 'symbol', 'test', 'example', 'doc', 'essay',
+      'principle', 'wiki', 'web', 'live', 'contradiction', 'capability',
+    ]) {
+      expect(searched).toContain(kind);
+    }
+    // Two tiers × two passes (keywords, then the raw-phrasing retry when all tiers miss).
+    // The memoised blend must NOT fan out again after investigate also comes up empty —
+    // without that guard this would be 8.
+    expect(kindSets).toHaveLength(4);
+  });
+
+  it('admits corpus contradiction findings as evidence-only entries, never cited', async () => {
+    const mcp = {
+      connected: true,
+      investigate: async () => INSUFFICIENT_PKG,
+      searchKnowledge: async (_q: string, filters?: { kind?: string[] }) => {
+        if (filters?.kind?.includes('contradiction')) {
+          return {
+            hits: [
+              {
+                id: 'c:1',
+                kind: 'contradiction',
+                title: 'Alert key retirement',
+                locator: 'csw://contradictions/alert-key',
+                excerpt: 'The 2010 alert key sits awkwardly with later immutability claims.',
+              },
+            ],
+          };
+        }
+        return { hits: [] };
+      },
+      getResource: async () => ({
+        text: 'Finding: the early alert key design sits awkwardly with later immutability claims.',
+      }),
+    } as unknown as McpBridge;
+    const g = await groundQuestion('Why was the alert key retired?', { mcp, corpus: null });
+    expect(g.mode).toBe('mcp');
+    // The finding reaches the model as evidence…
+    expect(g.evidenceText).toContain('early alert key design');
+    // …but with no public URL it is never cited, and carries no [n] marker.
+    expect(g.citations).toHaveLength(0);
+    expect(g.evidenceText).not.toMatch(/\[\d+\]/);
+  });
+
+  it('routes comparative questions to the essay-first blend, not the claim composer', async () => {
+    const calls = { search: 0, investigate: 0 };
+    const mcp = {
+      connected: true,
+      investigate: async () => {
+        calls.investigate += 1;
+        return SUFFICIENT_PKG;
+      },
+      searchKnowledge: async (_q: string, filters?: { kind?: string[] }) => {
+        calls.search += 1;
+        if (filters?.kind?.includes('essay')) {
+          return {
+            hits: [
+              {
+                id: 'e:1',
+                kind: 'essay',
+                title: 'The Miner Is Not a Monarch',
+                locator: 'csw://essay/substack/the-miner-is-not-a-monarch',
+              },
+            ],
+          };
+        }
+        return { hits: [] };
+      },
+      getResource: async () => ({
+        text: 'Objections to Network Access Rules (NAR) and Digital Asset Recovery (DAR) rest on a category error.',
+      }),
+    } as unknown as McpBridge;
+    const g = await groundQuestion('Is that comparable to NAR/DAR? Please help me compare the two.', {
+      mcp,
+      corpus: null,
+    });
+    // The blend answered it; the phrasing-sensitive investigate composer never ran.
+    expect(calls.search).toBeGreaterThan(0);
+    expect(calls.investigate).toBe(0);
+    expect(g.citations[0]?.url).toBe('https://singulargrit.substack.com/p/the-miner-is-not-a-monarch');
+  });
+
+  it('routes identity questions by the original phrasing even when the rewrite drops the cue', async () => {
+    const curated = new CuratedReference(
+      [
+        {
+          id: 'd:1',
+          category: 'testimony',
+          title: 'A witness account',
+          url: 'https://example.com/witness',
+          text: 'Testimony about the authorship of the white paper.',
+        },
+      ],
+      null,
+      null,
+    );
+    const g = await groundQuestion(
+      'departure record 2010 authorship',
+      { mcp: null, corpus: null, curated },
+      { originalQuestion: 'Are you really Craig Wright?' },
+    );
+    expect(g.mode).toBe('reference');
+    expect(g.evidenceText).toContain('Testimony about the authorship');
   });
 });

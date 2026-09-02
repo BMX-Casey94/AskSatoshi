@@ -108,3 +108,33 @@ describe('SatoshiCorpus', () => {
     expect(withQuote.search('knightmb coded delay')).toEqual([]);
   });
 });
+
+describe('SatoshiCorpus.searchAll (multi-query)', () => {
+  const corpus = new SatoshiCorpus(DOCS);
+
+  it('finds documents via a later variant when the first query misses', () => {
+    const hits = corpus.searchAll(['zxqwv plugh asdfgh', 'Will transaction fees replace the block reward?']);
+    expect(hits[0]?.id).toBe('post-bitcointalk-287');
+  });
+
+  it('dedupes documents across queries', () => {
+    const hits = corpus.searchAll(['SPV', 'Simplified Payment Verification']);
+    expect(hits.length).toBeGreaterThan(0);
+    expect(hits.filter((h) => h.id === 'email-cryptography-2')).toHaveLength(1);
+  });
+
+  it('returns empty when every query misses', () => {
+    expect(corpus.searchAll(['zxqwv plugh', 'asdfgh qwerty'])).toEqual([]);
+  });
+
+  it('respects the limit across the merged results', () => {
+    const hits = corpus.searchAll(['Bitcoin', 'transaction'], 2);
+    expect(hits.length).toBeLessThanOrEqual(2);
+  });
+
+  it('matches search() when given a single query', () => {
+    const single = corpus.search('Will transaction fees replace the block reward?');
+    const multi = corpus.searchAll(['Will transaction fees replace the block reward?']);
+    expect(multi.map((h) => h.id)).toEqual(single.map((h) => h.id));
+  });
+});

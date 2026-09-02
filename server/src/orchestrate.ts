@@ -26,6 +26,7 @@ import {
   type CuratedReference,
   type ScalingRecord,
 } from './curatedReference.js';
+import { expandTerms, PROTOCOL_ID_SOURCE } from './queryUnderstanding.js';
 
 /** Where a source sits in the evidentiary hierarchy. */
 export type SourceClass = 'satoshi-primary' | 'spec' | 'later-commentary' | 'historical-record';
@@ -164,7 +165,10 @@ function resourceText(res: unknown): string | undefined {
 
 /** Detect conceptual/why questions that the MCP's `mixed` class handles poorly. */
 function isConceptualQuestion(q: string): boolean {
-  return /\b(why|meant|intended|original|vision|philosophy|design|always|hijack|co-?opt|satoshi|satoshi's|believe|think|opinion)\b/i.test(
+  // Comparative frames ("how does X compare to Y", "is that comparable to…") are
+  // concept questions: the answer lives in the essay corpus, and investigate's claim
+  // composer only mangles them into incidental README claims.
+  return /\b(why|meant|intended|original|vision|philosophy|design|always|hijack|co-?opt|satoshi|satoshi's|believe|think|opinion|compare|compares|compared|comparing|comparable|comparison|versus|vs|similar|similarity|difference|differences)\b/i.test(
     q,
   );
 }
@@ -185,7 +189,7 @@ export function extractKeywords(question: string): string | undefined {
   // Strongest signal: explicit protocol/spec identifiers. BRC-100, OP_CHECKSIG, BEEF,
   // SPV, Rúnar, UTXO, etc. A trailing plural 's' on a BRC id is stripped in the
   // normalisation below so "BRC-100s" resolves to the spec id "BRC-100".
-  const idMatches = q.match(/\b(?:BRC-?\d+s?|OP_[A-Z0-9_]+|BEEF|SPV|UTXO|Rúnar|Runar|SDK|TS-?stack|Arc(?:ade)?|WoC)\b/gi);
+  const idMatches = q.match(new RegExp(`\\b${PROTOCOL_ID_SOURCE}\\b`, 'gi'));
   if (idMatches && idMatches.length > 0) {
     const ids = [
       ...new Set(
@@ -200,17 +204,23 @@ export function extractKeywords(question: string): string | undefined {
     return ids;
   }
 
-  // Otherwise strip the conversational wrapper and keep content words.
+  // Otherwise strip the conversational wrapper and keep content words. Comparative
+  // framing (compare/versus/similar/two/both…) describes the asker's phrasing, not the
+  // subject — it only dilutes the AND-semantics search on the MCP side.
   const STOP = new Set(
-    ('a,an,and,are,as,at,be,been,but,by,can,could,did,do,does,for,from,had,has,have,he,her,his,how,i,if,in,into,is,it,its,me,my,of,on,or,so,tell,that,the,their,them,they,this,to,was,we,were,what,when,which,who,why,will,with,you,your,about,know,known,want,wanted,like,show,explain,describe,give,say,said,please,thanks,thank'.split(',')),
+    ('a,an,and,are,as,at,be,been,but,by,can,could,did,do,does,for,from,had,has,have,he,her,his,how,i,if,in,into,is,it,its,me,my,of,on,or,so,tell,that,the,their,them,they,this,to,was,we,were,what,when,which,who,why,will,with,you,your,about,know,known,want,wanted,like,show,explain,describe,give,say,said,please,thanks,thank,' +
+      'compare,compares,compared,comparing,comparable,comparison,versus,vs,similar,similarly,similarity,difference,differences,differ,between,help,relate,relates,related,relation,contrast,two,both').split(','),
   );
   const words = q
-    .replace(/[?!.,;:"'()]/g, ' ')
+    // Slashes and dashes join distinct tokens ("NAR/DAR") — split them, don't fuse them.
+    .replace(/[?!.,;:"'()\/–—]/g, ' ')
     .split(/\s+/)
     .filter((w) => w.length > 1 && !STOP.has(w.toLowerCase()));
   if (words.length === 0) return undefined;
-  // Keep it tight: the subject is usually in the first few content words.
-  return words.slice(0, 6).join(' ');
+  // Keep it tight: the subject is usually in the first few content words. Then append
+  // the full names of any coined acronyms (NAR → Network Access Rules): the snapshot's
+  // essays tokenise as the spelled-out phrase, so the acronym alone retrieves nothing.
+  return expandTerms(words.slice(0, 6).join(' '));
 }
 
 /**
@@ -639,41 +649,66 @@ async function hydrateBodies(evidence: NormalisedEvidence, mcp: McpBridge): Prom
  * for conceptual questions; the early writings must season it, not preempt it, and
  * technical questions should reach the spec data, not just essays.
  */
+/**
+ * Every kind the MCP's search_knowledge indexes (bsv-aio-mcp@1.1.0 HIT_KINDS). Splitting
+ * them across the two tiers keeps provenance meaningful whilst guaranteeing no section
+ * of the knowledge base is ever filtered out of reach. The reserved kinds (wiki, web,
+ * live, capability) carry no documents in the current snapshot, so they cost nothing —
+ * and the day a package update ingests them, they flow in automatically.
+ */
+const ESSAY_KINDS = ['essay', 'principle', 'contradiction'];
+const TECH_KINDS = ['brc', 'symbol', 'test', 'example', 'doc', 'wiki', 'web', 'live', 'capability'];
+
 async function searchGrounding(
   question: string,
   mcp: McpBridge,
   corpus: SatoshiCorpus | null,
-  opts?: { techQuery?: string },
+  opts?: { techQuery?: string; variants?: string[]; originalQuestion?: string },
 ): Promise<Grounding | null> {
-  // Pull later commentary (essays), technical spec data, and Satoshi's own writings in
-  // parallel. Technical kinds come from the MCP's search index (brc/symbol/test/
-  // example/doc); essays/principles are the Craig Wright commentary corpus. No `era`
-  // filter — that would silently exclude all technical docs (they carry era: null).
+  // Pull later commentary (essays + corpus contradiction findings), technical spec
+  // data, and Satoshi's own writings in parallel. No `era` filter — that would
+  // silently exclude all technical docs (they carry era: null).
   //
-  // The MCP ranks on phrasing, so query with the extracted subject keywords first and
-  // fall back to the raw question only if keywords yield nothing. This is what lets
-  // "What can you tell me about BRC-100s?" find BRC-100.
-  const keywords = extractKeywords(question) ?? question;
-  const techKeywords = opts?.techQuery ?? keywords;
-  const essayQuery = mcp
-    .searchKnowledge(keywords, { kind: ['essay', 'principle'] }, 30)
-    .catch(() => null);
-  const techQuery = mcp
-    .searchKnowledge(techKeywords, { kind: ['brc', 'symbol', 'test', 'example', 'doc'] }, 30)
-    .catch(() => null);
-  const primaryDocs = corpus ? corpus.search(question, 1) : [];
-  let [essayRaw, techRaw] = await Promise.all([essayQuery, techQuery]);
+  // The MCP ranks on phrasing and its FTS is AND-first, so vocabulary mismatch is the
+  // dominant failure mode. Multi-query retrieval is the fix: search the rewritten
+  // standalone query (via its extracted keywords) plus each query-understanding
+  // variant (raw — they are already query-shaped document vocabulary), and merge the
+  // hits in query order. When all of that finds nothing, retry once with the original
+  // user phrasing. This is what lets "What can you tell me about BRC-100s?" find
+  // BRC-100 — and "why did you leave Bitcoin" find the essay that says "withdrew from
+  // public view".
+  const intent = opts?.originalQuestion ?? question;
+  const queries = [...new Set([question, ...(opts?.variants ?? [])])].slice(0, 4);
+  const issued = new Set<string>();
+  const searchTier = (raw: string, kinds: string[]): Promise<unknown> => {
+    issued.add(raw);
+    return mcp.searchKnowledge(raw, { kind: kinds }, 30).catch(() => null);
+  };
+  // The main query goes through the keyword extractor (its subject terms, not its
+  // conversational wrapper); variants are already query-shaped and are issued raw.
+  const fanOut = (qs: string[], raw: boolean) => {
+    const queryFor = (q: string, i: number, tech: boolean) => {
+      if (raw || i !== 0) return q;
+      return (tech ? opts?.techQuery : undefined) ?? extractKeywords(q) ?? q;
+    };
+    return {
+      essay: Promise.all(qs.map((q, i) => searchTier(queryFor(q, i, false), ESSAY_KINDS))),
+      tech: Promise.all(qs.map((q, i) => searchTier(queryFor(q, i, true), TECH_KINDS))),
+    };
+  };
+  const main = fanOut(queries, false);
+  const primaryDocs = corpus ? corpus.searchAll([...new Set([intent, ...queries])], 1) : [];
+  let [essayRawList, techRawList] = await Promise.all([main.essay, main.tech]);
 
-  // Keyword query found nothing at all — retry once with the raw question phrasing.
   const empty = (r: unknown) => {
     const h = typeof r === 'object' && r !== null ? (r as Record<string, unknown>).hits : undefined;
     return !Array.isArray(h) || h.length === 0;
   };
-  if (keywords !== question && empty(essayRaw) && empty(techRaw)) {
-    [essayRaw, techRaw] = await Promise.all([
-      mcp.searchKnowledge(question, { kind: ['essay', 'principle'] }, 30).catch(() => null),
-      mcp.searchKnowledge(question, { kind: ['brc', 'symbol', 'test', 'example', 'doc'] }, 30).catch(() => null),
-    ]);
+  const allEmpty = [...essayRawList, ...techRawList].every(empty);
+  // Everything found nothing — one last attempt with the original user phrasing, raw.
+  if (allEmpty && !issued.has(intent)) {
+    const retry = fanOut([intent], true);
+    [essayRawList, techRawList] = await Promise.all([retry.essay, retry.tech]);
   }
 
   const hitsOf = (raw: unknown): Record<string, unknown>[] => {
@@ -686,11 +721,12 @@ async function searchGrounding(
   // document can surface under several locators (e.g. an essay as both csw://essay/...
   // and education/....md); dedup on the resolved URL across tiers so it is cited once.
   //
-  // Exception: the MCP's curated cards (fact://, analysis://, ops:// — Teranode
-  // benchmarks, the scaling-history analysis, operator playbooks) have no public URL,
-  // so they can never be cited — but their text is the whole point. Admit up to
-  // MAX_INTERNAL_EVIDENCE_PER_TIER per tier as evidence-only entries when the hit
-  // shares a term with the question.
+  // Exception: internal-only documents (the curated cards — fact://, analysis://,
+  // ops:// — and the corpus contradiction findings under csw://contradictions/) have no
+  // public URL, so they can never be cited — but their text is the whole point. Admit
+  // up to MAX_INTERNAL_EVIDENCE_PER_TIER per tier as evidence-only entries when the hit
+  // shares a term with the question. The term gate is the control against noise; no
+  // locator scheme is filtered out of the model's reach.
   const seenUrls = new Set<string>();
   const seenInternal = new Set<string>();
   const pickTier = (hits: Record<string, unknown>[], cap: number) => {
@@ -710,7 +746,6 @@ async function searchGrounding(
         picked.push({ title, url, locator });
         continue;
       }
-      if (!/^(fact|analysis|ops):\/\//.test(locator)) continue;
       if (internal >= MAX_INTERNAL_EVIDENCE_PER_TIER || seenInternal.has(locator)) continue;
       // Gate on the MCP's relevance snippet as well as title/locator — a curated card's
       // title ("Bitcoin's 2014–2017 direction change…") need not contain the query term.
@@ -720,15 +755,32 @@ async function searchGrounding(
         locator,
         title: excerpt ? `${title} ${excerpt}` : title,
       };
-      if (!sharesTermWith(question, gate)) continue;
+      if (!sharesTermWith(`${intent} ${question}`, gate)) continue;
       seenInternal.add(locator);
       internal++;
       picked.push({ title, url: undefined, locator });
     }
     return picked;
   };
-  const essayPicked = pickTier(hitsOf(essayRaw), 4);
-  const techPicked = pickTier(hitsOf(techRaw), 2);
+  // Merge per-query results round-robin (each phrasing's #1 hit before any #2), so a
+  // noisy phrasing cannot fill the tier cap and crowd out a precise variant's gold hit.
+  // pickTier's URL dedupe collapses the same document surfaced by several queries.
+  const interleave = (lists: Record<string, unknown>[][]): Record<string, unknown>[] => {
+    const out: Record<string, unknown>[] = [];
+    for (let i = 0; ; i++) {
+      let any = false;
+      for (const list of lists) {
+        const hit = list[i];
+        if (hit !== undefined) {
+          out.push(hit);
+          any = true;
+        }
+      }
+      if (!any) return out;
+    }
+  };
+  const essayPicked = pickTier(interleave(essayRawList.map(hitsOf)), 4);
+  const techPicked = pickTier(interleave(techRawList.map(hitsOf)), 2);
 
   // Nothing from any tier — fail closed so the caller can fall back.
   if (essayPicked.length === 0 && techPicked.length === 0 && primaryDocs.length === 0) return null;
@@ -809,7 +861,7 @@ async function searchGrounding(
     return blocks ? `${heading}\n\n${blocks}` : '';
   };
   const evidenceSections = [
-    sectionFor('essay', 'LATER COMMENTARY — the essays and article summaries that form the most extensive continuation of your work (your primary lens: present this reading as your developed view, with real weight; where others disagree, acknowledge that in a sentence without surrendering your lean):'),
+    sectionFor('essay', 'LATER COMMENTARY — the essays and article summaries that form the most extensive continuation of your work, and any corpus contradiction findings the record flags (your primary lens: present this reading as your developed view, with real weight; where the findings note conflict or others disagree, acknowledge that in a sentence without surrendering your lean):'),
     sectionFor('tech', 'TECHNICAL SPECIFICATION — BRCs, Script/opcodes, SDK symbols and examples (the canonical "how"; treat as fact):'),
     sectionFor('primary', "PRIMARY SOURCES — your own 2008–2011 writings (the early record: use it to support and season the answer, not to preempt the later essays):"),
   ].filter(Boolean);
@@ -913,28 +965,48 @@ function withScalingRecord(g: Grounding, scaling: ScalingRecord): Grounding {
   };
 }
 
+/**
+ * The product of the query-understanding pass, handed down from the chat handler.
+ * `question` remains the retrieval query (the rewrite when one was produced); the plan
+ * carries everything else the pass learned.
+ */
+export interface RetrievalPlan {
+  /** Alternative phrasings in document vocabulary — searched alongside the main query. */
+  variants?: string[];
+  /**
+   * The user's raw message. Classification (identity/conceptual/scaling/builder) always
+   * runs on the original phrasing — the user's intent is the best signal, and a rewrite
+   * may legitimately drop the cue words ("why") that routing depends on.
+   */
+  originalQuestion?: string;
+  /** Prior conversation context, forwarded to the MCP's investigate for follow-ups. */
+  context?: string;
+}
+
 export async function groundQuestion(
   question: string,
   deps: { mcp: McpBridge | null; corpus: SatoshiCorpus | null; curated?: CuratedReference | null },
+  plan?: RetrievalPlan,
 ): Promise<Grounding> {
+  const intent = plan?.originalQuestion ?? question;
   // 0. Identity questions are answered from the curated dossier — the historical
   //    record, not key-waving. Falls through to the standard path when no dossier
   //    is loaded or nothing in it is relevant.
-  if (deps.curated && isIdentityQuestion(question)) {
+  if (deps.curated && isIdentityQuestion(intent)) {
     const g = buildIdentityGrounding(question, deps.curated, deps.corpus);
     if (g) return g;
   }
 
-  const grounding = await groundStandard(question, deps);
+  const grounding = await groundStandard(question, deps, plan);
 
   // Scaling/Teranode questions always carry the demonstrated-capacity record, so the
   // measured figures are mentioned whatever the general retrieval path returned.
-  if (deps.curated?.scaling && isScalingQuestion(question)) {
+  if (deps.curated?.scaling && isScalingQuestion(intent)) {
     return withScalingRecord(grounding, deps.curated.scaling);
   }
   // Builder questions always carry the BSV implementation stack (BRC-100, native
   // script, OP_RETURN, SPV) so the model cannot fall back to a BTC prior.
-  if (deps.curated?.implementation && isImplementationQuestion(question)) {
+  if (deps.curated?.implementation && isImplementationQuestion(intent)) {
     return withScalingRecord(grounding, deps.curated.implementation);
   }
   return grounding;
@@ -943,32 +1015,48 @@ export async function groundQuestion(
 async function groundStandard(
   question: string,
   deps: { mcp: McpBridge | null; corpus: SatoshiCorpus | null },
+  plan?: RetrievalPlan,
 ): Promise<Grounding> {
+  const intent = plan?.originalQuestion ?? question;
   if (deps.mcp?.connected) {
     const mcp = deps.mcp;
     try {
       // For conceptual/"why" questions the MCP's default class routes to spec docs and
-      // fails closed. Go straight to the essay/principle corpus for those.
+      // fails closed. Go straight to the essay/principle corpus for those. The blend is
+      // memoised per call: when investigate also comes up empty we must not fan the
+      // same multi-query search out a second time.
       const canSearch = typeof mcp.searchKnowledge === 'function' && typeof mcp.getResource === 'function';
-      if (canSearch && (isConceptualQuestion(question) || isImplementationQuestion(question))) {
-        const g = await searchGrounding(
-          question,
-          mcp,
-          deps.corpus,
-          isImplementationQuestion(question) ? { techQuery: IMPLEMENTATION_TECH_QUERY } : undefined,
-        );
+      let searched: Grounding | null | undefined;
+      const trySearch = async (): Promise<Grounding | null> => {
+        if (searched !== undefined) return searched;
+        searched = await searchGrounding(question, mcp, deps.corpus, {
+          variants: plan?.variants,
+          originalQuestion: intent,
+          ...(isImplementationQuestion(intent) ? { techQuery: IMPLEMENTATION_TECH_QUERY } : {}),
+        });
+        return searched;
+      };
+      if (canSearch && (isConceptualQuestion(intent) || isImplementationQuestion(intent))) {
+        const g = await trySearch();
         if (g) return g;
       }
 
-      // investigate is phrasing-sensitive: a natural-language question can come back
-      // all-insufficient where the bare keyword succeeds. Try the question, then retry
-      // once with the extracted subject keywords before concluding there's no evidence.
-      let evidence = normaliseEvidence(await mcp.investigate(question), question);
-      if (!evidence.sufficient) {
-        const keywords = extractKeywords(question);
-        if (keywords && keywords !== question) {
-          evidence = normaliseEvidence(await mcp.investigate(keywords), question);
-        }
+      // investigate is phrasing-sensitive: one phrasing can come back all-insufficient
+      // where another succeeds. Try the retrieval query, then the query-understanding
+      // variants, then the extracted subject keywords (capped at three attempts) before
+      // concluding there's no evidence. Conversation context travels with every attempt
+      // so the server can resolve follow-up references into its token matching.
+      const attempts = [
+        ...new Set(
+          [question, ...(plan?.variants ?? []), extractKeywords(question)].filter(
+            (q): q is string => typeof q === 'string' && q.length > 0,
+          ),
+        ),
+      ].slice(0, 3);
+      let evidence = normaliseEvidence(null, `${intent} ${question}`);
+      for (const attempt of attempts) {
+        evidence = normaliseEvidence(await mcp.investigate(attempt, plan?.context), `${intent} ${question}`);
+        if (evidence.sufficient) break;
       }
       if (evidence.sufficient) {
         if (typeof mcp.getResource === 'function') await hydrateBodies(evidence, mcp);
@@ -976,7 +1064,7 @@ async function groundStandard(
       }
       // investigate found nothing solid — try the essay corpus before giving up.
       if (canSearch) {
-        const g = await searchGrounding(question, mcp, deps.corpus);
+        const g = await trySearch();
         if (g) return g;
       }
     } catch (err) {
@@ -985,9 +1073,12 @@ async function groundStandard(
     }
   }
 
-  // 2. Fallback: Satoshi's actual historical writings.
+  // 2. Fallback: Satoshi's actual historical writings. BM25 is as vocabulary-bound as
+  //    the MCP's FTS, so the rewrite variants are searched here too.
   if (deps.corpus) {
-    const docs = deps.corpus.search(question);
+    const docs = deps.corpus.searchAll([
+      ...new Set([question, ...(plan?.variants ?? []), intent]),
+    ]);
     if (docs.length > 0) return buildCorpusGrounding(docs);
   }
 
@@ -1001,6 +1092,7 @@ const PERSONA_RULES = [
   'Write a single, flowing answer that reads as your own reasoned voice. Synthesise the evidence into smooth, well-developed paragraphs — do not stitch together one sentence per source.',
   'Do NOT insert any citation markers, reference numbers, or bracketed numerals such as [1] or [2] anywhere in your answer. Write clean prose. The sources are listed separately by the application.',
   'Ground every substantive claim in the EVIDENCE block below. Never invent facts or quote documents that are not listed.',
+  'Acronyms and named terms are expanded exactly as the EVIDENCE expands them — if the evidence says "Network Access Rules (NAR)", that is the only expansion you may give. Never invent or guess an acronym\'s expansion; when the evidence does not spell one out, write the bare acronym.',
   'The EVIDENCE is the whole of your knowledge. Never import outside narratives, technologies or received wisdom that are absent from it — no matter how well-known they are in general crypto discourse. If the EVIDENCE shows the base protocol scaling on-chain (larger blocks, Teranode-class throughput benchmarks, parallelised validation), that IS your answer: present it. Do not substitute a second-layer or "the limit is fixed" narrative the record does not contain. Where the record and popular belief conflict, the record wins and you say so.',
   'If the evidence only partially covers the question, say so plainly and answer only what it supports. Never bluff.',
   'Voice: precise, calm, dry wit. British English. No emojis. Match the length to the question. A simple factual or conversational message earns a concise answer — a sentence or two up to a short paragraph. A substantive question deserves depth: develop your reasoning across several paragraphs, up to roughly 1,200 words when the question genuinely warrants it (a broad design question, a contested or historical question, a request to explain or compare). Never pad a simple answer to reach a length, and never truncate a complex one to a bare assertion. When in doubt, err toward more development for substantive questions and less for trivial ones.',
@@ -1097,6 +1189,7 @@ const CITATION_FILTER_SYSTEM = [
   'You are a strict relevance filter for a citation list in a Bitcoin knowledge tool.',
   'You are given a question and a numbered list of candidate sources (title + excerpt).',
   'Keep ONLY sources whose subject matter genuinely helps answer the question.',
+  'A source is relevant only if an answer to the question would draw a specific claim, fact, or quote from it. Sharing the question\'s broad topic is not enough — if nothing in the excerpt could end up reflected in the answer, reject it.',
   'Reject any source that merely shares a keyword but is about something else. Examples: a forum post about a logo image being "scaled" to pixel sizes is NOT about scaling the Bitcoin network; a token/ordinals basket spec is NOT about base-layer throughput; a post about mining software is NOT about a protocol rule unless it discusses that rule. When the question is about building or implementing an application, reject any source whose subject is Taproot, SegWit, Lightning, BIP-141, BIP-341 or a second-layer protocol — those are not implementation guidance for this chain.',
   'Be strict: when in doubt, reject. It is better to show fewer, correct sources.',
   'Reply with ONLY a comma-separated list of the relevant source numbers (e.g. "1, 3"), or the word "none". No explanation, no other text.',
@@ -1134,4 +1227,64 @@ export function parseCitationFilter(reply: string, count: number): number[] | un
     .map((m) => Number(m[0]) - 1)
     .filter((n) => n >= 0 && n < count);
   return [...new Set(nums)];
+}
+
+/**
+ * Stopwords for the usage floor below: English function words plus domain-common
+ * terms (bitcoin, network, node…) that appear in nearly every answer and every
+ * excerpt, so their overlap proves nothing about whether a source was used.
+ */
+const USAGE_STOP = new Set(
+  (
+    'a,an,and,are,as,at,be,been,being,but,by,can,could,did,do,does,doing,for,from,had,has,have,he,her,here,him,his,how,i,if,in,into,is,it,its,just,like,me,more,most,much,my,no,not,of,on,only,or,our,out,over,own,same,she,so,some,such,than,that,the,their,them,then,there,these,they,this,those,to,too,under,use,used,very,via,was,we,were,what,when,where,which,who,whom,why,will,with,would,you,your,' +
+    'about,after,again,against,also,any,around,because,before,between,both,down,during,each,even,ever,every,few,first,found,gave,get,gets,given,gives,going,gone,good,great,hasn,haven,having,hers,herself,himself,hisself,however,isn,itself,keep,keeps,kept,know,known,knows,last,later,least,less,let,lets,long,look,looks,made,make,makes,making,many,may,maybe,might,must,myself,never,new,next,nobody,none,nor,nothing,now,off,old,once,one,ones,onto,others,otherwise,ours,ourselves,part,per,perhaps,put,puts,quite,rather,really,right,said,say,says,see,seem,seems,seen,sees,set,sets,shall,she,since,still,take,takes,tell,tells,thing,things,think,thinks,though,thought,through,together,told,took,toward,towards,until,upon,us,want,wants,way,ways,well,went,whatever,whenever,wherever,whether,while,whilst,whoever,whole,whose,within,without,yes,yet,yours,yourself,' +
+    'bitcoin,satoshi,network,block,blocks,blockchain,chain,transaction,transactions,node,nodes,system,protocol,coin,coins,crypto,currency'
+  ).split(','),
+);
+
+/** Distinctive content tokens of a text: lowercase, 4+ chars, not stopwords. */
+function usageTokens(text: string): string[] {
+  return text
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((t) => t.length >= 4 && !USAGE_STOP.has(t));
+}
+
+/**
+ * Usage floor for the citation list, applied once the answer exists. The semantic
+ * filter judges relevance to the QUESTION, but relevance is not usage: a source can be
+ * topically adjacent yet contribute nothing to what was actually written (a spec link
+ * riding along on a historical answer, say). This pass scores each citation by the
+ * distinctive content its title+excerpt shares with the answer text — one point per
+ * shared content token, two per shared adjacent pair (bigram), since a shared phrase
+ * is far stronger evidence of use than a shared word — and drops sources scoring
+ * below the floor. Fail-open by design: if every citation scores zero (a heavily
+ * paraphrased answer, say), the list is returned unchanged, because a grounded answer
+ * must have drawn on something and an empty list would be a worse lie.
+ */
+export function filterUnusedCitations(answer: string, citations: Citation[]): Citation[] {
+  if (citations.length < 2 || !answer.trim()) return citations;
+  const answerTokens = usageTokens(answer);
+  const answerSet = new Set(answerTokens);
+  const answerBigrams = new Set<string>();
+  for (let i = 0; i + 1 < answerTokens.length; i++) {
+    answerBigrams.add(`${answerTokens[i]} ${answerTokens[i + 1]}`);
+  }
+  const FLOOR = 3;
+  const kept = citations.filter((c) => {
+    const tokens = usageTokens(`${c.title ?? ''} ${c.excerpt ?? ''}`);
+    let score = 0;
+    const seen = new Set<string>();
+    for (const t of tokens) {
+      if (!seen.has(t) && answerSet.has(t)) {
+        seen.add(t);
+        score += 1;
+      }
+    }
+    for (let i = 0; i + 1 < tokens.length; i++) {
+      if (answerBigrams.has(`${tokens[i]} ${tokens[i + 1]}`)) score += 2;
+    }
+    return score >= FLOOR;
+  });
+  return kept.length > 0 ? kept : citations;
 }

@@ -55,7 +55,10 @@ const STOP_WORDS = new Set(
     'once,such,no,nor,only,own,same,some,any,all,each,other,more,most,much,many,up,down,out,off,am,' +
     'always,meant,mean,means,intended,intend,supposed,really,actually,original,originally,ever,never,' +
     'still,even,say,said,tell,told,know,known,want,wanted,like,may,might,must,shall,thing,things,way,' +
-    'make,made,take,get,got'
+    'make,made,take,get,got,' +
+    // Comparative/conversational framing — "how does X compare to Y" is about X and Y.
+    'compare,compares,compared,comparing,comparable,comparison,versus,vs,similar,similarly,' +
+    'difference,differences,between,help,two,both'
   ).split(','),
 );
 
@@ -96,18 +99,46 @@ export class SatoshiCorpus {
   }
 
   search(question: string, limit = 3): CorpusDoc[] {
-    const hits = this.mini.search(question);
+    return this.collect(question, limit).map((e) => e.doc);
+  }
+
+  /**
+   * Best hits across several phrasings of the same question (the query-understanding
+   * variants), deduped by document and ranked by each document's best score. BM25 is
+   * as vocabulary-bound as the MCP's FTS, so the variants matter here too.
+   */
+  searchAll(queries: string[], limit = 3): CorpusDoc[] {
+    const best = new Map<string, { doc: CorpusDoc; score: number }>();
+    for (const query of queries) {
+      for (const entry of this.collect(query, limit)) {
+        const existing = best.get(entry.doc.id);
+        if (!existing || entry.score > existing.score) best.set(entry.doc.id, entry);
+      }
+    }
+    return [...best.values()]
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit)
+      .map((e) => e.doc);
+  }
+
+  private collect(query: string, limit: number): { doc: CorpusDoc; score: number }[] {
+    const trimmed = query.trim();
+    if (!trimmed) return [];
+    const hits = this.mini.search(trimmed);
     const top = hits[0]?.score ?? 0;
     return hits
       .filter((h) => h.score >= Math.max(MIN_SCORE, top * 0.25))
       .slice(0, limit)
       .map((h) => ({
-        id: String(h.id),
-        kind: h.kind as CorpusDoc['kind'],
-        title: String(h.title),
-        date: String(h.date),
-        url: String(h.url),
-        text: String(h.text),
+        score: h.score,
+        doc: {
+          id: String(h.id),
+          kind: h.kind as CorpusDoc['kind'],
+          title: String(h.title),
+          date: String(h.date),
+          url: String(h.url),
+          text: String(h.text),
+        },
       }));
   }
 }

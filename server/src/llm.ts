@@ -249,6 +249,10 @@ export async function runChain(
       // answer, so we end the request with a witty error instead.
       if (sentAny) throw new WittyException(witty('PROVIDER_ERROR'));
       const cls = classifyProviderError(err);
+      // Name the tier and the classified reason so a production failure is diagnosable
+      // from the journal alone, instead of surfacing only as a generic witty error.
+      const detail = err instanceof Error ? err.message : String(err);
+      console.warn(`[llm] tier ${tier.id} failed (${cls}): ${detail.slice(0, 200)}`);
       if (cls === 'day') opts.breaker.markDayExhausted(tier.id, quotaResetFor(tier.provider));
       else if (cls === 'minute') opts.breaker.markMinuteLimited(tier.id, retryAfterMs(err));
       else if (cls === 'auth') opts.breaker.markDisabled(tier.id);

@@ -499,6 +499,13 @@ if (!process.env.VERCEL) {
     const tiers = configuredTiers(keys).map((t) => t.id);
     console.log(`[ask-satoshi] listening on ${HOST}:${PORT}`);
     console.log(`[ask-satoshi] model tiers configured: ${tiers.length > 0 ? tiers.join(', ') : 'NONE (set API keys in .env)'}`);
+    // Per-provider presence (never the key values) so an empty/misread .env is obvious
+    // in the journal. The VPS failure mode is exactly this: keys present in the file
+    // but not reaching the process.
+    const presence = (['gemini', 'groq', 'openrouter'] as const)
+      .map((p) => `${p}=${keys[p] ? 'set' : 'MISSING'}`)
+      .join(' ');
+    console.log(`[ask-satoshi] provider keys: ${presence}`);
   });
 
   httpServer.on('error', (err: NodeJS.ErrnoException) => {

@@ -839,11 +839,23 @@ describe('retrieval plan (query understanding)', () => {
 
   it('tries the rewritten query, then variants, before concluding there is no evidence', async () => {
     const tried: string[] = [];
+    // investigate returns a claim that actually engages the asked terms ("alert key"),
+    // so the engagement gate admits it and the merged grounding is MCP-backed.
+    const ALERT_PKG = {
+      claims: [
+        { text: 'The alert key broadcasts a network-wide warning.', support: ['a:1'], status: 'supports' },
+      ],
+      hits: [
+        { id: 'a:1', kind: 'doc', title: 'Alert key', locator: 'brc://spec/alert', excerpt: 'alert key broadcast' },
+      ],
+      gaps: [],
+      contradictions: [],
+    };
     const mcp = {
       connected: true,
       investigate: async (q: string) => {
         tried.push(q);
-        return q === 'alert key emergency broadcast' ? SUFFICIENT_PKG : INSUFFICIENT_PKG;
+        return q === 'alert key emergency broadcast' ? ALERT_PKG : INSUFFICIENT_PKG;
       },
     } as unknown as McpBridge;
     const g = await groundQuestion('alert system network-wide warning', { mcp, corpus: null }, {
@@ -1046,10 +1058,56 @@ describe('retrieval plan (query understanding)', () => {
       mcp,
       corpus: null,
     });
-    // The blend answered it; the phrasing-sensitive investigate composer never ran.
+    // The blend answered it. investigate now runs in parallel (always-on collection),
+    // but its off-topic BEEF claim shares no term with "NAR/DAR", so the engagement gate
+    // excludes it and the essay is the citation that survives.
     expect(calls.search).toBeGreaterThan(0);
-    expect(calls.investigate).toBe(0);
+    expect(calls.investigate).toBeGreaterThan(0);
     expect(g.citations[0]?.url).toBe('https://singulargrit.substack.com/p/the-miner-is-not-a-monarch');
+    expect(g.citations.some((c) => c.url?.includes('brc'))).toBe(false);
+  });
+
+  it('reaches the NAR/DAR essay for a bare "What is NAR/DAR?" even when investigate returns a confident BRC miss', async () => {
+    // Regression for the live failure: investigate composes a "supported" claim from a
+    // nearby access-control spec (BRC-190) that never mentions NAR/DAR. The engagement
+    // gate must drop it so the essay that spells the terms out wins.
+    const BRC190_PKG = {
+      claims: [
+        { text: 'BRC-190 defines access control for Metanet Rooms.', support: ['b:190'], status: 'supports' },
+      ],
+      hits: [
+        { id: 'b:190', kind: 'brc', title: 'BRC-190', locator: 'brc://spec/190', excerpt: 'Metanet Rooms access' },
+      ],
+      gaps: [],
+      contradictions: [],
+    };
+    const mcp = {
+      connected: true,
+      investigate: async () => BRC190_PKG,
+      searchKnowledge: async (_q: string, filters?: { kind?: string[] }) => {
+        if (filters?.kind?.includes('essay')) {
+          return {
+            hits: [
+              {
+                id: 'e:1',
+                kind: 'essay',
+                title: 'Transparency Is Not Centralisation',
+                locator: 'csw://essay/substack/transparency-is-not-centralisation',
+              },
+            ],
+          };
+        }
+        return { hits: [] };
+      },
+      getResource: async () => ({
+        text: 'Network Access Rules (NAR) and Digital Asset Recovery (DAR) are the legal architecture of blockchain governance.',
+      }),
+    } as unknown as McpBridge;
+    const g = await groundQuestion('What is NAR/DAR?', { mcp, corpus: null });
+    // The essay grounded the answer; the BRC-190 near-miss was gated out.
+    expect(g.citations.some((c) => c.url === 'https://singulargrit.substack.com/p/transparency-is-not-centralisation')).toBe(true);
+    expect(g.citations.some((c) => c.url?.includes('brc'))).toBe(false);
+    expect(g.evidenceText).toContain('Network Access Rules');
   });
 
   it('routes identity questions by the original phrasing even when the rewrite drops the cue', async () => {

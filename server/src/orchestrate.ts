@@ -556,6 +556,33 @@ function buildMcpGrounding(evidence: NormalisedEvidence): Grounding {
   return { mode: 'mcp', evidenceText: text, citations: citations.slice(0, MAX_CITATIONS) };
 }
 
+/**
+ * Combine the always-on parallel collectors into one Grounding. `primary` is the
+ * multi-query search blend (essays + technical spec + corpus); `secondary` is
+ * investigate's claim-composed evidence. Both may be null (nothing found). When both
+ * found material, their evidence is concatenated and their citations merged — deduped
+ * on URL so the same document is never cited twice, and capped so a broad answer does
+ * not bury the panel. Returns null only when neither collector produced anything.
+ */
+function mergeGroundings(primary: Grounding | null, secondary: Grounding | null): Grounding | null {
+  if (!primary) return secondary;
+  if (!secondary) return primary;
+  const seen = new Set(primary.citations.map((c) => c.url).filter((u): u is string => !!u));
+  const extra = secondary.citations.filter((c) => {
+    if (!c.url) return true;
+    if (seen.has(c.url)) return false;
+    seen.add(c.url);
+    return true;
+  });
+  const evidenceText = [primary.evidenceText, secondary.evidenceText].filter(Boolean).join('\n\n');
+  return {
+    mode: primary.mode,
+    evidenceText:
+      evidenceText.length > MAX_EVIDENCE_CHARS ? `${evidenceText.slice(0, MAX_EVIDENCE_CHARS)}…` : evidenceText,
+    citations: [...primary.citations, ...extra].slice(0, MAX_CITATIONS),
+  };
+}
+
 /** Wrap a Satoshi quote for the citation panel; avoid double-wrapping. */
 function wrapAsQuotation(text: string): string {
   const t = text.trim();
@@ -1012,6 +1039,31 @@ export async function groundQuestion(
   return grounding;
 }
 
+/**
+ * True when investigate's returned claims/excerpts actually engage the question's
+ * subject terms. investigate composes claims from whatever its FTS surfaces, and its
+ * AND-first matching can return a confident "supported" claim built from a *nearby*
+ * document (e.g. BRC-190 access control for a NAR/DAR question). That false positive
+ * must not end the search. A claim/excerpt engages the question when it shares a
+ * content term with it; an investigate result with no engaging text is treated as a
+ * miss, however many claims it carries.
+ */
+function investigateEngages(evidence: NormalisedEvidence, question: string): boolean {
+  const terms = (extractKeywords(question) ?? question)
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((w) => w.length > 2);
+  if (terms.length === 0) return evidence.sufficient;
+  const corpus = [
+    ...evidence.claims.map((c) => c.text),
+    ...evidence.excerpts.map((e) => e.text),
+    evidence.sketch ?? '',
+  ]
+    .join(' ')
+    .toLowerCase();
+  return terms.some((t) => corpus.includes(t));
+}
+
 async function groundStandard(
   question: string,
   deps: { mcp: McpBridge | null; corpus: SatoshiCorpus | null },
@@ -1021,52 +1073,58 @@ async function groundStandard(
   if (deps.mcp?.connected) {
     const mcp = deps.mcp;
     try {
-      // For conceptual/"why" questions the MCP's default class routes to spec docs and
-      // fails closed. Go straight to the essay/principle corpus for those. The blend is
-      // memoised per call: when investigate also comes up empty we must not fan the
-      // same multi-query search out a second time.
       const canSearch = typeof mcp.searchKnowledge === 'function' && typeof mcp.getResource === 'function';
-      let searched: Grounding | null | undefined;
-      const trySearch = async (): Promise<Grounding | null> => {
-        if (searched !== undefined) return searched;
-        searched = await searchGrounding(question, mcp, deps.corpus, {
-          variants: plan?.variants,
-          originalQuestion: intent,
-          ...(isImplementationQuestion(intent) ? { techQuery: IMPLEMENTATION_TECH_QUERY } : {}),
-        });
-        return searched;
-      };
-      if (canSearch && (isConceptualQuestion(intent) || isImplementationQuestion(intent))) {
-        const g = await trySearch();
-        if (g) return g;
-      }
 
-      // investigate is phrasing-sensitive: one phrasing can come back all-insufficient
-      // where another succeeds. Try the retrieval query, then the query-understanding
-      // variants, then the extracted subject keywords (capped at three attempts) before
-      // concluding there's no evidence. Conversation context travels with every attempt
-      // so the server can resolve follow-up references into its token matching.
-      const attempts = [
-        ...new Set(
-          [question, ...(plan?.variants ?? []), extractKeywords(question)].filter(
-            (q): q is string => typeof q === 'string' && q.length > 0,
+      // Always-on parallel collection. Retrieval is vocabulary-bound on every surface
+      // (MCP FTS, investigate's claim composer, corpus BM25), and no single path is
+      // authoritative for every phrasing — so we ask them all at once and merge what
+      // actually engages the question, rather than routing the question to one path and
+      // trusting its "sufficient" flag. investigate and the multi-query search run
+      // concurrently; neither gates the other.
+
+      // investigate is phrasing-sensitive: try the retrieval query, then the
+      // query-understanding variants, then the extracted subject keywords (capped at
+      // three attempts). Conversation context travels with every attempt so the server
+      // can resolve follow-up references into its token matching.
+      const investigatePromise = (async (): Promise<NormalisedEvidence | null> => {
+        const attempts = [
+          ...new Set(
+            [question, ...(plan?.variants ?? []), extractKeywords(question)].filter(
+              (q): q is string => typeof q === 'string' && q.length > 0,
+            ),
           ),
-        ),
-      ].slice(0, 3);
-      let evidence = normaliseEvidence(null, `${intent} ${question}`);
-      for (const attempt of attempts) {
-        evidence = normaliseEvidence(await mcp.investigate(attempt, plan?.context), `${intent} ${question}`);
-        if (evidence.sufficient) break;
-      }
-      if (evidence.sufficient) {
-        if (typeof mcp.getResource === 'function') await hydrateBodies(evidence, mcp);
-        return buildMcpGrounding(evidence);
-      }
-      // investigate found nothing solid — try the essay corpus before giving up.
-      if (canSearch) {
-        const g = await trySearch();
-        if (g) return g;
-      }
+        ].slice(0, 3);
+        let evidence = normaliseEvidence(null, `${intent} ${question}`);
+        for (const attempt of attempts) {
+          evidence = normaliseEvidence(await mcp.investigate(attempt, plan?.context), `${intent} ${question}`);
+          if (evidence.sufficient) break;
+        }
+        return evidence.sufficient ? evidence : null;
+      })().catch(() => null);
+
+      const searchPromise = canSearch
+        ? searchGrounding(question, mcp, deps.corpus, {
+            variants: plan?.variants,
+            originalQuestion: intent,
+            ...(isImplementationQuestion(intent) ? { techQuery: IMPLEMENTATION_TECH_QUERY } : {}),
+          }).catch(() => null)
+        : Promise.resolve(null);
+
+      const [evidence, searched] = await Promise.all([investigatePromise, searchPromise]);
+
+      // investigate contributes only when its claims/excerpts actually engage the
+      // question's terms — a confident BRC near-miss (BRC-190 for NAR/DAR) must not
+      // crowd out the essay that spells the terms out.
+      const investigateGrounding =
+        evidence && investigateEngages(evidence, `${intent} ${question}`)
+          ? await (async () => {
+              if (typeof mcp.getResource === 'function') await hydrateBodies(evidence, mcp);
+              return buildMcpGrounding(evidence);
+            })()
+          : null;
+
+      const merged = mergeGroundings(searched, investigateGrounding);
+      if (merged) return merged;
     } catch (err) {
       // MCP down or timed out: degrade to the corpus rather than failing the request.
       console.warn('[orchestrate] investigate failed:', err instanceof Error ? err.message : err);

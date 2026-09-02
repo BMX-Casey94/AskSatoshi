@@ -39,6 +39,9 @@ export const MODEL_CHAIN: ModelTier[] = [
   // Paid workhorse: GA until ≥May 2027, $0.25/1M in + $1.50/1M out, 1M context, vision.
   // A funded OpenRouter key makes this the reliable primary; free tiers are overflow.
   { id: 'openrouter-flash-lite', provider: 'openrouter', model: 'google/gemini-3.1-flash-lite', vision: true, maxOutputTokens: PAID_MAX_OUTPUT_TOKENS },
+  // Paid backup, non-Google: DeepSeek V4 Flash (~$0.05/1M in, $0.16/1M out, 1M+ context).
+  // A stall on the Google primary fails over to another paid model, not a capped free one.
+  { id: 'openrouter-deepseek-flash', provider: 'openrouter', model: 'deepseek/deepseek-v4-flash', vision: false, maxOutputTokens: PAID_MAX_OUTPUT_TOKENS },
   // Free Gemini (unpaid AI Studio keys): newest Flash confirmed GA.
   { id: 'gemini-3.6-flash', provider: 'gemini', model: 'gemini-3.6-flash', vision: true, free: true, maxOutputTokens: FREE_MAX_OUTPUT_TOKENS },
   // Same-key Gemini failover (quotas are per model, so this multiplies daily capacity).

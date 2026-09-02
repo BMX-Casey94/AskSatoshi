@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { Breaker } from './breaker.js';
 import { WittyException } from './errors.js';
 import { runChain, type ChainRequest, type ProviderFn } from './llm.js';
@@ -81,6 +81,37 @@ describe('runChain', () => {
         },
       }),
     ).rejects.toSatisfy((e) => e instanceof WittyException && e.wittyError.code === 'TIMEOUT');
+  });
+
+  it('fails over fast when a tier streams no first token (stalled provider)', async () => {
+    // A provider that opens but never emits a token must yield to the next tier in the
+    // short first-token window, not hold the request for the full idle timeout.
+    // Fake timers make the 15s window deterministic and instant.
+    vi.useFakeTimers();
+    try {
+      const stalledProvider: ProviderFn = async (_tier, _req, _onDelta, signal) => {
+        await new Promise((resolve, reject) => {
+          const t = setTimeout(resolve, 60_000);
+          signal?.addEventListener('abort', () => {
+            clearTimeout(t);
+            reject(new Error('IDLE_TIMEOUT'));
+          });
+        });
+        return '';
+      };
+      const promise = runChain(REQ, {
+        keys,
+        breaker: new Breaker(),
+        onDelta: () => undefined,
+        providers: { gemini: stalledProvider, groq: okProvider('answer from groq') },
+      });
+      // Advance past every tier's first-token window so the chain can reach Groq.
+      await vi.runAllTimersAsync();
+      const result = await promise;
+      expect(result.tierId).toBe('groq-gpt-oss-120b');
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('does not fail over after partial output has streamed (avoids doubled answers)', async () => {

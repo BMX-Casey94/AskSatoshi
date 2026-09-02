@@ -49,6 +49,13 @@ export type ProviderFn = (
 ) => Promise<string>;
 
 const FIRST_TOKEN_TIMEOUT_MS = 45_000;
+/**
+ * How long to wait for a tier's FIRST token before failing over. A stalled provider
+ * (connection open, nothing streaming) should not hold the request hostage for the
+ * full idle timeout when a healthy tier is waiting. Once tokens flow, the longer
+ * idle timeout governs gaps between them.
+ */
+const FIRST_TOKEN_FAILOVER_MS = 15_000;
 // 1024 was being consumed by hidden "thinking" on Flash / GPT-OSS before any
 // visible token, cutting answers short. 4096 leaves generous room for reasoning +
 // a full answer; the system prompt still caps length, so headroom costs nothing.
@@ -162,19 +169,28 @@ async function withIdleTimeout<T>(
   timeoutMs: number,
   onDelta: (text: string) => void,
   parentSignal?: AbortSignal,
+  firstTokenMs?: number,
 ): Promise<T> {
   const controller = new AbortController();
   let timer: NodeJS.Timeout | undefined;
-  const reset = () => {
+  let firstTokenSeen = false;
+  const arm = (ms: number) => {
     if (timer) clearTimeout(timer);
-    timer = setTimeout(() => controller.abort(new Error('IDLE_TIMEOUT')), timeoutMs);
+    timer = setTimeout(() => controller.abort(new Error('IDLE_TIMEOUT')), ms);
   };
-  reset();
+  // Before the first token, use the shorter failover window so a stalled provider
+  // yields quickly; after it, fall back to the generous idle gap between tokens.
+  arm(firstTokenMs ?? timeoutMs);
   const onParentAbort = () => controller.abort(new Error('CLIENT_DISCONNECTED'));
   parentSignal?.addEventListener('abort', onParentAbort);
   try {
     return await fn(controller.signal, (text) => {
-      reset();
+      if (!firstTokenSeen) {
+        firstTokenSeen = true;
+        arm(timeoutMs);
+      } else {
+        arm(timeoutMs);
+      }
       onDelta(text);
     });
   } finally {
@@ -239,6 +255,7 @@ export async function runChain(
         FIRST_TOKEN_TIMEOUT_MS,
         opts.onDelta,
         opts.signal,
+        FIRST_TOKEN_FAILOVER_MS,
       );
       if (!text.trim()) throw new Error('EMPTY_RESPONSE');
       opts.breaker.markOk(tier.id);

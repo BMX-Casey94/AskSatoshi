@@ -2,19 +2,547 @@
   "pin": {
     "repo": "curated-research",
     "commit": "manual",
-    "fetchedAt": "2026-09-02T13:00:00.000Z",
+    "fetchedAt": "2026-09-02T13:37:55.172Z",
     "counts": {
-      "emails": 42,
-      "posts": 24,
+      "emails": 296,
+      "posts": 34,
       "quotes": 0
     },
     "bulk": {
       "seclists": {
-        "note": "SecurityFocus / seclists.org is the bulk of Kleiman’s dated public record. All listed posts are included; a full crawl of seclists.org/basics 2004–2012 would likely yield further replies in the same threads. Nothing after his death on 2013-04-26."
+        "note": "SecurityFocus / SecLists / MARC archives are the bulk of Kleiman’s dated public record; a deep pass (2003–2013) is now included. Court-exhibit emails from Kleiman v Wright are marked as such; estate-produced items are reliable, Wright-produced mundane operational emails are included for activity patterning only. Nothing after his death on 2013-04-26."
       }
     }
   },
   "documents": [
+    {
+      "id": "kleiman-email-20030324-re-cryptoprocessors-compliant-with-fips-140-2",
+      "kind": "email",
+      "title": "RE: Cryptoprocessors compliant with FIPS 140-2",
+      "date": "2003-03-24T15:19:37-05:00",
+      "url": "https://marc.info/?l=cryptography&m=104854866117343&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030331-re-russia-intercepts-us-military-communications",
+      "kind": "email",
+      "title": "RE: Russia Intercepts US Military Communications?",
+      "date": "2003-03-31T20:42:38-05:00",
+      "url": "https://marc.info/?l=cryptography&m=104916387918008&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030331-re-run-a-remailer-go-to-jail",
+      "kind": "email",
+      "title": "RE: Run a remailer, go to jail?",
+      "date": "2003-03-31T21:09:18-05:00",
+      "url": "https://www.metzdowd.com/pipermail/cryptography/2003-March/004386.html",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030617-re-dns-records",
+      "kind": "email",
+      "title": "RE: DNS Records",
+      "date": "2003-06-17T22:30:19-04:00",
+      "url": "https://marc.info/?l=security-basics&m=105595359715961&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030617-re-windows-2000-registry",
+      "kind": "email",
+      "title": "RE: Windows 2000 Registry",
+      "date": "2003-06-17T23:03:07-04:00",
+      "url": "https://marc.info/?l=security-basics&m=105595265014545&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030722-re-book-review",
+      "kind": "email",
+      "title": "RE: Book Review",
+      "date": "2003-07-22T20:21:40-04:00",
+      "url": "https://marc.info/?l=security-basics&m=105897338826094&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030723-re-encrypted-mail",
+      "kind": "email",
+      "title": "RE: Encrypted Mail",
+      "date": "2003-07-23T23:04:07-04:00",
+      "url": "https://marc.info/?l=security-basics&m=105906631719499&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030723-re-cisco-workaround",
+      "kind": "email",
+      "title": "RE: Cisco Workaround",
+      "date": "2003-07-23T23:17:45-04:00",
+      "url": "https://marc.info/?l=security-basics&m=105906624319390&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030723-re-microsot-liability-for-vulnerabilities",
+      "kind": "email",
+      "title": "RE: Microsot Liability for vulnerabilities",
+      "date": "2003-07-23T23:41:52-04:00",
+      "url": "https://marc.info/?l=security-basics&m=105906646619682&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030802-re-fw-wiz-html-emails-and-firewall-security",
+      "kind": "email",
+      "title": "RE: [fw-wiz] HTML Emails and Firewall Security",
+      "date": "2003-08-02T15:20:52-04:00",
+      "url": "https://marc.info/?l=firewall-wizards&m=105992342624294&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030804-re-snort-users-urgent-snort-rules-and-stuff",
+      "kind": "email",
+      "title": "RE: [Snort-users] URGENT: Snort Rules and Stuff",
+      "date": "2003-08-04T14:59:22-04:00",
+      "url": "https://marc.info/?l=snort-users&m=106002533209624&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030805-re-securing-iis-server",
+      "kind": "email",
+      "title": "RE: Securing IIS Server",
+      "date": "2003-08-05T12:21:50-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106012390014228&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030805-re-securig-iis-server",
+      "kind": "email",
+      "title": "RE: Securig IIS Server",
+      "date": "2003-08-05T13:11:06-04:00",
+      "url": "https://marc.info/?l=webappsec&m=106010893429468&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030805-re-best-win2k-based-compact-pen-test-tool-set",
+      "kind": "email",
+      "title": "RE: best Win2K based compact Pen Test tool set.?",
+      "date": "2003-08-05T13:44:42-04:00",
+      "url": "https://marc.info/?l=pen-test&m=106011147732648&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030805-re-password-audit-dictionary",
+      "kind": "email",
+      "title": "RE: Password audit dictionary",
+      "date": "2003-08-05T13:57:18-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106018677602658&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030805-re-best-win2k-based-compact-pen-test-tool-set-2",
+      "kind": "email",
+      "title": "RE: best Win2K based compact Pen Test tool set.?",
+      "date": "2003-08-05T16:22:46-04:00",
+      "url": "https://marc.info/?l=pen-test&m=106012582416172&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030807-re-using-non-printable-characters-in-passwords",
+      "kind": "email",
+      "title": "RE: Using non-printable characters in passwords",
+      "date": "2003-08-07T21:44:20-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106035806704800&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030811-director-of-it-security-north-wales-pa",
+      "kind": "email",
+      "title": "Director of IT Security, North Wales, PA",
+      "date": "2003-08-11T12:21:14-04:00",
+      "url": "https://marc.info/?l=security-jobs&m=106061946710645&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030811-re-post-director-of-it-security-north-wales-pa",
+      "kind": "email",
+      "title": "RE-POST - Director of IT Security, North Wales, PA",
+      "date": "2003-08-11T12:53:02-04:00",
+      "url": "https://marc.info/?l=security-jobs&m=106062555418283&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030812-re-using-non-printable-characters-in-passwords",
+      "kind": "email",
+      "title": "RE: Using non-printable characters in passwords",
+      "date": "2003-08-12T20:55:55-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106078849101067&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030813-re-port-5000-and-windows-xp",
+      "kind": "email",
+      "title": "RE: Port 5000 and Windows XP",
+      "date": "2003-08-13T21:18:51-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106088239528558&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030818-re-account-lockout-argh",
+      "kind": "email",
+      "title": "RE: Account Lockout -- ARGH",
+      "date": "2003-08-18T02:52:30-04:00",
+      "url": "https://marc.info/?l=focus-ms&m=106122065726639&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030907-re-disable-netbios-thru-registry-for-windows-2k-xp",
+      "kind": "email",
+      "title": "RE: Disable Netbios thru Registry for Windows 2K/XP",
+      "date": "2003-09-07T05:04:51-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106304134413561&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030910-re-windows-server-2003",
+      "kind": "email",
+      "title": "RE: Windows Server 2003",
+      "date": "2003-09-10T20:52:33-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106329465604065&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030913-re-file-encryption-laptop",
+      "kind": "email",
+      "title": "RE: File Encryption - Laptop",
+      "date": "2003-09-13T00:52:45-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106363904825278&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030915-re-patching-a-firewall",
+      "kind": "email",
+      "title": "RE: Patching a Firewall",
+      "date": "2003-09-15T19:03:55-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106372543418704&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030923-free-tool-release",
+      "kind": "email",
+      "title": "Free tool release",
+      "date": "2003-09-23T19:49:10-04:00",
+      "url": "https://marc.info/?l=sectools&m=106442592530989&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030924-new-free-security-tool-download",
+      "kind": "email",
+      "title": "New free security tool download",
+      "date": "2003-09-24T13:09:16-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106442962703526&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20030930-re-2004-sec-tools-wish-list",
+      "kind": "email",
+      "title": "RE: 2004 Sec Tools Wish-List",
+      "date": "2003-09-30T23:18:06-04:00",
+      "url": "https://marc.info/?l=sectools&m=106502807402958&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031001-re-commandline-tool-to-fix-drive-permissions",
+      "kind": "email",
+      "title": "RE: commandline tool to fix drive permissions.",
+      "date": "2003-10-01T20:45:53-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106511156217009&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031002-re-setting-iis-and-iplanet",
+      "kind": "email",
+      "title": "RE: Setting IIS and iPlanet",
+      "date": "2003-10-02T15:08:17-04:00",
+      "url": "https://marc.info/?l=webappsec&m=106512554001919&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031007-re-setting-up-secure-http-server",
+      "kind": "email",
+      "title": "RE: Setting up secure HTTP server",
+      "date": "2003-10-07T19:30:07-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106562730207504&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031008-re-yahoo-dat-chat-logs",
+      "kind": "email",
+      "title": "RE: yahoo .dat chat logs",
+      "date": "2003-10-08T19:46:54-04:00",
+      "url": "https://marc.info/?l=forensics&m=106590161622545&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031009-re-random-iis-stops-and-restarts",
+      "kind": "email",
+      "title": "RE: random IIS stops and restarts",
+      "date": "2003-10-09T18:30:43-04:00",
+      "url": "https://seclists.org/basics/2003/Oct/221",
+      "text": "Mailing-list post (SecLists archive)."
+    },
+    {
+      "id": "kleiman-email-20031009-re-anyone-seen-an-ipv6-to-ipv4-dll-and-vice-versa",
+      "kind": "email",
+      "title": "RE: Anyone seen an ipv6 to ipv4 dll and vice versa?",
+      "date": "2003-10-09T20:11:29-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106580154415920&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031011-re-snort-users-announcement-visual-intrusion-analy",
+      "kind": "email",
+      "title": "RE: [Snort-users] Announcement: Visual Intrusion Analyzer (Beta Release)",
+      "date": "2003-10-11T01:05:48-04:00",
+      "url": "https://marc.info/?l=snort-users&m=106585011423179&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031011-re-strange-dates-in-my-drivers-directory",
+      "kind": "email",
+      "title": "RE: Strange dates in my drivers directory",
+      "date": "2003-10-11T23:08:03-04:00",
+      "url": "https://marc.info/?l=forensics&m=106595421117666&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031021-re-where-are-local-passwords-stored-on-win2k",
+      "kind": "email",
+      "title": "RE: Where are Local Passwords stored on Win2K",
+      "date": "2003-10-21T02:12:38-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106675397000789&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031021-re-auditing-enabled-but-logon-failures-not-showing",
+      "kind": "email",
+      "title": "RE: Auditing enabled but Logon Failures not showing up",
+      "date": "2003-10-21T15:02:04-04:00",
+      "url": "https://marc.info/?l=focus-ms&m=106677192123528&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031021-re-when-does-a-scan-attempt-become-a-focused-attac",
+      "kind": "email",
+      "title": "RE: When does a scan attempt become a focused attack?",
+      "date": "2003-10-21T20:02:13-04:00",
+      "url": "https://marc.info/?l=security-basics&m=106684242923946&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031022-re-auditing-enabled-but-logon-failures-not-showing",
+      "kind": "email",
+      "title": "RE: Auditing enabled but Logon Failures not showing up",
+      "date": "2003-10-22T22:18:53-04:00",
+      "url": "https://marc.info/?l=focus-ms&m=106692691608954&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031114-re-suggested-safe-password-length",
+      "kind": "email",
+      "title": "RE: Suggested \"safe\" password length",
+      "date": "2003-11-14T18:24:23-05:00",
+      "url": "https://marc.info/?l=security-basics&m=106908730128189&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031117-re-suggested-safe-password-length",
+      "kind": "email",
+      "title": "RE: Suggested \"safe\" password length",
+      "date": "2003-11-17T13:04:46-05:00",
+      "url": "https://marc.info/?l=security-basics&m=106909496607294&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031117-re-suggested-safe-password-length-2",
+      "kind": "email",
+      "title": "RE: Suggested \"safe\" password length",
+      "date": "2003-11-17T13:20:46-05:00",
+      "url": "https://marc.info/?l=security-basics&m=106909502507398&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031118-re-winxp-admin-login",
+      "kind": "email",
+      "title": "RE: WinXP Admin login",
+      "date": "2003-11-18T20:55:22-05:00",
+      "url": "https://marc.info/?l=security-basics&m=106927111632402&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031118-re-temporary-internet-files-analyser",
+      "kind": "email",
+      "title": "RE: Temporary internet files analyser",
+      "date": "2003-11-18T21:30:58-05:00",
+      "url": "https://marc.info/?l=security-basics&m=106927036431352&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031119-re-temporary-internet-files-analyzer",
+      "kind": "email",
+      "title": "RE: Temporary internet files analyzer",
+      "date": "2003-11-19T22:33:35-05:00",
+      "url": "https://marc.info/?l=security-basics&m=106935970202260&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031119-re-service-install-without-permissions",
+      "kind": "email",
+      "title": "RE: Service install without permissions",
+      "date": "2003-11-19T22:50:44-05:00",
+      "url": "https://marc.info/?l=security-basics&m=106936079803598&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031120-re-service-install-without-permissions",
+      "kind": "email",
+      "title": "RE: Service install without permissions",
+      "date": "2003-11-20T19:45:35-05:00",
+      "url": "https://marc.info/?l=security-basics&m=106943564517276&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031120-re-ssl-server-ids",
+      "kind": "email",
+      "title": "RE: SSL Server IDs",
+      "date": "2003-11-20T20:00:25-05:00",
+      "url": "https://marc.info/?l=security-basics&m=106943606217832&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031123-re-full-disclosure-lots-and-lots-and-lots-of-swen",
+      "kind": "email",
+      "title": "RE: [Full-Disclosure] lots and lots and lots of swen?",
+      "date": "2003-11-23T22:16:57-05:00",
+      "url": "https://marc.info/?l=full-disclosure&m=106964626932491&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031123-re-auditing-log-on-not-working-win2kpro",
+      "kind": "email",
+      "title": "RE: Auditing Log On not working-Win2kPro",
+      "date": "2003-11-23T22:22:53-05:00",
+      "url": "https://marc.info/?l=security-basics&m=106969377710199&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031125-re-local-admin-account-password",
+      "kind": "email",
+      "title": "RE: local admin account password",
+      "date": "2003-11-25T23:21:40-05:00",
+      "url": "https://marc.info/?l=focus-ms&m=106986830226690&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031201-re-cached-password-concern",
+      "kind": "email",
+      "title": "RE: Cached Password concern",
+      "date": "2003-12-01T18:26:22-05:00",
+      "url": "https://seclists.org/basics/2003/Dec/31",
+      "text": "Mailing-list post (SecLists archive)."
+    },
+    {
+      "id": "kleiman-email-20031201-re-vulnerability-assessment-checklists",
+      "kind": "email",
+      "title": "RE: Vulnerability Assessment Checklists?",
+      "date": "2003-12-01T18:39:29-05:00",
+      "url": "https://marc.info/?l=security-basics&m=107032630408094&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031201-re-how-to-flood-the-mac-address-table-of-a-switch",
+      "kind": "email",
+      "title": "RE: how to flood the mac address table of a switch?",
+      "date": "2003-12-01T19:36:39-05:00",
+      "url": "https://marc.info/?l=security-basics&m=107032603107816&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031202-re-ssl-workings",
+      "kind": "email",
+      "title": "RE: SSL workings",
+      "date": "2003-12-02T19:23:05-05:00",
+      "url": "https://marc.info/?l=security-basics&m=107047346723553&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031202-re-fire-suppression",
+      "kind": "email",
+      "title": "RE: fire suppression",
+      "date": "2003-12-02T19:46:15-05:00",
+      "url": "https://marc.info/?l=security-basics&m=107047333523348&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031202-re-ssl-workings-2",
+      "kind": "email",
+      "title": "RE: SSL workings",
+      "date": "2003-12-02T22:00:34-05:00",
+      "url": "https://marc.info/?l=security-basics&m=107047539926260&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031204-re-full-disclosure-re-yahoo-instant-messenger-yaut",
+      "kind": "email",
+      "title": "RE: [Full-Disclosure] RE: Yahoo Instant Messenger YAUTO.DLL buffer overflow",
+      "date": "2003-12-04T11:53:12-05:00",
+      "url": "https://marc.info/?l=full-disclosure&m=107055930415102&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031209-re-wifi-security-implications",
+      "kind": "email",
+      "title": "RE: WiFi security implications",
+      "date": "2003-12-09T18:23:59-05:00",
+      "url": "https://marc.info/?l=security-basics&m=107107505817369&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031212-re-blessed-windows-security-templates",
+      "kind": "email",
+      "title": "RE: Blessed Windows Security Templates",
+      "date": "2003-12-12T11:49:24-05:00",
+      "url": "https://marc.info/?l=focus-ms&m=107126051521799&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031221-re-tcp-ip-stack-hardening",
+      "kind": "email",
+      "title": "RE: TCP/IP Stack Hardening",
+      "date": "2003-12-21T01:54:12-05:00",
+      "url": "https://marc.info/?l=focus-ms&m=107210827918540&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031222-re-tcp-ip-stack-hardening",
+      "kind": "email",
+      "title": "RE: TCP/IP Stack Hardening",
+      "date": "2003-12-22T19:31:36-05:00",
+      "url": "https://marc.info/?l=focus-ms&m=107219417725636&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20031222-re-tcp-ip-stack-hardening-2",
+      "kind": "email",
+      "title": "RE: TCP/IP Stack Hardening",
+      "date": "2003-12-22T23:37:22-05:00",
+      "url": "https://marc.info/?l=focus-ms&m=107219435125830&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040109-re-verisign-crl-single-point-of-failure",
+      "kind": "email",
+      "title": "RE: Verisign CRL single point of failure",
+      "date": "2004-01-09T15:26:42-05:00",
+      "url": "https://marc.info/?l=cryptography&m=108079102309314&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
     {
       "id": "kleiman-email-20040213-re-proving-a-wireless-router-is-shared-open",
       "kind": "email",
@@ -22,6 +550,78 @@
       "date": "2004-02-13T23:28:39-05:00",
       "url": "https://seclists.org/basics/2004/Feb/261",
       "text": "SecurityFocus Security Basics. Signed Dave Kleiman, CISSP, MCSE, CISM, CIFI; www.SecurityBreachResponse.com. Thread index also lists a follow-up on 16 Feb 2004."
+    },
+    {
+      "id": "kleiman-email-20040214-re-unusual-activity",
+      "kind": "email",
+      "title": "RE: Unusual Activity",
+      "date": "2004-02-14T10:38:15-05:00",
+      "url": "https://marc.info/?l=security-basics&m=107695421412708&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040220-re-preventing-os-detection",
+      "kind": "email",
+      "title": "RE: Preventing OS Detection",
+      "date": "2004-02-20T18:38:50-05:00",
+      "url": "https://marc.info/?l=security-basics&m=107764440522237&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040315-re-need-help-on-monitoring-what-application-utiliz",
+      "kind": "email",
+      "title": "RE: Need help on monitoring what application utilizes alg.exe",
+      "date": "2004-03-15T11:18:11-05:00",
+      "url": "https://marc.info/?l=forensics&m=107937988221643&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040317-re-help-needed",
+      "kind": "email",
+      "title": "RE: Help Needed",
+      "date": "2004-03-17T00:19:46-05:00",
+      "url": "https://marc.info/?l=security-basics&m=107954479425650&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040321-re-hardening-tcp-ip-stack-conflicting-sources",
+      "kind": "email",
+      "title": "RE: Hardening TCP/IP Stack; conflicting sources",
+      "date": "2004-03-21T15:38:14-05:00",
+      "url": "https://marc.info/?l=focus-ms&m=107996662912077&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040414-re-any-one-know-how-to-view-the-spool-file-with-a-",
+      "kind": "email",
+      "title": "RE: Any one know how to view the spool file with a estension of SPL and SHD",
+      "date": "2004-04-14T20:56:34-04:00",
+      "url": "https://marc.info/?l=forensics&m=108203048709535&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040502-isapi",
+      "kind": "email",
+      "title": "ISAPI",
+      "date": "2004-05-02T01:07:53-04:00",
+      "url": "https://marc.info/?l=webappsec&m=108350029527313&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040502-re-isapi",
+      "kind": "email",
+      "title": "RE: ISAPI",
+      "date": "2004-05-02T13:34:16-04:00",
+      "url": "https://marc.info/?l=webappsec&m=108352161309433&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040625-re-which-windows-os-is-safest",
+      "kind": "email",
+      "title": "RE: Which Windows OS is Safest",
+      "date": "2004-06-25T20:30:31-04:00",
+      "url": "https://marc.info/?l=security-basics&m=108848209817364&w=2",
+      "text": "Mailing-list post (MARC archive)."
     },
     {
       "id": "kleiman-email-20040719-re-minimum-password-requirements-first-reply",
@@ -32,12 +632,60 @@
       "text": "From dave@isecureu.com: users could cycle passwords 10 times back to the original; recommends 3–5 day minimum age and ALT characters for admin accounts."
     },
     {
+      "id": "kleiman-email-20040719-re-minimum-password-requirements",
+      "kind": "email",
+      "title": "RE: Minimum password requirements",
+      "date": "2004-07-19T22:37:12-04:00",
+      "url": "https://marc.info/?l=security-basics&m=109035097511816&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040720-re-comcast-cable-setup-security-issue",
+      "kind": "email",
+      "title": "RE: Comcast Cable Setup Security Issue",
+      "date": "2004-07-20T03:25:10-04:00",
+      "url": "https://marc.info/?l=security-basics&m=109034659705075&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040720-re-minimum-password-requirements",
+      "kind": "email",
+      "title": "RE: Minimum password requirements",
+      "date": "2004-07-20T12:14:08-04:00",
+      "url": "https://marc.info/?l=security-basics&m=109034478010356&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-email-20040720-re-minimum-password-requirements-follow-up",
       "kind": "email",
       "title": "RE: Minimum password requirements (follow-up)",
       "date": "2004-07-20T12:45:02-04:00",
       "url": "https://seclists.org/basics/2004/Jul/255",
       "text": "Further reply in the same password-policy thread. Thread lists additional Kleiman posts the same day."
+    },
+    {
+      "id": "kleiman-email-20040720-re-minimum-password-requirements-2",
+      "kind": "email",
+      "title": "RE: Minimum password requirements",
+      "date": "2004-07-20T12:45:02-04:00",
+      "url": "https://marc.info/?l=security-basics&m=109034524518191&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040720-re-comcast-cable-setup-security-issue-2",
+      "kind": "email",
+      "title": "RE: Comcast Cable Setup Security Issue",
+      "date": "2004-07-20T14:43:18-04:00",
+      "url": "https://marc.info/?l=security-basics&m=109043082404680&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040721-re-vpn",
+      "kind": "email",
+      "title": "RE: VPN",
+      "date": "2004-07-21T13:27:47-04:00",
+      "url": "https://marc.info/?l=focus-ms&m=109051841508322&w=2",
+      "text": "Mailing-list post (MARC archive)."
     },
     {
       "id": "kleiman-email-20040727-re-successful-anonymous-login",
@@ -48,12 +696,76 @@
       "text": "WebApp Sec list. Explains NtLmSsp / DCOM anonymous logons on Windows 2003. Signed www.SecurityBreachResponse.com."
     },
     {
+      "id": "kleiman-email-20040818-re-event-log-monitor",
+      "kind": "email",
+      "title": "RE: Event Log Monitor",
+      "date": "2004-08-18T00:42:53-04:00",
+      "url": "https://marc.info/?l=security-basics&m=109286555332339&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040820-re-ms-binary-integrity-baseline",
+      "kind": "email",
+      "title": "RE: MS binary integrity baseline",
+      "date": "2004-08-20T04:14:10-04:00",
+      "url": "https://marc.info/?l=focus-ms&m=109304805531469&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040820-re-ms-binary-integrity-baseline-2",
+      "kind": "email",
+      "title": "RE: MS binary integrity baseline",
+      "date": "2004-08-20T17:54:56-04:00",
+      "url": "https://marc.info/?l=focus-ms&m=109327155129861&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040831-re-process-viewer-under-win2k",
+      "kind": "email",
+      "title": "RE: process viewer under win2k",
+      "date": "2004-08-31T20:26:48-04:00",
+      "url": "https://marc.info/?l=security-basics&m=109413461826800&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040831-re-a-tool-like-nestat",
+      "kind": "email",
+      "title": "RE: a tool like nestat",
+      "date": "2004-08-31T20:36:25-04:00",
+      "url": "https://marc.info/?l=security-basics&m=109417504622727&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040901-re-where-should-i-start",
+      "kind": "email",
+      "title": "RE: where should I start?",
+      "date": "2004-09-01T00:46:28-04:00",
+      "url": "https://marc.info/?l=security-basics&m=109415086226172&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20040923-re-laptop-encryption-hibernation",
+      "kind": "email",
+      "title": "RE: Laptop Encryption & Hibernation",
+      "date": "2004-09-23T15:02:26-04:00",
+      "url": "https://marc.info/?l=security-basics&m=109601403430205&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-email-20041109-re-simple-but-effective-disk-wipe-software",
       "kind": "email",
       "title": "RE: Simple but effective Disk Wipe Software",
       "date": "2004-11-09T01:02:00+00:00",
       "url": "https://seclists.org/basics/2004/Nov/191",
       "text": "From dave@isecureu.com. Points to SourceForge Eraser and DBAN; offers to email an in-house wiper (no warranty)."
+    },
+    {
+      "id": "kleiman-email-20041109-re-usb-write-blocker-but-going-the-other-way",
+      "kind": "email",
+      "title": "RE: USB Write Blocker but going the other way?!",
+      "date": "2004-11-09T02:16:49-05:00",
+      "url": "https://marc.info/?l=forensics&m=110000655914554&w=2",
+      "text": "Mailing-list post (MARC archive)."
     },
     {
       "id": "kleiman-email-20041109-re-simple-but-effective-disk-wipe-software-follo",
@@ -64,12 +776,204 @@
       "text": "Same-day follow-up in the disk-wipe thread."
     },
     {
+      "id": "kleiman-email-20041110-re-md5-collisions-and-evidence-integrity",
+      "kind": "email",
+      "title": "RE: MD5 Collisions and Evidence Integrity",
+      "date": "2004-11-10T10:42:36-05:00",
+      "url": "https://marc.info/?l=forensics&m=110019934510746&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20041112-re-md5-collisions-and-evidence-integrity",
+      "kind": "email",
+      "title": "RE: MD5 Collisions and Evidence Integrity",
+      "date": "2004-11-12T15:05:13-05:00",
+      "url": "https://marc.info/?l=forensics&m=110052214107730&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20041112-re-help-with-forensics-on-a-desktop-computer",
+      "kind": "email",
+      "title": "RE: help with forensics on a desktop computer",
+      "date": "2004-11-12T16:04:32-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110054040718610&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20041115-re-mactimes-not-reliable",
+      "kind": "email",
+      "title": "RE: mactimes - not reliable.",
+      "date": "2004-11-15T10:23:28-05:00",
+      "url": "https://marc.info/?l=forensics&m=110061131421915&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-email-20041118-re-how-secure-is-vpn-access",
       "kind": "email",
       "title": "RE: How secure is VPN access?",
       "date": "2004-11-18T00:11:58-05:00",
       "url": "https://seclists.org/basics/2004/Nov/377",
       "text": "Advises against home PCs on corporate VPN: 'you should have complete control of the systems that do access via VPN'."
+    },
+    {
+      "id": "kleiman-email-20041120-re-mactimes-not-reliable",
+      "kind": "email",
+      "title": "RE: mactimes - not reliable.",
+      "date": "2004-11-20T02:00:54-05:00",
+      "url": "https://marc.info/?l=forensics&m=110112713215810&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20041122-re-md5-collisions-and-evidence-integrity",
+      "kind": "email",
+      "title": "RE: MD5 Collisions and Evidence Integrity",
+      "date": "2004-11-22T15:10:04-05:00",
+      "url": "https://marc.info/?l=forensics&m=110122414209785&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20041122-re-please-help-need-to-check-iis-volunrabilities",
+      "kind": "email",
+      "title": "RE: Please help ! need to check IIS volunrabilities.",
+      "date": "2004-11-22T22:40:28-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110124275823790&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20041122-re-social-engineering",
+      "kind": "email",
+      "title": "RE: Social Engineering ... ?",
+      "date": "2004-11-22T23:16:06-05:00",
+      "url": "https://marc.info/?l=pen-test&m=110129475112834&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20041123-re-dvd-burner-for-archival-image-copies",
+      "kind": "email",
+      "title": "RE: DVD burner for archival image copies",
+      "date": "2004-11-23T15:31:54-05:00",
+      "url": "https://marc.info/?l=forensics&m=110125485109313&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20041123-keylogger-case",
+      "kind": "email",
+      "title": "Keylogger case",
+      "date": "2004-11-23T15:41:48-05:00",
+      "url": "https://marc.info/?l=forensics&m=110139362404661&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20041125-re-deny-access",
+      "kind": "email",
+      "title": "RE: deny access",
+      "date": "2004-11-25T22:53:02-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110152057025961&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20041126-re-besctrypt-container-brute-force-util",
+      "kind": "email",
+      "title": "RE: Besctrypt container brute force util",
+      "date": "2004-11-26T23:33:25-05:00",
+      "url": "https://marc.info/?l=pen-test&m=110157311332604&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20041207-wifi-dampening",
+      "kind": "email",
+      "title": "WiFi dampening",
+      "date": "2004-12-07T10:18:44-05:00",
+      "url": "https://marc.info/?l=pen-test&m=110247243613057&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20041208-re-windows-private-folder-option-decryption",
+      "kind": "email",
+      "title": "RE: Windows private folder option decryption",
+      "date": "2004-12-08T23:02:47-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110262578604904&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20041215-re-services-running-in-windows-domain-winxp-client",
+      "kind": "email",
+      "title": "RE: services running in windows domain (winXP clients)",
+      "date": "2004-12-15T21:14:54-05:00",
+      "url": "https://marc.info/?l=focus-ms&m=110321317803978&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20041229-re-simple-firewall",
+      "kind": "email",
+      "title": "RE: Simple Firewall",
+      "date": "2004-12-29T12:52:14-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110434850704068&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050109-re-workarounds-for-windows-event-file-corruption",
+      "kind": "email",
+      "title": "RE: Workarounds for Windows Event File corruption",
+      "date": "2005-01-09T21:25:35-05:00",
+      "url": "https://marc.info/?l=forensics&m=110536863421078&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050110-re-data-security",
+      "kind": "email",
+      "title": "RE: Data security",
+      "date": "2005-01-10T21:02:43-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110546674720187&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050112-re-workarounds-for-windows-event-file-corruption",
+      "kind": "email",
+      "title": "RE: Workarounds for Windows Event File corruption",
+      "date": "2005-01-12T15:25:06-05:00",
+      "url": "https://marc.info/?l=forensics&m=110562639315519&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050117-re-port-listner",
+      "kind": "email",
+      "title": "RE: port listner",
+      "date": "2005-01-17T13:31:02-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110599380403567&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050117-re-building-a-company-computer-use-security-policy",
+      "kind": "email",
+      "title": "RE: Building a Company Computer Use/Security Policy",
+      "date": "2005-01-17T13:41:16-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110599668113566&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050128-re-preventing-multiple-logins-in-2003",
+      "kind": "email",
+      "title": "RE: Preventing multiple logins in 2003",
+      "date": "2005-01-28T17:48:14-05:00",
+      "url": "https://marc.info/?l=focus-ms&m=110702208316078&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050131-re-some-few-doubts-on-iis-vuln",
+      "kind": "email",
+      "title": "RE: Some Few Doubts on IIS Vuln",
+      "date": "2005-01-31T20:30:44-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110732756510582&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050203-re-disk-pda-encryption",
+      "kind": "email",
+      "title": "RE: Disk/PDA Encryption",
+      "date": "2005-02-03T14:14:38-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110753766420704&w=2",
+      "text": "Mailing-list post (MARC archive)."
     },
     {
       "id": "kleiman-post-20050210-microsoft-log-parser-toolkit-published-contribut",
@@ -80,12 +984,276 @@
       "text": "Syngress/Elsevier. ISBN 1-932266-52-6. Court expert report lists 24 Feb 2005; publisher listings also give 10 Feb 2005."
     },
     {
+      "id": "kleiman-email-20050214-re-nmapwin-v1-3-1",
+      "kind": "email",
+      "title": "RE: NMapWin v1.3.1",
+      "date": "2005-02-14T15:26:31-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110842614411506&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050217-re-sha1-showing-it-s-age",
+      "kind": "email",
+      "title": "RE: SHA1 showing it's age",
+      "date": "2005-02-17T17:16:44-05:00",
+      "url": "https://marc.info/?l=forensics&m=110892451307561&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050218-re-simple-scan",
+      "kind": "email",
+      "title": "RE: Simple Scan",
+      "date": "2005-02-18T01:03:01-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110874970003160&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050218-re-new-to-this-how-to-map-network",
+      "kind": "email",
+      "title": "RE: New to this: How to map network?",
+      "date": "2005-02-18T01:06:18-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110874935521069&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050223-re-copying-files-from-one-server-to-another",
+      "kind": "email",
+      "title": "RE: Copying files from one server to another.",
+      "date": "2005-02-23T22:24:24-05:00",
+      "url": "https://marc.info/?l=webappsec&m=110921957307575&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050301-re-open-ports-to-establish-a-one-way-trust",
+      "kind": "email",
+      "title": "RE: Open ports to establish a one-way trust",
+      "date": "2005-03-01T13:32:37-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110980196807816&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050304-re-uk-cissp-resources",
+      "kind": "email",
+      "title": "RE: UK CISSP resources",
+      "date": "2005-03-04T12:28:58-05:00",
+      "url": "https://marc.info/?l=security-basics&m=110996279328395&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-email-20050308-re-career-choice",
       "kind": "email",
       "title": "RE: Career Choice",
       "date": "2005-03-08T22:11:53-05:00",
       "url": "https://seclists.org/basics/2005/Mar/190",
       "text": "Career advice on Security Basics. Signed CIFI, CISM, CISSP, ISSAP, ISSMP, MCSE; SecurityBreachResponse.com and ComputerForensicInvestigations.com."
+    },
+    {
+      "id": "kleiman-email-20050308-re-port-open-help",
+      "kind": "email",
+      "title": "RE: Port open - help",
+      "date": "2005-03-08T22:29:28-05:00",
+      "url": "https://marc.info/?l=security-basics&m=111038743919690&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050311-re-basic-question",
+      "kind": "email",
+      "title": "RE: Basic question",
+      "date": "2005-03-11T05:03:59-05:00",
+      "url": "https://marc.info/?l=focus-ms&m=111055652418367&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050312-re-encrypted-emails",
+      "kind": "email",
+      "title": "RE: Encrypted emails",
+      "date": "2005-03-12T00:44:14-05:00",
+      "url": "https://marc.info/?l=security-basics&m=111082764524327&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050314-re-security-certifications",
+      "kind": "email",
+      "title": "RE: Security Certifications",
+      "date": "2005-03-14T13:59:46-05:00",
+      "url": "https://marc.info/?l=security-basics&m=111084535723671&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050316-re-uf-passwd-notreqd-user-account-flag",
+      "kind": "email",
+      "title": "RE: UF_PASSWD_NOTREQD user account flag",
+      "date": "2005-03-16T13:43:58-05:00",
+      "url": "https://marc.info/?l=focus-ms&m=111101016712031&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050317-re-iusr-issue-after-patch",
+      "kind": "email",
+      "title": "RE: IUSR issue after patch",
+      "date": "2005-03-17T11:57:20-05:00",
+      "url": "https://marc.info/?l=security-basics&m=111108210330575&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050317-re-iusr-issue-after-patch-2",
+      "kind": "email",
+      "title": "RE: IUSR issue after patch",
+      "date": "2005-03-17T22:27:37-05:00",
+      "url": "https://marc.info/?l=security-basics&m=111116771527680&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050322-re-reality-and-2-5-laptop-drives-re-macintosh-wipi",
+      "kind": "email",
+      "title": "RE: Reality and 2.5\" laptop drives, Re: Macintosh wiping (but why)",
+      "date": "2005-03-22T07:17:03-05:00",
+      "url": "https://marc.info/?l=forensics&m=111166518426727&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050526-re-user-name-from-security-logs",
+      "kind": "email",
+      "title": "RE: user name from security logs",
+      "date": "2005-05-26T16:16:16-04:00",
+      "url": "https://marc.info/?l=security-basics&m=111720791232100&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050626-re-should-login-pages-be-protected-by-ssl",
+      "kind": "email",
+      "title": "RE: Should login pages be protected by SSL?",
+      "date": "2005-06-26T14:07:42-04:00",
+      "url": "https://marc.info/?l=webappsec&m=111983115108118&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050627-re-should-login-pages-be-protected-by-ssl",
+      "kind": "email",
+      "title": "RE: Should login pages be protected by SSL?",
+      "date": "2005-06-27T02:12:40-04:00",
+      "url": "https://marc.info/?l=webappsec&m=111988283214374&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050706-re-cisa-prepartion-links",
+      "kind": "email",
+      "title": "RE: CISA Prepartion Links",
+      "date": "2005-07-06T20:52:09-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112111553906838&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050706-re-changing-the-mac-address-on-windows-2000-and-xp",
+      "kind": "email",
+      "title": "RE: Changing the mac address on Windows 2000 and XP",
+      "date": "2005-07-06T22:38:17-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112111641224995&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050706-fbi-infragard-2005-national-conference",
+      "kind": "email",
+      "title": "FBI InfraGard 2005 National Conference",
+      "date": "2005-07-06T23:24:57-04:00",
+      "url": "https://marc.info/?l=forensics&m=112073922728963&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050709-re-utilities-for-determining-os-primary-user",
+      "kind": "email",
+      "title": "RE: Utilities for determining OS, primary user",
+      "date": "2005-07-09T01:06:43-04:00",
+      "url": "https://marc.info/?l=forensics&m=112091008217678&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050713-the-fbi-s-infragard-2005-national-conference",
+      "kind": "email",
+      "title": "The FBI's InfraGard 2005 National Conference",
+      "date": "2005-07-13T07:16:03-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112127620101233&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050713-the-fbi-s-infragard-2005-national-conference-2",
+      "kind": "email",
+      "title": "The FBI's InfraGard 2005 National Conference",
+      "date": "2005-07-13T07:17:20-04:00",
+      "url": "https://marc.info/?l=webappsec&m=112126185712230&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050724-re-peter-gutmann-data-deletion-theaory",
+      "kind": "email",
+      "title": "RE: Peter Gutmann data deletion theaory?",
+      "date": "2005-07-24T15:30:30-04:00",
+      "url": "https://marc.info/?l=bugtraq&m=112251165318070&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050803-re-windows-last-shutdown",
+      "kind": "email",
+      "title": "RE: Windows last shutdown",
+      "date": "2005-08-03T06:29:58-04:00",
+      "url": "https://marc.info/?l=forensics&m=112324002609421&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050806-re-all-of-the-things-you-need-to-learn-to-be-a-pen",
+      "kind": "email",
+      "title": "RE: All of the things you need to learn to be a pen-tester (Re: Pen t est basic needs)",
+      "date": "2005-08-06T21:49:06-04:00",
+      "url": "https://marc.info/?l=pen-test&m=112342672501827&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050807-re-ad-password-auditing",
+      "kind": "email",
+      "title": "RE: AD password Auditing",
+      "date": "2005-08-07T14:09:01-04:00",
+      "url": "https://marc.info/?l=pen-test&m=112353216520977&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050824-presentations-from-the-2005-infragard-national-con",
+      "kind": "email",
+      "title": "Presentations from the 2005 InfraGard National Conference",
+      "date": "2005-08-24T12:36:25-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112491997911571&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050825-re-tandem-wipe-tool",
+      "kind": "email",
+      "title": "RE: Tandem Wipe Tool",
+      "date": "2005-08-25T06:00:19-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112509994202132&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050830-re-computer-forensics-to-uncover-illegal-internet-",
+      "kind": "email",
+      "title": "RE: Computer forensics to uncover illegal internet use",
+      "date": "2005-08-30T01:11:04-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112541452713160&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050830-re-where-are-windows-enforce-password-history-pass",
+      "kind": "email",
+      "title": "RE: Where are Windows \"Enforce password history\" passwords stored?",
+      "date": "2005-08-30T20:28:29-04:00",
+      "url": "https://marc.info/?l=pen-test&m=112545956312275&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050830-re-computer-forensics-consulting",
+      "kind": "email",
+      "title": "RE: Computer Forensics Consulting",
+      "date": "2005-08-30T20:51:59-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112553242707857&w=2",
+      "text": "Mailing-list post (MARC archive)."
     },
     {
       "id": "kleiman-email-20050830-re-computer-forensics-to-uncover-illegal-interne",
@@ -104,12 +1272,284 @@
       "text": "Next-day follow-up in the same thread. Thread index lists a further Kleiman reply the same day."
     },
     {
+      "id": "kleiman-email-20050831-re-computer-forensics-to-uncover-illegal-internet-",
+      "kind": "email",
+      "title": "RE: Computer forensics to uncover illegal internet use",
+      "date": "2005-08-31T17:18:51-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112553468720547&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050831-fw-computer-forensics-to-uncover-illegal-internet-",
+      "kind": "email",
+      "title": "FW: Computer forensics to uncover illegal internet use",
+      "date": "2005-08-31T21:27:55-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112559165523932&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050902-re-computer-forensics-to-uncover-illegal-internet-",
+      "kind": "email",
+      "title": "RE: Computer forensics to uncover illegal internet use",
+      "date": "2005-09-02T11:11:44-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112605735825744&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050902-re-computer-forensics-to-uncover-illegal-internet--2",
+      "kind": "email",
+      "title": "RE: Computer forensics to uncover illegal internet use",
+      "date": "2005-09-02T13:09:40-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112604066700511&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050902-re-incident-legal-plan",
+      "kind": "email",
+      "title": "RE: Incident legal plan??",
+      "date": "2005-09-02T19:16:23-04:00",
+      "url": "https://marc.info/?l=incidents&m=112580923329251&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050902-full-disclosure-re-computer-forensics-to-uncover-i",
+      "kind": "email",
+      "title": "[Full-disclosure] RE: Computer forensics to uncover illegal",
+      "date": "2005-09-02T20:05:20-04:00",
+      "url": "https://marc.info/?l=full-disclosure&m=112571607422941&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050902-re-computer-forensics-to-uncover-illegal-internet--2-2",
+      "kind": "email",
+      "title": "RE: Computer forensics to uncover illegal internet use",
+      "date": "2005-09-02T20:05:20-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112604262618893&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050905-re-full-disclosure-re-computer-forensics-to",
+      "kind": "email",
+      "title": "RE: [Full-disclosure] RE: Computer forensics to",
+      "date": "2005-09-05T16:29:17-04:00",
+      "url": "https://marc.info/?l=full-disclosure&m=112596552818635&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050905-fw-full-disclosure-re-computer-forensics-to",
+      "kind": "email",
+      "title": "FW: [Full-disclosure] RE: Computer forensics to",
+      "date": "2005-09-05T16:31:09-04:00",
+      "url": "https://marc.info/?l=full-disclosure&m=112595232708957&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050906-re-computer-forensics-to-uncover-illegal-internet-",
+      "kind": "email",
+      "title": "RE: Computer forensics to uncover illegal internet use",
+      "date": "2005-09-06T17:26:14-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112604317211500&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050909-new-isc-2-forensics-course",
+      "kind": "email",
+      "title": "New (ISC)2 Forensics Course",
+      "date": "2005-09-09T21:27:12-04:00",
+      "url": "https://marc.info/?l=forensics&m=112652245931669&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050911-re-full-disclosure-forensic-help",
+      "kind": "email",
+      "title": "RE: [Full-disclosure] Forensic help?",
+      "date": "2005-09-11T19:37:16-04:00",
+      "url": "https://marc.info/?l=full-disclosure&m=112648188106543&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050912-re-new-isc-2-forensics-course",
+      "kind": "email",
+      "title": "RE: New (ISC)2 Forensics Course",
+      "date": "2005-09-12T11:28:43-04:00",
+      "url": "https://marc.info/?l=forensics&m=112655328417341&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050912-fw-new-isc-2-course-forensics-for-information-secu",
+      "kind": "email",
+      "title": "FW: New (ISC)2 Course - Forensics for Information Security Managers",
+      "date": "2005-09-12T12:48:56-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112655761509898&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050913-re-recommended-configuration-settings-for-logging",
+      "kind": "email",
+      "title": "RE: Recommended configuration settings for logging",
+      "date": "2005-09-13T13:44:54-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112663550418992&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050916-re-sam-user-dump",
+      "kind": "email",
+      "title": "RE: SAM user dump",
+      "date": "2005-09-16T22:28:12-04:00",
+      "url": "https://marc.info/?l=pen-test&m=112707225912135&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050918-re-whitespace-in-passwords",
+      "kind": "email",
+      "title": "RE: Whitespace in passwords",
+      "date": "2005-09-18T17:08:43-04:00",
+      "url": "https://marc.info/?l=pen-test&m=112714180124893&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050928-re-password-security-was-passwords-with-lan-manage",
+      "kind": "email",
+      "title": "RE: Password \"security\" - was\"Passwords with Lan Manager (LM) under Windows\" and \"Whitespace in pass",
+      "date": "2005-09-28T13:32:10-04:00",
+      "url": "https://marc.info/?l=pen-test&m=112804818710981&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050928-firewall-log-management-security",
+      "kind": "email",
+      "title": "Firewall Log Management Security",
+      "date": "2005-09-28T17:44:52-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112795440207158&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050928-fw-wiz-firewall-log-management-security",
+      "kind": "email",
+      "title": "[fw-wiz] Firewall Log Management Security",
+      "date": "2005-09-28T17:54:15-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112853348710226&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20050928-re-hard-drive-intergrety-status",
+      "kind": "email",
+      "title": "RE: Hard Drive Intergrety Status",
+      "date": "2005-09-28T20:57:33-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112810221931941&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-email-20051003-re-careless-law-enforcement-computer-forensics-l",
       "kind": "email",
       "title": "RE: Careless Law Enforcement Computer Forensics Lacking InfoSec Expertise Causes Suicides",
       "date": "2005-10-03T14:51:49-04:00",
       "url": "https://seclists.org/fulldisclosure/2005/Oct/65",
       "text": "Full Disclosure reply to Jason Coombs. Signed CAS, CIFI, CISM, CISSP, ISSAP, ISSMP, MCSE; www.SecurityBreachResponse.com."
+    },
+    {
+      "id": "kleiman-email-20051003-full-disclosure-re-careless-law-enforcement-comput",
+      "kind": "email",
+      "title": "[Full-disclosure] RE: Careless Law Enforcement Computer Forensics",
+      "date": "2005-10-03T14:51:49-04:00",
+      "url": "https://marc.info/?l=full-disclosure&m=112841482432589&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20051004-re-full-disclosure-re-careless-law-enforcement-com",
+      "kind": "email",
+      "title": "RE: [Full-disclosure] Re: Careless Law Enforcement Computer Forensics",
+      "date": "2005-10-04T12:29:31-04:00",
+      "url": "https://marc.info/?l=full-disclosure&m=112844465208394&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20051010-re-two-windows-questions",
+      "kind": "email",
+      "title": "RE: Two Windows questions",
+      "date": "2005-10-10T12:05:23-04:00",
+      "url": "https://marc.info/?l=forensics&m=112897071001106&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20051011-re-auditing-nt-hash",
+      "kind": "email",
+      "title": "RE: auditing nt hash",
+      "date": "2005-10-11T13:23:22-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112905665508992&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20051014-re-qos-in-windowsxp",
+      "kind": "email",
+      "title": "RE: QOS in WindowsXP",
+      "date": "2005-10-14T19:51:44-04:00",
+      "url": "https://marc.info/?l=security-basics&m=112958483717797&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20051024-re-worm-origin",
+      "kind": "email",
+      "title": "RE: Worm Origin",
+      "date": "2005-10-24T03:06:50-04:00",
+      "url": "https://marc.info/?l=forensics&m=113033229306361&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20051109-re-cisco-acls-are-there-lists-already-out-there-to",
+      "kind": "email",
+      "title": "RE: CISCO ACLs.. Are there lists already out there to protect me from trojans and known bad sites?",
+      "date": "2005-11-09T15:14:35-05:00",
+      "url": "https://marc.info/?l=security-basics&m=113164235122243&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20051115-re-trojan-lodear-b-trojan-lodav-a",
+      "kind": "email",
+      "title": "RE: Trojan.Lodear.B/Trojan.Lodav.A",
+      "date": "2005-11-15T17:06:27-05:00",
+      "url": "https://marc.info/?l=security-basics&m=113216156523591&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20051115-re-list-of-security-oriented-fairs-events-conferen",
+      "kind": "email",
+      "title": "RE: List of Security-oriented Fairs/Events/Conferences?",
+      "date": "2005-11-15T17:13:23-05:00",
+      "url": "https://marc.info/?l=bugtraq&m=113209891205905&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20051115-re-break-in",
+      "kind": "email",
+      "title": "RE: break in?",
+      "date": "2005-11-15T18:45:48-05:00",
+      "url": "https://marc.info/?l=focus-ms&m=113215587031286&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20051115-re-what-server-hardening-are-you-doing-these-days",
+      "kind": "email",
+      "title": "RE: What server hardening are you doing these days?",
+      "date": "2005-11-15T18:51:59-05:00",
+      "url": "https://marc.info/?l=focus-ms&m=113215606407201&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20051116-re-password-creating-theories",
+      "kind": "email",
+      "title": "RE: Password creating Theories",
+      "date": "2005-11-16T14:39:09-05:00",
+      "url": "https://marc.info/?l=security-basics&m=113219373516755&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20051126-re-zonealarm",
+      "kind": "email",
+      "title": "RE: ZoneAlarm",
+      "date": "2005-11-26T00:10:37-05:00",
+      "url": "https://marc.info/?l=security-basics&m=113321622321017&w=2",
+      "text": "Mailing-list post (MARC archive)."
     },
     {
       "id": "kleiman-post-20051225-perfect-passwords-technical-editor",
@@ -120,12 +1560,52 @@
       "text": "Syngress. ISBN 1-59749-041-5. Date from Kleiman v Wright expert report (ECF 509-4)."
     },
     {
+      "id": "kleiman-email-20060119-re-windows-log",
+      "kind": "email",
+      "title": "RE: Windows Log",
+      "date": "2006-01-19T21:08:52-05:00",
+      "url": "https://marc.info/?l=security-basics&m=113796956602357&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20060119-re-windows-log-2",
+      "kind": "email",
+      "title": "RE: Windows Log",
+      "date": "2006-01-19T21:25:01-05:00",
+      "url": "https://marc.info/?l=security-basics&m=113797102808882&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20060120-re-windows-log",
+      "kind": "email",
+      "title": "RE: Windows Log",
+      "date": "2006-01-20T20:23:31-05:00",
+      "url": "https://marc.info/?l=security-basics&m=113803957725809&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20060125-re-windows-log",
+      "kind": "email",
+      "title": "RE: Windows Log",
+      "date": "2006-01-25T09:23:30-05:00",
+      "url": "https://marc.info/?l=security-basics&m=113831428407152&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-email-20060207-re-spam-re-forensic-cyber-crime-investigator",
       "kind": "email",
       "title": "RE: Spam: RE: Forensic/Cyber Crime Investigator",
       "date": "2006-02-07T09:00:24-05:00",
       "url": "https://seclists.org/basics/2006/Feb/111",
       "text": "Thread with Craig Wright and Jason Coombs on forensic investigator qualifications. Signed CAS, CCE, CIFI, CISM, CISSP, ISSAP, ISSMP, MCSE; davekleiman.com/about.php."
+    },
+    {
+      "id": "kleiman-email-20060208-re-spam-re-forensic-cyber-crime-investigator",
+      "kind": "email",
+      "title": "RE: Spam: RE: Forensic/Cyber Crime Investigator",
+      "date": "2006-02-08T23:00:50-05:00",
+      "url": "https://marc.info/?l=security-basics&m=113951176227533&w=2",
+      "text": "Mailing-list post (MARC archive)."
     },
     {
       "id": "kleiman-email-20060209-re-forensic-cyber-crime-investigator",
@@ -144,6 +1624,14 @@
       "text": "Points to CyberCrime Summit 27 Feb–3 Mar 2006 and his own class; lists events.castlecops.com. Signed forensicsflorida.com/services.php."
     },
     {
+      "id": "kleiman-email-20060222-re-why-easy-to-use-software-is-putting-you-at-risk",
+      "kind": "email",
+      "title": "RE: Why Easy To Use Software Is Putting You At Risk",
+      "date": "2006-02-22T10:22:49-05:00",
+      "url": "https://marc.info/?l=security-basics&m=114064596410189&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-post-20060413-security-log-management-identifying-patterns-in-",
       "kind": "post",
       "title": "Security Log Management: Identifying Patterns in the Chaos (contributing author)",
@@ -158,6 +1646,54 @@
       "date": "2006-05-19",
       "url": "https://web.archive.org/web/20060519093230/http://s-doc.com/company/management.asp",
       "text": "Biography: CISO and S-Lok product manager; InfraGard; ISSMP, ISSAP, CISSP, CIFI, CISM, CAS, CCE, MCSE. Capture cited in Kleiman v Wright ECF 509-4. Site copyright 2005."
+    },
+    {
+      "id": "kleiman-email-20060523-re-ms-audit-logs",
+      "kind": "email",
+      "title": "RE: MS Audit logs",
+      "date": "2006-05-23T15:24:24-04:00",
+      "url": "https://marc.info/?l=security-basics&m=114844855626070&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20060717-re-re-re-ads-password-storage-protection",
+      "kind": "email",
+      "title": "RE: Re: RE: ADS Password Storage Protection",
+      "date": "2006-07-17T18:14:24-04:00",
+      "url": "https://marc.info/?l=security-basics&m=115323832118744&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20060718-re-re-re-ads-password-storage-protection",
+      "kind": "email",
+      "title": "RE: Re: RE: ADS Password Storage Protection",
+      "date": "2006-07-18T13:34:57-04:00",
+      "url": "https://marc.info/?l=security-basics&m=115334309612710&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20060721-re-ads-password-storage-protection",
+      "kind": "email",
+      "title": "RE: ADS Password Storage Protection",
+      "date": "2006-07-21T12:17:19-04:00",
+      "url": "https://marc.info/?l=security-basics&m=115350978416034&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20060727-ms-exchange",
+      "kind": "email",
+      "title": "MS Exchange",
+      "date": "2006-07-27T17:47:37-04:00",
+      "url": "https://marc.info/?l=focus-ms&m=115409350823785&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20060729-re-ms-exchange",
+      "kind": "email",
+      "title": "RE: MS Exchange",
+      "date": "2006-07-29T12:57:00-04:00",
+      "url": "https://marc.info/?l=focus-ms&m=115419725116743&w=2",
+      "text": "Mailing-list post (MARC archive)."
     },
     {
       "id": "kleiman-post-20060904-winternals-defragmentation-recovery-and-administ",
@@ -176,6 +1712,38 @@
       "text": "Syngress. ISBN 1-59749-105-5."
     },
     {
+      "id": "kleiman-email-20061018-re-password-statistics-and-standards",
+      "kind": "email",
+      "title": "RE: Password statistics and standards",
+      "date": "2006-10-18T19:45:25-04:00",
+      "url": "https://marc.info/?l=security-basics&m=116128569718090&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20061020-re-password-statistics-and-standards",
+      "kind": "email",
+      "title": "RE: Password statistics and standards",
+      "date": "2006-10-20T16:41:07-04:00",
+      "url": "https://marc.info/?l=security-basics&m=116138937405328&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20061023-re-the-ugly-side-of-using-disk-encryption",
+      "kind": "email",
+      "title": "RE: The ugly side of using disk encryption",
+      "date": "2006-10-23T11:07:27-04:00",
+      "url": "https://marc.info/?l=security-basics&m=116162161310000&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20061023-re-the-ugly-side-of-using-disk-encryption-2",
+      "kind": "email",
+      "title": "RE: The ugly side of using disk encryption",
+      "date": "2006-10-23T12:29:53-04:00",
+      "url": "https://marc.info/?l=security-basics&m=116165137207757&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-email-20061026-are-laptop-search-seizures-increasing-use-of-dis",
       "kind": "email",
       "title": "Are laptop search & seizures increasing use of disk crypto?",
@@ -184,12 +1752,44 @@
       "text": "Metzdowd cryptography list. Cites NYT 'At U.S. Borders, Laptops Have No Right to Privacy'. Signed davekleiman.com/about.php."
     },
     {
+      "id": "kleiman-email-20061101-re-recovery-data-after-57-formats-fact-or-fiction",
+      "kind": "email",
+      "title": "RE: Recovery data after 57+ formats - fact or fiction??",
+      "date": "2006-11-01T21:54:04-05:00",
+      "url": "https://marc.info/?l=forensics&m=116269205420694&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-email-20061107-can-you-keep-a-secret-this-encrypted-drive-can",
       "kind": "email",
       "title": "Can you keep a secret? This encrypted drive can...",
       "date": "2006-11-07T14:01:15-05:00",
       "url": "https://www.metzdowd.com/pipermail/cryptography/2006-November/011724.html",
       "text": "Explains Windows noatime / Log Parser to avoid access-time updates; links HTCIA CyberCrime Summit class zip on davekleiman.com/Files."
+    },
+    {
+      "id": "kleiman-email-20061201-re-memory-dump",
+      "kind": "email",
+      "title": "RE: Memory dump",
+      "date": "2006-12-01T18:11:53-05:00",
+      "url": "https://marc.info/?l=security-basics&m=116527920624459&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20061222-re-fwd-print-server-log-analyzer",
+      "kind": "email",
+      "title": "RE: Fwd: Print Server Log Analyzer",
+      "date": "2006-12-22T01:06:08-05:00",
+      "url": "https://marc.info/?l=security-basics&m=116709380201353&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20061227-re-restrict-access-to-shared-folder-with-encryptio",
+      "kind": "email",
+      "title": "RE: Restrict Access to Shared Folder with Encryption Key Rather than Password",
+      "date": "2006-12-27T22:04:34-05:00",
+      "url": "https://marc.info/?l=security-basics&m=116740044927671&w=2",
+      "text": "Mailing-list post (MARC archive)."
     },
     {
       "id": "kleiman-post-20070107-enemy-at-the-water-cooler-technical-reviewer",
@@ -208,6 +1808,14 @@
       "text": "Wiley. ISBN 978-0-471-91710-6."
     },
     {
+      "id": "kleiman-email-20070203-re-pci-efs-and-the-future",
+      "kind": "email",
+      "title": "RE: PCI, EFS and the future?",
+      "date": "2007-02-03T01:02:35-05:00",
+      "url": "https://marc.info/?l=security-basics&m=117068913915482&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-email-20070208-castlecops-5-year-anniversary-and-contest",
       "kind": "email",
       "title": "CastleCops 5-Year Anniversary and Contest",
@@ -222,6 +1830,30 @@
       "date": "2007-03-12",
       "url": "https://en.wikipedia.org/wiki/Dave_Kleiman",
       "text": "Syngress. ISBN 1-59749-128-4."
+    },
+    {
+      "id": "kleiman-email-20070317-cybercrime-summit",
+      "kind": "email",
+      "title": "CyberCrime Summit",
+      "date": "2007-03-17T11:13:28-04:00",
+      "url": "https://marc.info/?l=forensics&m=117433686823711&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20070329-re-cybercrime-summit-follow-up",
+      "kind": "email",
+      "title": "RE: CyberCrime Summit - Follow-up",
+      "date": "2007-03-29T00:09:51-04:00",
+      "url": "https://marc.info/?l=forensics&m=117518468912406&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20070413-re-join-the-fight-against-phishing",
+      "kind": "email",
+      "title": "RE: Join the Fight Against Phishing!",
+      "date": "2007-04-13T18:29:17-04:00",
+      "url": "https://marc.info/?l=security-basics&m=117665427126226&w=2",
+      "text": "Mailing-list post (MARC archive)."
     },
     {
       "id": "kleiman-post-20070508-windows-forensic-analysis-including-dvd-toolkit-",
@@ -240,6 +1872,54 @@
       "text": "Full Disclosure. Challenges claim that carriers keep SMS bodies forever; says Verisign inter-carrier messaging kept headers only."
     },
     {
+      "id": "kleiman-email-20070522-re-full-disclosure-retrieving-deleted-sms-mms-from",
+      "kind": "email",
+      "title": "Re: [Full-disclosure] Retrieving \"deleted\" sms/mms from Nokia phone",
+      "date": "2007-05-22T06:11:43-04:00",
+      "url": "https://marc.info/?l=full-disclosure&m=117987373801313&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20070715-re-least-privilege-vs-windows-server-security",
+      "kind": "email",
+      "title": "RE: Least privilege vs Windows server security",
+      "date": "2007-07-15T02:58:14-04:00",
+      "url": "https://marc.info/?l=security-basics&m=118469224313128&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20070719-re-secure-app-desktop-sharing",
+      "kind": "email",
+      "title": "RE: Secure App/Desktop Sharing",
+      "date": "2007-07-19T13:06:41-04:00",
+      "url": "https://marc.info/?l=security-basics&m=118486688627562&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-post-20070827-taught-htcia-international-conference-lab-san-dieg",
+      "kind": "post",
+      "title": "Taught HTCIA International Conference lab, San Diego (erasure-trace demonstration; class materials later posted as HTCIA_2007_LogFileForensics-n-Tools_Tricks.zip)",
+      "date": "2007-08-27",
+      "url": "https://web.archive.org/web/20110719202636/http://www.davekleiman.com/computer-forensics-expert-florida-miami-palm-beach-lauderdale-dave-kleiman-forensic-training-files/HTCIA_2007_LogFileForensics-n-Tools_Tricks.zip",
+      "text": "Conference / training engagement."
+    },
+    {
+      "id": "kleiman-email-20070912-re-advice-regarding-servers-and-wiping-drives-afte",
+      "kind": "email",
+      "title": "RE: Advice regarding servers and Wiping Drives after testing",
+      "date": "2007-09-12T10:07:54-04:00",
+      "url": "https://marc.info/?l=security-basics&m=118962427814215&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20070912-re-advice-regarding-servers-and-wiping-drives-afte-2",
+      "kind": "email",
+      "title": "RE: Advice regarding servers and Wiping Drives after testing",
+      "date": "2007-09-12T13:53:21-04:00",
+      "url": "https://marc.info/?l=security-basics&m=118962076122738&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-email-20070912-re-advice-regarding-servers-and-wiping-drives-af",
       "kind": "email",
       "title": "RE: Advice regarding servers and Wiping Drives after testing",
@@ -248,10 +1928,34 @@
       "text": "Says he teaches wipe-trace labs at InfraGard and HTCIA San Diego; has never seen recovery after a proper wipe except via ESM. Thread lists a 13 Sep 2007 follow-up."
     },
     {
+      "id": "kleiman-email-20070913-re-advice-regarding-servers-and-wiping-drives-afte",
+      "kind": "email",
+      "title": "RE: Advice regarding servers and Wiping Drives after testing",
+      "date": "2007-09-13T12:26:19-04:00",
+      "url": "https://marc.info/?l=security-basics&m=118970234821247&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20070915-re-sp-level-of-the-win-os-from-cmd",
+      "kind": "email",
+      "title": "RE: SP level of the Win OS from CMD",
+      "date": "2007-09-15T01:30:01-04:00",
+      "url": "https://marc.info/?l=security-basics&m=119018201705575&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20070919-re-sp-level-of-the-win-os-from-cmd",
+      "kind": "email",
+      "title": "RE: SP level of the Win OS from CMD",
+      "date": "2007-09-19T00:58:25-04:00",
+      "url": "https://marc.info/?l=security-basics&m=119021744714595&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-post-20070927-wayback-first-successful-capture-of-davekleiman-",
       "kind": "post",
       "title": "Wayback: first successful capture of davekleiman.com homepage",
-      "date": "2007-09-27T04:57:55+00:00",
+      "date": "2007-09-27",
       "url": "https://web.archive.org/web/20070927045755/http://www.davekleiman.com/",
       "text": "Earliest 200-status CDX hit for the personal site. Later captures: 2008-07-05, 2009-03-24, 2009-04-12, 2010-05-01, 2011-02-01, 2012-02-04, 2012-07-13."
     },
@@ -272,6 +1976,14 @@
       "text": "From 'dave kleiman - mobile'. Points to davekleiman.com/Files; 'From Dave's Phone!'"
     },
     {
+      "id": "kleiman-email-20071231-re-ot-ip-of-the-originating-machine-from-a-gmail-e",
+      "kind": "email",
+      "title": "RE: OT: IP of the originating machine from a gmail email",
+      "date": "2007-12-31T13:09:23-05:00",
+      "url": "https://marc.info/?l=security-basics&m=119912644106565&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-email-20080312-re-defamation-and-the-difficulties-of-law-on-the",
       "kind": "email",
       "title": "RE: Defamation and the difficulties of law on the Internet",
@@ -280,12 +1992,68 @@
       "text": "Public reply to Craig Wright: 'Sometimes you amaze me....I literally today just took on a case today dealing exactly with this.' Praises Wright as a 'Knowledge Junkie'. Distinct from the later disputed private 'Bit cash, Bitcoin' email that reused this subject line."
     },
     {
+      "id": "kleiman-email-20080422-email-to-craig-wright-fw-authorship-offer-isc-2-is",
+      "kind": "email",
+      "title": "Email to Craig Wright: FW: Authorship offer (ISC)2 ISSMP textbook chapter — declined, 'I have not been doing too well lately'",
+      "date": "2008-04-22T15:37:15-04:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.65.pdf",
+      "text": "Email produced as an exhibit in Kleiman v Wright."
+    },
+    {
       "id": "kleiman-email-20080423-new-remote-forensics-and-ediscovery-tool-f-respo",
       "kind": "email",
       "title": "New Remote Forensics and eDiscovery Tool F-Response",
       "date": "2008-04-23T10:47:51-04:00",
       "url": "https://seclists.org/basics/2008/Apr/276",
       "text": "Unaffiliated product intro: F-Response USB-over-TCP, read-only remote disks. Signed davekleiman.com, 4371 Northlake Blvd #314, Palm Beach Gardens, FL."
+    },
+    {
+      "id": "kleiman-email-20080430-re-sleuthkit-users-microsoft-s-usb-thumb-drive-for",
+      "kind": "email",
+      "title": "Re: [sleuthkit-users] Microsoft's USB thumb drive forensic tool",
+      "date": "2008-04-30T10:42:18-04:00",
+      "url": "https://marc.info/?l=sleuthkit-users&m=120956657518631&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20080430-re-sleuthkit-users-microsoft-s-usb-thumb-drive-for-2",
+      "kind": "email",
+      "title": "Re: [sleuthkit-users] Microsoft's USB thumb drive forensic tool",
+      "date": "2008-04-30T13:06:33-04:00",
+      "url": "https://marc.info/?l=sleuthkit-users&m=120957521102385&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20080513-re-xp-hardening",
+      "kind": "email",
+      "title": "RE: XP Hardening",
+      "date": "2008-05-13T23:10:28-04:00",
+      "url": "https://marc.info/?l=focus-ms&m=121079106818106&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20080603-email-to-craig-wright-re-isaca-ethics-issue-darn-i",
+      "kind": "email",
+      "title": "Email to Craig Wright: RE: ISACA ethics issue — 'Darn it!!! I plagiarize you all the time!!'",
+      "date": "2008-06-03T21:53:00-04:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.38.pdf",
+      "text": "Email produced as an exhibit in Kleiman v Wright."
+    },
+    {
+      "id": "kleiman-email-20080728-re-log-reader",
+      "kind": "email",
+      "title": "RE: Log reader",
+      "date": "2008-07-28T03:19:08-04:00",
+      "url": "https://seclists.org/basics/2008/Jul/302",
+      "text": "Mailing-list post (SecLists archive)."
+    },
+    {
+      "id": "kleiman-post-20080729-presented-facci-2008-live-preview-tools-tricks-and",
+      "kind": "post",
+      "title": "Presented FACCI 2008: Live Preview — Tools, Tricks, and Traps; Log File Forensics with Microsoft Log Parser (Sarasota; materials posted as FACCI-2008_LivePreview-n-LogParser.rar)",
+      "date": "2008-07-29",
+      "url": "https://web.archive.org/web/20081120181724/http://www.davekleiman.com/computer-forensics-expert-florida-miami-palm-beach-lauderdale-dave-kleiman-forensic-training-files/FACCI-2008_LivePreview-n-LogParser.rar",
+      "text": "Conference / training engagement."
     },
     {
       "id": "kleiman-post-20080828-wayback-davekleiman-com-services-page-forensics-",
@@ -304,6 +2072,14 @@
       "text": "Posts FACCI 2008 lab files: Live Preview and Log File Forensics with Microsoft Log Parser. computerforensicexaminer.com."
     },
     {
+      "id": "kleiman-email-20080909-email-to-craig-wright-and-shyaam-re-our-paper-let-",
+      "kind": "email",
+      "title": "Email to Craig Wright and Shyaam: RE: Our Paper — 'Let me know what you need me to do, and it will be done!' (ICISS wiping paper)",
+      "date": "2008-09-09T06:49:00-04:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.87.pdf",
+      "text": "Email produced as an exhibit in Kleiman v Wright."
+    },
+    {
       "id": "kleiman-email-20081103-aba-resolution-on-digital-forensics-and-the-dfcb",
       "kind": "email",
       "title": "ABA Resolution on Digital Forensics and the DFCB",
@@ -312,12 +2088,44 @@
       "text": "Announces BrightTALK webcast and IASIR Orlando talk with Jody Westby on 6 Nov 2008."
     },
     {
+      "id": "kleiman-email-20081112-cybercrime-summit-2009-back-and-better-than-ever",
+      "kind": "email",
+      "title": "CyberCrime Summit 2009 - Back and better than ever!!",
+      "date": "2008-11-12T12:36:24-05:00",
+      "url": "https://seclists.org/basics/2008/Nov/110",
+      "text": "Mailing-list post (SecLists archive)."
+    },
+    {
       "id": "kleiman-post-20081216-overwriting-hard-drive-data-the-great-wiping-con",
       "kind": "post",
       "title": "Overwriting Hard Drive Data: The Great Wiping Controversy (ICISS 2008)",
       "date": "2008-12-16",
       "url": "https://doi.org/10.1007/978-3-540-89862-7_21",
       "text": "Wright, Kleiman, Sundhar R.S. LNCS 5352 pp. 243–257. Conference Hyderabad 16–20 Dec 2008. Argues a single overwrite is sufficient on modern drives."
+    },
+    {
+      "id": "kleiman-post-20081216-iciss-2008-paper-presented-wright-kleiman-sundhar-",
+      "kind": "post",
+      "title": "ICISS 2008 paper presented: Wright, Kleiman, Sundhar — Overwriting Hard Drive Data: The Great Wiping Controversy (Hyderabad, 16–20 Dec 2008)",
+      "date": "2008-12-16",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-540-89862-7_21",
+      "text": "Conference / training engagement."
+    },
+    {
+      "id": "kleiman-email-20090106-email-to-craig-wright-re-happy-new-year-holiday-wi",
+      "kind": "email",
+      "title": "Email to Craig Wright: RE: Happy new year — holiday wishes; asked whether a package was sent on his FedEx number",
+      "date": "2009-01-06T11:29:00-05:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.64.pdf",
+      "text": "Email produced as an exhibit in Kleiman v Wright."
+    },
+    {
+      "id": "kleiman-email-20090119-seagate-7200-11-drives",
+      "kind": "email",
+      "title": "Seagate 7200.11 Drives",
+      "date": "2009-01-19T06:40:38-05:00",
+      "url": "https://seclists.org/basics/2009/Jan/116",
+      "text": "Mailing-list post (SecLists archive)."
     },
     {
       "id": "kleiman-email-20090120-heise-online-uk-secure-deletion-a-single-overwri",
@@ -336,12 +2144,52 @@
       "text": "Metzdowd. Signed ComputerForensicExaminer.com, Palm Beach Gardens."
     },
     {
+      "id": "kleiman-post-20090225-blog-post-first-blog-introductory-post-on-computer",
+      "kind": "post",
+      "title": "Blog post: First Blog — introductory post on ComputerForensicExaminer.com-Blog (WordPress RSS pubDate)",
+      "date": "2009-02-25T20:47:43+00:00",
+      "url": "https://web.archive.org/web/20090427160229/http://computerforensicexaminer.com/computer-forensics-blog/2009/02/25/hello-world/",
+      "text": "Blog post."
+    },
+    {
+      "id": "kleiman-post-20090225-blog-post-outstanding-data-recovery-experience-rev",
+      "kind": "post",
+      "title": "Blog post: Outstanding Data Recovery Experience — review of Scott Moulton / MyHardDriveDied.com class; mentions IACIS and HTCC (WordPress RSS pubDate)",
+      "date": "2009-02-25T20:56:00+00:00",
+      "url": "https://web.archive.org/web/20090411201852/http://www.computerforensicexaminer.com/computer-forensics-blog/2009/02/25/outstanding-data-recovery-experience/",
+      "text": "Blog post."
+    },
+    {
+      "id": "kleiman-email-20090309-email-from-dave-kleiman-mobile-to-craig-wright-wel",
+      "kind": "email",
+      "title": "Email from Dave Kleiman - Mobile to Craig Wright: Welcome! — SMS follow-up, proposed Wednesday dinner",
+      "date": "2009-03-09T17:49:16-04:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.77.pdf",
+      "text": "Email produced as an exhibit in Kleiman v Wright."
+    },
+    {
+      "id": "kleiman-email-20090401-federally-mandated-certification-of-cybersecurity-",
+      "kind": "email",
+      "title": "Federally Mandated Certification of cybersecurity professionals?",
+      "date": "2009-04-01T22:16:14-04:00",
+      "url": "https://marc.info/?l=webappsec&m=123865486607129&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-email-20090401-federally-mandated-certification-of-cybersecurit",
       "kind": "email",
       "title": "Federally Mandated Certification of cybersecurity professionals?",
       "date": "2009-04-01T22:17:34-04:00",
       "url": "https://seclists.org/pen-test/2009/Apr/5",
       "text": "Pen-Test list. Forwards Washington Post on Rockefeller–Snowe cybersecurity bill and NIST licensing of professionals."
+    },
+    {
+      "id": "kleiman-email-20090506-re-conflict-of-interests",
+      "kind": "email",
+      "title": "RE: Conflict of interests",
+      "date": "2009-05-06T01:38:51-04:00",
+      "url": "https://seclists.org/basics/2009/May/94",
+      "text": "Mailing-list post (SecLists archive)."
     },
     {
       "id": "kleiman-email-20090506-re-security-checklist",
@@ -360,12 +2208,36 @@
       "text": "Recommends F-Response, X-Ways, EnCase, AccessData; free conference lab files; upcoming CEIC Orlando (PowerShell, Log Parser, Perl, Sysinternals)."
     },
     {
+      "id": "kleiman-email-20090506-email-to-dex561-yahoo-com-dex561-aol-com-better-bu",
+      "kind": "email",
+      "title": "Email to dex561@yahoo.com / dex561@aol.com: Better buy some twitter stock (Kleiman estate production KLEIMAN_00027940)",
+      "date": "2009-05-06T08:19:00-04:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.41.pdf",
+      "text": "Email produced as an exhibit in Kleiman v Wright."
+    },
+    {
+      "id": "kleiman-post-20090517-ceic-2009-orlando-scripting-network-forensics-powe",
+      "kind": "post",
+      "title": "CEIC 2009 Orlando — Scripting Network Forensics (PowerShell, Log Parser, Perl, Sysinternals); materials later posted as 2009_CEIC_Conference_Forensics zip",
+      "date": "2009-05-17",
+      "url": "https://web.archive.org/web/20110719202758/http://www.davekleiman.com/computer-forensics-expert-florida-miami-palm-beach-lauderdale-dave-kleiman-forensic-training-files/2009_CEIC_Conference_Forensics-Featuring_Powershell_LogParser_Perl_Sysinternals.zip",
+      "text": "Conference / training engagement."
+    },
+    {
       "id": "kleiman-post-20090530-wayback-davekleiman-com-services-page-reviewed-i",
       "kind": "post",
       "title": "Wayback: davekleiman.com services page reviewed in court (30 May 2009)",
       "date": "2009-05-30",
       "url": "https://web.archive.org/web/20090530000000/http://davekleiman.com/",
       "text": "ECF 509-4 cites a 30 May 2009 archive: litigation support, no programming/Bitcoin/C++ mentioned. Threat ticker on the exhibit is dated 29 May 2009."
+    },
+    {
+      "id": "kleiman-post-20090706-sans-whatworks-summit-in-forensics-and-incident-re",
+      "kind": "post",
+      "title": "SANS WhatWorks Summit in Forensics and Incident Response, Fairmont Washington DC (6–7 Jul 2009) — panelist, Forensic Challenges from the Court Room",
+      "date": "2009-07-06",
+      "url": "https://web.archive.org/web/20100126005820/http://www.sans.org/forensics09_summit/speakers.php#kleiman",
+      "text": "Conference / training engagement."
     },
     {
       "id": "kleiman-post-20090925-google-groups-overwritten-data-can-apparently-be",
@@ -408,12 +2280,124 @@
       "text": "'As long as it wipes the Physical drive, it does not make a difference. Now some file erasers and such are not so efficient.'"
     },
     {
+      "id": "kleiman-email-20090930-re-hard-drive-eraser-recommendation",
+      "kind": "email",
+      "title": "RE: Hard Drive eraser recommendation",
+      "date": "2009-09-30T16:54:51-04:00",
+      "url": "https://seclists.org/basics/2009/Oct/2",
+      "text": "Mailing-list post (SecLists archive)."
+    },
+    {
+      "id": "kleiman-email-20091028-re-any-recommendable-windows-server-vaccine-progra",
+      "kind": "email",
+      "title": "RE: Any recommendable Windows Server Vaccine program?",
+      "date": "2009-10-28T19:41:03-04:00",
+      "url": "https://seclists.org/basics/2009/Oct/146",
+      "text": "Mailing-list post (SecLists archive)."
+    },
+    {
+      "id": "kleiman-email-20091113-re-how-to-prepare-windows-installation-discs",
+      "kind": "email",
+      "title": "RE: How to prepare Windows Installation Discs",
+      "date": "2009-11-13T12:43:01-05:00",
+      "url": "https://marc.info/?l=focus-ms&m=125839583005842&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20100107-re-windows-user-logon-times",
+      "kind": "email",
+      "title": "RE: Windows User Logon Times",
+      "date": "2010-01-07T12:22:47-05:00",
+      "url": "https://seclists.org/basics/2010/Jan/21",
+      "text": "Mailing-list post (SecLists archive)."
+    },
+    {
+      "id": "kleiman-email-20100111-re-light-forensics",
+      "kind": "email",
+      "title": "RE: Light forensics",
+      "date": "2010-01-11T15:40:06-05:00",
+      "url": "https://marc.info/?l=pen-test&m=126324984111511&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20100218-re-tool-to-quickly-export-all-logs-on-a-windows-bo",
+      "kind": "email",
+      "title": "RE: Tool to quickly export all logs on a Windows box",
+      "date": "2010-02-18T11:33:38-05:00",
+      "url": "https://seclists.org/basics/2010/Feb/96",
+      "text": "Mailing-list post (SecLists archive)."
+    },
+    {
+      "id": "kleiman-email-20100315-email-from-mobile-to-craig-wright-and-bob-radvanov",
+      "kind": "email",
+      "title": "Email from mobile to Craig Wright and Bob Radvanovsky: RE: A paper — would read IEEE Globecom draft that night; 55 minutes from house to Miami",
+      "date": "2010-03-15T11:55:35-04:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.48.pdf",
+      "text": "Email produced as an exhibit in Kleiman v Wright."
+    },
+    {
+      "id": "kleiman-email-20100318-email-to-craig-wright-re-so-comments-on-unix-comma",
+      "kind": "email",
+      "title": "Email to Craig Wright: RE: So... — comments on UNIX commands and criminal-specialisation papers; agreed to work on a book",
+      "date": "2010-03-18T01:49:34-04:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.45.pdf",
+      "text": "Email produced as an exhibit in Kleiman v Wright."
+    },
+    {
       "id": "kleiman-email-20100325-new-research-suggests-that-governments-may-fake-",
       "kind": "email",
       "title": "New Research Suggests That Governments May Fake SSL Certificates",
       "date": "2010-03-25T08:05:26-04:00",
       "url": "https://www.metzdowd.com/pipermail/cryptography/2010-March/016029.html",
       "text": "Metzdowd. Signed ComputerForensicExaminer.com / DigitalForensicExpert.com."
+    },
+    {
+      "id": "kleiman-email-20100416-re-home-wireless-free-hotspot",
+      "kind": "email",
+      "title": "RE: Home wireless free hotspot",
+      "date": "2010-04-16T16:27:36-04:00",
+      "url": "https://seclists.org/basics/2010/Apr/94",
+      "text": "Mailing-list post (SecLists archive)."
+    },
+    {
+      "id": "kleiman-email-20100419-email-to-craig-wright-re-papers-so-far-i-was-wonde",
+      "kind": "email",
+      "title": "Email to Craig Wright: RE: Papers so far — 'I was wondering if you quit sleeping ...'",
+      "date": "2010-04-19T04:38:43-04:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.83.pdf",
+      "text": "Email produced as an exhibit in Kleiman v Wright."
+    },
+    {
+      "id": "kleiman-post-20100420-cnn-in-session-interview-with-vinnie-politan-on-sa",
+      "kind": "post",
+      "title": "CNN In Session interview with Vinnie Politan on Sarah Palin / David Kernell Yahoo email-hack case (air date inferred from Kernell trial opening statements; uploaded on YouTube channel Dave Kleiman)",
+      "date": "2010-04-20",
+      "url": "https://www.youtube.com/watch?v=jkN4Qr4uz4w",
+      "text": "Media interview."
+    },
+    {
+      "id": "kleiman-post-20100520-wpbf-25-abc-news-interview-quoted-on-copier-hard-d",
+      "kind": "post",
+      "title": "WPBF 25 / ABC News interview quoted on copier hard-drive identity-theft risk (Security Info Watch reprint)",
+      "date": "2010-05-20",
+      "url": "https://www.securityinfowatch.com/home/news/10500266/copy-machines-could-put-sensitive-data-at-risk",
+      "text": "Media interview."
+    },
+    {
+      "id": "kleiman-email-20100524-email-to-craig-wright-re-some-more-reading-asked-w",
+      "kind": "email",
+      "title": "Email to Craig Wright: RE: Some more reading — asked whether papers had been accepted and where Wright would speak",
+      "date": "2010-05-24T05:03:57-04:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.47.pdf",
+      "text": "Email produced as an exhibit in Kleiman v Wright."
+    },
+    {
+      "id": "kleiman-email-20101009-email-from-d-kleiman-to-i-kleiman-and-others-cited",
+      "kind": "email",
+      "title": "Email from D. Kleiman to I. Kleiman and others (cited as Exhibit P in Kleiman v Wright; signature-block address evidence)",
+      "date": "2010-10-09",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.488.0.pdf",
+      "text": "Email produced as an exhibit in Kleiman v Wright."
     },
     {
       "id": "kleiman-email-20110202-re-dhs-cyber-r-d-grants-40mm",
@@ -438,6 +2422,14 @@
       "date": "2011-02-14T19:13:00-05:00",
       "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.22.pdf",
       "text": "Cannot file LLC/nonprofit in time; lists existing Sunbiz fictitious names G06303900172 and G98287000005."
+    },
+    {
+      "id": "kleiman-email-20110215-email-to-craig-and-lynn-wright-re-registration-tta",
+      "kind": "email",
+      "title": "Email to Craig and Lynn Wright: RE: Registration - TTAI — asked if they had already created a username",
+      "date": "2011-02-15T06:35:00-05:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.30.pdf",
+      "text": "Email produced as an exhibit in Kleiman v Wright."
     },
     {
       "id": "kleiman-email-20110215-link-to-r-d-site-duns-fbo-gov",
@@ -488,12 +2480,36 @@
       "text": "Contemporaneous YouTube/Facebook listing: '2011/02/17 Computer Forensics Expert Dave Kleiman on CNN News InSession'. Also reported as ABC News commentary on a City of Lake Worth breach."
     },
     {
+      "id": "kleiman-email-20110623-email-to-craig-wright-craig-panopticrypt-com",
+      "kind": "email",
+      "title": "Email to Craig Wright <craig@panopticrypt.com>",
+      "date": "2011-06-23T21:03:48-05:00",
+      "url": "https://www.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.268.8.pdf",
+      "text": "Email produced as an exhibit in Kleiman v Wright (operational thread)."
+    },
+    {
+      "id": "kleiman-email-20111017-email-to-craig-wright-re-using-checklists-to-make-",
+      "kind": "email",
+      "title": "Email to Craig Wright: RE: Using Checklists to make better best.docx — first-pass review of draft paper",
+      "date": "2011-10-17T02:56:19-04:00",
+      "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.46.pdf",
+      "text": "Email produced as an exhibit in Kleiman v Wright."
+    },
+    {
       "id": "kleiman-post-20120213-articles-of-organization-computer-forensics-llc",
       "kind": "post",
       "title": "Articles of Organization: Computer Forensics LLC",
       "date": "2012-02-13",
       "url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.521536/gov.uscourts.flsd.521536.828.16.pdf",
       "text": "Florida L12000020457, filed 13 Feb 2012, effective 6 Feb 2012. Managing members Dave Kleiman, Carter V Conrad, Patrick Paige. Amended/name-changed 11 Jun 2012."
+    },
+    {
+      "id": "kleiman-post-20120602-computer-forensics-llc-blog-launch-note-company-po",
+      "kind": "post",
+      "title": "Computer Forensics LLC blog launch note (company post; reprints Kleiman 2009-02-25 data-recovery article to test the system)",
+      "date": "2012-06-02",
+      "url": "https://web.archive.org/web/20130228173845/http://www.computerforensicsllc.com/experts-florida-miami-palm-beach-lauderdale-blog.php",
+      "text": "Blog post."
     },
     {
       "id": "kleiman-email-20120604-re-building-a-surveillance-system-for-a-house-wi",
@@ -504,12 +2520,44 @@
       "text": "First Kleiman reply in the NVR/Wi-Fi surveillance thread (thread index: Jun 04). Follow-ups 5–6 Jun 2012 from dave@davekleiman.com."
     },
     {
+      "id": "kleiman-email-20120604-re-patch-management",
+      "kind": "email",
+      "title": "RE: Patch Management",
+      "date": "2012-06-04T14:31:35-04:00",
+      "url": "https://marc.info/?l=security-basics&m=133883615331065&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20120604-re-securing-access-to-a-web-server-best-practices-",
+      "kind": "email",
+      "title": "RE: Securing access to a web server best practices and suggestions",
+      "date": "2012-06-04T14:35:33-04:00",
+      "url": "https://marc.info/?l=security-basics&m=133883640831152&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-email-20120606-re-building-a-surveillance-system-wi-fi-risks",
       "kind": "email",
       "title": "RE: Building a surveillance system (Wi-Fi risks)",
       "date": "2012-06-06T16:24:27-05:00",
       "url": "https://seclists.org/basics/2012/Jun/39",
       "text": "Warns of inherent risks with Wi-Fi cameras. Thread lists three Kleiman posts on 4 and 6 Jun 2012."
+    },
+    {
+      "id": "kleiman-email-20120606-re-building-a-surveillance-system-for-a-house-with",
+      "kind": "email",
+      "title": "RE: Building a surveillance system for a house with a do-it-yourself NVR",
+      "date": "2012-06-06T17:24:27-04:00",
+      "url": "https://marc.info/?l=security-basics&m=133901850701170&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20120606-mandiant-intelligent-response",
+      "kind": "email",
+      "title": "Mandiant Intelligent Response",
+      "date": "2012-06-06T22:07:20-04:00",
+      "url": "https://marc.info/?l=security-basics&m=133908310528599&w=2",
+      "text": "Mailing-list post (MARC archive)."
     },
     {
       "id": "kleiman-email-20120608-re-write-blockers",
@@ -520,6 +2568,38 @@
       "text": "Recommends Tableau write-blockers and free Tableau imaging software. Thread lists a further reply 11 Jun 2012."
     },
     {
+      "id": "kleiman-email-20120611-re-write-blockers",
+      "kind": "email",
+      "title": "RE: Write blockers",
+      "date": "2012-06-11T08:48:57-04:00",
+      "url": "https://marc.info/?l=security-basics&m=133942867808819&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20120612-re-hashing-passwords",
+      "kind": "email",
+      "title": "RE: Hashing passwords",
+      "date": "2012-06-12T14:03:18-04:00",
+      "url": "https://marc.info/?l=security-basics&m=133952711713345&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20120614-re-operative-system-updates",
+      "kind": "email",
+      "title": "RE: Operative System Updates",
+      "date": "2012-06-14T14:41:54-04:00",
+      "url": "https://marc.info/?l=security-basics&m=133970017411194&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20120622-re-server-security",
+      "kind": "email",
+      "title": "RE: server security",
+      "date": "2012-06-22T18:51:54-04:00",
+      "url": "https://marc.info/?l=security-basics&m=134040646419736&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-email-20120711-re-recommendation-for-a-comprehensive-security-a",
       "kind": "email",
       "title": "RE: Recommendation for a comprehensive security audit",
@@ -528,10 +2608,42 @@
       "text": "Last clearly dated Security Basics post found. Signed ComputerForensicsLLC.com / DaveKleiman.com."
     },
     {
+      "id": "kleiman-email-20120727-re-no-budget-static-log-analysis",
+      "kind": "email",
+      "title": "RE: No Budget Static Log Analysis",
+      "date": "2012-07-27T13:21:12-04:00",
+      "url": "https://marc.info/?l=security-basics&m=134341017801663&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20120807-re-comparing-hosts-on-a-network-to-text-file",
+      "kind": "email",
+      "title": "RE: Comparing hosts on a network to text file",
+      "date": "2012-08-07T14:15:37-04:00",
+      "url": "https://marc.info/?l=security-basics&m=134436466707627&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20121010-re-need-vulnerability-management-tool-review",
+      "kind": "email",
+      "title": "RE: Need Vulnerability Management Tool Review",
+      "date": "2012-10-10T14:47:03-04:00",
+      "url": "https://marc.info/?l=security-basics&m=134993859709382&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
+      "id": "kleiman-email-20121031-re-bank-of-montreal-online-security",
+      "kind": "email",
+      "title": "RE: Bank Of Montreal Online Security",
+      "date": "2012-10-31T10:26:30-04:00",
+      "url": "https://marc.info/?l=security-basics&m=135169718420812&w=2",
+      "text": "Mailing-list post (MARC archive)."
+    },
+    {
       "id": "kleiman-post-20130118-wayback-first-capture-of-computerforensicsllc-co",
       "kind": "post",
       "title": "Wayback: first capture of computerforensicsllc.com",
-      "date": "2013-01-18T07:38:03+00:00",
+      "date": "2013-01-18",
       "url": "https://web.archive.org/web/20130118073803/http://www.computerforensicsllc.com/",
       "text": "Partnership site with Paige and Conrad. Further 200-status captures 24 Mar, 29 May, 16 Jun 2013 (after death) and through 2014."
     },

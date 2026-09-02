@@ -124,9 +124,9 @@ describe('getActivity', () => {
     expect(byId.wright!.byKind).toEqual({ emails: 5, posts: 514 });
     expect(byId.wright!.points).toHaveLength(519);
 
-    expect(byId.kleiman!.total).toBe(66);
-    expect(byId.kleiman!.byKind).toEqual({ emails: 42, posts: 24 });
-    expect(byId.kleiman!.points).toHaveLength(66);
+    expect(byId.kleiman!.total).toBe(330);
+    expect(byId.kleiman!.byKind).toEqual({ emails: 296, posts: 34 });
+    expect(byId.kleiman!.points).toHaveLength(330);
   });
 
   it('caches each subject payload independently', () => {

@@ -39,7 +39,18 @@ export function loadTtsConfig(env: NodeJS.ProcessEnv = process.env): TtsConfig {
   };
 }
 
+const REQUIRED_SECRETS = [
+  ['resembleApiKey', 'RESEMBLE_API_KEY'],
+  ['resembleVoiceUuid', 'RESEMBLE_VOICE_UUID'],
+  ['treasuryWif', 'TREASURY_WIF'],
+] as const;
+
 /** True only when the Resemble key, voice UUID and treasury WIF are all present. */
 export function isTtsConfigured(config: TtsConfig): boolean {
-  return Boolean(config.resembleApiKey && config.resembleVoiceUuid && config.treasuryWif);
+  return ttsMissingSecrets(config).length === 0;
+}
+
+/** Env var names that are empty — names only, never values. */
+export function ttsMissingSecrets(config: TtsConfig): string[] {
+  return REQUIRED_SECRETS.filter(([field]) => !config[field]).map(([, name]) => name);
 }

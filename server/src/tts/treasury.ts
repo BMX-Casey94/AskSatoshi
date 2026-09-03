@@ -60,6 +60,13 @@ function bsvToSats(value: number): number {
   return Math.round(value * 1e8);
 }
 
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+/** How many times to retry a 404 before declaring the payment missing. */
+const PAYMENT_LOOKUP_RETRIES = 3;
+/** Delay between retries — mempool propagation to the explorer is not instant. */
+const PAYMENT_LOOKUP_RETRY_MS = 2_000;
+
 export async function verifyPayment(opts: {
   txid: string;
   expectedSats: number;
@@ -67,19 +74,31 @@ export async function verifyPayment(opts: {
   fetchFn?: typeof fetch;
 }): Promise<VerifyPaymentResult> {
   const fetchFn = opts.fetchFn ?? fetch;
-  let payment: { status: number; json: WocTx | null };
-  try {
-    payment = await fetchTx(opts.txid, fetchFn);
-  } catch (err) {
-    console.warn('[tts] payment lookup failed:', err instanceof Error ? err.message : err);
-    return { ok: false, reason: 'lookup-failed' };
-  }
+  let payment: { status: number; json: WocTx | null } | null = null;
+  for (let attempt = 0; attempt < PAYMENT_LOOKUP_RETRIES; attempt++) {
+    try {
+      payment = await fetchTx(opts.txid, fetchFn);
+    } catch (err) {
+      console.warn('[tts] payment lookup failed:', err instanceof Error ? err.message : err);
+      return { ok: false, reason: 'lookup-failed' };
+    }
 
-  if (payment.status === 404 || (payment.status >= 200 && payment.status < 300 && !payment.json)) {
-    return { ok: false, reason: 'not-found' };
+    if (payment.status === 404 || (payment.status >= 200 && payment.status < 300 && !payment.json)) {
+      if (attempt < PAYMENT_LOOKUP_RETRIES - 1) {
+        console.info(`[tts] payment ${opts.txid} not yet on explorer; retrying (${attempt + 1}/${PAYMENT_LOOKUP_RETRIES})`);
+        await sleep(PAYMENT_LOOKUP_RETRY_MS);
+        continue;
+      }
+      console.warn(`[tts] payment ${opts.txid} not found on explorer after ${PAYMENT_LOOKUP_RETRIES} attempts`);
+      return { ok: false, reason: 'not-found' };
+    }
+    if (!payment.json || payment.status >= 400) {
+      return { ok: false, reason: payment.status === 404 ? 'not-found' : 'lookup-failed' };
+    }
+    break;
   }
-  if (!payment.json || payment.status >= 400) {
-    return { ok: false, reason: payment.status === 404 ? 'not-found' : 'lookup-failed' };
+  if (!payment?.json) {
+    return { ok: false, reason: 'lookup-failed' };
   }
 
   const vouts = payment.json.vout ?? [];

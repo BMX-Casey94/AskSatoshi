@@ -167,7 +167,7 @@ export function friendlyTtsError(err: unknown): string {
       case 'TTS_BAD_INPUT':
         return err.message || 'That text could not be synthesised.';
       case 'TTS_PAYMENT_INVALID':
-        return 'The payment could not be verified. If the transaction did not confirm, nothing was charged.';
+        return 'The payment could not be verified yet. The network may still be propagating — wait a few seconds and try again. Nothing was charged.';
       case 'TTS_QUOTE_UNKNOWN':
         return 'That price quote was not recognised. Please try again.';
       case 'TTS_TX_REUSED':

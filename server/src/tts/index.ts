@@ -5,7 +5,7 @@
 
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { isTtsConfigured, loadTtsConfig, type TtsConfig } from './config.js';
+import { isTtsConfigured, loadTtsConfig, ttsMissingSecrets, type TtsConfig } from './config.js';
 import { fetchBsvUsd, quoteSatoshis, satsPerThousand } from './pricing.js';
 import { createResembleClient, type ResembleClient } from './resemble.js';
 import { createTtsRouter, type TtsRouterDeps } from './routes.js';
@@ -84,8 +84,12 @@ export function assembleTts(runtimeDir: string = DEFAULT_RUNTIME): TtsAssembly {
 }
 
 export function ttsStartupLine(assembly: TtsAssembly): string {
-  if (!isTtsConfigured(assembly.config) || !assembly.treasury) {
-    return '[tts] disabled: not-configured';
+  const missing = ttsMissingSecrets(assembly.config);
+  if (missing.length > 0) {
+    return `[tts] disabled: not-configured (missing ${missing.join(', ')})`;
+  }
+  if (!assembly.treasury) {
+    return '[tts] disabled: not-configured (TREASURY_WIF invalid)';
   }
   const st = assembly.state.getState();
   if (st.disabled) return `[tts] disabled: ${st.reason ?? 'kill-switch'}`;

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { P2PKH, PrivateKey } from '@bsv/sdk';
 import { REFUND_FEE_SATS, buildRefundTx, treasuryFromWif, verifyPayment } from './treasury.js';
 
@@ -77,14 +77,51 @@ describe('verifyPayment', () => {
   });
 
   it('returns not-found when WhatsOnChain has no such transaction', async () => {
-    const fetchFn = fetchMap({ [`/tx/${PAYMENT_TXID}`]: 404 });
-    const result = await verifyPayment({
-      txid: PAYMENT_TXID,
-      expectedSats: 7500,
-      treasuryScriptHex: TREASURY_SCRIPT,
-      fetchFn,
-    });
-    expect(result).toEqual({ ok: false, reason: 'not-found' });
+    vi.useFakeTimers();
+    try {
+      const fetchFn = fetchMap({ [`/tx/${PAYMENT_TXID}`]: 404 });
+      const promise = verifyPayment({
+        txid: PAYMENT_TXID,
+        expectedSats: 7500,
+        treasuryScriptHex: TREASURY_SCRIPT,
+        fetchFn,
+      });
+      await vi.runAllTimersAsync();
+      const result = await promise;
+      expect(result).toEqual({ ok: false, reason: 'not-found' });
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('retries a not-found payment until it appears on the explorer', async () => {
+    vi.useFakeTimers();
+    try {
+      let calls = 0;
+      const fetchFn: typeof fetch = async (input) => {
+        calls += 1;
+        if (calls < 3) return new Response('missing', { status: 404 });
+        return new Response(
+          JSON.stringify(
+            wocTx(PAYMENT_TXID, [{ value: 0.000075, hex: TREASURY_SCRIPT }], [{ txid: SOURCE_TXID, vout: 0 }]),
+          ),
+          { status: 200 },
+        );
+      };
+      const promise = verifyPayment({
+        txid: PAYMENT_TXID,
+        expectedSats: 7500,
+        treasuryScriptHex: TREASURY_SCRIPT,
+        fetchFn,
+      });
+      await vi.runAllTimersAsync();
+      const result = await promise;
+      expect(calls).toBe(4); // 2 misses + payment hit + sender-script lookup
+      expect(result.ok).toBe(true);
+      if (result.ok) expect(result.receivedSats).toBe(7500);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('returns lookup-failed when the explorer request errors', async () => {

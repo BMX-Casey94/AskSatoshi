@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { isTtsConfigured, loadTtsConfig } from './config.js';
+import { isTtsConfigured, loadTtsConfig, ttsMissingSecrets } from './config.js';
 
 const FULL_ENV = {
   RESEMBLE_API_KEY: 'rk_test',
@@ -61,5 +61,17 @@ describe('isTtsConfigured', () => {
     expect(isTtsConfigured(loadTtsConfig({ ...FULL_ENV, RESEMBLE_VOICE_UUID: '' }))).toBe(false);
     expect(isTtsConfigured(loadTtsConfig({ ...FULL_ENV, TREASURY_WIF: '' }))).toBe(false);
     expect(isTtsConfigured(loadTtsConfig({}))).toBe(false);
+  });
+
+  it('names the missing env vars without exposing values', () => {
+    expect(ttsMissingSecrets(loadTtsConfig(FULL_ENV))).toEqual([]);
+    expect(ttsMissingSecrets(loadTtsConfig({ ...FULL_ENV, RESEMBLE_API_KEY: '' }))).toEqual([
+      'RESEMBLE_API_KEY',
+    ]);
+    expect(ttsMissingSecrets(loadTtsConfig({}))).toEqual([
+      'RESEMBLE_API_KEY',
+      'RESEMBLE_VOICE_UUID',
+      'TREASURY_WIF',
+    ]);
   });
 });

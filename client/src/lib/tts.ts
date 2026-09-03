@@ -322,7 +322,7 @@ async function payWithWallet(quote: TtsQuote): Promise<string> {
     throw new Error('The treasury address on this quote is not valid. Please try again.');
   }
 
-  let txid: string | undefined;
+  let rawTx: string | undefined;
   try {
     const result = await wallet.createAction({
       description: 'Ask Satoshi — read aloud',
@@ -334,7 +334,11 @@ async function payWithWallet(quote: TtsQuote): Promise<string> {
         },
       ],
     });
-    txid = result.txid;
+    if (result.tx) {
+      rawTx = Array.isArray(result.tx)
+        ? result.tx.map((b) => b.toString(16).padStart(2, '0')).join('')
+        : String(result.tx);
+    }
   } catch (err) {
     if (isPaymentCancelled(err)) {
       throw new Error('Payment cancelled — nothing was charged.');
@@ -346,10 +350,10 @@ async function payWithWallet(quote: TtsQuote): Promise<string> {
     throw new Error(msg || 'The wallet could not complete the payment.');
   }
 
-  if (!txid || !TXID_RE.test(txid)) {
-    throw new Error('The wallet did not return a payment transaction. Nothing further was submitted.');
+  if (!rawTx || !/^[0-9a-fA-F]+$/.test(rawTx)) {
+    throw new Error('The wallet did not return a signed transaction. Nothing further was submitted.');
   }
-  return txid;
+  return rawTx;
 }
 
 function isSafeAudioUrl(url: string): boolean {
@@ -362,13 +366,13 @@ function isSafeAudioUrl(url: string): boolean {
   }
 }
 
-async function submitSpeak(text: string, quote: TtsQuote, txid: string): Promise<{ audioUrl: string }> {
+async function submitSpeak(text: string, quote: TtsQuote, rawTx: string): Promise<{ audioUrl: string }> {
   let res: Response;
   try {
     res = await fetch('/api/tts/speak', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quoteId: quote.quoteId, txid, text }),
+      body: JSON.stringify({ quoteId: quote.quoteId, rawTx, text }),
     });
   } catch {
     throw new Error('Paid, but could not reach the synthesis service. Please contact support with your transaction id.');
@@ -405,7 +409,7 @@ export async function payAndSpeak(
   onProgress?: (phase: TtsProgress) => void,
 ): Promise<{ audioUrl: string }> {
   onProgress?.('paying');
-  const txid = await payWithWallet(quote);
+  const rawTx = await payWithWallet(quote);
   onProgress?.('synthesising');
-  return submitSpeak(text, quote, txid);
+  return submitSpeak(text, quote, rawTx);
 }

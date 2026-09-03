@@ -1,140 +1,115 @@
 import { describe, expect, it, vi } from 'vitest';
-import { P2PKH, PrivateKey } from '@bsv/sdk';
+import { P2PKH, PrivateKey, Transaction } from '@bsv/sdk';
 import { REFUND_FEE_SATS, buildRefundTx, treasuryFromWif, verifyPayment } from './treasury.js';
 
-const TREASURY_SCRIPT = '76a91489abcdef0123456789abcdef0123456789abcdef88ac';
-const SENDER_SCRIPT = '76a91400112233445566778899aabbccddeeff0011223388ac';
-const PAYMENT_TXID = 'aa'.repeat(32);
-const SOURCE_TXID = 'bb'.repeat(32);
+const TREASURY_KEY = PrivateKey.fromRandom();
+const TREASURY = treasuryFromWif(TREASURY_KEY.toWif());
+const SENDER_KEY = PrivateKey.fromRandom();
+const SENDER_SCRIPT = new P2PKH().lock(SENDER_KEY.toPublicKey().toAddress()).toHex();
 
-function wocTx(txid: string, vouts: { value: number; hex: string }[], vin = [{ txid: SOURCE_TXID, vout: 0 }]) {
-  return {
-    txid,
-    vin,
-    vout: vouts.map((v) => ({
-      value: v.value,
-      scriptPubKey: { hex: v.hex, addresses: ['1Fake'] },
-    })),
-  };
-}
+/** Build a real signed tx paying the treasury, with the source tx embedded. */
+async function makePayment(satoshis: number): Promise<string> {
+  const sourceTx = new Transaction();
+  sourceTx.addInput({
+    sourceTXID: '00'.repeat(32),
+    sourceOutputIndex: 0,
+    unlockingScriptTemplate: new P2PKH().unlock(SENDER_KEY, 'all', false, 100_000, new P2PKH().lock(SENDER_KEY.toPublicKey().toAddress())),
+  });
+  sourceTx.addOutput({ lockingScript: new P2PKH().lock(SENDER_KEY.toPublicKey().toAddress()), satoshis: 100_000 });
+  await sourceTx.sign();
 
-function fetchMap(routes: Record<string, unknown | number>): typeof fetch {
-  return async (input) => {
-    const url = String(input);
-    const match = Object.entries(routes).find(([key]) => url.includes(key));
-    if (!match) return new Response('missing', { status: 404 });
-    const body = match[1];
-    if (typeof body === 'number') return new Response('err', { status: body });
-    return new Response(JSON.stringify(body), { status: 200 });
-  };
+  const tx = new Transaction();
+  tx.addInput({
+    sourceTransaction: sourceTx,
+    sourceOutputIndex: 0,
+    unlockingScriptTemplate: new P2PKH().unlock(SENDER_KEY, 'all', false, 100_000, sourceTx.outputs[0]!.lockingScript),
+  });
+  tx.addOutput({ lockingScript: new P2PKH().lock(TREASURY.address), satoshis });
+  await tx.sign();
+  return tx.toHex();
 }
 
 describe('verifyPayment', () => {
-  it('accepts a treasury output at or above the expected sats and extracts the sender script', async () => {
-    const fetchFn = fetchMap({
-      [`/tx/${PAYMENT_TXID}`]: wocTx(PAYMENT_TXID, [{ value: 0.000075, hex: TREASURY_SCRIPT }]),
-      [`/tx/${SOURCE_TXID}`]: wocTx(SOURCE_TXID, [{ value: 0.001, hex: SENDER_SCRIPT }]),
-    });
+  it('accepts a raw tx paying the treasury and returns the sender script', async () => {
+    const raw = await makePayment(7_500);
+    const parsed = Transaction.fromHex(raw);
+    const embedded = parsed.inputs[0]?.sourceTransaction?.outputs[0]?.lockingScript.toHex() ?? '';
+    const broadcast = vi.fn(async () => new Response(JSON.stringify({ txid: 'ab'.repeat(32) }), { status: 200 }));
     const result = await verifyPayment({
-      txid: PAYMENT_TXID,
-      expectedSats: 7500,
-      treasuryScriptHex: TREASURY_SCRIPT,
-      fetchFn,
+      rawTx: raw,
+      expectedSats: 7_500,
+      treasuryScriptHex: TREASURY.lockingScriptHex,
+      fetchFn: broadcast,
     });
-    expect(result).toEqual({
-      ok: true,
-      receivedSats: 7500,
-      voutIndex: 0,
-      senderScriptHex: SENDER_SCRIPT,
-    });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.receivedSats).toBe(7_500);
+      expect(result.voutIndex).toBe(0);
+      expect(result.senderScriptHex).toBe(embedded);
+      expect(result.txid).toMatch(/^[0-9a-f]{64}$/);
+    }
+    expect(broadcast).toHaveBeenCalledOnce();
   });
 
-  it('returns underpaid when the treasury output is below the expected sats', async () => {
-    const fetchFn = fetchMap({
-      [`/tx/${PAYMENT_TXID}`]: wocTx(PAYMENT_TXID, [{ value: 0.00001, hex: TREASURY_SCRIPT }]),
-      [`/tx/${SOURCE_TXID}`]: wocTx(SOURCE_TXID, [{ value: 0.001, hex: SENDER_SCRIPT }]),
-    });
+  it('rejects an underpaid tx', async () => {
+    const raw = await makePayment(1_000);
     const result = await verifyPayment({
-      txid: PAYMENT_TXID,
-      expectedSats: 7500,
-      treasuryScriptHex: TREASURY_SCRIPT,
-      fetchFn,
+      rawTx: raw,
+      expectedSats: 7_500,
+      treasuryScriptHex: TREASURY.lockingScriptHex,
+      fetchFn: vi.fn(),
     });
     expect(result).toEqual({ ok: false, reason: 'underpaid' });
   });
 
-  it('returns wrong-destination when no output pays the treasury script', async () => {
-    const fetchFn = fetchMap({
-      [`/tx/${PAYMENT_TXID}`]: wocTx(PAYMENT_TXID, [{ value: 0.000075, hex: '76a914ffffffffffffffffffffffffffffffffffffffff88ac' }]),
+  it('rejects a tx that does not pay the treasury', async () => {
+    const other = PrivateKey.fromRandom();
+    const sourceTx = new Transaction();
+    sourceTx.addInput({
+      sourceTXID: '00'.repeat(32),
+      sourceOutputIndex: 0,
+      unlockingScriptTemplate: new P2PKH().unlock(SENDER_KEY, 'all', false, 100_000, new P2PKH().lock(SENDER_KEY.toPublicKey().toAddress())),
     });
+    sourceTx.addOutput({ lockingScript: new P2PKH().lock(SENDER_KEY.toPublicKey().toAddress()), satoshis: 100_000 });
+    await sourceTx.sign();
+    const tx = new Transaction();
+    tx.addInput({
+      sourceTransaction: sourceTx,
+      sourceOutputIndex: 0,
+      unlockingScriptTemplate: new P2PKH().unlock(SENDER_KEY, 'all', false, 100_000, sourceTx.outputs[0]!.lockingScript),
+    });
+    tx.addOutput({ lockingScript: new P2PKH().lock(other.toPublicKey().toAddress()), satoshis: 7_500 });
+    await tx.sign();
+
     const result = await verifyPayment({
-      txid: PAYMENT_TXID,
-      expectedSats: 7500,
-      treasuryScriptHex: TREASURY_SCRIPT,
-      fetchFn,
+      rawTx: tx.toHex(),
+      expectedSats: 7_500,
+      treasuryScriptHex: TREASURY.lockingScriptHex,
+      fetchFn: vi.fn(),
     });
     expect(result).toEqual({ ok: false, reason: 'wrong-destination' });
   });
 
-  it('returns not-found when WhatsOnChain has no such transaction', async () => {
-    vi.useFakeTimers();
-    try {
-      const fetchFn = fetchMap({ [`/tx/${PAYMENT_TXID}`]: 404 });
-      const promise = verifyPayment({
-        txid: PAYMENT_TXID,
-        expectedSats: 7500,
-        treasuryScriptHex: TREASURY_SCRIPT,
-        fetchFn,
-      });
-      await vi.runAllTimersAsync();
-      const result = await promise;
-      expect(result).toEqual({ ok: false, reason: 'not-found' });
-    } finally {
-      vi.useRealTimers();
-    }
-  });
-
-  it('retries a not-found payment until it appears on the explorer', async () => {
-    vi.useFakeTimers();
-    try {
-      let calls = 0;
-      const fetchFn: typeof fetch = async (input) => {
-        calls += 1;
-        if (calls < 3) return new Response('missing', { status: 404 });
-        return new Response(
-          JSON.stringify(
-            wocTx(PAYMENT_TXID, [{ value: 0.000075, hex: TREASURY_SCRIPT }], [{ txid: SOURCE_TXID, vout: 0 }]),
-          ),
-          { status: 200 },
-        );
-      };
-      const promise = verifyPayment({
-        txid: PAYMENT_TXID,
-        expectedSats: 7500,
-        treasuryScriptHex: TREASURY_SCRIPT,
-        fetchFn,
-      });
-      await vi.runAllTimersAsync();
-      const result = await promise;
-      expect(calls).toBe(4); // 2 misses + payment hit + sender-script lookup
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.receivedSats).toBe(7500);
-    } finally {
-      vi.useRealTimers();
-    }
-  });
-
-  it('returns lookup-failed when the explorer request errors', async () => {
-    const fetchFn = async () => {
-      throw new Error('network down');
-    };
+  it('rejects malformed hex', async () => {
     const result = await verifyPayment({
-      txid: PAYMENT_TXID,
-      expectedSats: 7500,
-      treasuryScriptHex: TREASURY_SCRIPT,
-      fetchFn,
+      rawTx: 'not-hex',
+      expectedSats: 7_500,
+      treasuryScriptHex: TREASURY.lockingScriptHex,
+      fetchFn: vi.fn(),
     });
-    expect(result).toEqual({ ok: false, reason: 'lookup-failed' });
+    expect(result).toEqual({ ok: false, reason: 'invalid-tx' });
+  });
+
+  it('returns broadcast-failed when the explorer rejects the tx', async () => {
+    const raw = await makePayment(7_500);
+    const broadcast = vi.fn(async () => new Response('bad tx', { status: 400 }));
+    const result = await verifyPayment({
+      rawTx: raw,
+      expectedSats: 7_500,
+      treasuryScriptHex: TREASURY.lockingScriptHex,
+      fetchFn: broadcast,
+    });
+    expect(result).toEqual({ ok: false, reason: 'broadcast-failed' });
   });
 });
 
@@ -151,7 +126,7 @@ describe('treasuryFromWif and buildRefundTx', () => {
     const key = PrivateKey.fromRandom();
     const sender = new P2PKH().lock(PrivateKey.fromRandom().toAddress()).toHex();
     const hex = await buildRefundTx({
-      paymentTxid: PAYMENT_TXID,
+      paymentTxid: 'aa'.repeat(32),
       voutIndex: 0,
       receivedSats: 10_000,
       senderScriptHex: sender,
@@ -161,7 +136,7 @@ describe('treasuryFromWif and buildRefundTx', () => {
     expect(hex!.length).toBeGreaterThan(200);
 
     const dust = await buildRefundTx({
-      paymentTxid: PAYMENT_TXID,
+      paymentTxid: 'aa'.repeat(32),
       voutIndex: 0,
       receivedSats: REFUND_FEE_SATS,
       senderScriptHex: sender,

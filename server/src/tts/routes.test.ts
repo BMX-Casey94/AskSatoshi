@@ -10,6 +10,7 @@ import { createTtsState, type TtsState } from './state.js';
 import { TtsCreditExhaustedError, TtsSynthError } from './resemble.js';
 import { createTtsRouter, type TtsRouterDeps } from './routes.js';
 
+const RAW_TX = '0100000001' + '00'.repeat(36) + '6a' + '47' + '30' + '44' + '02' + '20' + '01'.repeat(32) + '02' + '20' + '02'.repeat(32) + '41' + '21' + '03' + '03'.repeat(32) + 'ffffffff' + '01' + 'e803000000000000' + '1976a91489abcdef0123456789abcdef0123456789abcdef88ac' + '00000000';
 const TXID = 'ab'.repeat(32);
 const TXID2 = 'cd'.repeat(32);
 
@@ -52,6 +53,7 @@ async function startApp(overrides: Partial<TtsRouterDeps> = {}): Promise<LiveApp
   const synthesize = vi.fn(async () => ({ audio: Buffer.from('ID3fake'), durationSeconds: 1.5 }));
   const verifyPayment = vi.fn(async () => ({
     ok: true as const,
+    txid: TXID,
     receivedSats: 1000,
     voutIndex: 0,
     senderScriptHex: '76a91400112233445566778899aabbccddeeff0011223388ac',
@@ -194,7 +196,7 @@ describe('POST /api/tts/speak', () => {
     const unknown = await fetch(`${live.url}/api/tts/speak`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quoteId: 'q_missing', txid: TXID, text: 'hello' }),
+      body: JSON.stringify({ quoteId: 'q_missing', rawTx: RAW_TX, text: 'hello' }),
     });
     expect(unknown.status).toBe(404);
     expect(await unknown.json()).toMatchObject({ error: { code: 'TTS_QUOTE_UNKNOWN' } });
@@ -204,7 +206,7 @@ describe('POST /api/tts/speak', () => {
     const used = await fetch(`${live.url}/api/tts/speak`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quoteId: rec.quoteId, txid: TXID, text: 'hello' }),
+      body: JSON.stringify({ quoteId: rec.quoteId, rawTx: RAW_TX, text: 'hello' }),
     });
     expect(used.status).toBe(409);
     expect(await used.json()).toMatchObject({ error: { code: 'TTS_QUOTE_USED' } });
@@ -214,7 +216,7 @@ describe('POST /api/tts/speak', () => {
     const expired = await fetch(`${expiredLive.url}/api/tts/speak`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quoteId: exp.quoteId, txid: TXID, text: 'hello' }),
+      body: JSON.stringify({ quoteId: exp.quoteId, rawTx: RAW_TX, text: 'hello' }),
     });
     expect(expired.status).toBe(410);
     expect(await expired.json()).toMatchObject({ error: { code: 'TTS_QUOTE_EXPIRED' } });
@@ -226,14 +228,14 @@ describe('POST /api/tts/speak', () => {
     const res = await fetch(`${live.url}/api/tts/speak`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quoteId: rec.quoteId, txid: TXID, text: 'nope' }),
+      body: JSON.stringify({ quoteId: rec.quoteId, rawTx: RAW_TX, text: 'nope' }),
     });
     expect(res.status).toBe(400);
     expect(await res.json()).toMatchObject({ error: { code: 'TTS_BAD_INPUT' } });
     expect(live.synthesize).not.toHaveBeenCalled();
   });
 
-  it('rejects a reused txid', async () => {
+  it('rejects a reused payment transaction', async () => {
     const live = await startApp();
     const first = live.store.createQuote({ chars: 5, satoshis: 1000 });
     live.store.markPaid(first.id, TXID);
@@ -241,7 +243,7 @@ describe('POST /api/tts/speak', () => {
     const res = await fetch(`${live.url}/api/tts/speak`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quoteId: second.quoteId, txid: TXID, text: 'hello' }),
+      body: JSON.stringify({ quoteId: second.quoteId, rawTx: RAW_TX, text: 'hello' }),
     });
     expect(res.status).toBe(409);
     expect(await res.json()).toMatchObject({ error: { code: 'TTS_TX_REUSED' } });
@@ -254,7 +256,7 @@ describe('POST /api/tts/speak', () => {
     const res = await fetch(`${live.url}/api/tts/speak`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quoteId: rec.quoteId, txid: TXID, text: 'hello' }),
+      body: JSON.stringify({ quoteId: rec.quoteId, rawTx: RAW_TX, text: 'hello' }),
     });
     expect(res.status).toBe(503);
     expect(await res.json()).toMatchObject({ error: { code: 'TTS_DISABLED' } });
@@ -267,7 +269,7 @@ describe('POST /api/tts/speak', () => {
     const res = await fetch(`${live.url}/api/tts/speak`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quoteId: rec.quoteId, txid: TXID, text: 'hello' }),
+      body: JSON.stringify({ quoteId: rec.quoteId, rawTx: RAW_TX, text: 'hello' }),
     });
     expect(res.status).toBe(402);
     expect(await res.json()).toMatchObject({ error: { code: 'TTS_PAYMENT_INVALID', reason: 'underpaid' } });
@@ -279,7 +281,7 @@ describe('POST /api/tts/speak', () => {
     const res = await fetch(`${live.url}/api/tts/speak`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quoteId: rec.quoteId, txid: TXID, text: 'hello' }),
+      body: JSON.stringify({ quoteId: rec.quoteId, rawTx: RAW_TX, text: 'hello' }),
     });
     expect(res.status).toBe(200);
     const body = (await res.json()) as { purchaseId: string; audioUrl: string; durationSeconds: number };
@@ -304,7 +306,7 @@ describe('POST /api/tts/speak', () => {
     const res = await fetch(`${live.url}/api/tts/speak`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quoteId: rec.quoteId, txid: TXID2, text: 'hello' }),
+      body: JSON.stringify({ quoteId: rec.quoteId, rawTx: RAW_TX, text: 'hello' }),
     });
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({
@@ -323,7 +325,7 @@ describe('POST /api/tts/speak', () => {
     const res = await fetch(`${live.url}/api/tts/speak`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quoteId: rec.quoteId, txid: TXID, text: 'hello' }),
+      body: JSON.stringify({ quoteId: rec.quoteId, rawTx: RAW_TX, text: 'hello' }),
     });
     expect(res.status).toBe(503);
     expect(await res.json()).toMatchObject({
@@ -340,7 +342,7 @@ describe('POST /api/tts/speak', () => {
     const res = await fetch(`${live.url}/api/tts/speak`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quoteId: rec.quoteId, txid: TXID, text: 'hello' }),
+      body: JSON.stringify({ quoteId: rec.quoteId, rawTx: RAW_TX, text: 'hello' }),
     });
     expect(res.status).toBe(502);
     expect(await res.json()).toMatchObject({ error: { code: 'TTS_SYNTH_FAILED', refunded: true } });
@@ -353,7 +355,7 @@ describe('POST /api/tts/speak', () => {
     const res2 = await fetch(`${failing.url}/api/tts/speak`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quoteId: rec2.quoteId, txid: TXID, text: 'hello' }),
+      body: JSON.stringify({ quoteId: rec2.quoteId, rawTx: RAW_TX, text: 'hello' }),
     });
     expect(res2.status).toBe(502);
     expect(await res2.json()).toMatchObject({ error: { code: 'TTS_SYNTH_FAILED', refunded: false } });
@@ -375,7 +377,7 @@ describe('POST /api/tts/speak', () => {
     const res = await fetch(`${live.url}/api/tts/speak`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quoteId: rec.quoteId, txid: TXID, text: 'hello' }),
+      body: JSON.stringify({ quoteId: rec.quoteId, rawTx: RAW_TX, text: 'hello' }),
     });
     expect(res.status).toBe(502);
     expect(await res.json()).toMatchObject({ error: { code: 'TTS_SYNTH_FAILED', refunded: false } });

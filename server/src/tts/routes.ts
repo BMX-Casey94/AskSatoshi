@@ -32,11 +32,11 @@ export interface TtsRouterDeps {
     address: string;
     lockingScriptHex: string;
     verifyPayment(opts: {
-      txid: string;
+      rawTx: string;
       expectedSats: number;
       treasuryScriptHex: string;
     }): Promise<
-      | { ok: true; receivedSats: number; voutIndex: number; senderScriptHex: string }
+      | { ok: true; txid: string; receivedSats: number; voutIndex: number; senderScriptHex: string }
       | { ok: false; reason: string }
     >;
     buildRefundTx(opts: {
@@ -113,7 +113,7 @@ export function createTtsRouter(deps: TtsRouterDeps): Router {
 
   const speakBody = z.object({
     quoteId: z.string().min(1),
-    txid: z.string().regex(/^[0-9a-fA-F]{64}$/),
+    rawTx: z.string().min(1).max(1_000_000),
     text: z.string().min(1).max(deps.config.maxChars),
   });
 
@@ -166,10 +166,10 @@ export function createTtsRouter(deps: TtsRouterDeps): Router {
   async function handleSpeak(req: Request, res: Response): Promise<void> {
     const parsed = speakBody.safeParse(req.body);
     if (!parsed.success) {
-      jsonError(res, 400, 'TTS_BAD_INPUT', 'quoteId, txid and text are required and must be valid.');
+      jsonError(res, 400, 'TTS_BAD_INPUT', 'quoteId, rawTx and text are required and must be valid.');
       return;
     }
-    const { quoteId, txid, text } = parsed.data;
+    const { quoteId, rawTx, text } = parsed.data;
     const quote = deps.store.getByQuoteId(quoteId);
     if (!quote) {
       jsonError(res, 404, 'TTS_QUOTE_UNKNOWN', 'Unknown quote.');
@@ -191,17 +191,13 @@ export function createTtsRouter(deps: TtsRouterDeps): Router {
       jsonError(res, 400, 'TTS_BAD_INPUT', 'Text length does not match the quoted character count.');
       return;
     }
-    if (deps.store.getByTxid(txid)) {
-      jsonError(res, 409, 'TTS_TX_REUSED', 'This payment has already been used.');
-      return;
-    }
     if (deps.state.getState().disabled || !deps.resemble || !deps.treasury) {
       jsonError(res, 503, 'TTS_DISABLED', 'Text-to-speech is temporarily unavailable.');
       return;
     }
 
     const payment = await deps.treasury.verifyPayment({
-      txid,
+      rawTx,
       expectedSats: quote.satoshis,
       treasuryScriptHex: deps.treasury.lockingScriptHex,
     });
@@ -209,8 +205,12 @@ export function createTtsRouter(deps: TtsRouterDeps): Router {
       jsonError(res, 402, 'TTS_PAYMENT_INVALID', 'Payment could not be verified.', { reason: payment.reason });
       return;
     }
+    if (deps.store.getByTxid(payment.txid)) {
+      jsonError(res, 409, 'TTS_TX_REUSED', 'This payment has already been used.');
+      return;
+    }
 
-    deps.store.markPaid(quote.id, txid);
+    deps.store.markPaid(quote.id, payment.txid);
 
     try {
       const synth = await deps.resemble.synthesize(text);
@@ -219,7 +219,7 @@ export function createTtsRouter(deps: TtsRouterDeps): Router {
       const delivered = deps.store.markDelivered(quote.id, audioFile, synth.durationSeconds);
       res.json(deliveredBody(delivered));
     } catch (err) {
-      const refund = await attemptRefund(quote.id, txid, payment);
+      const refund = await attemptRefund(quote.id, payment.txid, payment);
       if (err instanceof TtsCreditExhaustedError) {
         deps.state.disable('credit-exhausted');
         jsonError(res, 503, 'TTS_CREDIT_EXHAUSTED', 'The speech service is out of credit.', {

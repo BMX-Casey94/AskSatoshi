@@ -62,14 +62,14 @@ describe('pollBalanceTick', () => {
     expect(state.getState()).toMatchObject({ disabled: true, reason: 'low-balance' });
   });
 
-  it('disables when Resemble reports low_balance even if dollars are above the floor', async () => {
+  it('ignores the low_balance flag when dollars are above the floor', async () => {
     const state = createTtsState(await tmpStatePath());
     await pollBalanceTick(
       { minBalanceUsd: 0.25 },
       { getWallet: async () => ({ balanceDollars: 9.92, lowBalance: true }) },
       state,
     );
-    expect(state.getState()).toMatchObject({ disabled: true, reason: 'low-balance' });
+    expect(state.getState().disabled).toBe(false);
   });
 
   it('leaves the switch alone when the wallet lookup fails or the balance is healthy', async () => {

@@ -93,7 +93,7 @@ export async function pollBalanceTick(
 ): Promise<void> {
   const wallet = await resembleClient.getWallet();
   if (!wallet) return;
-  if (wallet.lowBalance || wallet.balanceDollars < config.minBalanceUsd) {
+  if (wallet.balanceDollars < config.minBalanceUsd) {
     state.disable('low-balance');
   }
 }

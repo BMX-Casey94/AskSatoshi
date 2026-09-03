@@ -40,6 +40,7 @@ import {
 import { getActivity } from './satoshiActivity.js';
 import { loadCorpus } from './satoshiCorpus.js';
 import { loadCuratedReference } from './curatedReference.js';
+import { assembleTts, ttsStartupLine } from './tts/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // Prefer the repo-root .env (documented location); allow server/.env to override.
@@ -92,6 +93,7 @@ const rewriteCache = new RewriteCache();
 const mcp = new McpBridge();
 const corpus = loadCorpus();
 const curated = loadCuratedReference();
+const tts = assembleTts();
 
 /**
  * When a warm-up wait last timed out. A child that cannot come up (e.g. a frozen
@@ -148,6 +150,7 @@ app.use(
         styleSrc: ["'self'", "'unsafe-inline'"], // Vite injects critical CSS; React inline styles
         imgSrc: ["'self'", 'data:', 'blob:'],
         connectSrc: ["'self'"],
+        mediaSrc: ["'self'"], // same-origin /api/tts/audio/*.mp3
         fontSrc: ["'self'", 'data:'],
         objectSrc: ["'none'"],
         baseUri: ["'self'"],
@@ -470,6 +473,8 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
   }
 });
 
+app.use('/api/tts', tts.router);
+
 // ---------------------------------------------------------------------------
 // Static client (production build)
 // ---------------------------------------------------------------------------
@@ -507,6 +512,7 @@ app.use(
 mcp.connect().catch((err) => {
   console.warn('[mcp] initial connect failed (will retry in background):', err instanceof Error ? err.message : err);
 });
+console.info(ttsStartupLine(tts));
 
 // On Vercel the module is imported as a function handler — listening is the platform's
 // job. Everywhere else (npm start, tsx dev) we bind the port ourselves.

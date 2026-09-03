@@ -44,6 +44,15 @@ HOST=127.0.0.1              # app is only reachable via Caddy
 ALLOWED_ORIGIN=https://ask-satoshi.example.com
 TRUST_PROXY=1               # behind Caddy
 BSV_AIO_DB_PATH=/var/lib/ask-satoshi/knowledge.sqlite
+# Paid TTS is optional and self-disables when these are unset:
+RESEMBLE_API_KEY=…          # Resemble AI API key
+RESEMBLE_VOICE_UUID=…       # voice to synthesise with
+# RESEMBLE_PROJECT_UUID=…   # optional Resemble project
+TREASURY_WIF=…              # fresh treasury key; never a personal wallet
+TTS_ADMIN_TOKEN=…           # Bearer token for POST /api/tts/admin/enable
+# TTS_MAX_CHARS=12000
+# TTS_MIN_BALANCE_USD=0.25
+# BSV_USD_FALLBACK=15
 ```
 
 ## 4. Edit the domain in the Caddyfile

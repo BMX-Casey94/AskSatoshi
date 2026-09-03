@@ -9,6 +9,7 @@ import type { Citation, Message, SourceClass } from '../types';
 import { renderMarkdown } from '../lib/markdown';
 import { TypingIndicator } from './TypingIndicator';
 import { CitationPanel } from './CitationPanel';
+import { ReadAloudButton } from './ReadAloudButton';
 import { BookIcon } from './icons';
 
 const SOURCE_CLASS_LABEL: Record<SourceClass, string> = {
@@ -74,6 +75,7 @@ export function MessageList({ messages, awaitingFirstToken, chatPhase, onRetry, 
                     // Sanitised by DOMPurify inside renderMarkdown.
                     dangerouslySetInnerHTML={{ __html: renderMarkdown(m.content) }}
                   />
+                  {!m.streaming && m.content.trim().length > 0 && <ReadAloudButton text={m.content} />}
                   {m.citations && m.citations.length > 0 && (
                     <div className="sources">
                       <span className="sources-label">

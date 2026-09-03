@@ -162,21 +162,21 @@ app.use(
 app.use(cors({ origin: ALLOWED_ORIGINS }));
 app.use(express.json({ limit: '8mb' }));
 
-const wittyRateMessage = { error: { code: 'RATE_LIMITED', message: WITTY.RATE_LIMITED } };
-const minuteLimiter = rateLimit({
+// Anti-abuse burst ceiling only. The paid OpenRouter primary carries the traffic now,
+// so the old free-quota guards (10/min, 40/day per IP) are gone; what remains is a
+// generous per-IP limit no human chatter will hit, to blunt scripted spend against
+// the paid key. RATE_LIMIT_PER_MIN overrides the default; 0 disables it entirely.
+const parsedBurstLimit = Number(process.env.RATE_LIMIT_PER_MIN || 60);
+const BURST_LIMIT_PER_MIN =
+  Number.isFinite(parsedBurstLimit) && parsedBurstLimit >= 0 ? parsedBurstLimit : 60;
+const burstLimiter = rateLimit({
   windowMs: 60_000,
-  limit: 10,
+  limit: BURST_LIMIT_PER_MIN,
   standardHeaders: 'draft-8',
   legacyHeaders: false,
-  message: wittyRateMessage,
+  message: { error: { code: 'RATE_LIMITED', message: WITTY.RATE_LIMITED } },
 });
-const dayLimiter = rateLimit({
-  windowMs: 24 * 3_600_000,
-  limit: 40,
-  standardHeaders: 'draft-8',
-  legacyHeaders: false,
-  message: wittyRateMessage,
-});
+const chatGuards: express.RequestHandler[] = BURST_LIMIT_PER_MIN > 0 ? [burstLimiter] : [];
 
 // ---------------------------------------------------------------------------
 // Status + health
@@ -215,7 +215,7 @@ function sseWrite(res: express.Response, event: string, data: unknown): void {
   res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
 }
 
-app.post('/api/chat', minuteLimiter, dayLimiter, async (req, res) => {
+app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Response) => {
   const parsed = chatBodySchema.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({ error: witty('BAD_INPUT') });

@@ -18,15 +18,17 @@ Browser (Vite + React)                Node.js backend (Express)
 │ localStorage threads     │ ◀──────▶ │   └─▶ orchestrator                     │
 │ dictation, image attach  │          │         ├─▶ BSV-AIO-MCP (stdio child)  │
 └──────────────────────────┘          │         ├─▶ Satoshi corpus (BM25)      │
-                                      │         ├─▶ Curated reference (BM25): │
-                                      │         │   identity dossier +        │
-                                      │         │   scaling record            │
-                                      │         └─▶ LLM chain:               │
-                                      │             gemini-3.6-flash          │
-                                      │             gemini-3.5-flash          │
-                                      │             Groq gpt-oss-120b         │
-                                      │             OpenRouter :free (opt.)   │
-                                      │ GET /api/status (awake / asleep)      │
+                                      │         ├─▶ Curated reference (BM25):  │
+                                      │         │   identity / scaling /       │
+                                      │         │   implementation records     │
+                                      │         └─▶ LLM chain, in order:       │
+                                      │             OpenRouter paid primary:   │
+                                      │             gemini-3.1-flash-lite →    │
+                                      │             deepseek-v4-flash          │
+                                      │             Gemini 3.6/3.5 (free)      │
+                                      │             Groq gpt-oss-120b (free)   │
+                                      │             OpenRouter :free           │
+                                      │ GET /api/status (awake / asleep)       │
                                       └────────────────────────────────────────┘
 ```
 
@@ -35,7 +37,7 @@ with the official MCP SDK. On a long-running host that child stays up. On Vercel
 started when an instance wakes and is gone again after idle — when it is not ready, answers
 fall back to Satoshi's own writings. All model API keys stay server-side.
 
-Two curated reference files under `server/data/` anchor specific topics whatever the
+Three curated reference files under `server/data/` anchor specific topics whatever the
 retrieval path returns: `identity-dossier.json` (third-party testimony, documented events
 and public curiosities bearing on the Satoshi identity question — identity answers are
 grounded here, never in "possession of a key is proof" logic) and `scaling-record.json`
@@ -58,13 +60,15 @@ cp .env.example .env   # then add your keys
 npm run dev            # server on :8787, client on :5173
 ```
 
-Free API keys (no card required for either):
+The primary chain runs on a funded OpenRouter key (pennies per answer); Gemini and Groq
+free keys (no card required) add overflow capacity, and OpenRouter `:free` models are the
+last resort:
 
 | Provider | Where | Powers |
 |---|---|---|
-| Google AI Studio | https://aistudio.google.com/apikey | `gemini-3.6-flash` → `gemini-3.5-flash` → `gemini-2.5-flash` (vision + streaming) |
-| Groq | https://console.groq.com/keys | `openai/gpt-oss-120b` (text), `qwen/qwen3.6-27b` (vision turns) |
-| OpenRouter (optional) | https://openrouter.ai/keys | `:free` third tier — 50 req/day unfunded, 1,000/day after a one-time $10 top-up |
+| OpenRouter (primary) | https://openrouter.ai/keys | Paid: `google/gemini-3.1-flash-lite` (vision) → `deepseek/deepseek-v4-flash`. An unfunded key still serves the `:free` overflow models — 50 req/day, 1,000/day after a one-time $10 top-up |
+| Google AI Studio | https://aistudio.google.com/apikey | Free overflow: `gemini-3.6-flash` → `gemini-3.5-flash` (vision + streaming) |
+| Groq | https://console.groq.com/keys | Free overflow: `openai/gpt-oss-120b` (text), `qwen/qwen3.6-27b` (vision turns) |
 
 The app runs with any subset of keys; with none it still answers from cache/corpus misses
 gracefully (and tells the user Satoshi is sleeping).
@@ -85,6 +89,14 @@ npm run build # server → server/dist, client → repo-root public/
 npm start     # serves public/ and the API from one Node process
 ```
 
+### Rate limiting
+
+With the paid OpenRouter primary active there are no per-user quota caps. A generous
+per-IP burst limit on `POST /api/chat` (default 60 req/min) remains purely to blunt
+scripted abuse of the paid key — no ordinary conversation will approach it. Set
+`RATE_LIMIT_PER_MIN` to tune it or `0` to disable it entirely. Behind a reverse proxy,
+`TRUST_PROXY=1` ensures the limit keys on real client addresses rather than the proxy's.
+
 ### Vercel
 
 The repo deploys to Vercel as-is: the client builds into `public/` (served by Vercel's CDN)
@@ -102,8 +114,8 @@ Caveats of the serverless model:
   startup handshake never completes — `/api/health` reports `mcp:false`. Technical questions
   (BRCs, Teranode, Script) then fall back to Satoshi's own posts and e-mails, which do not
   cover them. **Use a long-running host (below) if you want the full knowledge base.**
-- Rate limits, the quota breaker and the answer cache are in-memory, so they apply per
-  function instance rather than globally.
+- The burst rate limit, the quota breaker and the answer cache are in-memory, so they
+  apply per function instance rather than globally.
 - Function duration caps apply to chat streams (plan-dependent).
 
 ### Long-running host (guaranteed MCP) — recommended
@@ -133,10 +145,11 @@ For other hosts (Railway, Render, Fly, a different VPS distro): `npm install`,
 
 - Chats never leave the browser except as a single question to `/api/chat`; nothing is
   persisted server-side.
-- Free-tier Gemini traffic may be used by Google to improve its products; OpenRouter `:free`
-  traffic may be logged by the upstream provider (NVIDIA/Google). Groq does not train on API
-  traffic. Never paste private keys or seed phrases into any chatbot — the app warns users
-  who try.
+- The primary chain runs on paid OpenRouter models; all OpenRouter traffic passes through
+  the upstream model providers (Google, DeepSeek, NVIDIA, Z.ai), whose own logging policies
+  apply. Free-tier Gemini overflow may be used by Google to improve its products; Groq does
+  not train on API traffic. Never paste private keys or seed phrases into any chatbot — the
+  app warns users who try.
 
 ## Development
 

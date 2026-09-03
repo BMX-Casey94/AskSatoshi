@@ -177,11 +177,11 @@ export function friendlyTtsError(err: unknown): string {
       case 'TTS_QUOTE_EXPIRED':
         return 'The quote expired. Please try again.';
       case 'TTS_DISABLED':
-        return 'Read aloud is currently unavailable.';
+        return 'Text transcription is currently unavailable.';
       case 'TTS_CREDIT_EXHAUSTED':
         return refunded
-          ? 'Read aloud is temporarily unavailable — credits are exhausted. Your payment has been refunded.'
-          : 'Read aloud is temporarily unavailable — credits are exhausted.';
+          ? 'Text transcription is temporarily unavailable — credits are exhausted. Your payment has been refunded.'
+          : 'Text transcription is temporarily unavailable — credits are exhausted.';
       case 'TTS_SYNTH_FAILED':
         return refunded
           ? 'Synthesis failed and your payment has been refunded.'

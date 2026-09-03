@@ -126,7 +126,7 @@ export function ReadAloudPayModal({ quote, status, onCancel, onConfirm, returnFo
         <dl className="read-aloud-modal-details">
           <div className="read-aloud-modal-row">
             <dt>Purchase</dt>
-            <dd>Read this answer aloud</dd>
+            <dd>Text-to-speech transcription</dd>
           </div>
           <div className="read-aloud-modal-row">
             <dt>Characters</dt>

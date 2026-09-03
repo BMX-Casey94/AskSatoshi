@@ -150,8 +150,8 @@ export function ReadAloudButton({ text }: Props) {
           className="read-aloud-btn"
           onClick={() => void beginQuote()}
           disabled={inFlight || phase === 'confirm'}
-          aria-label="Read aloud"
-          title="Read aloud"
+          aria-label="Listen to this answer"
+          title="Listen to this answer"
         >
           <SpeakerIcon size={14} />
         </button>
@@ -159,7 +159,7 @@ export function ReadAloudButton({ text }: Props) {
       {error && (
         <div className="read-aloud-error-box" role="alert">
           <div className="read-aloud-error-body">
-            <p className="read-aloud-error-title">Could not read aloud</p>
+            <p className="read-aloud-error-title">Could not transcribe</p>
             <p className="read-aloud-error-text">{error.message}</p>
             {error.refunded && <span className="read-aloud-error-refunded">Payment refunded</span>}
           </div>

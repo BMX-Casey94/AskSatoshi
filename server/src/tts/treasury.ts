@@ -1,8 +1,8 @@
 /**
  * Treasury wallet: derive the P2PKH receive address from TREASURY_WIF, verify a
- * user payment from its raw transaction, broadcast it to WhatsOnChain, and build
- * a 1-in/1-out refund back to the sender's locking script. The server broadcasts
- * so the user is never waiting on wallet-to-explorer propagation.
+ * user payment from its raw transaction or Atomic BEEF, broadcast the subject
+ * transaction to WhatsOnChain, and build a 1-in/1-out refund back to the sender.
+ * BRC-100 wallets return Atomic BEEF and often broadcast before we do.
  */
 
 import { LockingScript, P2PKH, PrivateKey, Transaction } from '@bsv/sdk';
@@ -10,6 +10,10 @@ import { LockingScript, P2PKH, PrivateKey, Transaction } from '@bsv/sdk';
 export const REFUND_FEE_SATS = 250;
 
 const WOC_BROADCAST = 'https://api.whatsonchain.com/v1/bsv/main/tx/raw';
+const ATOMIC_BEEF_PREFIX = '01010101';
+const BEEF_MAGIC = '0100beef';
+const ALREADY_ON_NETWORK =
+  /already[- ]?(known|exists|in(?: the)? mempool)|txn-already-known|duplicate[- ]tx/i;
 
 export interface TreasuryIdentity {
   key: PrivateKey;
@@ -30,10 +34,62 @@ export function treasuryFromWif(wif: string): TreasuryIdentity {
   return { key, address, lockingScriptHex };
 }
 
+function hexToBytes(hex: string): number[] {
+  const bytes: number[] = [];
+  for (let i = 0; i < hex.length; i += 2) {
+    bytes.push(Number.parseInt(hex.slice(i, i + 2), 16));
+  }
+  return bytes;
+}
+
+function reject(reason: PaymentFailReason, detail?: string): VerifyPaymentResult {
+  console.warn(`[tts] payment rejected: ${reason}${detail ? ` (${detail})` : ''}`);
+  return { ok: false, reason };
+}
+
+/** BRC-100 wallets return Atomic BEEF; some also send raw hex, BEEF, or EF. */
+export function parsePaymentTx(hex: string): Transaction {
+  const clean = hex.trim().toLowerCase();
+  if (!/^[0-9a-f]+$/.test(clean) || clean.length % 2 !== 0) {
+    throw new Error('not hex');
+  }
+  const bytes = hexToBytes(clean);
+
+  if (clean.startsWith(ATOMIC_BEEF_PREFIX)) {
+    return Transaction.fromAtomicBEEF(bytes);
+  }
+  if (clean.startsWith(BEEF_MAGIC)) {
+    return Transaction.fromHexBEEF(clean);
+  }
+
+  try {
+    return Transaction.fromHex(clean);
+  } catch (rawErr) {
+    try {
+      return Transaction.fromAtomicBEEF(bytes);
+    } catch {
+      try {
+        return Transaction.fromHexBEEF(clean);
+      } catch {
+        try {
+          return Transaction.fromHexEF(clean);
+        } catch {
+          throw rawErr instanceof Error ? rawErr : new Error('invalid-tx');
+        }
+      }
+    }
+  }
+}
+
+export function isAlreadyOnNetwork(status: number, body: string): boolean {
+  if (status >= 200 && status < 300) return false;
+  return ALREADY_ON_NETWORK.test(body);
+}
+
 /**
- * Decode the raw transaction, confirm it pays the treasury at least the quoted
- * amount, then broadcast it. No explorer lookup — the server is the first to
- * know the tx exists, so the user gets their audio as soon as synthesis returns.
+ * Decode the payment (raw hex or Atomic BEEF), confirm it pays the treasury at
+ * least the quoted amount, then broadcast the raw subject transaction. A
+ * wallet that already pushed the same tx is treated as paid.
  */
 export async function verifyPayment(opts: {
   rawTx: string;
@@ -43,27 +99,34 @@ export async function verifyPayment(opts: {
 }): Promise<VerifyPaymentResult> {
   let tx: Transaction;
   try {
-    tx = Transaction.fromHex(opts.rawTx);
-  } catch {
-    return { ok: false, reason: 'invalid-tx' };
+    tx = parsePaymentTx(opts.rawTx);
+  } catch (err) {
+    return reject('invalid-tx', err instanceof Error ? err.message : undefined);
   }
 
   const dest = opts.treasuryScriptHex.toLowerCase();
   const matchIndex = tx.outputs.findIndex((o) => o.lockingScript.toHex().toLowerCase() === dest);
-  if (matchIndex < 0) return { ok: false, reason: 'wrong-destination' };
+  if (matchIndex < 0) return reject('wrong-destination');
 
   const match = tx.outputs[matchIndex]!;
   const receivedSats = match.satoshis ?? 0;
-  if (receivedSats < opts.expectedSats) return { ok: false, reason: 'underpaid' };
+  if (receivedSats < opts.expectedSats) return reject('underpaid');
 
-  const senderScriptHex = tx.inputs[0]?.sourceTransaction?.outputs[tx.inputs[0]!.sourceOutputIndex]?.lockingScript.toHex() ?? '';
+  const senderScriptHex =
+    tx.inputs[0]?.sourceTransaction?.outputs[tx.inputs[0]!.sourceOutputIndex]?.lockingScript.toHex() ?? '';
 
   const txid = tx.id('hex');
+  const rawHex = tx.toHex();
   try {
-    await broadcastTx(opts.rawTx, opts.fetchFn);
+    await broadcastTx(rawHex, opts.fetchFn);
   } catch (err) {
-    console.warn('[tts] broadcast failed:', err instanceof Error ? err.message : err);
-    return { ok: false, reason: 'broadcast-failed' };
+    const message = err instanceof Error ? err.message : String(err);
+    if (isAlreadyOnNetwork(400, message)) {
+      console.info('[tts] payment already on the network:', txid);
+      return { ok: true, txid, receivedSats, voutIndex: matchIndex, senderScriptHex };
+    }
+    console.warn('[tts] broadcast failed:', message);
+    return reject('broadcast-failed', message);
   }
 
   return { ok: true, txid, receivedSats, voutIndex: matchIndex, senderScriptHex };
@@ -111,6 +174,9 @@ export async function broadcastTx(rawHex: string, fetchFn: typeof fetch = fetch)
   });
   const text = await res.text();
   if (!res.ok) {
+    if (isAlreadyOnNetwork(res.status, text)) {
+      return text.trim().replace(/^"|"$/g, '') || 'already-known';
+    }
     throw new Error(`broadcast failed (${res.status}): ${text.slice(0, 200)}`);
   }
   const trimmed = text.trim().replace(/^"|"$/g, '');

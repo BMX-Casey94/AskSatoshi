@@ -397,6 +397,32 @@ describe('GET /api/tts/audio/:purchaseId and admin enable', () => {
     expect(missing.status).toBe(404);
   });
 
+  it('serves delivered audio inline, or as a named attachment when download=1', async () => {
+    const live = await startApp();
+    const rec = live.store.createQuote({ chars: 5, satoshis: 1 });
+    await writeFile(join(live.audioDir, `${rec.id}.mp3`), 'ID3fake');
+    live.store.markPaid(rec.id, TXID);
+    live.store.markDelivered(rec.id, `${rec.id}.mp3`, 1.5);
+
+    const headerText = (headers: Headers, name: string): string => {
+      const value = headers.get(name);
+      return typeof value === 'string' ? value : JSON.stringify(value ?? '');
+    };
+
+    const inline = await fetch(`${live.url}/api/tts/audio/${rec.id}`);
+    expect(inline.status).toBe(200);
+    expect(inline.headers.get('content-type')).toMatch(/audio\/mpeg/);
+    expect(headerText(inline.headers, 'content-disposition')).toMatch(/inline/i);
+    expect(headerText(inline.headers, 'content-disposition')).not.toMatch(/attachment/i);
+
+    const download = await fetch(`${live.url}/api/tts/audio/${rec.id}?download=1`);
+    expect(download.status).toBe(200);
+    expect(download.headers.get('content-type')).toMatch(/audio\/mpeg/);
+    expect(headerText(download.headers, 'content-disposition')).toMatch(/attachment/i);
+    expect(headerText(download.headers, 'content-disposition')).toMatch(/ask-satoshi-read-aloud\.mp3/i);
+    expect(Buffer.from(await download.arrayBuffer()).toString()).toBe('ID3fake');
+  });
+
   it('re-enables via bearer admin token and rejects a bad token', async () => {
     const live = await startApp();
     live.state.disable('credit-exhausted');

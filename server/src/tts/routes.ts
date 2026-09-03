@@ -53,6 +53,18 @@ export interface TtsRouterDeps {
 }
 
 const AUDIO_ID = /^p_[A-Za-z0-9_-]+$/;
+const AUDIO_DOWNLOAD_NAME = 'ask-satoshi-read-aloud.mp3';
+
+function wantsAudioDownload(query: Request['query']): boolean {
+  const raw = query.download;
+  const value = Array.isArray(raw) ? raw[0] : raw;
+  return value === '1' || value === 'true';
+}
+
+function audioContentDisposition(download: boolean): string {
+  const kind = download ? 'attachment' : 'inline';
+  return `${kind}; filename="${AUDIO_DOWNLOAD_NAME}"`;
+}
 
 function jsonError(
   res: Response,
@@ -202,6 +214,7 @@ export function createTtsRouter(deps: TtsRouterDeps): Router {
       treasuryScriptHex: deps.treasury.lockingScriptHex,
     });
     if (!payment.ok) {
+      console.warn(`[tts] payment rejected: ${payment.reason} quote=${quoteId}`);
       jsonError(res, 402, 'TTS_PAYMENT_INVALID', 'Payment could not be verified.', { reason: payment.reason });
       return;
     }
@@ -297,6 +310,7 @@ export function createTtsRouter(deps: TtsRouterDeps): Router {
     }
     res.setHeader('Content-Type', 'audio/mpeg');
     res.setHeader('Cache-Control', 'private, max-age=31536000, immutable');
+    res.setHeader('Content-Disposition', audioContentDisposition(wantsAudioDownload(req.query)));
     createReadStream(filePath).pipe(res);
   });
 

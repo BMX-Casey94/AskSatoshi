@@ -7,8 +7,12 @@ const TREASURY = treasuryFromWif(TREASURY_KEY.toWif());
 const SENDER_KEY = PrivateKey.fromRandom();
 const SENDER_SCRIPT = new P2PKH().lock(SENDER_KEY.toPublicKey().toAddress()).toHex();
 
+function bytesToHex(bytes: number[] | Uint8Array): string {
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+}
+
 /** Build a real signed tx paying the treasury, with the source tx embedded. */
-async function makePayment(satoshis: number): Promise<string> {
+async function makePaymentTx(satoshis: number): Promise<Transaction> {
   const sourceTx = new Transaction();
   sourceTx.addInput({
     sourceTXID: '00'.repeat(32),
@@ -26,7 +30,11 @@ async function makePayment(satoshis: number): Promise<string> {
   });
   tx.addOutput({ lockingScript: new P2PKH().lock(TREASURY.address), satoshis });
   await tx.sign();
-  return tx.toHex();
+  return tx;
+}
+
+async function makePayment(satoshis: number): Promise<string> {
+  return (await makePaymentTx(satoshis)).toHex();
 }
 
 describe('verifyPayment', () => {
@@ -110,6 +118,58 @@ describe('verifyPayment', () => {
       fetchFn: broadcast,
     });
     expect(result).toEqual({ ok: false, reason: 'broadcast-failed' });
+  });
+
+  it('accepts Atomic BEEF from a BRC-100 wallet and broadcasts the raw subject tx', async () => {
+    const tx = await makePaymentTx(7_500);
+    const beefHex = bytesToHex(tx.toAtomicBEEF(true));
+    expect(beefHex.startsWith('01010101')).toBe(true);
+    expect(beefHex).not.toBe(tx.toHex());
+
+    const broadcast = vi.fn(async (_input: Parameters<typeof fetch>[0], init?: RequestInit) => {
+      const body = JSON.parse(String(init?.body)) as { txhex?: string };
+      expect(body.txhex).toBe(tx.toHex());
+      return new Response(JSON.stringify({ txid: tx.id('hex') }), { status: 200 });
+    });
+
+    const result = await verifyPayment({
+      rawTx: beefHex,
+      expectedSats: 7_500,
+      treasuryScriptHex: TREASURY.lockingScriptHex,
+      fetchFn: broadcast,
+    });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.txid).toBe(tx.id('hex'));
+      expect(result.receivedSats).toBe(7_500);
+      expect(result.senderScriptHex).toBe(SENDER_SCRIPT);
+    }
+    expect(broadcast).toHaveBeenCalledOnce();
+  });
+
+  it('treats an already-in-mempool broadcast as success', async () => {
+    const raw = await makePayment(7_500);
+    const broadcast = vi.fn(async () => new Response('txn-already-known', { status: 400 }));
+    const result = await verifyPayment({
+      rawTx: raw,
+      expectedSats: 7_500,
+      treasuryScriptHex: TREASURY.lockingScriptHex,
+      fetchFn: broadcast,
+    });
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.receivedSats).toBe(7_500);
+  });
+
+  it('logs every payment rejection reason', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    await verifyPayment({
+      rawTx: 'not-hex',
+      expectedSats: 7_500,
+      treasuryScriptHex: TREASURY.lockingScriptHex,
+      fetchFn: vi.fn(),
+    });
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('[tts] payment rejected: invalid-tx'));
+    warn.mockRestore();
   });
 });
 

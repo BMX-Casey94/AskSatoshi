@@ -117,6 +117,23 @@ export function StopIcon(props: IconProps) {
   );
 }
 
+export function PlayIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M8 5v14l11-7z" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function PauseIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none" />
+      <rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
 export function DownloadIcon(props: IconProps) {
   return (
     <svg {...base(props)}>

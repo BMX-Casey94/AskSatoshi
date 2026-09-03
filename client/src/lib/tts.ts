@@ -4,6 +4,20 @@
  */
 
 export { renderPlainText as stripMarkdown } from './markdown';
+import {
+  WalletUnavailableError,
+  describeTtsError,
+  encodeWalletTx,
+  friendlyTtsError,
+  type TtsFriendlyError,
+} from './ttsErrors';
+export {
+  WalletUnavailableError,
+  describeTtsError,
+  encodeWalletTx,
+  friendlyTtsError,
+  type TtsFriendlyError,
+};
 
 export type TtsDisabledReason = 'not-configured' | 'credit-exhausted' | 'low-balance';
 
@@ -22,13 +36,6 @@ export interface TtsQuote {
   satoshis: number;
   treasuryAddress: string;
   expiresAt: number;
-}
-
-export class WalletUnavailableError extends Error {
-  readonly name = 'WalletUnavailableError';
-  constructor(message = 'No BRC-100 wallet is available. Open a compatible wallet and try again.') {
-    super(message);
-  }
 }
 
 export type TtsProgress = 'paying' | 'synthesising';
@@ -140,6 +147,12 @@ interface ApiErrorShape {
   code: string;
   message: string;
   refunded?: boolean;
+  reason?: string;
+  refundTxid?: string;
+}
+
+function asOptionalString(value: unknown): string | undefined {
+  return typeof value === 'string' && value.length > 0 ? value : undefined;
 }
 
 function parseApiError(body: unknown, fallbackCode: string, fallbackMessage: string): ApiErrorShape {
@@ -151,66 +164,34 @@ function parseApiError(body: unknown, fallbackCode: string, fallbackMessage: str
         code: typeof o.code === 'string' && o.code.length > 0 ? o.code : fallbackCode,
         message: typeof o.message === 'string' && o.message.length > 0 ? o.message : fallbackMessage,
         refunded: o.refunded === true ? true : undefined,
+        reason: asOptionalString(o.reason),
+        refundTxid: asOptionalString(o.refundTxid),
       };
     }
   }
   return { code: fallbackCode, message: fallbackMessage };
 }
 
-export function friendlyTtsError(err: unknown): string {
-  if (err instanceof WalletUnavailableError) return err.message;
-  if (err instanceof Error) {
-    if (err.message === 'Payment cancelled — nothing was charged.') return err.message;
-    const code = 'code' in err && typeof err.code === 'string' ? err.code : '';
-    const refunded = 'refunded' in err && err.refunded === true;
-    switch (code) {
-      case 'TTS_BAD_INPUT':
-        return err.message || 'That text could not be synthesised.';
-      case 'TTS_PAYMENT_INVALID':
-        return 'The payment could not be verified yet. The network may still be propagating — wait a few seconds and try again. Nothing was charged.';
-      case 'TTS_QUOTE_UNKNOWN':
-        return 'That price quote was not recognised. Please try again.';
-      case 'TTS_TX_REUSED':
-        return 'That payment has already been used.';
-      case 'TTS_QUOTE_USED':
-        return 'This quote has already been used. Please try again.';
-      case 'TTS_QUOTE_EXPIRED':
-        return 'The quote expired. Please try again.';
-      case 'TTS_DISABLED':
-        return 'Text transcription is currently unavailable.';
-      case 'TTS_CREDIT_EXHAUSTED':
-        return refunded
-          ? 'Text transcription is temporarily unavailable — credits are exhausted. Your payment has been refunded.'
-          : 'Text transcription is temporarily unavailable — credits are exhausted.';
-      case 'TTS_SYNTH_FAILED':
-        return refunded
-          ? 'Synthesis failed and your payment has been refunded.'
-          : 'Synthesis failed. Please try again.';
-      default:
-        return err.message || 'Something went wrong. Please try again.';
-    }
-  }
-  return 'Something went wrong. Please try again.';
-}
-
-export interface TtsFriendlyError {
-  message: string;
-  refunded: boolean;
-}
-
-export function describeTtsError(err: unknown): TtsFriendlyError {
-  const refunded = err instanceof Error && 'refunded' in err && err.refunded === true;
-  return { message: friendlyTtsError(err), refunded };
-}
-
 class CodedError extends Error {
   readonly code: string;
   readonly refunded?: boolean;
-  constructor(code: string, message: string, refunded?: boolean) {
+  readonly reason?: string;
+  readonly refundTxid?: string;
+  constructor(
+    code: string,
+    message: string,
+    extra?: boolean | { refunded?: boolean; reason?: string; refundTxid?: string },
+  ) {
     super(message);
     this.name = 'TtsApiError';
     this.code = code;
-    this.refunded = refunded;
+    if (typeof extra === 'boolean') {
+      this.refunded = extra;
+    } else {
+      this.refunded = extra?.refunded;
+      this.reason = extra?.reason;
+      this.refundTxid = extra?.refundTxid;
+    }
   }
 }
 
@@ -237,7 +218,11 @@ export async function requestQuote(chars: number): Promise<TtsQuote> {
     if (parsed.code === 'TTS_DISABLED' || parsed.code === 'TTS_CREDIT_EXHAUSTED') {
       void refreshTtsStatus();
     }
-    throw new CodedError(parsed.code, parsed.message, parsed.refunded);
+    throw new CodedError(parsed.code, parsed.message, {
+      refunded: parsed.refunded,
+      reason: parsed.reason,
+      refundTxid: parsed.refundTxid,
+    });
   }
 
   const quote = parseQuote(await res.json());
@@ -334,11 +319,7 @@ async function payWithWallet(quote: TtsQuote): Promise<string> {
         },
       ],
     });
-    if (result.tx) {
-      rawTx = Array.isArray(result.tx)
-        ? result.tx.map((b) => b.toString(16).padStart(2, '0')).join('')
-        : String(result.tx);
-    }
+    rawTx = encodeWalletTx(result.tx) ?? undefined;
   } catch (err) {
     if (isPaymentCancelled(err)) {
       throw new Error('Payment cancelled — nothing was charged.');
@@ -390,7 +371,11 @@ async function submitSpeak(text: string, quote: TtsQuote, rawTx: string): Promis
     if (parsed.code === 'TTS_DISABLED' || parsed.code === 'TTS_CREDIT_EXHAUSTED') {
       void refreshTtsStatus();
     }
-    throw new CodedError(parsed.code, parsed.message, parsed.refunded);
+    throw new CodedError(parsed.code, parsed.message, {
+      refunded: parsed.refunded,
+      reason: parsed.reason,
+      refundTxid: parsed.refundTxid,
+    });
   }
 
   if (!body || typeof body !== 'object') {

@@ -145,7 +145,10 @@ export function ReadAloudPayModal({ quote, status, onCancel, onConfirm, returnFo
           </div>
         </dl>
         <p className="drawer-note read-aloud-modal-note">
-          Payment is taken from your BSV wallet (BRC-100).
+          Payment is taken from your BSV wallet (BRC-100). If we cannot generate
+          the audio after payment, we refund the quoted amount to the same wallet
+          immediately (minus a small miner fee). The refund should appear within
+          a few seconds as a 0-conf transaction.
         </p>
         <div className="read-aloud-modal-actions">
           <button type="button" className="read-aloud-modal-cancel" onClick={onCancel}>

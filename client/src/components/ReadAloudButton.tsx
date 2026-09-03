@@ -16,6 +16,7 @@ import {
   type TtsStatus,
 } from '../lib/tts';
 import { ReadAloudPayModal } from './ReadAloudPayModal';
+import { ReadAloudPlayer } from './ReadAloudPlayer';
 
 interface Props {
   text: string;
@@ -26,6 +27,7 @@ type Phase = 'idle' | 'quoting' | 'confirm' | 'paying' | 'synthesising' | 'ready
 interface ErrorState {
   message: string;
   refunded: boolean;
+  refundTxid?: string;
 }
 
 export function ReadAloudButton({ text }: Props) {
@@ -120,9 +122,7 @@ export function ReadAloudButton({ text }: Props) {
   if (phase === 'ready' && audioUrl) {
     return (
       <div className="read-aloud">
-        <audio className="read-aloud-player" controls autoPlay src={audioUrl} preload="auto">
-          Your browser cannot play this audio.
-        </audio>
+        <ReadAloudPlayer src={audioUrl} />
       </div>
     );
   }
@@ -161,7 +161,12 @@ export function ReadAloudButton({ text }: Props) {
           <div className="read-aloud-error-body">
             <p className="read-aloud-error-title">Could not transcribe</p>
             <p className="read-aloud-error-text">{error.message}</p>
-            {error.refunded && <span className="read-aloud-error-refunded">Payment refunded</span>}
+            {error.refunded && (
+              <span className="read-aloud-error-refunded">Refund sent — check your wallet in a few seconds</span>
+            )}
+            {error.refundTxid && (
+              <p className="read-aloud-error-txid">Refund transaction: {error.refundTxid}</p>
+            )}
           </div>
           <button
             type="button"

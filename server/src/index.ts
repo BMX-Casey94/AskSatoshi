@@ -38,6 +38,7 @@ import {
   type QueryUnderstanding,
 } from './queryUnderstanding.js';
 import { getActivity } from './satoshiActivity.js';
+import { helmetOptions } from './security.js';
 import { loadCorpus } from './satoshiCorpus.js';
 import { loadCuratedReference } from './curatedReference.js';
 import { assembleTts, ttsStartupLine } from './tts/index.js';
@@ -138,30 +139,9 @@ const app = express();
 app.disable('x-powered-by');
 // Vercel always sits behind its proxy; elsewhere TRUST_PROXY=1 opts in explicitly.
 app.set('trust proxy', process.env.TRUST_PROXY === '1' || process.env.VERCEL ? 1 : false);
-app.use(
-  helmet({
-    // Content-Security-Policy: the SPA is self-contained (bundled JS/CSS, no CDN), so we
-    // can run a strict policy. Images may be blob:/data: (local previews + inline assets);
-    // the API is same-origin. No inline scripts or eval — React's production build needs neither.
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'"],
-        styleSrc: ["'self'", "'unsafe-inline'"], // Vite injects critical CSS; React inline styles
-        imgSrc: ["'self'", 'data:', 'blob:'],
-        connectSrc: ["'self'"],
-        mediaSrc: ["'self'"], // same-origin /api/tts/audio/*.mp3
-        fontSrc: ["'self'", 'data:'],
-        objectSrc: ["'none'"],
-        baseUri: ["'self'"],
-        formAction: ["'self'"],
-        frameAncestors: ["'none'"],
-        upgradeInsecureRequests: null, // allow plain http on localhost dev
-      },
-    },
-    crossOriginEmbedderPolicy: false, // would break blob: image previews
-  }),
-);
+// Security headers (CSP included) live in security.ts — the connect-src list there
+// is what lets desktop browsers reach BRC-100 wallets on localhost.
+app.use(helmet(helmetOptions));
 app.use(cors({ origin: ALLOWED_ORIGINS }));
 app.use(express.json({ limit: '8mb' }));
 

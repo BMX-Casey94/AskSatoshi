@@ -423,6 +423,26 @@ describe('GET /api/tts/audio/:purchaseId and admin enable', () => {
     expect(Buffer.from(await download.arrayBuffer()).toString()).toBe('ID3fake');
   });
 
+  it('serves byte ranges so the player can scrub', async () => {
+    const live = await startApp();
+    const rec = live.store.createQuote({ chars: 5, satoshis: 1 });
+    await writeFile(join(live.audioDir, `${rec.id}.mp3`), 'xxxxfakeYYYY');
+    live.store.markPaid(rec.id, TXID);
+    live.store.markDelivered(rec.id, `${rec.id}.mp3`, 1.5);
+
+    const full = await fetch(`${live.url}/api/tts/audio/${rec.id}`);
+    expect(full.status).toBe(200);
+    expect(full.headers.get('accept-ranges')).toMatch(/bytes/i);
+    expect(full.headers.get('content-length')).toBe('12');
+
+    const ranged = await fetch(`${live.url}/api/tts/audio/${rec.id}`, {
+      headers: { Range: 'bytes=4-7' },
+    });
+    expect(ranged.status).toBe(206);
+    expect(ranged.headers.get('content-range')).toMatch(/bytes 4-7\/12/i);
+    expect(Buffer.from(await ranged.arrayBuffer()).toString()).toBe('fake');
+  });
+
   it('re-enables via bearer admin token and rejects a bad token', async () => {
     const live = await startApp();
     live.state.disable('credit-exhausted');

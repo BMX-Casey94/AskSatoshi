@@ -18,6 +18,7 @@ export function ReadAloudPlayer({ src }: Props) {
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
   const [failed, setFailed] = useState(false);
+  const seekingRef = useRef(false);
   const downloadHref = ttsDownloadUrl(src);
 
   useEffect(() => {
@@ -28,10 +29,11 @@ export function ReadAloudPlayer({ src }: Props) {
     setPlaying(false);
     setCurrent(0);
     setDuration(Number.isFinite(el.duration) ? el.duration : 0);
+    seekingRef.current = false;
 
     const syncTimes = () => {
-      setCurrent(el.currentTime);
       if (Number.isFinite(el.duration)) setDuration(el.duration);
+      if (!seekingRef.current) setCurrent(el.currentTime);
     };
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
@@ -82,8 +84,13 @@ export function ReadAloudPlayer({ src }: Props) {
     const el = audioRef.current;
     const next = Number(event.target.value);
     if (!el || !Number.isFinite(next)) return;
+    seekingRef.current = true;
     el.currentTime = next;
     setCurrent(next);
+  };
+
+  const endSeek = () => {
+    seekingRef.current = false;
   };
 
   const progress = duration > 0 ? Math.min(100, (current / duration) * 100) : 0;
@@ -119,6 +126,12 @@ export function ReadAloudPlayer({ src }: Props) {
         step={0.1}
         value={seekValue}
         onChange={onSeek}
+        onPointerDown={() => {
+          seekingRef.current = true;
+        }}
+        onPointerUp={endSeek}
+        onPointerCancel={endSeek}
+        onBlur={endSeek}
         disabled={failed || duration <= 0}
         aria-label="Seek"
         aria-valuetext={`${formatPlaybackClock(current)} of ${formatPlaybackClock(duration)}`}

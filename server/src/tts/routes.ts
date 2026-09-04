@@ -4,7 +4,7 @@
  */
 
 import { timingSafeEqual } from 'node:crypto';
-import { createReadStream, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Router, type Request, type Response } from 'express';
 import rateLimit from 'express-rate-limit';
@@ -308,10 +308,16 @@ export function createTtsRouter(deps: TtsRouterDeps): Router {
       jsonError(res, 404, 'TTS_NOT_FOUND', 'Audio not found.');
       return;
     }
-    res.setHeader('Content-Type', 'audio/mpeg');
-    res.setHeader('Cache-Control', 'private, max-age=31536000, immutable');
-    res.setHeader('Content-Disposition', audioContentDisposition(wantsAudioDownload(req.query)));
-    createReadStream(filePath).pipe(res);
+    res.sendFile(filePath, {
+      headers: {
+        'Content-Type': 'audio/mpeg',
+        'Cache-Control': 'private, max-age=31536000, immutable',
+        'Content-Disposition': audioContentDisposition(wantsAudioDownload(req.query)),
+      },
+    }, (err) => {
+      if (!err || res.headersSent) return;
+      jsonError(res, 404, 'TTS_NOT_FOUND', 'Audio not found.');
+    });
   });
 
   router.post('/admin/enable', (req, res) => {

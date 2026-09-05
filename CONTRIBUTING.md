@@ -32,6 +32,8 @@ npm run build         # must build cleanly
 - Match the existing code style (TypeScript, ESM, no unnecessary dependencies).
 - British English in user-facing copy; no emojis in the UI.
 - Never commit `.env` or real API keys — `.env.example` documents the required variables.
+- Prompt, critic or retrieval changes: from `server/`, run `npx tsx scripts/eval.ts`
+  (needs API keys) and keep the 12-case rubric green.
 
 ## Reporting issues
 

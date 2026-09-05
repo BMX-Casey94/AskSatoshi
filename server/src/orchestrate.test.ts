@@ -10,6 +10,7 @@ import {
   locatorToUrl,
   normaliseEvidence,
   parseCitationFilter,
+  pickInvitationSeed,
 } from './orchestrate.js';
 import { SatoshiCorpus, type CorpusDoc } from './satoshiCorpus.js';
 import { CuratedReference } from './curatedReference.js';
@@ -602,6 +603,21 @@ describe('prompt construction', () => {
     expect(sys).toMatch(/up to roughly 1,200 words/);
     expect(sys).toMatch(/FOLLOW-UP INVITATION/);
     expect(sys).toMatch(/never on a conversational message/);
+  });
+
+  it('varies the closing invitation’s construction with a per-request seed', () => {
+    // The persona rule demands variety and defers to the seed when one is given.
+    const base = buildSystemPrompt('mcp');
+    expect(base).toMatch(/VARY THE PHRASING/);
+    expect(base).toMatch(/never reuse the construction of an invitation already made/);
+    // No seed block is injected unless one is passed.
+    expect(base).not.toContain('INVITATION SEED (construction for the closing invitation only');
+    // A picked seed is a known construction and is injected verbatim.
+    const seed = pickInvitationSeed();
+    expect(seed).toMatch(/^Phrase the invitation as /);
+    const sys = buildSystemPrompt('mcp', undefined, { invitationSeed: seed });
+    expect(sys).toMatch(/INVITATION SEED/);
+    expect(sys).toContain(seed);
   });
 
   it('forbids inventing acronym expansions the evidence does not give', () => {

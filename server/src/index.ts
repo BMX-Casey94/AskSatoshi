@@ -32,6 +32,7 @@ import {
   filterUnusedCitations,
   groundQuestion,
   parseCitationFilter,
+  pickInvitationSeed,
   pickStyleSeed,
   questionClass,
 } from './orchestrate.js';
@@ -410,14 +411,17 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // funded OpenRouter primary) have a 1M context and get the full evidence.
     const firstUsable = eligibleTiers(keys, !!image).find((t) => breaker.isUsable(t.id));
     const evidenceBudget = evidenceBudgetFor(firstUsable);
-    // One style seed for the answer AND any later revision of it — a fresh seed would
-    // shift the voice instructions while the revision is told to keep the same voice.
+    // One style seed and one invitation seed for the answer AND any later revision of
+    // it — fresh seeds would shift the voice instructions while the revision is told to
+    // keep the same voice.
     const styleSeed = pickStyleSeed();
+    const invitationSeed = pickInvitationSeed();
     const result = await runChain(
       {
         system: buildSystemPrompt(grounding.mode, grounding, {
           questionClass: questionClass(question),
           styleSeed,
+          invitationSeed,
           evidenceChars: evidenceBudget,
         }),
         history: picked,
@@ -519,6 +523,7 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
                 system: buildSystemPrompt(grounding.mode, grounding, {
                   questionClass: questionClass(question),
                   styleSeed,
+                  invitationSeed,
                   evidenceChars: evidenceBudget,
                 }),
                 history: picked,

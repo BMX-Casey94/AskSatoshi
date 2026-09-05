@@ -28,6 +28,8 @@ Browser (Vite + React)                Node.js backend (Express)
                                       │             Gemini 3.6/3.5 (free)      │
                                       │             Groq gpt-oss-120b (free)   │
                                       │             OpenRouter :free           │
+                                      │             then critic (fail-open)    │
+                                      │             may send a revision event  │
                                       │ GET /api/status (awake / asleep)       │
                                       └────────────────────────────────────────┘
 ```
@@ -44,10 +46,19 @@ grounded here, never in "possession of a key is proof" logic) and `scaling-recor
 (the demonstrated-capacity record for scaling/Teranode questions: the 1M TPS sustained
 trial and the 79.09 billion TPS fleet measurement, always quoted with conditions) and
 `implementation-record.json` (the BSV-only builder stack: BRC-100, native script,
-OP_RETURN, SPV/BEEF, `@bsv/sdk` and a BitGenius.net pointer — Taproot/SegWit/Lightning
-are never prescribed as something to implement).
+OP_RETURN, SPV/BEEF, `@bsv/sdk` and a BitGenius.net pointer, plus a decision table that
+prefers the native opcode for simple builds and escalates to a contract language only
+when the question outgrows m-of-n — Taproot/SegWit/Lightning are never prescribed as
+something to implement).
 Conceptual questions are blended essay-first: the later essays and article summaries are
 the primary lens, with the 2008–2011 posts and e-mails seasoning the answer.
+Builder questions retrieve an option set of protocol primitives (with a second hop for
+specs the commentary named), prepend that decision table, and answer with one firm
+recommendation plus the condition under which an alternative wins. Compiler frontends
+(Rúnar, sCrypt) are implementations of a listed primitive, not rivals to it. After the
+answer streams, a fail-open critic may replace it with a `revision` event if the draft
+is factually off, prescribes forbidden technology, or picks a weaker primitive than the
+table's default.
 
 ## Setup
 
@@ -158,6 +169,10 @@ npm run test         # vitest suite (routing, errors, breaker, corpus, cache)
 npm run typecheck    # tsc --noEmit on both workspaces
 npm run fetch-corpus # re-pin the Satoshi corpus (records the upstream commit SHA)
 ```
+
+Prompt or retrieval changes: from `server/`, `npx tsx scripts/eval.ts` runs the live
+pipeline against a 12-question rubric (needs API keys; keep the builder cases and the
+non-builder guards green).
 
 Model IDs are pinned in `server/src/models.config.ts` — free catalogues churn, so if a model
 is sunset, swap the ID there and redeploy.

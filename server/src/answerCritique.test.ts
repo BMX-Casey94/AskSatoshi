@@ -21,6 +21,12 @@ describe('buildCritiqueRequest', () => {
     expect(req.system.indexOf('Forbidden technology')).toBeLessThan(req.system.indexOf('Optimality'));
   });
 
+  it('tells the reviewer that a compiler frontend is an implementation, not a rival primitive', () => {
+    const req = buildCritiqueRequest(question, evidence, answer);
+    expect(req.system).toMatch(/compiler frontend or SDK \(Rúnar, sCrypt, @bsv\/sdk\) is an implementation OF a primitive, not a rival to it/);
+    expect(req.system).toMatch(/pinned decision table, its default wins/);
+  });
+
   it('states the strict single-line JSON contract', () => {
     const req = buildCritiqueRequest(question, evidence, answer);
     expect(req.system).toMatch(/ONLY a single-line JSON object/);

@@ -159,7 +159,7 @@ export function ReadAloudButton({ text }: Props) {
       {error && (
         <div className="read-aloud-error-box" role="alert">
           <div className="read-aloud-error-body">
-            <p className="read-aloud-error-title">Could not transcribe</p>
+            <p className="read-aloud-error-title">Could not read this aloud</p>
             <p className="read-aloud-error-text">{error.message}</p>
             {error.refunded && (
               <span className="read-aloud-error-refunded">Refund sent — check your wallet in a few seconds</span>

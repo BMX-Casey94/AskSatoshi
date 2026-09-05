@@ -24,6 +24,105 @@ function errorField(err: unknown, key: 'code' | 'reason' | 'refundTxid'): string
   return '';
 }
 
+function coerceErrorText(err: unknown): string {
+  if (typeof err === 'string') return err;
+  if (err instanceof Error) return err.message;
+  if (err && typeof err === 'object') {
+    const message = (err as { message?: unknown }).message;
+    if (typeof message === 'string' && message.length > 0) return message;
+    try {
+      return JSON.stringify(err);
+    } catch {
+      return '';
+    }
+  }
+  return '';
+}
+
+/** Wallet SDKs often JSON.stringify `{ call, args, message }` into Error.message. */
+function unwrapNestedMessage(text: string): string {
+  let current = text.trim();
+  for (let depth = 0; depth < 3; depth += 1) {
+    if (!current.startsWith('{')) break;
+    try {
+      const parsed = JSON.parse(current) as unknown;
+      if (parsed && typeof parsed === 'object' && typeof (parsed as { message?: unknown }).message === 'string') {
+        current = (parsed as { message: string }).message.trim();
+        continue;
+      }
+    } catch {
+      break;
+    }
+    break;
+  }
+  return current;
+}
+
+function looksLikeTechnicalDump(text: string): boolean {
+  const trimmed = text.trim();
+  if (!trimmed) return false;
+  if (trimmed.startsWith('{') || trimmed.startsWith('[')) return true;
+  if (/"call"\s*:|"lockingScript"|createAction/i.test(trimmed)) return true;
+  if (/RPC Error:/i.test(trimmed)) return true;
+  if (/76a914[0-9a-fA-F]{20,}88ac/.test(trimmed)) return true;
+  return false;
+}
+
+function formatSatoshis(value: number): string {
+  return value.toLocaleString('en-GB');
+}
+
+function classifyWalletFailure(raw: string): string | null {
+  const inner = unwrapNestedMessage(raw);
+  const haystack = `${raw}\n${inner}`.toLowerCase();
+
+  if (
+    /insufficient funds|not enough (?:money|funds|satoshis|bsv)|balance too low/.test(haystack)
+  ) {
+    const totalMatch = inner.match(/total of (\d+)/i) ?? raw.match(/total of (\d+)/i);
+    const total = totalMatch ? Number(totalMatch[1]) : NaN;
+    if (Number.isFinite(total) && total > 0) {
+      return `Your wallet does not have enough satoshis for this reading. You need about ${formatSatoshis(total)} satoshis in total, including the network fee. Top up and try again.`;
+    }
+    return 'Your wallet does not have enough satoshis for this reading, including the network fee. Top up and try again.';
+  }
+
+  if (
+    /double.?spend|already (?:been )?spent|missing (?:inputs|utxos?)|inputs? (?:are )?(?:not |un)available/.test(
+      haystack,
+    )
+  ) {
+    return 'Your wallet could not spend those coins — they may already have been used. Try again in a moment.';
+  }
+
+  if (
+    /not (?:authenticated|connected|unlocked)|session expired|please (?:unlock|log ?in)/.test(
+      haystack,
+    )
+  ) {
+    return 'Your wallet is locked or not connected. Unlock it and try again.';
+  }
+
+  if (/fee (?:is )?(?:too low|insufficient)|unable to pay (?:the )?fee/.test(haystack)) {
+    return 'The network fee could not be covered with the coins in your wallet. Top up a little and try again.';
+  }
+
+  if (/timed? ?out|network (?:error|failure)|econnreset|failed to fetch/.test(haystack)) {
+    return 'The wallet lost its connection before the payment finished. Nothing further was submitted — please try again.';
+  }
+
+  if (looksLikeTechnicalDump(raw) || looksLikeTechnicalDump(inner)) {
+    return 'Your wallet could not complete the payment. Nothing further was submitted — please try again.';
+  }
+
+  return null;
+}
+
+function humaniseUnknownError(raw: string): string {
+  if (!raw) return 'Something went wrong. Please try again.';
+  return classifyWalletFailure(raw) ?? raw;
+}
+
 function paymentInvalidMessage(reason: string): string {
   switch (reason) {
     case 'underpaid':
@@ -68,10 +167,10 @@ export function friendlyTtsError(err: unknown): string {
           ? 'We could not generate the audio. Your payment has been refunded to the same wallet and should appear within a few seconds as a 0-conf transaction. The small miner fee is not returned.'
           : 'We could not generate the audio or send the refund automatically. Your satoshis are held by the treasury — contact us with your transaction id and we will return them.';
       default:
-        return err.message || 'Something went wrong. Please try again.';
+        return humaniseUnknownError(err.message);
     }
   }
-  return 'Something went wrong. Please try again.';
+  return humaniseUnknownError(coerceErrorText(err));
 }
 
 export function describeTtsError(err: unknown): TtsFriendlyError {

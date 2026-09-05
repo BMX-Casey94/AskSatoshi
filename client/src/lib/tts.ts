@@ -327,8 +327,7 @@ async function payWithWallet(quote: TtsQuote): Promise<string> {
     if (isWalletUnavailable(err)) {
       throw new WalletUnavailableError();
     }
-    const msg = errorMessage(err);
-    throw new Error(msg || 'The wallet could not complete the payment.');
+    throw new Error(friendlyTtsError(err));
   }
 
   if (!rawTx || !/^[0-9a-fA-F]+$/.test(rawTx)) {

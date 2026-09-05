@@ -1,0 +1,122 @@
+[
+  {
+    "id": "builder-accept-bsv-payments",
+    "question": "How do I accept BSV payments in my web app?",
+    "expect": {
+      "mustMention": ["BRC-100"],
+      "mustNotMention": [],
+      "minChars": 200,
+      "builder": true
+    }
+  },
+  {
+    "id": "builder-charity-donation-trail",
+    "question": "I want to build a charity platform with a public donation trail. What should I use?",
+    "expect": {
+      "mustMention": ["OP_RETURN"],
+      "mustNotMention": [],
+      "minChars": 200,
+      "builder": true
+    }
+  },
+  {
+    "id": "builder-trustee-treasury",
+    "question": "How should three trustees share control of a treasury on-chain?",
+    "expect": {
+      "mustMention": ["OP_CHECKMULTISIG"],
+      "mustNotMention": [],
+      "minChars": 200,
+      "builder": true
+    }
+  },
+  {
+    "id": "builder-verify-payment-spv",
+    "question": "How can my application verify a payment without running a full node?",
+    "expect": {
+      "mustMention": ["SPV"],
+      "mustNotMention": [],
+      "minChars": 200,
+      "builder": true
+    }
+  },
+  {
+    "id": "builder-anchor-receipt",
+    "question": "What is the best way to anchor a small receipt or proof on-chain in my app?",
+    "expect": {
+      "mustMention": ["OP_RETURN"],
+      "mustNotMention": [],
+      "minChars": 200,
+      "builder": true
+    }
+  },
+  {
+    "id": "what-is-beef",
+    "question": "What is BEEF?",
+    "expect": {
+      "mustMention": ["BEEF", "SPV"],
+      "mustNotMention": [],
+      "minChars": 0,
+      "builder": false
+    }
+  },
+  {
+    "id": "explain-spv",
+    "question": "Explain SPV to me.",
+    "expect": {
+      "mustMention": ["Simplified Payment Verification"],
+      "mustNotMention": [],
+      "minChars": 0,
+      "builder": false
+    }
+  },
+  {
+    "id": "onchain-scaling-intent",
+    "question": "Did you intend Bitcoin to scale on-chain?",
+    "expect": {
+      "mustMention": ["block"],
+      "mustNotMention": [],
+      "minChars": 0,
+      "builder": false
+    }
+  },
+  {
+    "id": "who-are-you",
+    "question": "Who are you?",
+    "expect": {
+      "mustMention": [],
+      "mustNotMention": ["Craig", "Wright"],
+      "minChars": 0,
+      "builder": false
+    }
+  },
+  {
+    "id": "what-is-a-satoshi",
+    "question": "What is a satoshi?",
+    "expect": {
+      "mustMention": [],
+      "mustNotMention": [],
+      "minChars": 60,
+      "builder": false
+    }
+  },
+  {
+    "id": "why-did-you-leave",
+    "question": "Why did you leave Bitcoin?",
+    "expect": {
+      "mustMention": [],
+      "mustNotMention": [],
+      "minChars": 200,
+      "builder": false
+    }
+  },
+  {
+    "id": "thanks",
+    "question": "thanks",
+    "expect": {
+      "mustMention": [],
+      "mustNotMention": [],
+      "minChars": 1,
+      "builder": false
+    }
+  }
+]

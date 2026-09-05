@@ -93,6 +93,10 @@ describe('isImplementationQuestion', () => {
     ).toBe(true);
     expect(isImplementationQuestion('How do I build a wallet that talks to the chain?')).toBe(true);
     expect(isImplementationQuestion('What stack should I use for an on-chain donation platform?')).toBe(true);
+    // Third-person design questions with no first person and no build verb still ask
+    // "what should I build" — custody/governance nouns anchor the intent.
+    expect(isImplementationQuestion('How should three trustees share control of a treasury on-chain?')).toBe(true);
+    expect(isImplementationQuestion('What is the best way to structure an escrow between two parties?')).toBe(true);
   });
 
   it('lets critique and definition of BTC features through as non-builder questions', () => {
@@ -100,6 +104,9 @@ describe('isImplementationQuestion', () => {
     expect(isImplementationQuestion('Why is SegWit a problem?')).toBe(false);
     expect(isImplementationQuestion('Explain Lightning Network')).toBe(false);
     expect(isImplementationQuestion('How do I know if Bitcoin is private?')).toBe(false);
+    // Design nouns alone do not make a build question — definitions stay explanations.
+    expect(isImplementationQuestion('What is a multisig wallet?')).toBe(false);
+    expect(isImplementationQuestion('Explain how a treasury multisig works')).toBe(false);
   });
 
   it('classifies builder questions as facts so the answer does not hedge', () => {
@@ -235,13 +242,14 @@ describe('groundQuestion with curated reference', () => {
     expect(g.evidenceText).toBe('');
   });
 
-  it('appends the BSV implementation stack to builder questions', async () => {
+  it('prepends the BSV implementation stack to builder questions', async () => {
     const curated = new CuratedReference([], null, IMPLEMENTATION);
     const g = await groundQuestion(
       'If I were to make an application for a charity that ran on-chain, what would you choose to implement?',
       { mcp: thinMcp(), corpus: null, curated },
     );
-    expect(g.evidenceText).toContain('IMPLEMENTATION STACK');
+    // Head position: the decision record must survive the free-tier evidence budget cut.
+    expect(g.evidenceText.startsWith('IMPLEMENTATION STACK')).toBe(true);
     expect(g.evidenceText).toContain('BRC-100');
     expect(g.citations.some((c) => c.url?.includes('0100.md'))).toBe(true);
     expect(g.citations.find((c) => c.url?.includes('0100.md'))?.sourceClass).toBe('historical-record');

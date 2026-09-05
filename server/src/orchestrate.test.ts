@@ -3,6 +3,7 @@ import {
   buildCitationFilter,
   buildSystemPrompt,
   buildUserContent,
+  extractCandidateIds,
   extractKeywords,
   filterUnusedCitations,
   groundQuestion,
@@ -1155,5 +1156,123 @@ describe('retrieval plan (query understanding)', () => {
     );
     expect(g.mode).toBe('reference');
     expect(g.evidenceText).toContain('Testimony about the authorship');
+  });
+});
+
+describe('extractCandidateIds', () => {
+  it('extracts and normalises protocol identifiers in mention order', () => {
+    expect(extractCandidateIds('Use BRC-100s with op_checkmultisig and BEEF. brc-62 too.')).toEqual([
+      'BRC-100',
+      'OP_CHECKMULTISIG',
+      'BEEF',
+      'BRC-62',
+    ]);
+  });
+
+  it('dedupes case-insensitively and returns [] when nothing matches', () => {
+    expect(extractCandidateIds('BRC-100 then brc-100 again')).toEqual(['BRC-100']);
+    expect(extractCandidateIds('plain prose, no identifiers')).toEqual([]);
+  });
+});
+
+describe('builder option set (second-hop retrieval)', () => {
+  const WALLET_ESSAY =
+    'Applications should talk to the user\u2019s wallet through BRC-100 rather than managing keys themselves, and verify with SPV proofs.';
+  const BRC100_BODY =
+    'BRC-100 is the wallet-to-application interface: applications request signatures, payments and identity from the user\u2019s wallet.';
+
+  /**
+   * Builder MCP stub: the essay tier names BRC-100; the first-hop tech tier finds
+   * nothing (the long AND-first hint query realistically matches nothing); only the
+   * second hop queried with the extracted id "BRC-100" returns the spec hit.
+   */
+  function builderMcp(calls?: string[]): McpBridge {
+    const bodies: Record<string, string> = {
+      'csw://essay/medium/wallets': WALLET_ESSAY,
+      'bsv-blockchain/BRCs/wallet/0100.md': BRC100_BODY,
+    };
+    return {
+      connected: true,
+      investigate: async () => INSUFFICIENT_PKG,
+      searchKnowledge: async (q: string, filters?: { kind?: string[] }) => {
+        calls?.push(q);
+        const kinds = filters?.kind ?? [];
+        if (q === 'BRC-100' && (kinds.includes('brc') || kinds.includes('doc'))) {
+          return {
+            hits: [{ id: 'b:100', kind: 'brc', title: 'BRC-100', locator: 'bsv-blockchain/BRCs/wallet/0100.md' }],
+          };
+        }
+        if (kinds.includes('essay')) {
+          return {
+            hits: [{ id: 'e:1', kind: 'essay', title: 'Walletless applications', locator: 'csw://essay/medium/wallets' }],
+          };
+        }
+        return { hits: [] };
+      },
+      getResource: async (uri: string) => ({ text: bodies[uri] }),
+    } as unknown as McpBridge;
+  }
+
+  it('retrieves the specification for a primitive the commentary names (second hop)', async () => {
+    const calls: string[] = [];
+    const g = await groundQuestion('How do I build a payment app?', { mcp: builderMcp(calls), corpus: null });
+    expect(g.mode).toBe('mcp');
+    // The second hop queried the extracted identifier…
+    expect(calls).toContain('BRC-100');
+    // …and its spec landed in a dedicated options section, citable as usual.
+    expect(g.evidenceText).toContain('IMPLEMENTATION OPTIONS');
+    expect(g.evidenceText).toContain('wallet-to-application interface');
+    expect(g.citations.some((c) => c.url === 'https://github.com/bsv-blockchain/BRCs/blob/master/wallet/0100.md')).toBe(true);
+  });
+
+  it('orders the option set ahead of the commentary for builder questions', async () => {
+    const g = await groundQuestion('How do I build a payment app?', { mcp: builderMcp(), corpus: null });
+    expect(g.evidenceText).toContain('IMPLEMENTATION OPTIONS');
+    expect(g.evidenceText).toContain('DECISION CRITERIA');
+    expect(g.evidenceText.indexOf('IMPLEMENTATION OPTIONS')).toBeLessThan(
+      g.evidenceText.indexOf('DECISION CRITERIA'),
+    );
+    // The essay-first framing is for conceptual questions, not builders.
+    expect(g.evidenceText).not.toContain('LATER COMMENTARY');
+  });
+
+  it('never fires for non-builder questions', async () => {
+    const calls: string[] = [];
+    const g = await groundQuestion('Why did you design SPV proofs?', { mcp: builderMcp(calls), corpus: null });
+    expect(g.mode).toBe('mcp');
+    expect(g.evidenceText).not.toContain('IMPLEMENTATION OPTIONS');
+    // No second-hop query was issued for the identifier the essay named.
+    expect(calls).not.toContain('BRC-100');
+  });
+
+  it('prepends the implementation record for builder questions so it survives truncation', async () => {
+    const curated = new CuratedReference([], null, {
+      evidenceText: 'IMPLEMENTATION STACK — BSV-only test record.',
+      citations: [{ label: 'BRC-100', url: 'https://github.com/bsv-blockchain/BRCs/blob/master/wallet/0100.md' }],
+    });
+    const g = await groundQuestion('How do I build a payment app?', { mcp: builderMcp(), corpus: null, curated });
+    expect(g.evidenceText.startsWith('IMPLEMENTATION STACK')).toBe(true);
+    // The record's citations ride along, after the retrieved ones.
+    expect(g.citations.some((c) => c.url?.includes('0100.md'))).toBe(true);
+  });
+
+  it('still appends the demonstrated-capacity record to scaling answers (unchanged)', async () => {
+    const curated = new CuratedReference(
+      [],
+      { evidenceText: 'DEMONSTRATED CAPACITY — 1M TPS sustained.', citations: [] },
+      null,
+    );
+    const g = await groundQuestion('Can Bitcoin scale to a million TPS?', { mcp: builderMcp(), corpus: null, curated });
+    expect(g.evidenceText).toContain('DEMONSTRATED CAPACITY');
+    expect(g.evidenceText.indexOf('DEMONSTRATED CAPACITY')).toBeGreaterThan(0);
+  });
+});
+
+describe('options-with-a-verdict persona rule', () => {
+  it('instructs a firm recommendation with conditional alternatives', () => {
+    const sys = buildSystemPrompt('mcp');
+    expect(sys).toMatch(/OPTIONS WITH A VERDICT/);
+    expect(sys).toMatch(/land on one firm recommendation/);
+    expect(sys).toMatch(/never to dodge the verdict/);
   });
 });

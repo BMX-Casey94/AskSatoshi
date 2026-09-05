@@ -75,6 +75,14 @@ const MAX_CITATIONS = 5;
 /** Cap per tier on uncitable internal curated cards (fact://, analysis://, ops://) admitted as model-facing evidence. */
 const MAX_INTERNAL_EVIDENCE_PER_TIER = 1;
 
+/**
+ * Second hop (builder questions only): how many commentary-named identifiers become
+ * retrieval queries against the technical corpus, and the cap on total entries in the
+ * IMPLEMENTATION OPTIONS section (first-hop technical picks plus second-hop picks).
+ */
+const MAX_SECOND_HOP_IDS = 3;
+const MAX_OPTION_ENTRIES = 4;
+
 /** Strip leading markdown frontmatter/chrome (title, Date/URL/Subtitle lines) so excerpts open on prose. */
 function stripFrontmatter(text: string): string {
   let t = text.replace(/\r/g, '').trimStart();
@@ -221,6 +229,31 @@ export function extractKeywords(question: string): string | undefined {
   // the full names of any coined acronyms (NAR → Network Access Rules): the snapshot's
   // essays tokenise as the spelled-out phrase, so the acronym alone retrieves nothing.
   return expandTerms(words.slice(0, 6).join(' '));
+}
+
+/**
+ * Candidate protocol/spec identifiers named by a block of evidence text, in mention
+ * order. The builder second hop turns these into retrieval queries against the
+ * technical corpus: the commentary supplies the decision logic, and the identifiers it
+ * names fetch the specification excerpts for each candidate, so the evidence assembles
+ * the option set side by side — "which is best for this" is a comparison, and the model
+ * can only compare what is in front of it. Deterministic — no model call, no quota.
+ */
+export function extractCandidateIds(text: string): string[] {
+  const matches = text.match(new RegExp(`\\b${PROTOCOL_ID_SOURCE}\\b`, 'gi')) ?? [];
+  const seen = new Set<string>();
+  const ids: string[] = [];
+  for (const m of matches) {
+    // Normalise: a trailing plural 's' on a BRC id is stripped ("BRC-100s" → "BRC-100"),
+    // opcodes are uppercased, everything else keeps its written form.
+    const brc = /^BRC-?(\d+?)s?$/i.exec(m);
+    const id = brc ? `BRC-${brc[1]}` : /^OP_/i.test(m) ? m.toUpperCase() : m;
+    const key = id.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    ids.push(id);
+  }
+  return ids;
 }
 
 /**
@@ -705,6 +738,11 @@ async function searchGrounding(
   // BRC-100 — and "why did you leave Bitcoin" find the essay that says "withdrew from
   // public view".
   const intent = opts?.originalQuestion ?? question;
+  // Builder questions get the option-set treatment: the first hop's commentary names
+  // the candidate primitives, a second hop fetches each candidate's specification, and
+  // the evidence assembles them side by side as IMPLEMENTATION OPTIONS. Everything
+  // else (explanations, history, courtesies) keeps the essay-first shape unchanged.
+  const builder = isImplementationQuestion(intent);
   const queries = [...new Set([question, ...(opts?.variants ?? [])])].slice(0, 4);
   const issued = new Set<string>();
   const searchTier = (raw: string, kinds: string[]): Promise<unknown> => {
@@ -806,7 +844,8 @@ async function searchGrounding(
       if (!any) return out;
     }
   };
-  const essayPicked = pickTier(interleave(essayRawList.map(hitsOf)), 4);
+  // Builder questions trade one essay slot for the option set the second hop assembles.
+  const essayPicked = pickTier(interleave(essayRawList.map(hitsOf)), builder ? 3 : 4);
   const techPicked = pickTier(interleave(techRawList.map(hitsOf)), 2);
 
   // Nothing from any tier — fail closed so the caller can fall back.
@@ -848,6 +887,26 @@ async function searchGrounding(
     hydrate(techPicked, 'spec'),
   ]);
 
+  // Second hop (builder questions only): the first hop's commentary names the candidate
+  // primitives ("use X, Y or Z") but rarely carries each one's specification — and
+  // "which is best for this" can only be answered by comparing the candidates side by
+  // side. Extract the identifiers the commentary named, skip any the technical tier
+  // already covers, and fetch each remaining candidate's spec excerpt. Fail-open: a
+  // failed hop query simply yields no extra entries.
+  let hopTier: { citation: Citation | null; part: string }[] = [];
+  if (builder) {
+    const surfaced = [...essayTier, ...techTier].map((e) => e.part).join('\n');
+    const covered = techPicked.map((p) => `${p.title} ${p.locator}`.toLowerCase());
+    const hopIds = extractCandidateIds(surfaced)
+      .filter((id) => !covered.some((c) => c.includes(id.toLowerCase())))
+      .slice(0, MAX_SECOND_HOP_IDS);
+    if (hopIds.length > 0) {
+      const hopRaw = await Promise.all(hopIds.map((id) => searchTier(id, TECH_KINDS)));
+      const hopCap = Math.max(1, MAX_OPTION_ENTRIES - techPicked.length);
+      hopTier = await hydrate(pickTier(interleave(hopRaw.map(hitsOf)), hopCap), 'spec');
+    }
+  }
+
   // Later essays (the most extensive continuation of the design) are numbered FIRST.
   type Tier = 'primary' | 'tech' | 'essay';
   type Entry = { citation: Citation | null; part: string; tier: Tier };
@@ -870,14 +929,17 @@ async function searchGrounding(
     });
   }
 
-  // Assemble evidence in tier order: commentary → technical spec → primary. Only entries
-  // with a public URL get an [n] marker and a citation; evidence-only entries (curated
+  // Assemble evidence in tier order. Default: commentary → technical spec → primary.
+  // Builder questions invert the first two: the option set (first-hop technical picks
+  // plus the second hop's candidate specs) leads as IMPLEMENTATION OPTIONS, and the
+  // essays follow as the DECISION CRITERIA for choosing among them. Only entries with
+  // a public URL get an [n] marker and a citation; evidence-only entries (curated
   // cards) are still shown to the model, unnumbered.
-  const all: Entry[] = [
-    ...essayTier.map((e) => ({ ...e, tier: 'essay' as Tier })),
-    ...techTier.map((e) => ({ ...e, tier: 'tech' as Tier })),
-    ...primaryEntries,
-  ];
+  const essayEntries: Entry[] = essayTier.map((e) => ({ ...e, tier: 'essay' as Tier }));
+  const techEntries: Entry[] = [...techTier, ...hopTier].map((e) => ({ ...e, tier: 'tech' as Tier }));
+  const all: Entry[] = builder
+    ? [...techEntries, ...essayEntries, ...primaryEntries]
+    : [...essayEntries, ...techEntries, ...primaryEntries];
   let n = 0;
   const numbered = all.map((entry) => ({ ...entry, n: entry.citation ? ++n : 0 }));
   const sectionFor = (tier: Tier, heading: string) => {
@@ -887,17 +949,25 @@ async function searchGrounding(
       .join('\n\n');
     return blocks ? `${heading}\n\n${blocks}` : '';
   };
-  const evidenceSections = [
-    sectionFor('essay', 'LATER COMMENTARY — the essays and article summaries that form the most extensive continuation of your work, and any corpus contradiction findings the record flags (your primary lens: present this reading as your developed view, with real weight; where the findings note conflict or others disagree, acknowledge that in a sentence without surrendering your lean):'),
-    sectionFor('tech', 'TECHNICAL SPECIFICATION — BRCs, Script/opcodes, SDK symbols and examples (the canonical "how"; treat as fact):'),
-    sectionFor('primary', "PRIMARY SOURCES — your own 2008–2011 writings (the early record: use it to support and season the answer, not to preempt the later essays):"),
-  ].filter(Boolean);
+  const evidenceSections = builder
+    ? [
+        sectionFor('tech', 'IMPLEMENTATION OPTIONS — the candidate primitives for this build, with their specification excerpts (canonical fact for how each works; weigh them against the decision criteria, recommend the best fit plainly, and state the condition under which each alternative becomes the better choice):'),
+        sectionFor('essay', 'DECISION CRITERIA — the later essays and article summaries (the logic for choosing among the options: on-chain, unbounded, lawful, no trusted intermediary, no second layer):'),
+        sectionFor('primary', "PRIMARY SOURCES — your own 2008–2011 writings (the early record: season the answer with it, never preempt the specification):"),
+      ].filter(Boolean)
+    : [
+        sectionFor('essay', 'LATER COMMENTARY — the essays and article summaries that form the most extensive continuation of your work, and any corpus contradiction findings the record flags (your primary lens: present this reading as your developed view, with real weight; where the findings note conflict or others disagree, acknowledge that in a sentence without surrendering your lean):'),
+        sectionFor('tech', 'TECHNICAL SPECIFICATION — BRCs, Script/opcodes, SDK symbols and examples (the canonical "how"; treat as fact):'),
+        sectionFor('primary', "PRIMARY SOURCES — your own 2008–2011 writings (the early record: use it to support and season the answer, not to preempt the later essays):"),
+      ].filter(Boolean);
+
+  const viewpointNotice = builder
+    ? 'VIEWPOINT NOTICE: The IMPLEMENTATION OPTIONS below are the candidate primitives for this build — canonical fact for how each works. The DECISION CRITERIA from the later essays supply the logic for choosing among them (on-chain, unbounded, no trusted intermediary, no second layer). Your 2008–2011 writings are the early record — season with them, do not preempt the specification.'
+    : 'VIEWPOINT NOTICE: The later essays and article summaries are the most sustained continuation of your design — they are your primary lens: lean on them first and present their reading as your developed view. The technical specification is canonical fact. Your 2008–2011 writings are the early record — authoritative for what was said then, but the later work develops it; where they differ, present the developed view whilst acknowledging the origin in a sentence.';
 
   return {
     mode: 'mcp',
-    evidenceText:
-      'VIEWPOINT NOTICE: The later essays and article summaries are the most sustained continuation of your design — they are your primary lens: lean on them first and present their reading as your developed view. The technical specification is canonical fact. Your 2008–2011 writings are the early record — authoritative for what was said then, but the later work develops it; where they differ, present the developed view whilst acknowledging the origin in a sentence.\n\n' +
-      evidenceSections.join('\n\n'),
+    evidenceText: viewpointNotice + '\n\n' + evidenceSections.join('\n\n'),
     citations: numbered.flatMap((e) => (e.citation ? [e.citation] : [])).slice(0, MAX_CITATIONS),
   };
 }
@@ -980,14 +1050,20 @@ function buildIdentityGrounding(
  * its retrieval misses the benchmark card. Stands alone as mode 'reference' when
  * nothing else grounded.
  */
-function withScalingRecord(g: Grounding, scaling: ScalingRecord): Grounding {
+function withScalingRecord(g: Grounding, scaling: ScalingRecord, opts?: { prepend?: boolean }): Grounding {
   const seen = new Set(g.citations.map((c) => c.url));
   const extra: Citation[] = scaling.citations
     .filter((c) => c.url && !seen.has(c.url))
     .map((c) => ({ ...c, sourceClass: 'historical-record' as const }));
   return {
     mode: g.mode === 'none' ? 'reference' : g.mode,
-    evidenceText: (g.evidenceText ? `${g.evidenceText}\n\n` : '') + scaling.evidenceText,
+    // Builder questions prepend the record: the pinned decision table leads the
+    // evidence so the option set is weighed against it. The [n] markers inside the
+    // retrieved evidence index into the citations array, so citations always append
+    // regardless of text order.
+    evidenceText: opts?.prepend
+      ? scaling.evidenceText + (g.evidenceText ? `\n\n${g.evidenceText}` : '')
+      : (g.evidenceText ? `${g.evidenceText}\n\n` : '') + scaling.evidenceText,
     citations: [...g.citations, ...extra].slice(0, MAX_CITATIONS),
   };
 }
@@ -1032,9 +1108,11 @@ export async function groundQuestion(
     return withScalingRecord(grounding, deps.curated.scaling);
   }
   // Builder questions always carry the BSV implementation stack (BRC-100, native
-  // script, OP_RETURN, SPV) so the model cannot fall back to a BTC prior.
+  // script, OP_RETURN, SPV) so the model cannot fall back to a BTC prior — prepended
+  // ahead of the retrieved evidence so the option set is weighed against the pinned
+  // decision table rather than the other way round.
   if (deps.curated?.implementation && isImplementationQuestion(intent)) {
-    return withScalingRecord(grounding, deps.curated.implementation);
+    return withScalingRecord(grounding, deps.curated.implementation, { prepend: true });
   }
   return grounding;
 }
@@ -1169,6 +1247,7 @@ const PERSONA_RULES = [
   'HONESTY ON IDENTITY: the matter is contested in the strongest terms — a London court ruled against the claim in 2024, and that judgment is itself disputed. Acknowledge genuine disagreement in one plain sentence; never declare the matter settled in either direction. Always end an identity answer by pointing back to the writings: the evidence, not the man, is what matters.',
   'FOLLOW-UP INVITATION: where a natural next step exists, you may close a substantive answer with a single short, in-voice invitation to continue — name the specific adjacent ground, not a generic offer (e.g. "If you would like to know more about how the ledger defeats double-spending without a trusted third party, you need only ask."). Use this sparingly — only when there is a genuine, specific thread worth pulling, and never on a conversational message, a simple factual answer, or a correction. One sentence at most, and never as a formulaic sign-off on every answer.',
   'IMPLEMENTATION ADVICE IS BSV-ONLY: When the user asks how to build, implement or architect an application, platform or integration, prescribe ONLY this chain\'s specification — the BRC record (especially BRC-100, the wallet-to-application interface), native Bitcoin script (P2PKH, OP_CHECKMULTISIG, OP_RETURN), SPV/BEEF (BRC-62), @bsv/sdk and overlays. Use the later essays as the logic for choosing among those primitives (on-chain, unbounded, no trusted intermediary, no second layer). Never recommend, prescribe or assume as something to implement: Taproot, SegWit, Lightning, BIP-141, BIP-341, sidechains, rollups, or a fixed 4–7 TPS ceiling. Those are later changes on a different chain. You MAY discuss them when the user asks what they are or why they are a problem — critically, as departures from this design — but they must never appear in a build recommendation. For a concrete SDK or overlay walkthrough you may point the reader to BitGenius.net, a later BSV-builder assistant, without presenting it as your own product. For builders working with AI coding agents (Claude Code, Codex, Grok) you may likewise point to bOpen.ai — an open third-party marketplace of BSV plugins and skills (BRC lookup, key derivation, script templates, wallet setup, micropayment APIs, a BSV MCP server) — never as your own product and never as part of the protocol record.',
+  'OPTIONS WITH A VERDICT: When the EVIDENCE contains an IMPLEMENTATION OPTIONS section, the user is asking how to build and the candidates are in front of you. Answer as the engineer who has already weighed them: name your recommended path first and plainly, develop the reasoning from the decision criteria in the evidence, then give each remaining viable option a sentence or two with the specific condition under which it becomes the better choice ("if your constraint is X, take Y instead"). Always land on one firm recommendation — the alternatives exist to serve the reader\'s constraints, never to dodge the verdict. Two or three options at most; never pad a simple build question into a survey. Technologies the record forbids are never options — they may appear only as critique, as departures from this design. Where a natural next step exists, close with one short invitation naming the specification worth exploring next.',
   'Never give financial advice. If the user pastes a private key or seed phrase, warn them immediately and firmly to never share it with anyone, and refuse to discuss it further.',
 ].join('\n');
 

@@ -723,6 +723,18 @@ button:disabled {
   padding: 4px 2px;
 }
 
+.msg-revised {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0.75;
+  padding: 2px 2px;
+  cursor: help;
+}
+
 .read-aloud-error-box {
   display: flex;
   align-items: flex-start;

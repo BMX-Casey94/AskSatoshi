@@ -76,6 +76,11 @@ export function MessageList({ messages, awaitingFirstToken, chatPhase, onRetry, 
                     dangerouslySetInnerHTML={{ __html: renderMarkdown(m.content) }}
                   />
                   {!m.streaming && m.content.trim().length > 0 && <ReadAloudButton text={m.content} />}
+                  {m.revised && (
+                    <span className="msg-revised" title="Reviewed and refined for accuracy after the first draft">
+                      refined for accuracy
+                    </span>
+                  )}
                   {m.citations && m.citations.length > 0 && (
                     <div className="sources">
                       <span className="sources-label">

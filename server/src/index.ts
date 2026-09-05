@@ -13,6 +13,12 @@ import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import { z } from 'zod';
+import {
+  buildCritiqueRequest,
+  buildRevisionRequest,
+  forbiddenTechLint,
+  parseCritique,
+} from './answerCritique.js';
 import { Breaker } from './breaker.js';
 import { AnswerCache } from './cache.js';
 import { noKnowledgeLine, SLEEP_LINES, WITTY, witty, WittyException, type ErrorCode } from './errors.js';
@@ -68,6 +74,15 @@ const MAX_QUESTION_CHARS = 8_000;
  * on timeout the request fails open to the deterministic regex path below.
  */
 const REWRITE_TIMEOUT_MS = 6_000;
+/**
+ * Bounds on the post-answer review pass. The answer is already with the user when
+ * these run, so they only delay stream close — but a hung provider must never hold
+ * the connection. Both fail open to the original answer.
+ */
+const CRITIQUE_TIMEOUT_MS = 8_000;
+const REVISION_TIMEOUT_MS = 20_000;
+/** Answers shorter than this have nothing worth reviewing (courtesies, one-liners). */
+const MIN_REVIEWABLE_ANSWER_CHARS = 300;
 
 /** Heuristic: is this message a short follow-up that needs the prior question for context? */
 function isFollowUp(text: string): boolean {
@@ -394,12 +409,16 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // grounded prompt fits under that tier's per-minute token ceiling. Paid tiers (the
     // funded OpenRouter primary) have a 1M context and get the full evidence.
     const firstUsable = eligibleTiers(keys, !!image).find((t) => breaker.isUsable(t.id));
+    const evidenceBudget = evidenceBudgetFor(firstUsable);
+    // One style seed for the answer AND any later revision of it — a fresh seed would
+    // shift the voice instructions while the revision is told to keep the same voice.
+    const styleSeed = pickStyleSeed();
     const result = await runChain(
       {
         system: buildSystemPrompt(grounding.mode, grounding, {
           questionClass: questionClass(question),
-          styleSeed: pickStyleSeed(),
-          evidenceChars: evidenceBudgetFor(firstUsable),
+          styleSeed,
+          evidenceChars: evidenceBudget,
         }),
         history: picked,
         userContent: buildUserContent(question, grounding),
@@ -431,13 +450,107 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // the written answer does not reflect (deterministic, fail-open — see the function).
     citations = filterUnusedCitations(result.text, citations);
 
-    // A message the understanding pass flagged as a follow-up is never cached as a
-    // standalone oracle: its answer only makes sense against this conversation.
-    if (cacheable && !understanding?.followUp) {
-      cache.set(question, { text: result.text, mode: grounding.mode, citations });
-    }
     sseWrite(res, 'meta', { mode: grounding.mode, citations, tier: result.tierId });
     sseWrite(res, 'done', {});
+
+    // 5. Adversarial review (stream-then-revise). The answer is already with the
+    //    user; a reviewer pass now checks it against the evidence — factual fidelity,
+    //    forbidden technology, and (for builder questions) whether the best-fit
+    //    primitive was chosen — and a revise verdict triggers one rewrite, delivered
+    //    as a `revision` event that replaces the streamed text. Fail-open throughout:
+    //    any error, timeout or garbled reply ships the original answer. Skipped where
+    //    there is nothing worth checking (ungrounded, image, constrained, or trivially
+    //    short answers) so the review never burns quota needed by answers.
+    let finalText = result.text;
+    let finalCitations = citations;
+    // (mode 'none' never reaches here — the no-knowledge branch returned already.)
+    const reviewable =
+      hasKeys && !constrained && !image && result.text.trim().length >= MIN_REVIEWABLE_ANSWER_CHARS;
+    if (reviewable) {
+      try {
+        // Deterministic observability signal alongside the model review — a lint hit
+        // is not itself a verdict (mentioning Lightning as critique is legitimate).
+        const lint = forbiddenTechLint(result.text);
+        if (lint.length > 0) console.info(`[chat] forbidden-tech lint: ${lint.join(', ')}`);
+
+        // The reviewer judges the answer against the evidence AS THE ANSWER MODEL SAW
+        // it (same free-tier trim) — flagging an omission against evidence the writer
+        // never received would produce unfair revisions.
+        const answerEvidence =
+          evidenceBudget !== undefined && grounding.evidenceText.length > evidenceBudget
+            ? `${grounding.evidenceText.slice(0, evidenceBudget)}…`
+            : grounding.evidenceText;
+        const cReq = buildCritiqueRequest(question, answerEvidence, result.text);
+        let critiqueErr: unknown;
+        const cRes = await Promise.race([
+          runChain(
+            { system: cReq.system, history: [], userContent: cReq.userContent },
+            { keys, breaker, signal: controller.signal, onDelta: () => undefined },
+          ).catch((e: unknown) => {
+            critiqueErr = e;
+            return null;
+          }),
+          new Promise<null>((resolveRace) =>
+            setTimeout(() => {
+              critiqueErr = critiqueErr ?? new Error(`critique timed out after ${CRITIQUE_TIMEOUT_MS}ms`);
+              resolveRace(null);
+            }, CRITIQUE_TIMEOUT_MS),
+          ),
+        ]);
+        const critique = cRes ? parseCritique(cRes.text) : undefined;
+        if (!critique) {
+          const why = cRes
+            ? `unparseable reply: ${cRes.text.slice(0, 120).replace(/\s+/g, ' ')}`
+            : `call failed: ${critiqueErr instanceof Error ? critiqueErr.message : String(critiqueErr)}`;
+          console.info(`[chat] critique: unavailable (${why}) — original answer stands`);
+        } else if (critique.verdict === 'pass') {
+          console.info('[chat] critique: pass');
+        }
+        if (critique?.verdict === 'revise') {
+          console.info(
+            `[chat] critique: revise (${critique.kind ?? 'unclassified'}) — ${critique.issues.join('; ')}`,
+          );
+          const rReq = buildRevisionRequest(question, result.text, critique);
+          const rRes = await Promise.race([
+            runChain(
+              {
+                // Same persona prompt the answer was written under — the revision must
+                // stay in voice and grounded in the same evidence.
+                system: buildSystemPrompt(grounding.mode, grounding, {
+                  questionClass: questionClass(question),
+                  styleSeed,
+                  evidenceChars: evidenceBudget,
+                }),
+                history: picked,
+                userContent: rReq.userContent,
+              },
+              { keys, breaker, signal: controller.signal, onDelta: () => undefined },
+            ).catch(() => null),
+            new Promise<null>((resolveRace) => setTimeout(() => resolveRace(null), REVISION_TIMEOUT_MS)),
+          ]);
+          const revised = rRes?.text.trim();
+          // Guard: an empty or drastically truncated revision is never an improvement.
+          if (revised && revised.length >= Math.floor(result.text.trim().length * 0.5)) {
+            finalText = revised;
+            // The usage floor was applied to the draft; re-run it against the revision
+            // so the sources shown (and cached) match the text actually displayed.
+            finalCitations = filterUnusedCitations(finalText, citations);
+            sseWrite(res, 'revision', { text: finalText, citations: finalCitations });
+          }
+        }
+      } catch (reviewErr) {
+        // Fail open: the original answer stands.
+        console.warn('[chat] critique failed:', reviewErr instanceof Error ? reviewErr.message : reviewErr);
+      }
+    }
+
+    // A message the understanding pass flagged as a follow-up is never cached as a
+    // standalone oracle: its answer only makes sense against this conversation. The
+    // write happens after the review pass so future visitors are served the revised
+    // answer, not the pre-review draft.
+    if (cacheable && !understanding?.followUp) {
+      cache.set(question, { text: finalText, mode: grounding.mode, citations: finalCitations });
+    }
     finish();
   } catch (err) {
     if (err instanceof WittyException) {

@@ -253,6 +253,11 @@ export function App() {
       onMeta: (meta) => {
         if (meta.citations) patchAssistant({ citations: meta.citations });
       },
+      onRevision: (text, citations) => {
+        // The review pass refined the answer after streaming: swap the body wholesale,
+        // along with the sources re-filtered against the revised text.
+        patchAssistant({ content: text, revised: true, ...(citations ? { citations } : {}) });
+      },
       onError: (err) => {
         setAwaitingFirstToken(false);
         patchAssistant({ content: err.message, errorCode: err.code, streaming: false });

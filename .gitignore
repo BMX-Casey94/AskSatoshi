@@ -8,3 +8,7 @@ dist/
 Thumbs.db
 server/data/runtime/
 .ops/
+# Eval harness run artefacts (the question set eval-questions.json IS committed)
+server/scripts/eval-report.json
+server/scripts/eval-baseline.json
+server/scripts/eval-after.json

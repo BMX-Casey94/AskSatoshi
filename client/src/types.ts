@@ -27,6 +27,8 @@ export interface Message {
   errorCode?: string;
   /** True while tokens are still arriving. */
   streaming?: boolean;
+  /** True when the server's review pass replaced the streamed answer with a refined version. */
+  revised?: boolean;
 }
 
 export interface Thread {

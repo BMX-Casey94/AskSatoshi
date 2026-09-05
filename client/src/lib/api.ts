@@ -12,6 +12,13 @@ export interface ChatHandlers {
   onDone: () => void;
   /** Pre-grounding status, e.g. the MCP child is still waking up. */
   onStatus?: (status: { phase?: string }) => void;
+  /**
+   * The server's post-answer review pass refined the answer: replace the full text
+   * (and the citations, re-filtered against the revised text). Arrives after
+   * meta/done (stream-then-revise); the stream stays open until the review resolves,
+   * so handlers must tolerate it landing after onDone.
+   */
+  onRevision?: (text: string, citations?: Citation[]) => void;
 }
 
 interface ChatMessagePayload {
@@ -136,6 +143,11 @@ export async function streamChat(
         break;
       case 'status':
         handlers.onStatus?.(payload as { phase?: string });
+        break;
+      case 'revision':
+        if (typeof payload.text === 'string') {
+          handlers.onRevision?.(payload.text, (payload as { citations?: Citation[] }).citations);
+        }
         break;
       case 'error':
         handlers.onError({

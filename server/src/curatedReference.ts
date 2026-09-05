@@ -97,7 +97,7 @@ export function isScalingQuestion(q: string): boolean {
  * question and must not match here.
  */
 const IMPLEMENTATION_BUILD =
-  /\b(implement|implementation|build(?:ing)?|develop(?:ing|ment)|application|\bapps?\b|platform|dapp|integrat(?:e|ion)|architect(?:ure)?|what (?:would|should|do) (?:you|i) (?:use|choose|recommend|implement|build)|how (?:do|would|can|should) i\b.{0,80}\b(?:build|implement|create|make|write|code|develop|integrate)|recommend (?:for|to)|stack to use|on-?chain (?:app|application|charity|platform))\b/i;
+  /\b(implement|implementation|build(?:ing)?|develop(?:ing|ment)|application|\bapps?\b|platform|dapp|integrat(?:e|ion)|architect(?:ure)?|what (?:would|should|do) (?:you|i) (?:use|choose|recommend|implement|build)|how (?:do|would|can|should) i\b.{0,80}\b(?:build|implement|create|make|write|code|develop|integrate)|recommend (?:for|to)|stack to use|on-?chain (?:app|application|charity|platform)|(?:how (?:do|would|can|should)|how to|what(?:'s| is) the best (?:way|approach))\b.{0,60}\b(?:treasury|escrow|multisig|multi-?signature|shared? control|joint control|custody|governance))\b/i;
 const IMPLEMENTATION_CRITIQUE_ONLY =
   /\b(what is|what's|whats|explain|why (?:is|was|did|does)|critique|problem with|wrong with|history of)\b.{0,40}\b(taproot|segwit|segregated witness|lightning|bip-?14[01]|bip-?341|sidechain|rollup)\b/i;
 

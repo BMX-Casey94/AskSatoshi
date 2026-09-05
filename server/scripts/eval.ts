@@ -8,7 +8,7 @@
  *   npx tsx scripts/eval.ts --only id1,id2       # run a subset
  *   npx tsx scripts/eval.ts --out <path>         # override the report path
  *
- * The five `builder` cases encode DESIRED future behaviour and may fail; the seven
+ * The nine `builder` cases encode DESIRED future behaviour and may fail; the seven
  * non-builder guards encode CURRENT behaviour and must pass. The exit code is driven
  * by the guards alone: 0 when every guard passes, 1 otherwise.
  */

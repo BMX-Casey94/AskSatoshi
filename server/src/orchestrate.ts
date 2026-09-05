@@ -19,7 +19,7 @@ import type { McpBridge } from './mcp.js';
 import type { SatoshiCorpus, CorpusDoc } from './satoshiCorpus.js';
 import { htmlToText } from './htmlText.js';
 import {
-  IMPLEMENTATION_TECH_QUERY,
+  implementationTechQuery,
   isIdentityQuestion,
   isImplementationQuestion,
   isScalingQuestion,
@@ -1184,7 +1184,7 @@ async function groundStandard(
         ? searchGrounding(question, mcp, deps.corpus, {
             variants: plan?.variants,
             originalQuestion: intent,
-            ...(isImplementationQuestion(intent) ? { techQuery: IMPLEMENTATION_TECH_QUERY } : {}),
+            ...(isImplementationQuestion(intent) ? { techQuery: implementationTechQuery(intent) } : {}),
           }).catch(() => null)
         : Promise.resolve(null);
 

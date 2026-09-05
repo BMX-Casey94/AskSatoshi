@@ -1252,6 +1252,36 @@ describe('builder option set (second-hop retrieval)', () => {
     expect(g.evidenceText).not.toContain('LATER COMMENTARY');
   });
 
+  it('appends BRC-79 to the tech hint only for market builds', async () => {
+    const paymentCalls: string[] = [];
+    await groundQuestion('How do I build a payment app?', { mcp: builderMcp(paymentCalls), corpus: null });
+    expect(paymentCalls.some((q) => q.includes('BRC-79'))).toBe(false);
+
+    const marketCalls: string[] = [];
+    await groundQuestion(
+      'What is the best architecture for building a decentralised trading platform on Bitcoin?',
+      { mcp: builderMcp(marketCalls), corpus: null },
+    );
+    expect(marketCalls.some((q) => q.includes('BRC-79'))).toBe(true);
+  });
+
+  it('appends BRC-138 for login and BRC-121 for a paid API', async () => {
+    const loginCalls: string[] = [];
+    await groundQuestion(
+      'How do I add login to my Bitcoin app so the server knows which wallet is calling?',
+      { mcp: builderMcp(loginCalls), corpus: null },
+    );
+    expect(loginCalls.some((q) => q.includes('BRC-138'))).toBe(true);
+
+    const paidCalls: string[] = [];
+    await groundQuestion('How do I build a paid API that charges a micropayment per request?', {
+      mcp: builderMcp(paidCalls),
+      corpus: null,
+    });
+    expect(paidCalls.some((q) => q.includes('BRC-121'))).toBe(true);
+    expect(paidCalls.some((q) => q.includes('BRC-31'))).toBe(false);
+  });
+
   it('never fires for non-builder questions', async () => {
     const calls: string[] = [];
     const g = await groundQuestion('Why did you design SPV proofs?', { mcp: builderMcp(calls), corpus: null });

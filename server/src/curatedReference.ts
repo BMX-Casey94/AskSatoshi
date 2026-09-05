@@ -109,6 +109,26 @@ export function isImplementationQuestion(q: string): boolean {
 /** Tech-retrieval hint so builder questions hit BRC-100 / SPV rather than a BTC prior. */
 export const IMPLEMENTATION_TECH_QUERY = 'BRC-100 BRC-62 OP_RETURN SPV wallet overlay SDK';
 
+/**
+ * Markets, exchanges and DEX builds. Kept separate from the generic builder classifier
+ * so payments, treasuries and receipts keep the short tech hint — a long AND-style
+ * query is how FTS returns nothing. BRC-79 must be in the first hop: the second hop
+ * extracts candidate ids from retrieved essay/tech hits, not from the pinned table.
+ */
+const MARKET_BUILD =
+  /\b(trad(?:e|ing|er)|exchange|dex|marketplace|order\s?book|limit order|atomic swap|otc|rfq)\b/i;
+const LOGIN_BUILD = /\b(log[\s-]?in|sign[\s-]?in|auth(?:enticate|entication)?|session)\b/i;
+const MICRO_BUILD =
+  /\b(micropayment|pay[\s-]?per[\s-]?(?:request|call|hit|api)|http\s*402|402\s*payment|paid api)\b/i;
+
+export function implementationTechQuery(question: string): string {
+  const extra: string[] = [];
+  if (MARKET_BUILD.test(question)) extra.push('BRC-79');
+  if (LOGIN_BUILD.test(question)) extra.push('BRC-138');
+  if (MICRO_BUILD.test(question)) extra.push('BRC-121');
+  return extra.length ? `${IMPLEMENTATION_TECH_QUERY} ${extra.join(' ')}` : IMPLEMENTATION_TECH_QUERY;
+}
+
 export class CuratedReference {
   private readonly mini: MiniSearch<DossierEntry>;
   private readonly all: DossierEntry[];

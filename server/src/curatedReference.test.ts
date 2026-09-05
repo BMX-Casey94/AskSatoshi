@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   CuratedReference,
+  IMPLEMENTATION_TECH_QUERY,
+  implementationTechQuery,
   isIdentityQuestion,
   isImplementationQuestion,
   isScalingQuestion,
@@ -97,6 +100,19 @@ describe('isImplementationQuestion', () => {
     // "what should I build" — custody/governance nouns anchor the intent.
     expect(isImplementationQuestion('How should three trustees share control of a treasury on-chain?')).toBe(true);
     expect(isImplementationQuestion('What is the best way to structure an escrow between two parties?')).toBe(true);
+    expect(
+      isImplementationQuestion(
+        'What is the best architecture for building a decentralised trading platform on Bitcoin?',
+      ),
+    ).toBe(true);
+    expect(
+      isImplementationQuestion(
+        'How do I add login to my Bitcoin app so the server knows which wallet is calling?',
+      ),
+    ).toBe(true);
+    expect(isImplementationQuestion('How do I build a paid API that charges a micropayment per request?')).toBe(
+      true,
+    );
   });
 
   it('lets critique and definition of BTC features through as non-builder questions', () => {
@@ -111,6 +127,60 @@ describe('isImplementationQuestion', () => {
 
   it('classifies builder questions as facts so the answer does not hedge', () => {
     expect(questionClass('How do I build a charity app on chain?')).toBe('fact');
+  });
+});
+
+describe('implementationTechQuery', () => {
+  it('keeps the generic builder hint for ordinary builds', () => {
+    expect(implementationTechQuery('How do I accept BSV payments in my web app?')).toBe(
+      IMPLEMENTATION_TECH_QUERY,
+    );
+    expect(implementationTechQuery('How should three trustees share control of a treasury on-chain?')).toBe(
+      IMPLEMENTATION_TECH_QUERY,
+    );
+  });
+
+  it('adds BRC-79 when the build is a market, exchange or DEX', () => {
+    const q = 'What is the best architecture for building a decentralised trading platform on Bitcoin?';
+    const query = implementationTechQuery(q);
+    expect(query).toContain('BRC-79');
+    expect(query.startsWith(IMPLEMENTATION_TECH_QUERY)).toBe(true);
+    expect(implementationTechQuery('How do I build a token exchange with an on-chain settlement layer?')).toContain(
+      'BRC-79',
+    );
+  });
+
+  it('adds BRC-138 for app login and BRC-121 for a paid API, not BRC-31', () => {
+    expect(
+      implementationTechQuery(
+        'How do I add login to my Bitcoin app so the server knows which wallet is calling?',
+      ),
+    ).toContain('BRC-138');
+    const paid = implementationTechQuery('How do I build a paid API that charges a micropayment per request?');
+    expect(paid).toContain('BRC-121');
+    expect(paid).not.toContain('BRC-31');
+    expect(
+      implementationTechQuery('What is the best way to structure an escrow between a buyer and a seller with a refund window?'),
+    ).toBe(IMPLEMENTATION_TECH_QUERY);
+  });
+});
+
+describe('implementation-record.json', () => {
+  it('maps marketplace builds to atomic UTXO settlement, not a compiler or identity token', () => {
+    const path = join(dirname(fileURLToPath(import.meta.url)), '..', 'data', 'implementation-record.json');
+    const rec = JSON.parse(readFileSync(path, 'utf8')) as { evidenceText: string };
+    expect(rec.evidenceText).toMatch(/DECISION TABLE/);
+    expect(rec.evidenceText).toMatch(/BRC-79/);
+    expect(rec.evidenceText).toMatch(/atomic/i);
+    expect(rec.evidenceText).toMatch(/signed UTXO/i);
+    expect(rec.evidenceText).toMatch(/BRC-174 name tokens are identity binding, not a trading engine/);
+    expect(rec.evidenceText).toMatch(/2-of-2/);
+    expect(rec.evidenceText).toMatch(/nLockTime/);
+    expect(rec.evidenceText).toMatch(/BRC-138/);
+    expect(rec.evidenceText).toMatch(/BRC-121/);
+    expect(rec.evidenceText).toMatch(/BRC-105/);
+    expect(rec.evidenceText).not.toMatch(/x402 \(BRC-31 authenticated/);
+    expect(rec.evidenceText).toMatch(/BRC-31 is Authrite mutual authentication, not a payment protocol/);
   });
 });
 

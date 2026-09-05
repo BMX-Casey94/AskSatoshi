@@ -50,6 +50,46 @@
     }
   },
   {
+    "id": "builder-trading-platform",
+    "question": "What is the best architecture for building a decentralised trading platform on Bitcoin?",
+    "expect": {
+      "mustMention": ["BRC-79"],
+      "mustNotMention": [],
+      "minChars": 200,
+      "builder": true
+    }
+  },
+  {
+    "id": "builder-two-party-escrow",
+    "question": "What is the best way to structure an escrow between a buyer and a seller with a refund window?",
+    "expect": {
+      "mustMention": ["nLockTime"],
+      "mustNotMention": [],
+      "minChars": 200,
+      "builder": true
+    }
+  },
+  {
+    "id": "builder-app-login",
+    "question": "How do I add login to my Bitcoin app so the server knows which wallet is calling?",
+    "expect": {
+      "mustMention": ["BRC-138"],
+      "mustNotMention": [],
+      "minChars": 200,
+      "builder": true
+    }
+  },
+  {
+    "id": "builder-paid-api",
+    "question": "How do I build a paid API that charges a micropayment per request?",
+    "expect": {
+      "mustMention": ["BRC-121"],
+      "mustNotMention": [],
+      "minChars": 200,
+      "builder": true
+    }
+  },
+  {
     "id": "what-is-beef",
     "question": "What is BEEF?",
     "expect": {

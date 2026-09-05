@@ -25,6 +25,12 @@ describe('buildCritiqueRequest', () => {
     const req = buildCritiqueRequest(question, evidence, answer);
     expect(req.system).toMatch(/compiler frontend or SDK \(Rúnar, sCrypt, @bsv\/sdk\) is an implementation OF a primitive, not a rival to it/);
     expect(req.system).toMatch(/pinned decision table, its default wins/);
+    expect(req.system).toMatch(/marketplace or DEX default/);
+    expect(req.system).toMatch(/Identity tokens are not a trading engine/);
+    expect(req.system).toMatch(/two-party escrow default/);
+    expect(req.system).toMatch(/BRC-138/);
+    expect(req.system).toMatch(/BRC-121/);
+    expect(req.system).toMatch(/Authrite is not a payment protocol/);
   });
 
   it('states the strict single-line JSON contract', () => {

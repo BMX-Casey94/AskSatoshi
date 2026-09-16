@@ -7,18 +7,15 @@ import type { AttachedImage, Citation, ActivityResponse, StatusResponse, Subject
 
 export interface ChatHandlers {
   onDelta: (text: string) => void;
-  onMeta: (meta: { mode?: string; citations?: Citation[]; tier?: string }) => void;
+  onMeta: (meta: { mode?: string; citations?: Citation[]; tier?: string; revised?: boolean }) => void;
   onError: (err: { code: string; message: string; retryAfter?: string }) => void;
   onDone: () => void;
-  /** Pre-grounding status, e.g. the MCP child is still waking up. */
-  onStatus?: (status: { phase?: string }) => void;
   /**
-   * The server's post-answer review pass refined the answer: replace the full text
-   * (and the citations, re-filtered against the revised text). Arrives after
-   * meta/done (stream-then-revise); the stream stays open until the review resolves,
-   * so handlers must tolerate it landing after onDone.
+   * Pre-delivery status, e.g. the MCP child is still waking up ('warming') or the
+   * closed-door review pass is running ('reviewing'). The answer itself arrives as
+   * a single delta once settled — drafts are never streamed.
    */
-  onRevision?: (text: string, citations?: Citation[]) => void;
+  onStatus?: (status: { phase?: string }) => void;
 }
 
 interface ChatMessagePayload {
@@ -139,15 +136,10 @@ export async function streamChat(
         if (typeof payload.text === 'string') handlers.onDelta(payload.text);
         break;
       case 'meta':
-        handlers.onMeta(payload as { mode?: string; citations?: Citation[]; tier?: string });
+        handlers.onMeta(payload as { mode?: string; citations?: Citation[]; tier?: string; revised?: boolean });
         break;
       case 'status':
         handlers.onStatus?.(payload as { phase?: string });
-        break;
-      case 'revision':
-        if (typeof payload.text === 'string') {
-          handlers.onRevision?.(payload.text, (payload as { citations?: Citation[] }).citations);
-        }
         break;
       case 'error':
         handlers.onError({

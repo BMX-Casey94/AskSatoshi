@@ -17,6 +17,7 @@ import {
   buildCritiqueRequest,
   buildRevisionRequest,
   forbiddenTechLint,
+  isAcceptableRevision,
   parseCritique,
 } from './answerCritique.js';
 import { Breaker } from './breaker.js';
@@ -76,9 +77,9 @@ const MAX_QUESTION_CHARS = 8_000;
  */
 const REWRITE_TIMEOUT_MS = 6_000;
 /**
- * Bounds on the post-answer review pass. The answer is already with the user when
- * these run, so they only delay stream close — but a hung provider must never hold
- * the connection. Both fail open to the original answer.
+ * Bounds on the pre-delivery review pass. Review runs closed-door — the draft is
+ * buffered, never streamed — so these bounds directly shape time-to-answer; a hung
+ * provider must never hold the request. Both fail open to the original answer.
  */
 const CRITIQUE_TIMEOUT_MS = 8_000;
 const REVISION_TIMEOUT_MS = 20_000;
@@ -416,6 +417,10 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // keep the same voice.
     const styleSeed = pickStyleSeed();
     const invitationSeed = pickInvitationSeed();
+    // The draft is generated closed-door: tokens are buffered, never streamed, so the
+    // user only ever sees the final reviewed answer. Buffering also makes mid-stream
+    // provider failover safe — nothing was shown, so a fresh attempt cannot double a
+    // visible answer.
     const result = await runChain(
       {
         system: buildSystemPrompt(grounding.mode, grounding, {
@@ -432,7 +437,8 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
         keys,
         breaker,
         signal: controller.signal,
-        onDelta: (text) => sseWrite(res, 'delta', { text }),
+        onDelta: () => undefined,
+        buffered: true,
       },
     );
 
@@ -450,27 +456,23 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
       // result is treated as a filter miss, not a reason to show zero sources.
       if (keep && keep.length > 0) citations = keep.map((i) => citations[i]!).filter(Boolean);
     }
-    // Usage floor: relevance to the question is not usage in the answer. Drop sources
-    // the written answer does not reflect (deterministic, fail-open — see the function).
-    citations = filterUnusedCitations(result.text, citations);
-
-    sseWrite(res, 'meta', { mode: grounding.mode, citations, tier: result.tierId });
-    sseWrite(res, 'done', {});
-
-    // 5. Adversarial review (stream-then-revise). The answer is already with the
-    //    user; a reviewer pass now checks it against the evidence — factual fidelity,
-    //    forbidden technology, and (for builder questions) whether the best-fit
-    //    primitive was chosen — and a revise verdict triggers one rewrite, delivered
-    //    as a `revision` event that replaces the streamed text. Fail-open throughout:
-    //    any error, timeout or garbled reply ships the original answer. Skipped where
-    //    there is nothing worth checking (ungrounded, image, constrained, or trivially
-    //    short answers) so the review never burns quota needed by answers.
+    // 5. Adversarial review, closed-door. The draft has NOT been shown to the user;
+    //    a reviewer pass checks it against the evidence — factual fidelity, forbidden
+    //    technology, and (for builder questions) whether the best-fit primitive was
+    //    chosen — and a revise verdict triggers one rewrite. Only the settled text is
+    //    ever delivered. Fail-open throughout: any error, timeout or garbled reply
+    //    ships the original draft. Skipped where there is nothing worth checking
+    //    (ungrounded, image, constrained, or trivially short answers) so the review
+    //    never burns quota needed by answers.
     let finalText = result.text;
-    let finalCitations = citations;
+    let wasRevised = false;
     // (mode 'none' never reaches here — the no-knowledge branch returned already.)
     const reviewable =
       hasKeys && !constrained && !image && result.text.trim().length >= MIN_REVIEWABLE_ANSWER_CHARS;
     if (reviewable) {
+      // The wait from here is review, not retrieval — tell the client so its progress
+      // label stays honest instead of claiming tokens are flowing.
+      sseWrite(res, 'status', { phase: 'reviewing' });
       try {
         // Deterministic observability signal alongside the model review — a lint hit
         // is not itself a verdict (mentioning Lightning as critique is legitimate).
@@ -529,18 +531,16 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
                 history: picked,
                 userContent: rReq.userContent,
               },
-              { keys, breaker, signal: controller.signal, onDelta: () => undefined },
+              { keys, breaker, signal: controller.signal, onDelta: () => undefined, buffered: true },
             ).catch(() => null),
             new Promise<null>((resolveRace) => setTimeout(() => resolveRace(null), REVISION_TIMEOUT_MS)),
           ]);
           const revised = rRes?.text.trim();
-          // Guard: an empty or drastically truncated revision is never an improvement.
-          if (revised && revised.length >= Math.floor(result.text.trim().length * 0.5)) {
+          // Guard on corruption, not length: a revision cut off by the output-token
+          // cap is never an improvement; a deliberately shorter or longer one is.
+          if (isAcceptableRevision(revised, rRes?.truncated ?? false)) {
             finalText = revised;
-            // The usage floor was applied to the draft; re-run it against the revision
-            // so the sources shown (and cached) match the text actually displayed.
-            finalCitations = filterUnusedCitations(finalText, citations);
-            sseWrite(res, 'revision', { text: finalText, citations: finalCitations });
+            wasRevised = true;
           }
         }
       } catch (reviewErr) {
@@ -548,6 +548,21 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
         console.warn('[chat] critique failed:', reviewErr instanceof Error ? reviewErr.message : reviewErr);
       }
     }
+
+    // Usage floor: relevance to the question is not usage in the answer. Drop sources
+    // the settled text does not reflect (deterministic, fail-open — see the function).
+    // Runs once, after review, so the sources shown and cached match the delivered text.
+    const finalCitations = filterUnusedCitations(finalText, citations);
+
+    // 6. Deliver the settled answer in one shot — the same shape the cache path uses.
+    sseWrite(res, 'delta', { text: finalText });
+    sseWrite(res, 'meta', {
+      mode: grounding.mode,
+      citations: finalCitations,
+      tier: result.tierId,
+      revised: wasRevised,
+    });
+    sseWrite(res, 'done', {});
 
     // A message the understanding pass flagged as a follow-up is never cached as a
     // standalone oracle: its answer only makes sense against this conversation. The

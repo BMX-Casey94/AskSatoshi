@@ -3,6 +3,7 @@ import {
   buildCritiqueRequest,
   buildRevisionRequest,
   forbiddenTechLint,
+  isAcceptableRevision,
   parseCritique,
   type Critique,
 } from './answerCritique.js';
@@ -48,14 +49,14 @@ describe('buildCritiqueRequest', () => {
     expect(req.userContent).toContain(`ANSWER:\n${answer}`);
   });
 
-  it('caps the evidence at 6,000 chars and the answer at 8,000 chars', () => {
+  it('caps the evidence at 6,000 chars and the answer at 16,000 chars', () => {
     const longEvidence = 'e'.repeat(7_000);
-    const longAnswer = 'a'.repeat(9_000);
+    const longAnswer = 'a'.repeat(17_000);
     const req = buildCritiqueRequest(question, longEvidence, longAnswer);
     expect(req.userContent).not.toContain(longEvidence);
     expect(req.userContent).not.toContain(longAnswer);
     expect(req.userContent).toContain(`${'e'.repeat(6_000)}…`);
-    expect(req.userContent).toContain(`${'a'.repeat(8_000)}…`);
+    expect(req.userContent).toContain(`${'a'.repeat(16_000)}…`);
   });
 
   it('leaves short evidence and answers untruncated', () => {
@@ -86,9 +87,19 @@ describe('buildRevisionRequest', () => {
 
   it('instructs a bare, voice-preserving rewrite that keeps citation markers', () => {
     const { userContent } = buildRevisionRequest(question, answer, critique);
-    expect(userContent).toMatch(/same voice, structure and approximate length/);
+    // Length is deliberately NOT pinned to the draft: corrections may legitimately
+    // shorten (padding removed) or lengthen (omissions restored) the answer.
+    expect(userContent).toMatch(/same voice/);
+    expect(userContent).not.toMatch(/approximate length/);
     expect(userContent).toMatch(/Preserve every \[n\] citation marker/);
     expect(userContent).toMatch(/Output ONLY the revised answer text/);
+  });
+
+  it('does not claim the draft was already shown to the user', () => {
+    // Closed-door review: the draft never reaches the chat, so the prompt must not
+    // describe it as streamed — that wording was both inaccurate and a leak risk.
+    const { userContent } = buildRevisionRequest(question, answer, critique);
+    expect(userContent).not.toMatch(/already streamed/i);
   });
 
   it('omits the correction line when the critique has none', () => {
@@ -97,11 +108,32 @@ describe('buildRevisionRequest', () => {
     expect(userContent).toContain(`- ${critique.issues[0]}`);
   });
 
-  it('caps the draft at 8,000 chars', () => {
-    const longAnswer = 'a'.repeat(9_000);
+  it('caps the draft at 16,000 chars', () => {
+    const longAnswer = 'a'.repeat(17_000);
     const { userContent } = buildRevisionRequest(question, longAnswer, critique);
     expect(userContent).not.toContain(longAnswer);
-    expect(userContent).toContain(`${'a'.repeat(8_000)}…`);
+    expect(userContent).toContain(`${'a'.repeat(16_000)}…`);
+  });
+});
+
+describe('isAcceptableRevision', () => {
+  it('rejects an empty or missing revision', () => {
+    expect(isAcceptableRevision(undefined, false)).toBe(false);
+    expect(isAcceptableRevision('', false)).toBe(false);
+  });
+
+  it('rejects a revision cut off by the output-token cap, however long', () => {
+    // Truncation — not shortness — is the corruption signal: a cut-off revision
+    // must never replace a complete draft.
+    expect(isAcceptableRevision('x'.repeat(12_000), true)).toBe(false);
+  });
+
+  it('accepts a deliberately short revision that finished cleanly', () => {
+    expect(isAcceptableRevision('Short, correct answer.', false)).toBe(true);
+  });
+
+  it('accepts a revision longer than the draft', () => {
+    expect(isAcceptableRevision('y'.repeat(20_000), false)).toBe(true);
   });
 });
 

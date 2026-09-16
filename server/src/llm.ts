@@ -41,12 +41,22 @@ export interface ChainRequest {
   image?: ImageInput;
 }
 
+export interface ProviderResult {
+  text: string;
+  /**
+   * True when the provider stopped at the output-token cap: the text is cut off,
+   * not complete. Callers use this to distinguish a deliberately short answer from
+   * a corrupted one — only the latter must never replace a complete draft.
+   */
+  truncated: boolean;
+}
+
 export type ProviderFn = (
   tier: ModelTier,
   req: ChainRequest,
   onDelta: (text: string) => void,
   signal: AbortSignal,
-) => Promise<string>;
+) => Promise<ProviderResult>;
 
 const FIRST_TOKEN_TIMEOUT_MS = 45_000;
 /**
@@ -106,7 +116,7 @@ export function createGeminiProvider(apiKey: string): ProviderFn {
       if (finish === 'MAX_TOKENS') truncated = true;
     }
     if (truncated) console.warn('[llm] gemini hit MAX_TOKENS — answer may be cut short');
-    return full;
+    return { text: full, truncated };
   };
 }
 
@@ -159,7 +169,7 @@ export function createOpenAiCompatProvider(provider: 'groq' | 'openrouter', apiK
       if (choice?.finish_reason === 'length') truncated = true;
     }
     if (truncated) console.warn(`[llm] ${provider} hit max tokens — answer may be cut short`);
-    return full;
+    return { text: full, truncated };
   };
 }
 
@@ -204,6 +214,12 @@ export interface RunChainOptions {
   breaker: Breaker;
   onDelta: (text: string) => void;
   signal?: AbortSignal;
+  /**
+   * True when tokens are buffered server-side instead of streamed to the client.
+   * A mid-stream provider failure can then fail over safely: nothing was ever
+   * shown, so a fresh attempt cannot double a visible answer.
+   */
+  buffered?: boolean;
   /** Injectable for tests; defaults to real providers built from `keys`. */
   providers?: Partial<Record<ProviderId, ProviderFn>>;
 }
@@ -211,7 +227,7 @@ export interface RunChainOptions {
 export async function runChain(
   req: ChainRequest,
   opts: RunChainOptions,
-): Promise<{ text: string; tierId: string }> {
+): Promise<{ text: string; tierId: string; truncated: boolean }> {
   const tiers = eligibleTiers(opts.keys, !!req.image);
   const providers: Partial<Record<ProviderId, ProviderFn>> =
     opts.providers ?? {
@@ -241,7 +257,7 @@ export async function runChain(
     if (!provider) continue;
     let sentAny = false;
     try {
-      const text = await withIdleTimeout(
+      const result = await withIdleTimeout(
         (signal, onDelta) =>
           provider(
             tier,
@@ -257,14 +273,15 @@ export async function runChain(
         opts.signal,
         FIRST_TOKEN_FAILOVER_MS,
       );
-      if (!text.trim()) throw new Error('EMPTY_RESPONSE');
+      if (!result.text.trim()) throw new Error('EMPTY_RESPONSE');
       opts.breaker.markOk(tier.id);
-      return { text, tierId: tier.id };
+      return { text: result.text, tierId: tier.id, truncated: result.truncated };
     } catch (err) {
       if (err instanceof Error && err.message === 'CLIENT_DISCONNECTED') throw err;
-      // Mid-stream failure after tokens were sent: failing over would double the
-      // answer, so we end the request with a witty error instead.
-      if (sentAny) throw new WittyException(witty('PROVIDER_ERROR'));
+      // Mid-stream failure after tokens reached the client: failing over would
+      // double the visible answer, so a streaming request ends with a witty error.
+      // Buffered requests have shown nothing, so failover remains safe.
+      if (sentAny && !opts.buffered) throw new WittyException(witty('PROVIDER_ERROR'));
       const cls = classifyProviderError(err);
       // Name the tier and the classified reason so a production failure is diagnosable
       // from the journal alone, instead of surfacing only as a generic witty error.

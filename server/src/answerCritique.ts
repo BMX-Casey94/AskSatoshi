@@ -24,7 +24,10 @@ export interface Critique {
 const CRITIQUE_KINDS: readonly CritiqueKind[] = ['factual', 'forbidden', 'suboptimal'];
 
 const MAX_EVIDENCE_CHARS = 6_000;
-const MAX_ANSWER_CHARS = 8_000;
+// 16k chars (~4k tokens) covers even the longest grounded answers. Paid tiers have
+// 1M-token contexts, so this is an input-hygiene bound, not a model limit; on a
+// free tier an over-budget review call simply fails open to the original answer.
+const MAX_ANSWER_CHARS = 16_000;
 const MAX_ISSUES = 5;
 const MAX_ISSUE_CHARS = 500;
 const MAX_CORRECTION_CHARS = 2_000;
@@ -118,14 +121,15 @@ export function parseCritique(reply: string): Critique | undefined {
   return { verdict, kind, issues, correction };
 }
 
-const MAX_REVISION_ANSWER_CHARS = 8_000;
+const MAX_REVISION_ANSWER_CHARS = 16_000;
 
 /**
  * Build the revision request's user content: the question, the draft answer, and the
  * reviewer's findings, with strict rewrite instructions. The caller supplies the SAME
  * system prompt the answer was generated with (persona + evidence) — the module only
- * wraps the correction brief. Output is instructed to be the bare revised answer so it
- * can replace the streamed text wholesale.
+ * wraps the correction brief. The draft is never shown to the user (closed-door
+ * review), and length is deliberately unpinned: corrections may legitimately shorten
+ * or lengthen the answer. Output is instructed to be the bare revised answer.
  */
 export function buildRevisionRequest(
   question: string,
@@ -137,16 +141,26 @@ export function buildRevisionRequest(
     'Question:',
     question,
     '',
-    'DRAFT ANSWER (already streamed to the user; you are refining it):',
+    'DRAFT ANSWER (not yet shown to the user; you are refining it):',
     truncate(answer, MAX_REVISION_ANSWER_CHARS),
     '',
     'REVIEWER FINDINGS — apply every one:',
     findings,
     ...(critique.correction ? [`Required correction: ${critique.correction}`] : []),
     '',
-    'Rewrite the answer applying the corrections. Keep the same voice, structure and approximate length. Preserve every [n] citation marker that still supports its claim, and do not introduce new markers or any fact not present in the EVIDENCE. Output ONLY the revised answer text.',
+    'Rewrite the answer applying the corrections. Keep the same voice; let length and structure follow the corrections rather than the draft. Preserve every [n] citation marker that still supports its claim, and do not introduce new markers or any fact not present in the EVIDENCE. Output ONLY the revised answer text.',
   ].join('\n');
   return { userContent };
+}
+
+/**
+ * Acceptance guard for a revised answer. The old ratio floor (≥50% of the draft)
+ * confused shortness with corruption: a deliberately concise revision is a valid
+ * outcome, while a revision cut off by the output-token cap is never an improvement.
+ * Accept any non-empty revision the provider finished cleanly.
+ */
+export function isAcceptableRevision(revised: string | undefined, truncated: boolean): revised is string {
+  return !!revised && !truncated;
 }
 
 /**

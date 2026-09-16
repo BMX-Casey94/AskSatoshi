@@ -22,7 +22,7 @@ const SOURCE_CLASS_LABEL: Record<SourceClass, string> = {
 interface Props {
   messages: Message[];
   awaitingFirstToken: boolean;
-  chatPhase: 'warming' | 'typing';
+  chatPhase: 'warming' | 'typing' | 'reviewing';
   onRetry?: (failedAssistantId: string) => void;
   sending?: boolean;
 }

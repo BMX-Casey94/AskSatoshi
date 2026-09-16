@@ -13,7 +13,7 @@ import { CloseIcon, DownloadIcon, HomeIcon, MenuIcon, PlusIcon } from './icons';
 interface Props {
   messages: Message[];
   awaitingFirstToken: boolean;
-  chatPhase: 'warming' | 'typing';
+  chatPhase: 'warming' | 'typing' | 'reviewing';
   sending: boolean;
   composerValue: string;
   onComposerChange: (v: string) => void;

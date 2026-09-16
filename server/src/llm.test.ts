@@ -11,10 +11,10 @@ const REQ: ChainRequest = {
 
 const keys = { gemini: 'g', groq: 'q' };
 
-function okProvider(text: string): ProviderFn {
+function okProvider(text: string, truncated = false): ProviderFn {
   return async (_tier, _req, onDelta) => {
     onDelta(text);
-    return text;
+    return { text, truncated };
   };
 }
 
@@ -97,7 +97,7 @@ describe('runChain', () => {
             reject(new Error('IDLE_TIMEOUT'));
           });
         });
-        return '';
+        return { text: '', truncated: false };
       };
       const promise = runChain(REQ, {
         keys,
@@ -131,6 +131,44 @@ describe('runChain', () => {
     expect(deltas).toEqual(['partial…']);
   });
 
+  it('fails over after partial output when buffered (nothing reached the client)', async () => {
+    // Closed-door generation buffers tokens server-side, so a mid-stream provider
+    // failure cannot double a visible answer — failing over is safe and correct.
+    const halfProvider: ProviderFn = async (_tier, _req, onDelta) => {
+      onDelta('partial…');
+      throw { status: 500, message: 'boom' };
+    };
+    const result = await runChain(REQ, {
+      keys,
+      breaker: new Breaker(),
+      onDelta: () => undefined,
+      buffered: true,
+      providers: { gemini: halfProvider, groq: okProvider('complete answer from groq') },
+    });
+    expect(result.tierId).toBe('groq-gpt-oss-120b');
+    expect(result.text).toBe('complete answer from groq');
+  });
+
+  it('propagates the provider truncation flag', async () => {
+    const result = await runChain(REQ, {
+      keys,
+      breaker: new Breaker(),
+      onDelta: () => undefined,
+      providers: { gemini: okProvider('cut off mid-sentence', true) },
+    });
+    expect(result.truncated).toBe(true);
+  });
+
+  it('reports no truncation when the provider finishes cleanly', async () => {
+    const result = await runChain(REQ, {
+      keys,
+      breaker: new Breaker(),
+      onDelta: () => undefined,
+      providers: { gemini: okProvider('complete') },
+    });
+    expect(result.truncated).toBe(false);
+  });
+
   it('routes image requests to a vision-capable tier', async () => {
     // With only an OpenRouter key, the vision-capable tiers are the paid primary
     // (flash-lite) then the free gemma-4-31b; the chain tries the paid primary first.
@@ -138,7 +176,7 @@ describe('runChain', () => {
     const visionProbe: ProviderFn = async (tier, _req, onDelta) => {
       seenModels.push(tier.model);
       onDelta('seen');
-      return 'seen';
+      return { text: 'seen', truncated: false };
     };
     const result = await runChain(
       { ...REQ, image: { data: 'aGk=', mimeType: 'image/png' } },

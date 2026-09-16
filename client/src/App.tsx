@@ -37,7 +37,7 @@ export function App() {
   const [composerFocused, setComposerFocused] = useState(false);
   const [sending, setSending] = useState(false);
   const [awaitingFirstToken, setAwaitingFirstToken] = useState(false);
-  const [chatPhase, setChatPhase] = useState<'warming' | 'typing'>('typing');
+  const [chatPhase, setChatPhase] = useState<'warming' | 'typing' | 'reviewing'>('typing');
   const [awakeState, setAwakeState] = useState<AwakeState>('awake');
   const [retryAfter, setRetryAfter] = useState<string | undefined>();
   const [sleepLines, setSleepLines] = useState<string[] | undefined>();
@@ -229,9 +229,11 @@ export function App() {
 
     void streamChat(historyPayload, sentImage, {
       onStatus: (status) => {
-        // 'warming' pins the warm-up line; the server's follow-up status hands back
-        // to the normal progress cycle once the warm-up window closes.
-        setChatPhase(status.phase === 'warming' ? 'warming' : 'typing');
+        // 'warming' pins the warm-up line, 'reviewing' pins the closed-door review
+        // line; any other status hands back to the normal progress cycle.
+        if (status.phase === 'warming') setChatPhase('warming');
+        else if (status.phase === 'reviewing') setChatPhase('reviewing');
+        else setChatPhase('typing');
       },
       onDelta: (delta) => {
         setAwaitingFirstToken(false);
@@ -251,12 +253,12 @@ export function App() {
         }));
       },
       onMeta: (meta) => {
-        if (meta.citations) patchAssistant({ citations: meta.citations });
-      },
-      onRevision: (text, citations) => {
-        // The review pass refined the answer after streaming: swap the body wholesale,
-        // along with the sources re-filtered against the revised text.
-        patchAssistant({ content: text, revised: true, ...(citations ? { citations } : {}) });
+        // The answer arrives once, settled by the closed-door review; `revised`
+        // marks answers the reviewer rewrote, so the badge reflects the final text.
+        patchAssistant({
+          ...(meta.citations ? { citations: meta.citations } : {}),
+          ...(meta.revised ? { revised: true } : {}),
+        });
       },
       onError: (err) => {
         setAwaitingFirstToken(false);

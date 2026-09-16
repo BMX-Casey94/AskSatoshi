@@ -197,8 +197,12 @@ export function App() {
     }
 
     // Payload: prior turns only — the server appends evidence to the question itself.
+    // Window to the server's history budget and drop blank turns (an aborted stream
+    // can leave an empty assistant bubble) so derived state can never fail validation.
+    const HISTORY_PAYLOAD_TURNS = 10; // mirrors the server's MAX_HISTORY_MESSAGES
     const historyPayload = (activeThread?.messages ?? [])
-      .filter((m) => !m.errorCode)
+      .filter((m) => !m.errorCode && m.content.trim().length > 0)
+      .slice(-HISTORY_PAYLOAD_TURNS)
       .map((m) => ({ role: m.role, content: m.content }));
     historyPayload.push({ role: 'user', content: text });
 
@@ -273,8 +277,22 @@ export function App() {
       },
     }, controller.signal)
       .catch(() => {
-        // Aborts land here; the message keeps whatever tokens arrived.
-        patchAssistant({ streaming: false });
+        // Aborts and network failures land here; the message keeps whatever tokens
+        // arrived. If none did, drop the placeholder rather than leave an empty
+        // bubble in the thread (which would also fail server validation next send).
+        setStore((s) => ({
+          ...s,
+          threads: s.threads.map((t) =>
+            t.id !== threadId
+              ? t
+              : {
+                  ...t,
+                  messages: t.messages
+                    .map((m) => (m.id === assistantMessage.id ? { ...m, streaming: false } : m))
+                    .filter((m) => m.id !== assistantMessage.id || m.content.trim().length > 0),
+                },
+          ),
+        }));
       })
       .finally(() => {
         setSending(false);

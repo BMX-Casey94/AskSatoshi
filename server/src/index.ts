@@ -12,7 +12,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
-import { z } from 'zod';
+import { chatBodySchema, MAX_QUESTION_CHARS, sanitiseMessages } from './chatRequest.js';
 import {
   buildCritiqueRequest,
   buildRevisionRequest,
@@ -69,8 +69,6 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGIN ?? 'http://localhost:5173')
 const MAX_HISTORY_MESSAGES = 10;
 const MAX_HISTORY_CHARS = 12_000;
 const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
-/** Max length of a single user message. Generous — Gemini's context window is huge. */
-const MAX_QUESTION_CHARS = 8_000;
 /**
  * Bound on the query-understanding pass. It gates grounding, so it must stay cheap:
  * on timeout the request fails open to the deterministic regex path below.
@@ -125,28 +123,8 @@ const WARMUP_SKIP_MS = 60_000;
 // Validation
 // ---------------------------------------------------------------------------
 
-const imageSchema = z.object({
-  data: z
-    .string()
-    .max(6_000_000)
-    .regex(/^[A-Za-z0-9+/=\r\n]+$/, 'invalid base64'),
-  mimeType: z.enum(['image/jpeg', 'image/png', 'image/webp']),
-});
-
-// User messages are capped; assistant history turns are longer (full answers), so
-// they get a higher ceiling. The 2,000-char user cap is enforced on the latest turn.
-const chatBodySchema = z.object({
-  messages: z
-    .array(
-      z.object({
-        role: z.enum(['user', 'assistant']),
-        content: z.string().min(1).max(MAX_QUESTION_CHARS),
-      }),
-    )
-    .min(1)
-    .max(40),
-  image: imageSchema.optional(),
-});
+// The chat request contract (schema, ceilings, history sanitising) lives in
+// chatRequest.ts so it is unit-testable without booting the server.
 
 // ---------------------------------------------------------------------------
 // App wiring
@@ -221,7 +199,11 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     res.status(400).json({ error: witty('BAD_INPUT') });
     return;
   }
-  const { messages, image } = parsed.data;
+  // Blank history turns (e.g. an empty bubble left by an aborted stream) are dropped,
+  // never rejected — history is derived state. The latest turn survives sanitising and
+  // is validated strictly just below.
+  const messages = sanitiseMessages(parsed.data.messages);
+  const { image } = parsed.data;
 
   if (image && Buffer.byteLength(image.data, 'base64') > MAX_IMAGE_BYTES) {
     res.status(400).json({ error: witty('IMAGE_REJECTED') });

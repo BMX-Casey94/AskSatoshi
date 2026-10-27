@@ -199,6 +199,78 @@ describe('diversifyEvidenceHits', () => {
     expect(packed.hits).toBe(few);
     expect(packed.leadAngle).toBeUndefined();
   });
+
+  it('keeps a primary-record cluster that theme and series caps would drop', () => {
+    const primaries: EvidenceRecord[] = [
+      row({
+        id: 'p1',
+        title: 'Alpha note — one',
+        kind: 'satoshi-primary',
+        themes: ['primary record'],
+        date: '2008-10-31',
+        excerpt: 'Root in the header.',
+      }),
+      row({
+        id: 'p2',
+        title: 'Alpha note — two',
+        kind: 'satoshi-primary',
+        themes: ['primary record'],
+        date: '2009-01-09',
+        excerpt: 'Branch links the transaction.',
+      }),
+      row({
+        id: 'p3',
+        title: 'Alpha note — three',
+        themes: ['primary record'],
+        date: '2010-07-14',
+        excerpt: 'Header commits to the root.',
+      }),
+    ];
+    const mixed = [...primaries, ...hits.slice(0, 3)];
+    const kept = diversifyEvidenceHits(mixed, question);
+    expect(kept.map((hit) => hit.id)).toEqual(['p1', 'p2', 'p3', 'tax-1', 'tax-2']);
+  });
+
+  it('does not drop primary-record hits when the final limit would otherwise exclude them', () => {
+    const packed = packBroadEvidence(
+      [
+        ...hits,
+        row({
+          id: 'p1',
+          title: 'Alpha note — one',
+          kind: 'satoshi-primary',
+          themes: ['primary record'],
+          date: '2008-10-31',
+          excerpt: 'Root in the header.',
+        }),
+        row({
+          id: 'p2',
+          title: 'Alpha note — two',
+          kind: 'satoshi-primary',
+          themes: ['primary record'],
+          date: '2009-01-09',
+          excerpt: 'Branch links the transaction.',
+        }),
+        row({
+          id: 'p3',
+          title: 'Alpha note — three',
+          kind: 'satoshi-primary',
+          themes: ['primary record'],
+          date: '2010-07-14',
+          excerpt: 'Header commits to the root.',
+        }),
+      ],
+      question,
+      () => 0.99,
+      { limit: 4 },
+    );
+    expect(
+      packed.hits
+        .filter((hit) => hit.kind === 'satoshi-primary' || hit.themes?.[0] === 'primary record')
+        .map((hit) => hit.id)
+        .sort(),
+    ).toEqual(['p1', 'p2', 'p3']);
+  });
 });
 
 describe('pickAngleSeed', () => {

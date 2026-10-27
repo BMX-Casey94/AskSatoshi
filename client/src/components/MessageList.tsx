@@ -22,6 +22,7 @@ const SOURCE_CLASS_LABEL: Record<SourceClass, string> = {
   spec: 'Spec',
   'later-commentary': 'Later commentary',
   'historical-record': 'Historical record',
+  news: 'News (CoinGeek)',
 };
 
 const NEAR_BOTTOM = 80;

@@ -13,6 +13,8 @@ import {
   normaliseEvidence,
   parseCitationFilter,
   pickInvitationSeed,
+  pickStyleSeed,
+  questionClass,
   shouldDiversifyQuestion,
 } from './orchestrate.js';
 import { SatoshiCorpus, type CorpusDoc } from './satoshiCorpus.js';
@@ -735,7 +737,10 @@ describe('prompt construction', () => {
   });
 
   it('injects a depth block that changes vocabulary only, and leaves it off by default', () => {
-    expect(buildSystemPrompt('mcp')).not.toContain('DEPTH:');
+    const persona = buildSystemPrompt('mcp');
+    expect(persona).toMatch(/Never open with "The design constraint of…"/);
+    expect(persona).toMatch(/Never open with "You are correct that…" unless the user made a claim/);
+    expect(persona).not.toContain('DEPTH:');
     const grounding = {
       mode: 'mcp' as const,
       evidenceText: 'BEEF is defined by BRC-62.',
@@ -751,6 +756,9 @@ describe('prompt construction', () => {
     expect(beginner).toMatch(/no assumed prior knowledge/);
     expect(beginner).toMatch(/technical or economic term/);
     expect(beginner).toMatch(/same sentence the first time it appears/);
+    expect(beginner).toMatch(/Never use an acronym or product name/);
+    expect(beginner).toMatch(/BEEF, SPV, UTXO/);
+    expect(beginner).toMatch(/if you cannot, leave it out/);
     expect(beginner).toMatch(/at most one everyday analogy/);
     expect(beginner).toMatch(/short paragraphs/);
     expect(beginner).toMatch(/150.300 words/);
@@ -778,6 +786,8 @@ describe('prompt construction', () => {
     expect(developer).toMatch(/code-adjacent specifics/);
     expect(developer).toMatch(/minimal rhetoric/);
     expect(developer).toMatch(/not in the EVIDENCE/);
+    expect(developer).toMatch(/field order, byte order, hash function, sibling ordering/);
+    expect(developer).toMatch(/what the specification would need to define rather than guessing/);
     expect(developer).toMatch(/Do not reuse stock phrases from earlier answers in this conversation/);
     expect(developer).toMatch(/vocabulary and depth only/);
     expect(developer).toMatch(/FOLLOW-UP INVITATION/);
@@ -791,6 +801,9 @@ describe('prompt construction', () => {
     expect(historian).toMatch(/primary record from later commentary/);
     expect(historian).toMatch(/emphasise the 2008.2011 record and the sequence of events/);
     expect(historian).toMatch(/date, thread, post or email that is not in the EVIDENCE/);
+    expect(historian).toMatch(/dated primary-record items/);
+    expect(historian).toMatch(/lead with the earliest relevant one and walk forward in time/);
+    expect(historian).toMatch(/dated record on this point is thin rather than padding/);
     expect(historian).toMatch(/Do not reuse stock phrases from earlier answers in this conversation/);
     expect(historian).toMatch(/vocabulary and depth only/);
     expect(historian).toMatch(/authorship and identity rules above stay as written/);
@@ -1695,5 +1708,329 @@ describe('broad-question evidence packing', () => {
     expect(g.evidenceText).toContain(SUPPLY);
     expect(g.evidenceText).not.toContain('TAIL principle:medium:twenty-one-million');
     expect(g.evidenceText).not.toContain('themes:');
+  });
+});
+
+describe('style seeds by question shape and depth', () => {
+  const MERKLE = 'How does a Merkle branch show that a transaction was included in a block?';
+  const GETS_RIGHT = 'Lead with what the question gets right, then correct what it compresses.';
+  const DESIGN = 'Open by restating the design constraint the question implies, then answer.';
+  const NEW_SEEDS = [
+    'Open with the single sentence that answers the question outright, then unpack it.',
+    'Open with the smallest concrete example (a two-transaction block), then generalise.',
+    'Open with what would break if the mechanism were absent, then show how it works.',
+    'Open with the quantity being proven (what is being shown, to whom), then how.',
+    'Open with the one thing people most often get wrong about it, then the mechanism.',
+  ];
+
+  function sweep(question: string, depth?: 'beginner' | 'developer' | 'historian'): string[] {
+    const seen = new Set<string>();
+    for (let i = 0; i < 24; i++) seen.add(pickStyleSeed(question, depth, () => i / 24));
+    return [...seen];
+  }
+
+  it('keeps a usable seed when called with no arguments', () => {
+    expect(pickStyleSeed().length).toBeGreaterThan(20);
+  });
+
+  it('withholds the claim opener and the design-constraint opener from how/why/what-is questions', () => {
+    for (const depth of [undefined, 'beginner', 'developer', 'historian'] as const) {
+      const seeds = sweep(MERKLE, depth);
+      expect(seeds).not.toContain(GETS_RIGHT);
+      expect(seeds).not.toContain(DESIGN);
+      expect(sweep('Why did you design SPV proofs?', depth)).not.toContain(GETS_RIGHT);
+      expect(sweep('What is a Merkle branch?', depth)).not.toContain(DESIGN);
+    }
+    const union = [
+      ...sweep(MERKLE),
+      ...sweep(MERKLE, 'beginner'),
+      ...sweep(MERKLE, 'developer'),
+      ...sweep(MERKLE, 'historian'),
+    ];
+    for (const seed of NEW_SEEDS) expect(union).toContain(seed);
+  });
+
+  it('reserves the claim opener for yes/no and loaded questions, and keeps the design-constraint opener rare', () => {
+    expect(sweep('Was Bitcoin hijacked?')).toContain(GETS_RIGHT);
+    expect(sweep('Why was Bitcoin hijacked?')).toContain(GETS_RIGHT);
+    expect(sweep('Did Satoshi mean to cap the block size?')).toContain(GETS_RIGHT);
+    expect(sweep('Tell me something about blocks')).toContain(DESIGN);
+    expect(sweep('Tell me something about blocks', 'developer')).not.toContain(DESIGN);
+    expect(sweep('Tell me something about blocks', 'beginner')).not.toContain(DESIGN);
+    expect(sweep('Tell me something about blocks', 'historian')).not.toContain(DESIGN);
+  });
+
+  it('gives each depth a different mechanism sub-pool, and standard and developer never share one', () => {
+    const depths = [undefined, 'beginner', 'developer', 'historian'] as const;
+    const pools = depths.map((depth) => sweep(MERKLE, depth).sort().join('|'));
+    expect(new Set(pools).size).toBe(4);
+    const standard = sweep(MERKLE);
+    const developer = sweep(MERKLE, 'developer');
+    expect(standard.filter((seed) => developer.includes(seed))).toEqual([]);
+    for (let i = 0; i < 12; i++) {
+      const rng = () => i / 12;
+      expect(pickStyleSeed(MERKLE, undefined, rng)).not.toBe(pickStyleSeed(MERKLE, 'developer', rng));
+    }
+  });
+});
+
+describe('depth-aware retrieval for a Merkle-branch question', () => {
+  const MERKLE = 'How does a Merkle branch show that a transaction was included in a block?';
+  const head =
+    'Byte order is little-endian. Hash function is double SHA-256. Sibling ordering places the sibling on the left when the bit is set. ';
+  const LONG_SPEC = `${head}${'abcd '.repeat(260)}BUDGET_MARK`;
+
+  const essays = [1, 2, 3, 4].map((n) => ({
+    id: `e:${n}`,
+    kind: 'essay',
+    title: `Design constraint essay ${n}`,
+    locator: `csw://essay/medium/merkle-essay-${n}`,
+    excerpt: `Essay prose ${n} about simplified payment verification and a design constraint.`,
+  }));
+
+  const specs = [
+    {
+      id: 'ex:1',
+      kind: 'example',
+      title: 'Merkle example walkthrough',
+      locator: 'bsv-blockchain/go-sdk/examples/merkle.ts:1',
+      excerpt: 'An example that walks a merkle branch without field layout.',
+    },
+    {
+      id: 't:1',
+      kind: 'test',
+      title: 'Merkle test vector',
+      locator: 'bsv-blockchain/go-sdk/test/merkle_test.go:1',
+      excerpt: 'A test vector for a merkle branch.',
+    },
+    {
+      id: 'b:62',
+      kind: 'brc',
+      title: 'BRC-62 Merkle proof',
+      locator: 'bsv-blockchain/BRCs/transactions/0062.md',
+      excerpt: 'Short excerpt: BEEF carries a merkle branch.',
+    },
+    {
+      id: 'd:1',
+      kind: 'doc',
+      title: 'Script Merkle opcode',
+      locator: 'repo://go-sdk/docs/concepts/merkle.md',
+      excerpt: 'Opcode notes for a merkle branch.',
+    },
+    {
+      id: 's:1',
+      kind: 'symbol',
+      title: 'SDK merkle branch',
+      locator: 'bsv-blockchain/go-sdk/transaction/merkle.go:20',
+      excerpt: 'Symbol docs for a merkle branch.',
+    },
+  ];
+
+  function merkleMcp(): McpBridge {
+    const bodies: Record<string, string> = {
+      'bsv-blockchain/BRCs/transactions/0062.md': LONG_SPEC,
+      'repo://go-sdk/docs/concepts/merkle.md': 'Script doc: the merkle branch is a list of sibling hashes.',
+      'bsv-blockchain/go-sdk/transaction/merkle.go:20': 'SDK: verifyMerkleBranch checks sibling ordering.',
+      'bsv-blockchain/go-sdk/examples/merkle.ts:1': 'Example prose without byte order.',
+      'bsv-blockchain/go-sdk/test/merkle_test.go:1': 'Test prose without byte order.',
+    };
+    for (const essay of essays) bodies[essay.locator] = essay.excerpt ?? '';
+    return {
+      connected: true,
+      investigate: async () => ({ claims: [], hits: [], gaps: [], contradictions: [] }),
+      searchKnowledge: async (_q: string, filters?: { kind?: string[] }) => {
+        const kinds = filters?.kind ?? [];
+        if (kinds.includes('essay')) return { hits: essays };
+        if (kinds.includes('brc') || kinds.includes('doc')) return { hits: specs };
+        return { hits: [] };
+      },
+      getResource: async (uri: string) => ({ text: bodies[uri] }),
+    } as unknown as McpBridge;
+  }
+
+  const base = 'A Merkle branch shows that a transaction was included in a block. ';
+  const merkleDocs: CorpusDoc[] = [
+    {
+      id: 'wp',
+      kind: 'post',
+      title: 'Merkle branch in the white paper',
+      date: '2008-10-31',
+      url: 'https://satoshi.nakamotoinstitute.org/bitcoin-whitepaper/',
+      text:
+        base +
+        'Transactions are hashed in a Merkle tree, with only the root included in the block hash. Obtain the Merkle branch linking the transaction to the block it is timestamped in.',
+    },
+    {
+      id: 'em',
+      kind: 'email',
+      title: 'Re: Merkle branch',
+      date: '2009-01-09',
+      url: 'https://satoshi.nakamotoinstitute.org/emails/cryptography/merkle/',
+      text: base + 'The header stores the Merkle root that the branch proves against.',
+    },
+    {
+      id: 'fo',
+      kind: 'post',
+      title: 'Merkle branch and the header',
+      date: '2010-07-14',
+      url: 'https://satoshi.nakamotoinstitute.org/posts/bitcointalk/merkle/',
+      text: base + 'Only the Merkle root is included in the block header.',
+    },
+  ];
+
+  it('does not change fact classification', () => {
+    expect(questionClass(MERKLE)).toBe('fact');
+    expect(shouldDiversifyQuestion(MERKLE)).toBe(false);
+    expect(questionClass('How do I build a payment app?')).toBe('fact');
+  });
+
+  it('keeps beginner identical to standard, prefers spec at developer depth, and merges dated primaries for historian', async () => {
+    const deps = { mcp: merkleMcp(), corpus: new SatoshiCorpus(merkleDocs) };
+    const standard = await groundQuestion(MERKLE, deps);
+    const beginner = await groundQuestion(MERKLE, deps, { depth: 'beginner' });
+    const developer = await groundQuestion(MERKLE, deps, { depth: 'developer' });
+    const historian = await groundQuestion(MERKLE, deps, { depth: 'historian' });
+
+    expect(beginner.evidenceText).toBe(standard.evidenceText);
+    expect(beginner.citations).toEqual(standard.citations);
+    expect(standard.mode).toBe('mcp');
+    expect(standard.evidenceText.indexOf('LATER COMMENTARY')).toBeLessThan(
+      standard.evidenceText.indexOf('TECHNICAL SPECIFICATION'),
+    );
+    expect(standard.evidenceText).toContain('Design constraint essay 4');
+    expect(standard.evidenceText).toContain('Merkle test vector');
+    expect(standard.evidenceText).not.toContain('BUDGET_MARK');
+    expect(standard.evidenceText).not.toContain('BRC-62');
+    expect(standard.evidenceText).not.toContain('2008-10-31');
+    expect(standard.evidenceText).not.toContain('Merkle branch and the header');
+    expect(standard.citations.filter((citation) => citation.sourceClass === 'satoshi-primary')).toHaveLength(0);
+
+    expect(developer.evidenceText.indexOf('TECHNICAL SPECIFICATION')).toBeLessThan(
+      developer.evidenceText.indexOf('LATER COMMENTARY'),
+    );
+    expect(developer.evidenceText).toContain('BUDGET_MARK');
+    expect(developer.evidenceText).toContain('double SHA-256');
+    expect(developer.evidenceText).toContain('BRC-62');
+    expect(developer.evidenceText).not.toContain('Design constraint essay 4');
+    expect(developer.evidenceText).not.toContain('Merkle test vector');
+    expect(developer.citations.filter((citation) => citation.sourceClass === 'spec').length).toBeGreaterThan(
+      standard.citations.filter((citation) => citation.sourceClass === 'spec').length,
+    );
+    expect(developer.citations.filter((citation) => citation.sourceClass === 'later-commentary').length).toBeLessThan(
+      standard.citations.filter((citation) => citation.sourceClass === 'later-commentary').length,
+    );
+
+    expect(historian.mode).toBe('mcp');
+    expect(historian.evidenceText.indexOf('PRIMARY SOURCES')).toBeLessThan(historian.evidenceText.indexOf('LATER COMMENTARY'));
+    const dates = ['2008-10-31', '2009-01-09', '2010-07-14'];
+    const positions = dates.map((date) => historian.evidenceText.indexOf(date));
+    expect(positions.every((position) => position >= 0)).toBe(true);
+    expect(positions[0]).toBeLessThan(positions[1]!);
+    expect(positions[1]).toBeLessThan(positions[2]!);
+    expect(historian.evidenceText).toContain('timestamped');
+    const primaries = historian.citations.filter((citation) => citation.sourceClass === 'satoshi-primary');
+    expect(primaries.map((citation) => citation.date)).toEqual(dates);
+    expect(historian.evidenceText).toContain('Design constraint essay 1');
+  });
+
+  it('merges corpus primaries into a sufficient protocol-fact answer when search is unavailable', async () => {
+    const g = await groundQuestion(
+      MERKLE,
+      {
+        mcp: fakeMcp({
+          claims: [
+            {
+              text: 'BRC-62 defines how a Merkle branch links a transaction to the block it was included in.',
+              support: ['brc:62'],
+              status: 'supports',
+            },
+          ],
+          hits: [
+            {
+              id: 'brc:62',
+              kind: 'brc',
+              title: 'BRC-62',
+              locator: 'brc://spec/62',
+              excerpt: 'A Merkle branch links the transaction to the block.',
+            },
+          ],
+          gaps: [],
+          contradictions: [],
+        }),
+        corpus: new SatoshiCorpus(merkleDocs),
+      },
+      { depth: 'historian' },
+    );
+    expect(g.mode).toBe('mcp');
+    expect(g.evidenceText).toContain('BRC-62');
+    expect(g.evidenceText.indexOf('2008-10-31')).toBeLessThan(g.evidenceText.indexOf('BRC-62'));
+    expect(g.citations.filter((citation) => citation.sourceClass === 'satoshi-primary')).toHaveLength(3);
+  });
+
+  it('drops undated corpus rows from a historian answer', async () => {
+    const dated: CorpusDoc = {
+      id: 'dated',
+      kind: 'post',
+      title: 'Merkle branch dated note',
+      date: '2008-11-14',
+      url: 'https://satoshi.nakamotoinstitute.org/posts/dated-merkle/',
+      text: 'A Merkle branch shows that a transaction was included in a block. The Merkle root sits in the header.',
+    };
+    const undated: CorpusDoc = {
+      id: 'undated',
+      kind: 'post',
+      title: 'Merkle branch undated note',
+      date: '',
+      url: 'https://satoshi.nakamotoinstitute.org/posts/undated-merkle/',
+      text: 'A Merkle branch shows that a transaction was included in a block. The Merkle root sits in the header.',
+    };
+    const g = await groundQuestion(MERKLE, {
+      mcp: fakeMcp(INSUFFICIENT_PKG),
+      corpus: new SatoshiCorpus([undated, dated]),
+    }, { depth: 'historian' });
+    expect(g.evidenceText).toContain('Merkle branch dated note');
+    expect(g.evidenceText).toContain('2008-11-14');
+    expect(g.evidenceText).not.toContain('undated note');
+    expect(g.citations.every((citation) => citation.date)).toBe(true);
+  });
+
+  it('still answers a builder question as an option set when depth is developer', async () => {
+    const mcp = {
+      connected: true,
+      investigate: async () => INSUFFICIENT_PKG,
+      searchKnowledge: async (q: string, filters?: { kind?: string[] }) => {
+        const kinds = filters?.kind ?? [];
+        if (q === 'BRC-100' && (kinds.includes('brc') || kinds.includes('doc'))) {
+          return {
+            hits: [{ id: 'b:100', kind: 'brc', title: 'BRC-100', locator: 'bsv-blockchain/BRCs/wallet/0100.md' }],
+          };
+        }
+        if (kinds.includes('essay')) {
+          return {
+            hits: [
+              {
+                id: 'e:1',
+                kind: 'essay',
+                title: 'Walletless applications',
+                locator: 'csw://essay/medium/wallets',
+                excerpt: 'Applications should talk to the wallet through BRC-100.',
+              },
+            ],
+          };
+        }
+        return { hits: [] };
+      },
+      getResource: async (uri: string) => ({
+        text:
+          uri === 'bsv-blockchain/BRCs/wallet/0100.md'
+            ? 'BRC-100 is the wallet-to-application interface.'
+            : 'Applications should talk to the wallet through BRC-100.',
+      }),
+    } as unknown as McpBridge;
+    const g = await groundQuestion('How do I build a payment app?', { mcp, corpus: null }, { depth: 'developer' });
+    expect(questionClass('How do I build a payment app?')).toBe('fact');
+    expect(g.evidenceText).toContain('IMPLEMENTATION OPTIONS');
+    expect(g.evidenceText).toContain('DECISION CRITERIA');
+    expect(g.evidenceText).not.toContain('BUDGET_MARK');
   });
 });

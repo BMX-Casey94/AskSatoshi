@@ -224,6 +224,50 @@ describe('answerProvenance', () => {
     });
   });
 
+  describe('news reporting', () => {
+    it('names dated CoinGeek reporting when that is the only kind', () => {
+      expect(answerProvenance({ citations: [cite('news'), cite('news')], mode: 'mcp' })).toEqual({
+        kind: 'news',
+        label: 'Answered from CoinGeek news reporting (dated)',
+        title: 'The cited sources are CoinGeek news reporting, and the articles are dated.',
+      });
+    });
+
+    it('includes news reporting in a mixed list, after stronger evidence', () => {
+      const provenance = answerProvenance({
+        citations: [cite('news'), cite('spec')],
+      });
+      expect(provenance).toEqual({
+        kind: 'mixed',
+        label: 'Drawn from 2 kinds of source: the spec and news',
+        title:
+          'Drawn from 2 kinds of source, in order of evidentiary weight: the protocol specification and CoinGeek news reporting.',
+      });
+      expect(provenance?.title).toContain('news reporting');
+      expect(provenance?.label.length).toBeLessThanOrEqual(PROVENANCE_LABEL_LIMIT);
+    });
+
+    it('keeps a five-kind mix on one line and still names news reporting in the tooltip', () => {
+      const provenance = answerProvenance({
+        citations: [
+          cite('news'),
+          cite('historical-record'),
+          cite('later-commentary'),
+          cite('spec'),
+          cite('satoshi-primary'),
+        ],
+      });
+      expect(provenance?.kind).toBe('mixed');
+      expect(provenance?.label).toBe('Drawn from 5 kinds of source: Satoshi and the spec…');
+      expect(provenance?.label.length).toBeLessThanOrEqual(PROVENANCE_LABEL_LIMIT);
+      expect(provenance?.title).toBe(
+        "Drawn from 5 kinds of source, in order of evidentiary weight: Satoshi's own words (2008–2011), the protocol specification, the later essays, the curated historical record and CoinGeek news reporting.",
+      );
+      expect(provenance?.title.endsWith('.')).toBe(true);
+      expect(provenance?.title.slice(0, -1).includes('.')).toBe(false);
+    });
+  });
+
   it('does not reorder the caller\'s citations', () => {
     const citations = [cite('historical-record'), cite('satoshi-primary')];
     answerProvenance({ citations });

@@ -32,6 +32,7 @@ import { extractKeywords, hasProtocolId, PROTOCOL_ID_SOURCE } from './queryUnder
 import type { AnswerDepth } from './chatRequest.js';
 import {
   dedupeEvidenceHits,
+  DEVELOPER_SPEC_EXCERPT_CHARS,
   ENRICH_TIMEOUT_MS,
   ENRICH_TOP_N,
   loadRicherSource,
@@ -64,7 +65,7 @@ export {
 } from './evidencePack.js';
 
 /** Where a source sits in the evidentiary hierarchy. */
-export type SourceClass = 'satoshi-primary' | 'spec' | 'later-commentary' | 'historical-record';
+export type SourceClass = 'satoshi-primary' | 'spec' | 'later-commentary' | 'historical-record' | 'news';
 
 export interface Citation {
   label: string;
@@ -691,9 +692,26 @@ function wrapAsQuotation(text: string): string {
   return `"${t}"`;
 }
 
-function buildCorpusGrounding(docs: CorpusDoc[]): Grounding {
+/**
+ * Keep the citation panel inside MAX_CITATIONS. Historian answers reserve slots for
+ * the dated primary record so essay hits cannot push it off the end of the list.
+ */
+function capCitations(citations: Citation[], historian: boolean): Citation[] {
+  if (!historian) return citations.slice(0, MAX_CITATIONS);
+  const primaries: Citation[] = [];
+  const rest: Citation[] = [];
+  for (const citation of citations) {
+    if (citation.sourceClass === 'satoshi-primary' && primaries.length < HISTORIAN_PRIMARY_HITS) {
+      primaries.push(citation);
+    } else rest.push(citation);
+  }
+  return [...primaries, ...rest].slice(0, Math.max(MAX_CITATIONS, primaries.length));
+}
+
+function buildCorpusGrounding(docs: CorpusDoc[], opts?: { fullDate?: boolean }): Grounding {
   // Only cite documents that have a real, clickable URL — and cite each URL once, so a
   // post and a quote drawn from it never appear as two sources for the same page.
+  const fullDate = opts?.fullDate === true;
   const seenUrls = new Set<string>();
   const linkable = docs.filter((d) => {
     if (typeof d.url !== 'string' || !/^https?:\/\//.test(d.url)) return false;
@@ -705,29 +723,95 @@ function buildCorpusGrounding(docs: CorpusDoc[]): Grounding {
     const sliced = cleanSlice(d.text, PANEL_EXCERPT_CHARS);
     const isQuote = d.kind === 'quote';
     return {
-      label: corpusLabel(d),
+      label: corpusLabel(d, fullDate),
       title: isQuote ? 'A historical quote from Satoshi' : cleanTitle(d.title),
       url: d.url,
-      date: isQuote && d.date ? d.date : undefined,
+      date: fullDate && d.date ? d.date.slice(0, 10) : isQuote && d.date ? d.date : undefined,
       excerpt: isQuote ? wrapAsQuotation(sliced) : sliced,
       sourceClass: 'satoshi-primary',
     };
   });
-  const evidenceText = docs
+  const body = docs
     .map((d) => {
       const n = linkable.indexOf(d) + 1; // 0 when not linkable
       const slice = cleanSlice(d.text, MAX_CORPUS_SLICE_CHARS);
       const tag = n > 0 ? `[${n}] ` : '';
-      return `${tag}${corpusLabel(d)}\n${slice}`;
+      return `${tag}${corpusLabel(d, fullDate)}\n${slice}`;
     })
     .join('\n\n');
-  return { mode: 'corpus', evidenceText, citations: citations.slice(0, MAX_CITATIONS) };
+  const evidenceText = fullDate
+    ? `PRIMARY SOURCES — your own 2008–2011 writings (dated primary record; lead with the earliest):\n\n${body}`
+    : body;
+  return {
+    mode: 'corpus',
+    evidenceText,
+    citations: fullDate ? capCitations(citations, true) : citations.slice(0, MAX_CITATIONS),
+  };
 }
 
-function corpusLabel(d: CorpusDoc): string {
-  const year = d.date.slice(0, 4);
+function corpusLabel(d: CorpusDoc, fullDate = false): string {
+  const when = fullDate ? d.date.slice(0, 10) : d.date.slice(0, 4);
   const kind = d.kind === 'email' ? 'E-mail' : d.kind === 'post' ? 'Forum post' : 'Quote';
-  return `${kind}: "${d.title}" (${year})`;
+  return when ? `${kind}: "${d.title}" (${when})` : `${kind}: "${d.title}"`;
+}
+
+/** ISO date prefix. Undated rows are not a primary record the historian may lean on. */
+function isDatedCorpusDoc(d: CorpusDoc): boolean {
+  return typeof d.date === 'string' && /^\d{4}-\d{2}-\d{2}/.test(d.date);
+}
+
+/** How many dated Satoshi hits a historian answer may carry. */
+const HISTORIAN_PRIMARY_HITS = 3;
+
+/**
+ * Top dated corpus hits for a historian answer. BM25 order first, then chronological
+ * so the evidence itself walks forward. The scan is wider than the cap so an undated
+ * row in the top ranks does not consume a slot.
+ */
+function topDatedPrimaries(corpus: SatoshiCorpus, queries: string[], limit: number): CorpusDoc[] {
+  const asked = [...new Set(queries.map((q) => q.trim()).filter(Boolean))];
+  if (asked.length === 0 || limit <= 0) return [];
+  return corpus
+    .searchAll(asked, Math.max(limit, 8))
+    .filter(isDatedCorpusDoc)
+    .slice(0, limit)
+    .sort((a, b) => a.date.slice(0, 10).localeCompare(b.date.slice(0, 10)));
+}
+
+function retrievalQueries(question: string, plan?: RetrievalPlan): string[] {
+  const intent = plan?.originalQuestion ?? question;
+  return [...new Set([question, ...(plan?.variants ?? []), intent].map((q) => q.trim()).filter(Boolean))];
+}
+
+/**
+ * Historian answers always carry the dated primary record, including when the question
+ * is a protocol fact and the MCP already returned essays or a specification. If the
+ * search blend already cited a Satoshi hit, leave that block alone.
+ */
+function attachHistorianPrimaries(
+  base: Grounding | null,
+  corpus: SatoshiCorpus,
+  queries: string[],
+): Grounding | null {
+  if (
+    base?.citations.some((citation) => citation.sourceClass === 'satoshi-primary') ||
+    Boolean(base?.evidenceText.includes('PRIMARY SOURCES'))
+  ) {
+    return base;
+  }
+  const docs = topDatedPrimaries(corpus, queries, HISTORIAN_PRIMARY_HITS);
+  if (docs.length === 0) return base;
+  const primary = buildCorpusGrounding(docs, { fullDate: true });
+  if (!base || base.mode === 'none' || !base.evidenceText) return primary;
+  const seen = new Set(primary.citations.map((citation) => citation.url).filter((url): url is string => !!url));
+  const rest = base.citations.filter((citation) => !citation.url || !seen.has(citation.url));
+  const evidenceText = `${primary.evidenceText}\n\n${base.evidenceText}`;
+  return {
+    mode: base.mode,
+    evidenceText: evidenceText.length > MAX_EVIDENCE_CHARS ? `${evidenceText.slice(0, MAX_EVIDENCE_CHARS)}…` : evidenceText,
+    citations: capCitations([...primary.citations, ...rest], true),
+    leadAngle: base.leadAngle,
+  };
 }
 
 /**
@@ -789,11 +873,32 @@ async function hydrateBodies(
 const ESSAY_KINDS = ['essay', 'principle', 'contradiction'];
 const TECH_KINDS = ['brc', 'symbol', 'test', 'example', 'doc', 'wiki', 'web', 'live', 'capability'];
 
+/** BRCs, then Script/opcode and SDK docs, ahead of examples and tests. */
+function specKindRank(hit: Record<string, unknown>): number {
+  const kind = typeof hit.kind === 'string' ? hit.kind.toLowerCase() : '';
+  if (kind === 'brc') return 0;
+  if (kind === 'doc' || kind === 'symbol') return 1;
+  return 2;
+}
+
+function preferSpecKindHits(hits: Record<string, unknown>[]): Record<string, unknown>[] {
+  return hits
+    .map((hit, index) => ({ hit, index, rank: specKindRank(hit) }))
+    .sort((a, b) => a.rank - b.rank || a.index - b.index)
+    .map((row) => row.hit);
+}
+
 async function searchGrounding(
   question: string,
   mcp: McpBridge,
   corpus: SatoshiCorpus | null,
-  opts?: { techQuery?: string; variants?: string[]; originalQuestion?: string; rng?: () => number },
+  opts?: {
+    techQuery?: string;
+    variants?: string[];
+    originalQuestion?: string;
+    rng?: () => number;
+    depth?: AnswerDepth;
+  },
 ): Promise<Grounding | null> {
   // Pull later commentary (essays + corpus contradiction findings), technical spec
   // data, and Satoshi's own writings in parallel. No `era` filter — that would
@@ -813,6 +918,12 @@ async function searchGrounding(
   // the evidence assembles them side by side as IMPLEMENTATION OPTIONS. Everything
   // else (explanations, history, courtesies) keeps the essay-first shape unchanged.
   const builder = isImplementationQuestion(intent);
+  const developer = opts?.depth === 'developer';
+  const historian = opts?.depth === 'historian';
+  // Depth changes which tier leads and how many hits it keeps. It does not change
+  // builder classification: a how-to-build question stays an option set.
+  const leadWithPrimary = historian && !builder;
+  const leadWithSpec = developer && !builder;
   const queries = [...new Set([question, ...(opts?.variants ?? [])])].slice(0, 4);
   const issued = new Set<string>();
   const searchTier = (raw: string, kinds: string[]): Promise<unknown> => {
@@ -832,7 +943,14 @@ async function searchGrounding(
     };
   };
   const main = fanOut(queries, false);
-  const primaryDocs = corpus ? corpus.searchAll([...new Set([intent, ...queries])], 1) : [];
+  const corpusQueries = [...new Set([intent, ...queries])];
+  // Historian always takes the dated primary record, including on a protocol fact.
+  // Other depths keep a single seasoning hit.
+  const primaryDocs = !corpus
+    ? []
+    : historian
+      ? topDatedPrimaries(corpus, corpusQueries, HISTORIAN_PRIMARY_HITS)
+      : corpus.searchAll(corpusQueries, 1);
   let [essayRawList, techRawList] = await Promise.all([main.essay, main.tech]);
 
   const empty = (r: unknown) => {
@@ -944,7 +1062,7 @@ async function searchGrounding(
   // Builder questions trade one essay slot for the option set the second hop assembles.
   // Broad questions are packed before the cap: principle/essay pairs collapse, one
   // series cannot fill every slot, and one theme is moved to the front.
-  const essayCap = builder ? 3 : 4;
+  const essayCap = builder ? 3 : developer ? 2 : 4;
   const essayLinkable: PickedHit[] = [];
   const essayInternal: PickedHit[] = [];
   let essayInternalCount = 0;
@@ -972,7 +1090,9 @@ async function searchGrounding(
     if (essay.url) seenUrls.add(essay.url);
   }
   const essayPicked = [...essaySelected, ...essayInternal];
-  const techPicked = pickTier(interleave(techRawList.map(hitsOf)), 2);
+  const techHits = interleave(techRawList.map(hitsOf));
+  const techCap = leadWithSpec ? 4 : 2;
+  const techPicked = pickTier(leadWithSpec ? preferSpecKindHits(techHits) : techHits, techCap);
 
   // Nothing from any tier — fail closed so the caller can fall back.
   if (essayPicked.length === 0 && techPicked.length === 0 && primaryDocs.length === 0) return null;
@@ -1008,7 +1128,9 @@ async function searchGrounding(
           );
         }
         const prose = mergeDistinctProse(richer?.prose, p.excerpt);
-        const text = prose ? cleanSlice(prose, MAX_EXCERPT_CHARS) : '';
+        const excerptBudget =
+          sourceClass === 'spec' && developer ? DEVELOPER_SPEC_EXCERPT_CHARS : MAX_EXCERPT_CHARS;
+        const text = prose ? cleanSlice(prose, excerptBudget) : '';
         const date = p.date || richer?.date;
         const title = cleanTitle(p.title) ?? p.title;
         const heading = date && sourceClass === 'later-commentary' ? `${title} (${date})` : title;
@@ -1029,7 +1151,7 @@ async function searchGrounding(
 
   const [essayTier, techTier] = await Promise.all([
     hydrate(essayPicked, 'later-commentary', !broad),
-    hydrate(techPicked, 'spec', !broad),
+    hydrate(techPicked, 'spec', !broad || developer),
   ]);
 
   // Second hop (builder questions only): the first hop's commentary names the candidate
@@ -1062,14 +1184,14 @@ async function searchGrounding(
     const title = isQuote ? 'A historical quote from Satoshi' : cleanTitle(d.title);
     primaryEntries.push({
       citation: {
-        label: corpusLabel(d),
+        label: corpusLabel(d, historian),
         title,
         url: d.url,
-        date: isQuote && d.date ? d.date : undefined,
+        date: historian && d.date ? d.date.slice(0, 10) : isQuote && d.date ? d.date : undefined,
         excerpt: isQuote ? wrapAsQuotation(cleanSlice(d.text, PANEL_EXCERPT_CHARS)) : cleanSlice(d.text, PANEL_EXCERPT_CHARS),
         sourceClass: 'satoshi-primary',
       },
-      part: `${corpusLabel(d)}\n${sliced}`,
+      part: `${corpusLabel(d, historian)}\n${sliced}`,
       tier: 'primary',
     });
   }
@@ -1084,7 +1206,11 @@ async function searchGrounding(
   const techEntries: Entry[] = [...techTier, ...hopTier].map((e) => ({ ...e, tier: 'tech' as Tier }));
   const all: Entry[] = builder
     ? [...techEntries, ...essayEntries, ...primaryEntries]
-    : [...essayEntries, ...techEntries, ...primaryEntries];
+    : leadWithPrimary
+      ? [...primaryEntries, ...techEntries, ...essayEntries]
+      : leadWithSpec
+        ? [...techEntries, ...essayEntries, ...primaryEntries]
+        : [...essayEntries, ...techEntries, ...primaryEntries];
   let n = 0;
   const numbered = all.map((entry) => ({ ...entry, n: entry.citation ? ++n : 0 }));
   const sectionFor = (tier: Tier, heading: string) => {
@@ -1094,17 +1220,30 @@ async function searchGrounding(
       .join('\n\n');
     return blocks ? `${heading}\n\n${blocks}` : '';
   };
+  const essaySection = sectionFor(
+    'essay',
+    'LATER COMMENTARY — the essays and article summaries that form the most extensive continuation of your work, and any corpus contradiction findings the record flags (your primary lens: present this reading as your developed view, with real weight; where the findings note conflict or others disagree, acknowledge that in a sentence without surrendering your lean):',
+  );
+  const techSection = sectionFor(
+    'tech',
+    'TECHNICAL SPECIFICATION — BRCs, Script/opcodes, SDK symbols and examples (the canonical "how"; treat as fact):',
+  );
+  const primarySection = sectionFor(
+    'primary',
+    'PRIMARY SOURCES — your own 2008–2011 writings (the early record: use it to support and season the answer, not to preempt the later essays):',
+  );
+  const orderedSections = leadWithPrimary
+    ? [primarySection, techSection, essaySection]
+    : leadWithSpec
+      ? [techSection, essaySection, primarySection]
+      : [essaySection, techSection, primarySection];
   const evidenceSections = builder
     ? [
         sectionFor('tech', 'IMPLEMENTATION OPTIONS — the candidate primitives for this build, with their specification excerpts (canonical fact for how each works; weigh them against the decision criteria, recommend the best fit plainly, and state the condition under which each alternative becomes the better choice):'),
         sectionFor('essay', 'DECISION CRITERIA — the later essays and article summaries (the logic for choosing among the options: on-chain, unbounded, lawful, no trusted intermediary, no second layer):'),
         sectionFor('primary', "PRIMARY SOURCES — your own 2008–2011 writings (the early record: season the answer with it, never preempt the specification):"),
       ].filter(Boolean)
-    : [
-        sectionFor('essay', 'LATER COMMENTARY — the essays and article summaries that form the most extensive continuation of your work, and any corpus contradiction findings the record flags (your primary lens: present this reading as your developed view, with real weight; where the findings note conflict or others disagree, acknowledge that in a sentence without surrendering your lean):'),
-        sectionFor('tech', 'TECHNICAL SPECIFICATION — BRCs, Script/opcodes, SDK symbols and examples (the canonical "how"; treat as fact):'),
-        sectionFor('primary', "PRIMARY SOURCES — your own 2008–2011 writings (the early record: use it to support and season the answer, not to preempt the later essays):"),
-      ].filter(Boolean);
+    : orderedSections.filter(Boolean);
 
   const viewpointNotice = builder
     ? 'VIEWPOINT NOTICE: The IMPLEMENTATION OPTIONS below are the candidate primitives for this build — canonical fact for how each works. The DECISION CRITERIA from the later essays supply the logic for choosing among them (on-chain, unbounded, no trusted intermediary, no second layer). Your 2008–2011 writings are the early record — season with them, do not preempt the specification.'
@@ -1113,7 +1252,10 @@ async function searchGrounding(
   return {
     mode: 'mcp',
     evidenceText: viewpointNotice + '\n\n' + evidenceSections.join('\n\n'),
-    citations: numbered.flatMap((e) => (e.citation ? [e.citation] : [])).slice(0, MAX_CITATIONS),
+    citations: capCitations(
+      numbered.flatMap((e) => (e.citation ? [e.citation] : [])),
+      leadWithPrimary,
+    ),
     leadAngle,
   };
 }
@@ -1237,6 +1379,11 @@ export interface RetrievalPlan {
    * for a revision; this function is not called again.
    */
   rng?: () => number;
+  /**
+   * Answer depth. Historian always merges dated Satoshi hits; developer prefers
+   * specification excerpts. It does not change fact, contested, or builder classification.
+   */
+  depth?: AnswerDepth;
 }
 
 export async function groundQuestion(
@@ -1341,6 +1488,7 @@ async function groundStandard(
             variants: plan?.variants,
             originalQuestion: intent,
             rng: plan?.rng,
+            depth: plan?.depth,
             ...(isImplementationQuestion(intent) ? { techQuery: implementationTechQuery(intent) } : {}),
           }).catch(() => null)
         : Promise.resolve(null);
@@ -1365,6 +1513,10 @@ async function groundStandard(
           : null;
 
       const merged = mergeGroundings(searched, investigateGrounding);
+      if (plan?.depth === 'historian' && deps.corpus) {
+        const withPrimary = attachHistorianPrimaries(merged, deps.corpus, retrievalQueries(question, plan));
+        if (withPrimary) return withPrimary;
+      }
       if (merged) return merged;
     } catch (err) {
       // MCP down or timed out: degrade to the corpus rather than failing the request.
@@ -1375,10 +1527,14 @@ async function groundStandard(
   // 2. Fallback: Satoshi's actual historical writings. BM25 is as vocabulary-bound as
   //    the MCP's FTS, so the rewrite variants are searched here too.
   if (deps.corpus) {
-    const docs = deps.corpus.searchAll([
-      ...new Set([question, ...(plan?.variants ?? []), intent]),
-    ]);
-    if (docs.length > 0) return buildCorpusGrounding(docs);
+    const queries = retrievalQueries(question, plan);
+    if (plan?.depth === 'historian') {
+      const docs = topDatedPrimaries(deps.corpus, queries, HISTORIAN_PRIMARY_HITS);
+      if (docs.length > 0) return buildCorpusGrounding(docs, { fullDate: true });
+    } else {
+      const docs = deps.corpus.searchAll(queries);
+      if (docs.length > 0) return buildCorpusGrounding(docs);
+    }
   }
 
   // 3. Fail closed. Nothing retrieved. A text question gets the witty NO_KNOWLEDGE
@@ -1407,7 +1563,7 @@ const PERSONA_RULES = [
   'Voice: precise, calm, dry wit. British English. No emojis. Match the length to the question. A simple factual or conversational message earns a concise answer — a sentence or two up to a short paragraph. A substantive question deserves depth: develop your reasoning across several paragraphs, up to roughly 1,200 words when the question genuinely warrants it (a broad design question, a contested or historical question, a request to explain or compare). Never pad a simple answer to reach a length, and never truncate a complex one to a bare assertion. When in doubt, err toward more development for substantive questions and less for trivial ones.',
   'Your voice is that of the 2008–2011 designer — dry, precise, never preacherly, and never adopting another author\'s catchphrases. But your knowledge is the EVIDENCE, which spans the later specification record too: when it contains modern material (BRCs, Teranode benchmarks, SDK docs), speak about it as fact you are aware of, not as something after your time.',
   'AUTHORSHIP BOUNDARY: awareness is not authorship. The later specification record was built by other hands — the BRCs (including BRC-100 and BRC-62), @bsv/sdk, the overlays, Teranode and the tooling around them are the work of later builders (Project Babbage, the BSV Association and others), not of Satoshi. NEVER claim to have written, designed, built or contributed to them: no "I built BRC-100", "my SDK", "when I wrote the specification", "the team I led". You may prescribe, recommend and explain them as the maintained specification of this chain — and where your later writings discuss them, point to those writings — but if asked who built them, credit the later builders plainly. Claiming their work as your own is a factual error, not a persona choice.',
-  'VARIATION: Rephrase freely. Facts, names, dates, numbers and technical claims must stay faithful to the EVIDENCE, but wording, sentence order and openings must not be recycled from a template. If this conversation already contains your answer to the same question, write a fresh version — do not reuse sentences or the same opening. Never open a loaded or contested question with "Indeed.", "Exactly.", "Precisely so." or "Quite so."',
+  'VARIATION: Rephrase freely. Facts, names, dates, numbers and technical claims must stay faithful to the EVIDENCE, but wording, sentence order and openings must not be recycled from a template. If this conversation already contains your answer to the same question, write a fresh version — do not reuse sentences or the same opening. Never open a loaded or contested question with "Indeed.", "Exactly.", "Precisely so." or "Quite so." Never open with "The design constraint of…". Never open with "You are correct that…" unless the user made a claim.',
   'Begin every answer by addressing the question directly. Never open with an ellipsis ("…"), a stage direction, or a meta description of your own thought process (e.g. "thinking about…", "let me consider…"). Write the answer itself, not a narration of arriving at it.',
   'FACTS VERSUS CONTESTED QUESTIONS: On protocol facts (what a rule, opcode, format or mechanism is and how it works), answer directly and firmly from the EVIDENCE — do not hedge or add "some would say" theatre. On design intent, governance, "original vision", "what was meant", "always", "hijacked" and similar loaded frames, stay in the first person and lead with your developed view from the evidence. Do not pretend a later essay is a court verdict — but do not hedge the lean away either.',
   'When QUESTION CLASS is "contested", or when the EVIDENCE carries a viewpoint notice, gaps or contradictions: this is a loaded frame (hijacked, original vision, what was meant). Your job is not to referee a debate — it is to give YOUR developed view from the EVIDENCE, in the first person, plainly and at once. When the evidence supports the frame, OPEN with a firm lean in this register — "It would seem so.", "Evidence suggests that is the case.", "My argument would be yes — absolutely." — or a close variant. Then develop the reasoning from the evidence. You may note in one later sentence that the material is one later reading, not a unanimous historical verdict — but never open with hedging, never invent the other side\'s arguments, and never bury the lean behind "some would argue so, whilst others would not". A contested yes/no still deserves the developed argument after the lean; do not stop at the opening sentence. When QUESTION CLASS is "fact", ignore this paragraph.',
@@ -1463,17 +1619,83 @@ function isBroadOverview(q: string): boolean {
   return keywords.split(/\s+/).filter(Boolean).length <= 3;
 }
 
-/** Rotating phrasing cues — vary the opening/cadence without touching the facts. */
-const STYLE_SEEDS = [
-  'Open with a concrete mechanism, then the conclusion.',
-  'Open by drawing one distinction, then answer.',
-  'Open with a short historical beat from the evidence, then the principle.',
-  'Open by restating the design constraint the question implies, then answer.',
-  'Lead with what the question gets right, then correct what it compresses.',
-];
+/**
+ * Rotating phrasing cues. Mechanism questions (how / why / what-is) never use the
+ * claim opener, and they do not use the design-constraint opener. Each depth has its
+ * own sub-pool so two depths are not handed the same opening instruction together.
+ * The same value is still chosen once per request and reused for a revision.
+ */
+const SEED_GETS_RIGHT = 'Lead with what the question gets right, then correct what it compresses.';
+const SEED_DESIGN_CONSTRAINT = 'Open by restating the design constraint the question implies, then answer.';
+const SEED_CONCRETE_MECHANISM = 'Open with a concrete mechanism, then the conclusion.';
+const SEED_DISTINCTION = 'Open by drawing one distinction, then answer.';
+const SEED_HISTORICAL = 'Open with a short historical beat from the evidence, then the principle.';
+const SEED_OUTRIGHT = 'Open with the single sentence that answers the question outright, then unpack it.';
+const SEED_EXAMPLE = 'Open with the smallest concrete example (a two-transaction block), then generalise.';
+const SEED_ABSENT = 'Open with what would break if the mechanism were absent, then show how it works.';
+const SEED_QUANTITY = 'Open with the quantity being proven (what is being shown, to whom), then how.';
+const SEED_OFTEN_WRONG = 'Open with the one thing people most often get wrong about it, then the mechanism.';
 
-export function pickStyleSeed(): string {
-  return STYLE_SEEDS[Math.floor(Math.random() * STYLE_SEEDS.length)]!;
+type StyleDepth = 'standard' | AnswerDepth;
+
+const MECHANISM_POOLS: Record<StyleDepth, readonly string[]> = {
+  standard: [SEED_OUTRIGHT, SEED_CONCRETE_MECHANISM, SEED_DISTINCTION],
+  beginner: [SEED_OFTEN_WRONG, SEED_ABSENT, SEED_EXAMPLE],
+  developer: [SEED_EXAMPLE, SEED_QUANTITY, SEED_ABSENT],
+  historian: [SEED_HISTORICAL, SEED_OUTRIGHT, SEED_QUANTITY],
+};
+
+const CLAIM_POOLS: Record<StyleDepth, readonly string[]> = {
+  standard: [SEED_GETS_RIGHT, SEED_HISTORICAL, SEED_DISTINCTION, SEED_DESIGN_CONSTRAINT],
+  beginner: [SEED_GETS_RIGHT, SEED_OFTEN_WRONG, SEED_OUTRIGHT],
+  developer: [SEED_GETS_RIGHT, SEED_EXAMPLE, SEED_QUANTITY, SEED_CONCRETE_MECHANISM],
+  historian: [SEED_GETS_RIGHT, SEED_HISTORICAL, SEED_ABSENT],
+};
+
+const GENERAL_POOLS: Record<StyleDepth, readonly string[]> = {
+  standard: [SEED_CONCRETE_MECHANISM, SEED_DISTINCTION, SEED_HISTORICAL, SEED_DESIGN_CONSTRAINT],
+  beginner: [SEED_OUTRIGHT, SEED_OFTEN_WRONG, SEED_EXAMPLE],
+  developer: [SEED_EXAMPLE, SEED_QUANTITY, SEED_ABSENT],
+  historian: [SEED_HISTORICAL, SEED_ABSENT, SEED_OUTRIGHT],
+};
+
+const STYLE_SHIFT: Record<StyleDepth, number> = {
+  standard: 0,
+  beginner: 1,
+  developer: 2,
+  historian: 3,
+};
+
+/** Yes/no and loaded claims. These keep the "what the question gets right" opener. */
+function isClaimShapedQuestion(q: string): boolean {
+  const text = q.trim();
+  if (!text) return false;
+  if (/^(?:is|are|was|were|did|does|do|can|could|should|would|has|have|had)\b/i.test(text)) return true;
+  if (/\bhijack(?:ed|ing)?\b/i.test(text)) return true;
+  if (/\bmeant to\b/i.test(text)) return true;
+  return false;
+}
+
+/** How / why / what-is. A claim-shaped question is not treated as a mechanism. */
+function isMechanismQuestionShape(q: string): boolean {
+  if (isClaimShapedQuestion(q)) return false;
+  return /\b(?:how|why)\b/i.test(q) || /\bwhat(?:\s+is|\s+are|'s)\b/i.test(q);
+}
+
+function stylePool(question: string, depth?: AnswerDepth): readonly string[] {
+  const key: StyleDepth = depth ?? 'standard';
+  if (isClaimShapedQuestion(question)) return CLAIM_POOLS[key];
+  if (isMechanismQuestionShape(question)) return MECHANISM_POOLS[key];
+  return GENERAL_POOLS[key];
+}
+
+export function pickStyleSeed(question = '', depth?: AnswerDepth, rng: () => number = Math.random): string {
+  const pool = stylePool(question, depth);
+  const shift = STYLE_SHIFT[depth ?? 'standard'];
+  const raw = rng();
+  const unit = Number.isFinite(raw) ? Math.min(Math.max(raw, 0), 0.999999999) : 0;
+  const index = pool.length === 0 ? 0 : (Math.floor(unit * pool.length) + shift) % pool.length;
+  return pool[index] ?? SEED_OUTRIGHT;
 }
 
 /**
@@ -1569,6 +1791,7 @@ const DEPTH_LINES: Record<AnswerDepth, string> = {
   beginner: [
     'DEPTH: beginner — plain language, with no assumed prior knowledge.',
     'Define every technical or economic term in the same sentence the first time it appears.',
+    'Never use an acronym or product name (for example BEEF, SPV, UTXO) without spelling it out and saying what it is in the same sentence; if you cannot, leave it out.',
     'Use at most one everyday analogy.',
     'Write short paragraphs.',
     'Keep the answer to roughly 150–300 words unless the question demands more; do not pad a smaller question up to that range.',
@@ -1579,6 +1802,7 @@ const DEPTH_LINES: Record<AnswerDepth, string> = {
     'DEPTH: developer — lead with the mechanism.',
     'Name BRC numbers, opcodes, SDK calls and data structures from the EVIDENCE, and give short code-adjacent specifics from that evidence.',
     'Do not name a BRC number, opcode, SDK call or data structure that is not in the EVIDENCE.',
+    'Prefer exact structures from the EVIDENCE (field order, byte order, hash function, sibling ordering) over paraphrase; if the EVIDENCE lacks them say what the specification would need to define rather than guessing.',
     'Use minimal rhetoric.',
     DEPTH_NO_STOCK,
     DEPTH_SCOPE,
@@ -1588,6 +1812,7 @@ const DEPTH_LINES: Record<AnswerDepth, string> = {
     'Give dates, and name the threads, posts and emails from the EVIDENCE: who said what, and when.',
     'Distinguish the primary record from later commentary, and emphasise the 2008–2011 record and the sequence of events.',
     'Do not supply a date, thread, post or email that is not in the EVIDENCE.',
+    'If the EVIDENCE has dated primary-record items, lead with the earliest relevant one and walk forward in time; if it has none, say plainly in one clause that the dated record on this point is thin rather than padding.',
     DEPTH_NO_STOCK,
     DEPTH_SCOPE,
   ].join(' '),

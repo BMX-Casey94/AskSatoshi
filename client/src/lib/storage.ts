@@ -21,7 +21,7 @@ export interface Store {
 const GROUNDING_MODES = new Set<GroundingMode>(['mcp', 'corpus', 'reference', 'none']);
 const RATINGS = new Set<Message['rating']>(['up', 'down']);
 const ROLES = new Set<MessageRole>(['user', 'assistant']);
-const SOURCE_CLASSES = new Set<SourceClass>(['satoshi-primary', 'spec', 'later-commentary', 'historical-record']);
+const SOURCE_CLASSES = new Set<SourceClass>(['satoshi-primary', 'spec', 'later-commentary', 'historical-record', 'news']);
 const DEPTHS = new Set<Depth>(['default', 'beginner', 'developer', 'historian']);
 const MAX_FOLLOW_UPS = 3;
 const MAX_FOLLOW_UP_CHARS = 400;

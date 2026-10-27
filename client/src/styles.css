@@ -29,6 +29,8 @@
   --chart-hour: #8a8a8a;
   --chart-wright: #3d7dd6;
   --chart-kleiman: #2a9d6e;
+  --news-ink: #6b3f86;
+  --news-stale: #8a5a00;
   color-scheme: light;
 }
 
@@ -50,6 +52,8 @@
   --chart-hour: #6a6a6a;
   --chart-wright: #6ba3e8;
   --chart-kleiman: #4cbe88;
+  --news-ink: #e0c2ef;
+  --news-stale: #e6c36a;
   color-scheme: dark;
 }
 
@@ -721,6 +725,11 @@ button:disabled {
   border-color: color-mix(in srgb, #4a6fa5 45%, transparent);
   background: color-mix(in srgb, #4a6fa5 8%, transparent);
 }
+.source-chip--news {
+  color: var(--news-ink, #6b3f86);
+  border-color: color-mix(in srgb, var(--news-ink, #6b3f86) 45%, transparent);
+  background: color-mix(in srgb, var(--news-ink, #6b3f86) 10%, transparent);
+}
 
 /* Paid read-aloud row under an assistant answer */
 .read-aloud {
@@ -1141,6 +1150,19 @@ button:disabled {
   font-weight: 600;
   color: var(--text-muted);
   letter-spacing: -0.01em;
+}
+.cite-panel-date--news {
+  margin-top: 0;
+  font-size: 0.95rem;
+  font-weight: 650;
+  color: var(--text);
+}
+.cite-panel-stale {
+  margin: -6px 0 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--news-stale, #8a5a00);
 }
 .cite-panel-excerpt {
   margin: 0;

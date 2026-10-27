@@ -78,6 +78,12 @@
   cursor: help;
 }
 
+.provenance-badge[data-kind='news'] {
+  color: var(--news-ink, #6b3f86);
+  border-color: color-mix(in srgb, var(--news-ink, #6b3f86) 45%, var(--border));
+  background: color-mix(in srgb, var(--news-ink, #6b3f86) 8%, var(--bg-raised));
+}
+
 .provenance-badge:hover,
 .provenance-badge:focus,
 .provenance-badge:focus-visible {

@@ -14,6 +14,7 @@ import type { Citation } from '../types';
 import { renderMarkdown } from '../lib/markdown';
 import { Link } from '../lib/router';
 import { sourceHostLabel } from '../lib/sourceOrigin';
+import { olderReportingNote } from '../lib/citationAge';
 import { excerptToMarkdown } from '../lib/sourceText';
 import { COPIED_NOTICE_MS, copyText, formatUkDate, markdownToPlainText, timelineHref } from '../lib/share';
 import { ChevronDownIcon, ChevronUpIcon, CloseIcon, ExternalLinkIcon } from './icons';
@@ -115,6 +116,15 @@ export function CitationPanel({ open, onClose, onNavigate }: Props) {
   const { index } = shown;
   const title = shownCitation.title ?? shownCitation.label;
   const dateLabel = shownCitation.date ? formatUkDate(shownCitation.date) : null;
+  const staleNote = olderReportingNote(shownCitation);
+  const dateBlock = dateLabel ? (
+    <>
+      <p className={shownCitation.sourceClass === 'news' ? 'cite-panel-date cite-panel-date--news' : 'cite-panel-date'}>
+        {dateLabel}
+      </p>
+      {staleNote && <p className="cite-panel-stale">{staleNote}</p>}
+    </>
+  ) : null;
   const originLabel = shownCitation.url ? sourceHostLabel(shownCitation.url) : null;
   const showOriginal = shownCitation.sourceClass === 'satoshi-primary' && Boolean(excerptHtml);
   const showTimeline =
@@ -164,7 +174,7 @@ export function CitationPanel({ open, onClose, onNavigate }: Props) {
           {showOriginal ? (
             <figure className="cite-original">
               <figcaption className="cite-original-kicker">In the original words</figcaption>
-              {dateLabel && <p className="cite-panel-date">{dateLabel}</p>}
+              {dateBlock}
               <h3 className="cite-original-title">{title}</h3>
               <blockquote
                 className="cite-panel-excerpt cite-panel-excerpt--original"
@@ -183,7 +193,7 @@ export function CitationPanel({ open, onClose, onNavigate }: Props) {
           ) : (
             <>
               <h3 className="cite-panel-title">{title}</h3>
-              {dateLabel && <p className="cite-panel-date">{dateLabel}</p>}
+              {dateBlock}
               {excerptHtml && (
                 <blockquote
                   className="cite-panel-excerpt"

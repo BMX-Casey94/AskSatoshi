@@ -56,6 +56,29 @@ describe('parseStoredStore', () => {
     expect(saved?.citations?.[0]?.sourceClass).toBe('satoshi-primary');
   });
 
+  it('keeps a CoinGeek news citation on reload', () => {
+    const store = parseStoredStore({
+      version: 1,
+      threads: [
+        thread([
+          message({
+            citations: [
+              {
+                label: 'Teranode trial',
+                title: 'Teranode trial',
+                url: 'https://coingeek.com/teranode-trial',
+                date: '2024-03-14T00:00:00.000Z',
+                excerpt: 'CoinGeek reported a public trial.',
+                sourceClass: 'news',
+              },
+            ],
+          }),
+        ]),
+      ],
+    });
+    expect(store.threads[0]?.messages[0]?.citations?.[0]?.sourceClass).toBe('news');
+  });
+
   it('drops a bad optional field and keeps the message', () => {
     const store = parseStoredStore({
       version: 1,

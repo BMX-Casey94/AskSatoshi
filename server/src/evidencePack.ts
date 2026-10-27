@@ -57,6 +57,14 @@ export const ENRICH_TOP_N = 4;
 export const ENRICH_TIMEOUT_MS = 2_500;
 /** Per-entry model budget: inside the 900–1,400 band, and inside MAX_EXCERPT_CHARS. */
 export const RICH_EXCERPT_CHARS = 1_200;
+/**
+ * Developer depth only. Spec bodies are sliced to this so field order, byte order
+ * and sibling ordering in the stored text can reach the model. Essays stay on
+ * RICH_EXCERPT_CHARS. Beginner and standard do not use it.
+ */
+export const DEVELOPER_SPEC_EXCERPT_CHARS = 2_000;
+/** Theme tag for Satoshi's own 2008–2011 hits. Diversification must not thin this cluster. */
+export const PRIMARY_RECORD_THEME = 'primary record';
 
 const THEME_CAP = 2;
 const SERIES_CAP = 2;
@@ -441,7 +449,14 @@ function aboutCluster(question: string, label: string | undefined): boolean {
   return parts.some((part) => asked.includes(part));
 }
 
+/** Historian retrieval tags Satoshi's own dated writings as this cluster. */
+export function isPrimaryRecord(hit: EvidenceRecord): boolean {
+  if (hit.kind?.toLowerCase() === 'satoshi-primary') return true;
+  return (hit.themes ?? []).some((theme) => theme.toLowerCase().trim() === PRIMARY_RECORD_THEME);
+}
+
 function clusterId(hit: EvidenceRecord): string {
+  if (isPrimaryRecord(hit)) return 'primary-record';
   const theme = hit.themes?.[0]?.toLowerCase().trim();
   if (theme) return `theme:${theme}`;
   const series = seriesKey(hit.title);
@@ -462,12 +477,18 @@ function angleLabel(hit: EvidenceRecord): string {
  * Walk in rank order. Keep the highest-ranked hit of each theme and series, allow
  * at most two from a cluster, and never drop a hit that engages a specific question
  * term. A question that is itself about that theme or series is not capped.
+ * Hits in the primary-record cluster are kept in full — that cluster is separate
+ * from theme and series caps.
  */
 export function diversifyEvidenceHits<T extends EvidenceRecord>(hits: T[], question: string): T[] {
   const themeCount = new Map<string, number>();
   const seriesCount = new Map<string, number>();
   const kept: T[] = [];
   for (const hit of hits) {
+    if (isPrimaryRecord(hit)) {
+      kept.push(hit);
+      continue;
+    }
     const theme = hit.themes?.[0]?.toLowerCase().trim();
     const series = seriesKey(hit.title);
     const protectedHit = hitDirectlyEngages(question, hit);
@@ -542,6 +563,42 @@ function selectFinal<T extends EvidenceRecord>(diverse: T[], lead: T, question: 
       chosen[replaceAt] = hit;
       chosenIds.add(hit.id);
     }
+  }
+  return retainPrimaryRecord(chosen, diverse, limit);
+}
+
+/**
+ * The primary-record cluster is not a theme to thin. If the limit would leave one out,
+ * evict a later non-primary; if every slot is already primary, keep the extra hit.
+ */
+function retainPrimaryRecord<T extends EvidenceRecord>(chosen: T[], diverse: T[], limit: number): T[] {
+  const chosenIds = new Set(chosen.map((hit) => hit.id));
+  for (const hit of diverse) {
+    if (!isPrimaryRecord(hit) || chosenIds.has(hit.id)) continue;
+    if (chosen.length < limit) {
+      chosen.push(hit);
+      chosenIds.add(hit.id);
+      continue;
+    }
+    let replaceAt = -1;
+    for (let i = chosen.length - 1; i >= 1; i--) {
+      const current = chosen[i];
+      if (current && !isPrimaryRecord(current)) {
+        replaceAt = i;
+        break;
+      }
+    }
+    if (replaceAt < 0 && chosen[0] && !isPrimaryRecord(chosen[0])) replaceAt = 0;
+    if (replaceAt < 0) {
+      chosen.push(hit);
+      chosenIds.add(hit.id);
+      continue;
+    }
+    const removed = chosen[replaceAt];
+    if (!removed) continue;
+    chosenIds.delete(removed.id);
+    chosen[replaceAt] = hit;
+    chosenIds.add(hit.id);
   }
   return chosen;
 }

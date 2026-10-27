@@ -58,6 +58,8 @@ import {
 import { getActivity } from './satoshiActivity.js';
 import { helmetOptions } from './security.js';
 import { corpusUpdatedAt, loadCorpus } from './satoshiCorpus.js';
+import { loadCoinGeekNews } from './coingeekNews.js';
+import { withNewsEvidence } from './newsGrounding.js';
 import { loadCuratedReference } from './curatedReference.js';
 import { assembleTts, ttsStartupLine } from './tts/index.js';
 
@@ -118,6 +120,7 @@ const feedback = new FeedbackCounters();
 const rewriteCache = new RewriteCache();
 const mcp = new McpBridge();
 const corpus = loadCorpus();
+const news = loadCoinGeekNews();
 const curated = loadCuratedReference();
 const tts = assembleTts();
 
@@ -392,14 +395,20 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     }
 
     const retrievalQuery = understanding?.query ?? contextualQuery(question, priorUser);
-    const grounding = await groundQuestion(retrievalQuery, { mcp, corpus, curated }, {
+    const baseGrounding = await groundQuestion(retrievalQuery, { mcp, corpus, curated }, {
       variants: understanding?.variants,
       originalQuestion: question,
       // investigate resolves follow-up references when given the prior turn as context —
       // but only forward it when this message actually is a follow-up, or unrelated
       // prior context would pollute a standalone question's retrieval.
       context: priorUser && (!standalone || understanding?.followUp) ? priorUser : undefined,
+      // Depth selects historian primaries and developer spec bias. It does not change
+      // fact or builder classification. Depth requests already skip the answer cache.
+      depth,
     });
+    // Pinned CoinGeek reporting joins the evidence only for event-type questions (judged
+    // on the user's own words). Such answers are time-sensitive, so they skip the cache.
+    const { grounding, usedNews } = withNewsEvidence(baseGrounding, question, understanding?.variants, news);
     // Nothing retrieved. A text question ends here: the no-knowledge line, mode
     // 'none', empty citations, and no model call. An attached image is not a miss —
     // the picture still has to reach a vision model. That path reports the same
@@ -448,7 +457,7 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // One prompt context for the draft and any revision. A fresh depth, style seed,
     // invitation seed or lead angle would shift the voice instructions while the
     // revision is told to keep the same voice. The angle was chosen during grounding.
-    const styleSeed = pickStyleSeed();
+    const styleSeed = pickStyleSeed(question, depth);
     const invitationSeed = pickInvitationSeed();
     const promptCtx = {
       questionClass: questionClass(question),
@@ -603,7 +612,7 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // standalone oracle: its answer only makes sense against this conversation. The
     // write happens after the review pass so future visitors are served the revised
     // answer, not the pre-review draft.
-    if (cacheable && !understanding?.followUp && grounding.mode !== 'none') {
+    if (cacheable && !usedNews && !understanding?.followUp && grounding.mode !== 'none') {
       cache.set(question, { text: finalText, mode: grounding.mode, citations: finalCitations, followUps });
     }
     finish();

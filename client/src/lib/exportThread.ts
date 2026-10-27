@@ -11,6 +11,7 @@ const CLASS_LABEL: Record<string, string> = {
   spec: 'Protocol specification',
   'later-commentary': 'Later commentary',
   'historical-record': 'Historical record & testimony',
+  news: 'News (CoinGeek)',
 };
 
 function fmtDate(ts: number): string {

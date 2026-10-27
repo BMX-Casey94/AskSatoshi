@@ -21,6 +21,12 @@ describe('deriveFollowUps', () => {
     expect(chips.join('\n')).not.toMatch(/Delta/);
   });
 
+  it('asks what has been reported when the source is news', () => {
+    expect(deriveFollowUps([{ label: 'n', title: 'Teranode public trial', sourceClass: 'news' }], ask)).toEqual([
+      'What has been reported about Teranode public trial?',
+    ]);
+  });
+
   it('uses the historical-record template and a plain label when there is no class', () => {
     expect(
       deriveFollowUps([{ label: 'd', title: 'The 2010 split', sourceClass: 'historical-record' }], ask),

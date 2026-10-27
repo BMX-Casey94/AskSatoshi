@@ -21,6 +21,7 @@ const CLASS_ORDER = [
   'spec',
   'later-commentary',
   'historical-record',
+  'news',
 ] as const satisfies readonly SourceClass[];
 
 const CLASS_SET: ReadonlySet<string> = new Set(CLASS_ORDER);
@@ -45,6 +46,7 @@ const SINGLE_LABEL: Record<SourceClass, string> = {
   spec: 'Answered from the protocol specification (BRCs, Script, SDK)',
   'later-commentary': 'Answered from the later essays and commentary',
   'historical-record': 'Answered from the curated historical record',
+  news: 'Answered from CoinGeek news reporting (dated)',
 };
 
 /** Full kind names, in the same order as CLASS_ORDER. No item contains "and". */
@@ -53,6 +55,7 @@ const FULL_NAME: Record<SourceClass, string> = {
   spec: 'the protocol specification',
   'later-commentary': 'the later essays',
   'historical-record': 'the curated historical record',
+  news: 'CoinGeek news reporting',
 };
 
 /**
@@ -64,6 +67,7 @@ const SHORT_NAME: Record<SourceClass, string> = {
   spec: 'the spec',
   'later-commentary': 'essays',
   'historical-record': 'history',
+  news: 'news',
 };
 
 const FALLBACK: Record<Exclude<GroundingMode, 'none'>, Provenance> = {
@@ -126,6 +130,8 @@ function singleTitle(sourceClass: SourceClass, someUnclassified: boolean): strin
       return `${who} the later essays and commentary.`;
     case 'historical-record':
       return `${who} from the curated historical record.`;
+    case 'news':
+      return `${who} CoinGeek news reporting, and the articles are dated.`;
     default: {
       const unexpected: never = sourceClass;
       return unexpected;

@@ -145,3 +145,45 @@ export function createRecogniser(): Recogniser {
   };
   return self;
 }
+
+type BrowserKind = 'opera' | 'brave' | 'other';
+
+function detectBrowser(): BrowserKind {
+  const nav = navigator as Navigator & { brave?: unknown };
+  if (/\bOPR\/|\bOpera\b/.test(navigator.userAgent)) return 'opera';
+  if (nav.brave) return 'brave';
+  return 'other';
+}
+
+const UNSUPPORTED_ENGINE =
+  'isn’t able to use the speech service dictation relies on. Please type your question, or try Chrome or Edge.';
+
+/** A user-facing explanation for a dictation failure, tailored to the browser where we know the cause. */
+export function describeSpeechError(reason: string): string {
+  const browser = detectBrowser();
+  switch (reason) {
+    case 'not-allowed':
+    case 'service-not-allowed':
+      return browser === 'brave' || browser === 'opera'
+        ? 'Dictation was blocked. Allow the microphone for this site, and check your browser’s privacy settings for speech services.'
+        : 'Microphone access is blocked — allow it in your browser’s site settings.';
+    case 'audio-capture':
+      return 'No microphone found — connect one and try again.';
+    case 'network':
+      if (browser === 'opera') return `Opera ${UNSUPPORTED_ENGINE}`;
+      if (browser === 'brave') return `Brave ${UNSUPPORTED_ENGINE}`;
+      return 'Dictation could not reach the speech service. Check your connection and try again.';
+    case 'language-not-supported':
+      return 'Dictation does not support British English in this browser.';
+    default:
+      return 'Dictation cut out — check your microphone and try again.';
+  }
+}
+
+/** Shown when dictation starts but no speech is ever transcribed (typical of Opera and Brave). */
+export function describeSilentFailure(): string {
+  const browser = detectBrowser();
+  if (browser === 'opera') return `Opera ${UNSUPPORTED_ENGINE}`;
+  if (browser === 'brave') return `Brave ${UNSUPPORTED_ENGINE}`;
+  return 'No speech was picked up. Check your microphone is selected and try again.';
+}

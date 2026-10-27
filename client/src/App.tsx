@@ -24,7 +24,10 @@ import {
   rejectionNotice,
 } from './lib/imageAttach';
 import { Link } from './lib/router';
-import { createRecogniser } from './lib/speech';
+import { createRecogniser, describeSilentFailure, describeSpeechError } from './lib/speech';
+
+/** How long dictation may stay silent before we assume the engine is not working. */
+const SILENCE_TIMEOUT_MS = 10_000;
 import { clearStore, isGroundingMode, loadDepth, loadStore, sanitizeFollowUps, saveDepth, saveStore } from './lib/storage';
 import type { AttachedImage, AwakeState, Depth, Message, Thread } from './types';
 
@@ -65,6 +68,7 @@ export function App() {
   const recogniser = useMemo(() => createRecogniser(), []);
   // Dictated text accumulates here so interim results replace rather than append.
   const dictatedBaseRef = useRef('');
+  const silenceTimerRef = useRef<number | null>(null);
 
   const activeThread: Thread | null =
     store.threads.find((t) => t.id === store.activeThreadId) ?? null;
@@ -183,34 +187,49 @@ export function App() {
 
   // ---- dictation ---------------------------------------------------------------
 
+  const clearSilenceTimer = () => {
+    if (silenceTimerRef.current !== null) {
+      window.clearTimeout(silenceTimerRef.current);
+      silenceTimerRef.current = null;
+    }
+  };
+
   const handleMicToggle = () => {
     if (!recogniser.supported) {
       flashNotice('Your browser cannot hear me — Chrome or Edge will do the trick.');
       return;
     }
     if (listening) {
+      clearSilenceTimer();
       recogniser.stop();
       setListening(false);
       return;
     }
     dictatedBaseRef.current = composer;
+    clearSilenceTimer();
+    // Some engines (Opera, Brave) start without error but never transcribe anything.
+    silenceTimerRef.current = window.setTimeout(() => {
+      silenceTimerRef.current = null;
+      recogniser.stop();
+      setListening(false);
+      flashNotice(describeSilentFailure());
+    }, SILENCE_TIMEOUT_MS);
     recogniser.start({
-      onInterim: (text) => setComposer(joinDictation(dictatedBaseRef.current, text)),
+      onInterim: (text) => {
+        clearSilenceTimer();
+        setComposer(joinDictation(dictatedBaseRef.current, text));
+      },
       // speech.ts rebuilds the transcript on every result and does not call this.
       // The property stays because the recogniser type still requires it.
       onFinal: () => undefined,
-      onEnd: () => setListening(false),
-      onError: (reason) => {
+      onEnd: () => {
+        clearSilenceTimer();
         setListening(false);
-        flashNotice(
-          reason === 'not-allowed' || reason === 'service-not-allowed'
-            ? 'Microphone access is blocked — allow it in your browser’s site settings.'
-            : reason === 'audio-capture'
-              ? 'No microphone found — connect one and try again.'
-              : reason === 'network'
-                ? 'Dictation needs an internet connection to work.'
-                : 'Dictation cut out — check your microphone and try again.',
-        );
+      },
+      onError: (reason) => {
+        clearSilenceTimer();
+        setListening(false);
+        flashNotice(describeSpeechError(reason));
       },
     });
     setListening(true);

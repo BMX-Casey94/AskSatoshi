@@ -111,8 +111,26 @@ button:disabled {
 }
 
 .icon-btn--listening {
-  color: #d64933;
+  color: #fff;
+  background: #d64933;
+  border-radius: 999px;
+  padding-inline: 10px;
+  gap: 6px;
+  display: inline-flex;
+  align-items: center;
   animation: pulse 1.4s ease-in-out infinite;
+}
+
+.icon-btn--listening:hover { background: #bf3b27; }
+
+.mic-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.composer--listening {
+  border-color: #d64933;
+  box-shadow: 0 0 0 2px rgba(214, 73, 51, 0.25);
 }
 
 @keyframes pulse {

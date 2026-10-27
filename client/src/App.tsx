@@ -200,9 +200,17 @@ export function App() {
       // The property stays because the recogniser type still requires it.
       onFinal: () => undefined,
       onEnd: () => setListening(false),
-      onError: () => {
+      onError: (reason) => {
         setListening(false);
-        flashNotice('Dictation cut out — check your microphone and try again.');
+        flashNotice(
+          reason === 'not-allowed' || reason === 'service-not-allowed'
+            ? 'Microphone access is blocked — allow it in your browser’s site settings.'
+            : reason === 'audio-capture'
+              ? 'No microphone found — connect one and try again.'
+              : reason === 'network'
+                ? 'Dictation needs an internet connection to work.'
+                : 'Dictation cut out — check your microphone and try again.',
+        );
       },
     });
     setListening(true);

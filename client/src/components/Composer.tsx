@@ -55,6 +55,12 @@ export function Composer(props: Props) {
     el.style.height = `${Math.min(el.scrollHeight, 200)}px`;
   }, [props.value]);
 
+  // Keep the newest dictated words in view.
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (el && props.listening) el.scrollTop = el.scrollHeight;
+  }, [props.value, props.listening]);
+
   useEffect(() => {
     if (props.autoFocus && !props.disabled) textareaRef.current?.focus();
   }, [props.autoFocus, props.disabled]);
@@ -78,7 +84,7 @@ export function Composer(props: Props) {
   return (
     <div className="composer-wrap">
       <div
-        className={`composer${props.asleep ? ' composer--asleep' : ''}${dragOver ? ' composer--drop' : ''}`}
+        className={`composer${props.listening ? ' composer--listening' : ''}${props.asleep ? ' composer--asleep' : ''}${dragOver ? ' composer--drop' : ''}`}
         onDragEnter={(event) => {
           if (!canAttach || !hasFiles(event.dataTransfer)) return;
           event.preventDefault();
@@ -132,7 +138,13 @@ export function Composer(props: Props) {
         onKeyDown={handleKeyDown}
         onFocus={() => props.onFocusChange(true)}
         onBlur={() => props.onFocusChange(false)}
-        placeholder={props.asleep ? 'Satoshi is sleeping…' : 'Ask anything…'}
+        placeholder={
+          props.asleep
+            ? 'Satoshi is sleeping…'
+            : props.listening
+              ? 'Listening… start speaking'
+              : 'Ask anything…'
+        }
         disabled={props.disabled || props.asleep}
         aria-label="Ask Satoshi a question"
         maxLength={MAX_CHARS}
@@ -180,10 +192,12 @@ export function Composer(props: Props) {
               className={`icon-btn${props.listening ? ' icon-btn--listening' : ''}`}
               onClick={props.onMicToggle}
               disabled={props.disabled || props.asleep || props.sending}
+              aria-pressed={props.listening}
               aria-label={props.listening ? 'Stop dictation' : 'Dictate your question'}
               title={props.listening ? 'Stop dictation' : 'Dictate your question'}
             >
               <MicIcon size={18} />
+              {props.listening && <span className="mic-label">Listening</span>}
             </button>
           )}
           {props.sending ? (

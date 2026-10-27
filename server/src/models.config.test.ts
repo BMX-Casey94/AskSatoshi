@@ -52,12 +52,26 @@ describe('model chain configuration', () => {
     expect(ids).not.toContain('groq-qwen3.6-27b');
   });
 
-  it('restricts image requests to vision-capable tiers, including the paid primary', () => {
-    const ids = eligibleTiers(allKeys, true).map((t) => t.id);
-    expect(ids).toContain('openrouter-flash-lite');
-    expect(ids).toContain('groq-qwen3.6-27b');
-    expect(ids).not.toContain('groq-gpt-oss-120b');
-    expect(ids).not.toContain('openrouter-nemotron-super');
+  it('restricts image requests to vision-capable tiers, in failover order', () => {
+    // Paid Gemini flash-lite, then free Gemini, Groq's vision preview, then free Gemma.
+    // Text-only backups (DeepSeek, gpt-oss, Nemotron, GLM) never see the image.
+    expect(eligibleTiers(allKeys, true).map((t) => t.id)).toEqual([
+      'openrouter-flash-lite',
+      'gemini-3.6-flash',
+      'gemini-3.5-flash',
+      'groq-qwen3.6-27b',
+      'openrouter-gemma-4-31b',
+    ]);
+    expect(eligibleTiers(allKeys, true).every((t) => t.vision)).toBe(true);
+    expect(eligibleTiers({ openrouter: 'o' }, true).map((t) => t.id)).toEqual([
+      'openrouter-flash-lite',
+      'openrouter-gemma-4-31b',
+    ]);
+    expect(eligibleTiers({ gemini: 'g' }, true).map((t) => t.id)).toEqual([
+      'gemini-3.6-flash',
+      'gemini-3.5-flash',
+    ]);
+    expect(eligibleTiers({ groq: 'q' }, true).map((t) => t.id)).toEqual(['groq-qwen3.6-27b']);
   });
 
   it('returns an empty chain when nothing is configured', () => {

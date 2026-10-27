@@ -1,9 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import {
   buildCitationFilter,
   buildSystemPrompt,
   buildUserContent,
+  clearLocatorCache,
   extractCandidateIds,
+  stopsForNoKnowledge,
   extractKeywords,
   filterUnusedCitations,
   groundQuestion,
@@ -11,6 +13,7 @@ import {
   normaliseEvidence,
   parseCitationFilter,
   pickInvitationSeed,
+  shouldDiversifyQuestion,
 } from './orchestrate.js';
 import { SatoshiCorpus, type CorpusDoc } from './satoshiCorpus.js';
 import { CuratedReference } from './curatedReference.js';
@@ -73,6 +76,10 @@ function failingMcp(): McpBridge {
     },
   } as unknown as McpBridge;
 }
+
+beforeEach(() => {
+  clearLocatorCache();
+});
 
 describe('locatorToUrl', () => {
   it('maps substack essays to singulargrit.substack.com', () => {
@@ -563,6 +570,58 @@ describe('prompt construction', () => {
     expect(sys).toMatch(/Answer ONLY the latest user message/);
   });
 
+  it('tells the model about an image, and uses an image-only variant when nothing was retrieved', () => {
+    expect(stopsForNoKnowledge('none', false)).toBe(true);
+    expect(stopsForNoKnowledge('none', true)).toBe(false);
+    expect(stopsForNoKnowledge('mcp', true)).toBe(false);
+    expect(stopsForNoKnowledge('corpus', false)).toBe(false);
+    expect(stopsForNoKnowledge('reference', true)).toBe(false);
+
+    const none = buildSystemPrompt('none', { mode: 'none', evidenceText: '', citations: [] }, {
+      hasImage: true,
+      questionClass: 'fact',
+      depth: 'beginner',
+    });
+    expect(none).toContain('IMAGE (no retrieved evidence):');
+    expect(none).toContain('The user attached an image to this message.');
+    expect(none).toContain('Describe what is actually visible, plainly');
+    expect(none).toContain('Never claim a fact about the image that is not visible in it.');
+    expect(none).toContain('Never identify real people from their faces.');
+    expect(none).toContain('where the EVIDENCE (if any) supports it');
+    expect(none).toContain('nothing to do with Bitcoin');
+    expect(none).toContain('do not invent a connection');
+    expect(none).toContain('do not repeat, transcribe or decode it');
+    expect(none).toContain('seed phrase');
+    expect(none).toContain('QR code');
+    expect(none).toContain('wallet secret');
+    expect(none).toContain('personal data');
+    expect(none).toContain('Warn the user instead');
+    expect(none).toContain('There is no EVIDENCE block for this question.');
+    expect(none).not.toContain('EVIDENCE (for the latest question only');
+    expect(none).toContain('You are Satoshi Nakamoto');
+    expect(none).toContain('If the user pastes a private key or seed phrase');
+    expect(none).toContain('QUESTION CLASS: fact');
+    expect(none).toContain('DEPTH: beginner');
+    expect(none).toMatch(/IDENTITY:/);
+
+    const grounding = {
+      mode: 'mcp' as const,
+      evidenceText: '[1] BEEF is defined by BRC-62.',
+      citations: [{ label: 'brc://spec/62' }],
+    };
+    const withEvidence = buildSystemPrompt('mcp', grounding, { hasImage: true, evidenceChars: 4 });
+    expect(withEvidence).toContain('IMAGE:');
+    expect(withEvidence).not.toContain('IMAGE (no retrieved evidence):');
+    expect(withEvidence).toContain('The user attached an image');
+    expect(withEvidence).toContain('where the EVIDENCE (if any) supports it');
+    expect(withEvidence).toContain('[1] …');
+    expect(withEvidence).not.toContain('BEEF is defined by BRC-62.');
+    expect(withEvidence).toContain('If the user pastes a private key or seed phrase');
+
+    expect(buildSystemPrompt('mcp', grounding)).not.toContain('The user attached an image');
+    expect(buildSystemPrompt('none')).not.toContain('The user attached an image');
+  });
+
   it('corpus mode tells the model the evidence is Satoshi’s own writing', () => {
     expect(buildSystemPrompt('corpus')).toMatch(/historical forum posts and e-mails/);
     expect(buildSystemPrompt('mcp')).toMatch(/pinned snapshot/);
@@ -687,11 +746,18 @@ describe('prompt construction', () => {
       questionClass: 'fact',
       invitationSeed: 'Phrase the invitation as a plain imperative.',
     });
-    expect(beginner).toMatch(
-      /DEPTH: beginner\s+[—–-]\s+plain language, define each term on first use, one analogy at most, shorter paragraphs/,
-    );
+    expect(beginner).toMatch(/DEPTH: beginner/);
+    expect(beginner).toMatch(/plain language/);
+    expect(beginner).toMatch(/no assumed prior knowledge/);
+    expect(beginner).toMatch(/technical or economic term/);
+    expect(beginner).toMatch(/same sentence the first time it appears/);
+    expect(beginner).toMatch(/at most one everyday analogy/);
+    expect(beginner).toMatch(/short paragraphs/);
+    expect(beginner).toMatch(/150.300 words/);
+    expect(beginner).toMatch(/unless the question demands more/);
+    expect(beginner).toMatch(/Do not reuse stock phrases from earlier answers in this conversation/);
     expect(beginner).toMatch(/vocabulary and depth only/);
-    expect(beginner).toMatch(/authorship and identity rules above stay as written/);
+    expect(beginner).toMatch(/facts, grounding, and the authorship and identity rules above stay as written/);
     expect(beginner).toContain('QUESTION CLASS: fact');
     expect(beginner).toContain('INVITATION SEED');
     expect(beginner).toContain('Phrase the invitation as a plain imperative.');
@@ -702,15 +768,34 @@ describe('prompt construction', () => {
     const evidenceBlock = beginner.indexOf('EVIDENCE (for the latest question only');
     expect(evidenceBlock).toBeGreaterThan(beginner.indexOf('DEPTH:'));
     expect(beginner).toContain('BEEF is defined by BRC-62.');
+    // Depth sits after the invitation rules and does not rewrite them.
+    expect(beginner.indexOf('FOLLOW-UP INVITATION')).toBeLessThan(beginner.indexOf('DEPTH:'));
 
-    expect(buildSystemPrompt('mcp', undefined, { depth: 'developer' })).toMatch(
-      /precise, name BRC numbers, opcodes, SDK calls and data structures, give concrete mechanics/,
-    );
+    const developer = buildSystemPrompt('mcp', undefined, { depth: 'developer' });
+    expect(developer).toMatch(/DEPTH: developer/);
+    expect(developer).toMatch(/lead with the mechanism/);
+    expect(developer).toMatch(/BRC numbers, opcodes, SDK calls and data structures from the EVIDENCE/);
+    expect(developer).toMatch(/code-adjacent specifics/);
+    expect(developer).toMatch(/minimal rhetoric/);
+    expect(developer).toMatch(/not in the EVIDENCE/);
+    expect(developer).toMatch(/Do not reuse stock phrases from earlier answers in this conversation/);
+    expect(developer).toMatch(/vocabulary and depth only/);
+    expect(developer).toMatch(/FOLLOW-UP INVITATION/);
+    expect(developer).toMatch(/AUTHORSHIP BOUNDARY/);
+
     const historian = buildSystemPrompt('corpus', undefined, { depth: 'historian' });
     expect(historian).toMatch(/DEPTH: historian/);
-    expect(historian).toMatch(/anchor in dates, threads, who said what and when/);
+    expect(historian).toMatch(/chronological framing/);
+    expect(historian).toMatch(/threads, posts and emails from the EVIDENCE/);
+    expect(historian).toMatch(/who said what, and when/);
+    expect(historian).toMatch(/primary record from later commentary/);
     expect(historian).toMatch(/emphasise the 2008.2011 record and the sequence of events/);
+    expect(historian).toMatch(/date, thread, post or email that is not in the EVIDENCE/);
+    expect(historian).toMatch(/Do not reuse stock phrases from earlier answers in this conversation/);
+    expect(historian).toMatch(/vocabulary and depth only/);
+    expect(historian).toMatch(/authorship and identity rules above stay as written/);
     expect(historian).toMatch(/historical forum posts and e-mails/);
+    expect(historian).toMatch(/FOLLOW-UP INVITATION/);
   });
 });
 
@@ -1358,5 +1443,257 @@ describe('options-with-a-verdict persona rule', () => {
     expect(sys).toMatch(/OPTIONS WITH A VERDICT/);
     expect(sys).toMatch(/land on one firm recommendation/);
     expect(sys).toMatch(/never to dodge the verdict/);
+  });
+});
+
+describe('shouldDiversifyQuestion', () => {
+  it('is on for broad and conceptual questions, and off for protocol-fact and builder questions', () => {
+    expect(shouldDiversifyQuestion('What is Bitcoin?')).toBe(true);
+    expect(shouldDiversifyQuestion('Why was Bitcoin hijacked?')).toBe(true);
+    expect(shouldDiversifyQuestion('What is BRC-100?')).toBe(false);
+    expect(shouldDiversifyQuestion('What is the frobnicate opcode?')).toBe(false);
+    expect(shouldDiversifyQuestion('How do I build a payment app?')).toBe(false);
+    expect(shouldDiversifyQuestion('What is NAR/DAR?')).toBe(false);
+  });
+});
+
+describe('broad-question evidence packing', () => {
+  const collapsed = (fields: string, prose: string) =>
+    `--- ${fields} --- # Placeholder — core principles ${prose}`;
+
+  function hit(partial: {
+    id: string;
+    kind: string;
+    title: string;
+    locator: string;
+    prose: string;
+    themes: string;
+    date?: string;
+  }) {
+    const date = partial.date ? ` date: ${partial.date}` : '';
+    return {
+      id: partial.id,
+      kind: partial.kind,
+      title: partial.title,
+      locator: partial.locator,
+      excerpt: collapsed(
+        `title: ${partial.title}${date} era: medium slug: ${partial.locator.split('/').pop()?.replace(/\.md$/, '')} themes: [${partial.themes}] source: summaries-medium/${partial.id}.md`,
+        partial.prose,
+      ),
+    };
+  }
+
+  const TAX_INCOME = 'Income received in bitcoin is taxed when it is received.';
+  const TAX_CAPITAL = 'Capital gains arise when bitcoin is sold.';
+  const TAX_VAT = 'VAT treatment of bitcoin payments differs from income tax.';
+  const CASH = 'Bitcoin is peer-to-peer electronic cash with no trusted issuer.';
+  const LEDGER = 'Bitcoin is a commodity ledger whose rules live in the protocol.';
+  const SUPPLY = 'The supply is capped at twenty-one million coins.';
+  const SCRIPT = 'Script decides whether a coin may be spent.';
+
+  const ESSAY_HITS = [
+    hit({
+      id: 'principle:medium:tax-and-bitcoin-income',
+      kind: 'principle',
+      title: 'Tax and Bitcoin — income',
+      locator: 'education/medium--tax-and-bitcoin-income.md',
+      themes: 'tax, law',
+      date: '2020-01-01',
+      prose: TAX_INCOME,
+    }),
+    hit({
+      id: 'essay:medium:tax-and-bitcoin-income',
+      kind: 'essay',
+      title: 'Tax and Bitcoin — income',
+      locator: 'csw://essay/medium/tax-and-bitcoin-income',
+      themes: 'tax',
+      date: '2020-01-01',
+      prose: `${TAX_INCOME} Mining rewards follow the same rule.`,
+    }),
+    hit({
+      id: 'principle:medium:tax-and-bitcoin-capital',
+      kind: 'principle',
+      title: 'Tax and Bitcoin — capital gains',
+      locator: 'education/medium--tax-and-bitcoin-capital.md',
+      themes: 'tax',
+      date: '2020-02-01',
+      prose: TAX_CAPITAL,
+    }),
+    hit({
+      id: 'essay:medium:taxing-bitcoin-vat',
+      kind: 'essay',
+      title: 'Taxing Bitcoin — VAT',
+      locator: 'csw://essay/medium/taxing-bitcoin-vat',
+      themes: 'tax',
+      date: '2020-03-01',
+      prose: TAX_VAT,
+    }),
+    hit({
+      id: 'principle:medium:what-is-bitcoin-aaa',
+      kind: 'principle',
+      title: 'What is Bitcoin',
+      locator: 'education/medium--what-is-bitcoin-aaa.md',
+      themes: 'money',
+      date: '2018-06-01',
+      prose: CASH,
+    }),
+    hit({
+      id: 'essay:medium:what-is-bitcoin-aaa',
+      kind: 'essay',
+      title: 'What is Bitcoin',
+      locator: 'csw://essay/medium/what-is-bitcoin-aaa',
+      themes: 'money',
+      date: '2018-06-01',
+      prose: CASH,
+    }),
+    hit({
+      id: 'essay:medium:what-is-bitcoin-bbb',
+      kind: 'essay',
+      title: 'What is Bitcoin',
+      locator: 'csw://essay/medium/what-is-bitcoin-bbb',
+      themes: 'design',
+      date: '2024-02-02',
+      prose: LEDGER,
+    }),
+    hit({
+      id: 'principle:medium:twenty-one-million',
+      kind: 'principle',
+      title: 'The 21 million',
+      locator: 'education/medium--twenty-one-million.md',
+      themes: 'supply',
+      date: '2019-01-01',
+      prose: SUPPLY,
+    }),
+    hit({
+      id: 'principle:medium:script-academy',
+      kind: 'principle',
+      title: 'Script and Bitcoin transactions',
+      locator: 'education/medium--script-academy.md',
+      themes: 'script',
+      date: '2019-05-01',
+      prose: SCRIPT,
+    }),
+  ];
+
+  function broadMcp(opts?: { failLocator?: string; hangLocator?: string }) {
+    const bodies: Record<string, string> = {};
+    for (const row of ESSAY_HITS) {
+      const filler = 'The record states the rule and then stops. '.repeat(12);
+      bodies[row.locator] =
+        `---\ntitle: ${row.title}\nera: medium\nthemes: [x]\n---\n\n# ${row.title} — core principles\n\n${filler}TAIL ${row.id}.`;
+    }
+    return {
+      connected: true,
+      investigate: async () => INSUFFICIENT_PKG,
+      searchKnowledge: async (_q: string, filters?: { kind?: string[] }) => {
+        if (filters?.kind?.includes('essay')) return { hits: ESSAY_HITS };
+        if (filters?.kind?.includes('brc') || filters?.kind?.includes('doc')) {
+          return {
+            hits: [
+              {
+                id: 'symbol:go-sdk:op',
+                kind: 'doc',
+                title: 'OP codes',
+                locator: 'repo://go-sdk/docs/concepts/OP.md',
+                excerpt: 'Opcode reference for the Go SDK.',
+              },
+            ],
+          };
+        }
+        return { hits: [] };
+      },
+      getResource: async (uri: string) => {
+        if (opts?.failLocator && uri === opts.failLocator) throw new Error('resource down');
+        if (opts?.hangLocator && uri === opts.hangLocator) return new Promise(() => undefined);
+        return { text: bodies[uri] };
+      },
+    } as unknown as McpBridge;
+  }
+
+  it('strips front matter from an investigate excerpt and keeps the parsed date', async () => {
+    const g = await groundQuestion('What is Bitcoin?', {
+      mcp: fakeMcp({
+        claims: [{ text: 'Bitcoin is electronic cash.', support: ['p:1'], status: 'supports' }],
+        hits: [
+          hit({
+            id: 'principle:medium:what-is-bitcoin-aaa',
+            kind: 'principle',
+            title: 'What is Bitcoin',
+            locator: 'education/medium--what-is-bitcoin-aaa.md',
+            themes: 'money',
+            date: '2018-06-01',
+            prose: CASH,
+          }),
+        ],
+        gaps: [],
+        contradictions: [],
+      }),
+      corpus: null,
+    });
+    expect(g.evidenceText).toContain(CASH);
+    expect(g.evidenceText).toContain('(2018-06-01)');
+    expect(g.evidenceText).not.toContain('themes:');
+    expect(g.evidenceText).not.toContain('core principles');
+    expect(g.citations[0]?.date).toBe('2018-06-01');
+  });
+
+  it('leads a broad "What is Bitcoin?" block with the seeded angle and drops the tax run', async () => {
+    const g = await groundQuestion('What is Bitcoin?', { mcp: broadMcp(), corpus: null }, { rng: () => 0.99 });
+    expect(g.mode).toBe('mcp');
+    expect(g.leadAngle).toMatch(/supply/i);
+    expect(g.leadAngle).toMatch(/21 million/i);
+    expect(g.evidenceText).not.toContain('themes:');
+    expect(g.evidenceText).not.toContain('core principles');
+    expect(g.evidenceText).toContain('TAIL principle:medium:twenty-one-million');
+    expect(g.evidenceText).toContain(TAX_INCOME);
+    expect(g.evidenceText).toContain('Mining rewards follow the same rule.');
+    expect(g.evidenceText).not.toContain(TAX_VAT);
+    expect(g.evidenceText).not.toContain(TAX_CAPITAL);
+    expect(g.evidenceText).not.toContain(SCRIPT);
+    expect(g.evidenceText.indexOf('TAIL principle:medium:twenty-one-million')).toBeLessThan(
+      g.evidenceText.indexOf(TAX_INCOME),
+    );
+    const income = g.citations.filter((c) => c.url?.includes('tax-and-bitcoin-income'));
+    expect(income).toHaveLength(1);
+    expect(income[0]?.date).toBe('2020-01-01');
+    const what = g.citations.filter((c) => c.title === 'What is Bitcoin');
+    expect(what.map((c) => c.date).sort()).toEqual(['2018-06-01', '2024-02-02']);
+
+    const prompt = buildSystemPrompt('mcp', g, { leadAngle: g.leadAngle, depth: 'beginner' });
+    expect(prompt).toContain(`LEAD ANGLE: Open from this angle — ${g.leadAngle} — and treat the other evidence as supporting. Do not survey every source.`);
+    expect(prompt).toMatch(/DEPTH: beginner/);
+    expect(prompt).toMatch(/FOLLOW-UP INVITATION/);
+    expect(prompt).toMatch(/AUTHORSHIP BOUNDARY/);
+    expect(prompt.indexOf('LEAD ANGLE:')).toBeGreaterThan(prompt.indexOf('DEPTH:'));
+    expect(prompt.indexOf('LEAD ANGLE:')).toBeLessThan(prompt.indexOf('EVIDENCE (for the latest question only'));
+  });
+
+  it('keeps protocol-fact and builder questions in rank order', async () => {
+    const fact = await groundQuestion('What is BRC-100?', { mcp: broadMcp(), corpus: null }, { rng: () => 0.99 });
+    expect(fact.leadAngle).toBeUndefined();
+    expect(fact.evidenceText).toContain(TAX_VAT);
+    expect(fact.evidenceText.indexOf(TAX_INCOME)).toBeLessThan(fact.evidenceText.indexOf(TAX_VAT));
+    expect(fact.evidenceText).not.toContain('TAIL principle:medium:twenty-one-million');
+
+    const builder = await groundQuestion(
+      'How do I build a payment app?',
+      { mcp: broadMcp(), corpus: null },
+      { rng: () => 0.99 },
+    );
+    expect(builder.leadAngle).toBeUndefined();
+    expect(builder.evidenceText).toContain('IMPLEMENTATION OPTIONS');
+    expect(builder.evidenceText.indexOf(TAX_INCOME)).toBeLessThan(builder.evidenceText.indexOf(TAX_VAT));
+    expect(builder.evidenceText).not.toContain('TAIL principle:medium:twenty-one-million');
+  });
+
+  it('fails open to the stripped excerpt when the fuller fetch throws', async () => {
+    const g = await groundQuestion(
+      'What is Bitcoin?',
+      { mcp: broadMcp({ failLocator: 'education/medium--twenty-one-million.md' }), corpus: null },
+      { rng: () => 0.99 },
+    );
+    expect(g.evidenceText).toContain(SUPPLY);
+    expect(g.evidenceText).not.toContain('TAIL principle:medium:twenty-one-million');
+    expect(g.evidenceText).not.toContain('themes:');
   });
 });

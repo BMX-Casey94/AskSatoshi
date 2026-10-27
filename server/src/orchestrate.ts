@@ -1,8 +1,10 @@
 /**
  * Orchestration: question → MCP investigate → (insufficient?) Satoshi corpus → grounding
  * bundle for the LLM chain. Fail-closed throughout: when neither source can answer,
- * we return mode 'none' and the caller replies with the witty NO_KNOWLEDGE message
- * without spending a single model token.
+ * we return mode 'none'. The caller answers a text question with the witty
+ * NO_KNOWLEDGE line and spends no model token. An attached image is the caller's
+ * exception (stopsForNoKnowledge): that request still goes to a vision model, and
+ * the reply is still reported as mode 'none' with no citations.
  *
  * EvidencePackage shape verified against bsv-aio-mcp@1.1.0 (gitHead 76fca58):
  *   { question, classified_as, network, hops_used, index, needs, claims, hits, gaps,
@@ -26,8 +28,40 @@ import {
   type CuratedReference,
   type ScalingRecord,
 } from './curatedReference.js';
-import { expandTerms, PROTOCOL_ID_SOURCE } from './queryUnderstanding.js';
+import { extractKeywords, hasProtocolId, PROTOCOL_ID_SOURCE } from './queryUnderstanding.js';
 import type { AnswerDepth } from './chatRequest.js';
+import {
+  dedupeEvidenceHits,
+  ENRICH_TIMEOUT_MS,
+  ENRICH_TOP_N,
+  loadRicherSource,
+  mergeDistinctProse,
+  packBroadEvidence,
+  parseLeadingMatter,
+  type EvidenceRecord,
+} from './evidencePack.js';
+
+export { extractKeywords };
+export {
+  dedupeEvidenceHits,
+  loadRicherSource,
+  mergeDistinctProse,
+  packBroadEvidence,
+  parseLeadingMatter,
+};
+export {
+  clearLocatorCache,
+  createLocatorCache,
+  deriveAngles,
+  diversifyEvidenceHits,
+  evidencePairKey,
+  hitDirectlyEngages,
+  loadRicherBody,
+  parseThemeList,
+  pickAngleSeed,
+  seriesKey,
+  titleKey,
+} from './evidencePack.js';
 
 /** Where a source sits in the evidentiary hierarchy. */
 export type SourceClass = 'satoshi-primary' | 'spec' | 'later-commentary' | 'historical-record';
@@ -50,6 +84,11 @@ export interface Grounding {
   mode: 'mcp' | 'corpus' | 'reference' | 'none';
   evidenceText: string;
   citations: Citation[];
+  /**
+   * For a broad question: the theme the evidence block leads with. Threaded into
+   * the prompt once per request and reused for a revision, the same way a style seed is.
+   */
+  leadAngle?: string;
 }
 
 export interface NormalisedEvidence {
@@ -63,6 +102,8 @@ export interface NormalisedEvidence {
   sketch?: string;
   gaps: string[];
   contradictions: string[];
+  /** Set when a broad question had more than one theme to lead with. */
+  leadAngle?: string;
 }
 
 const MAX_EVIDENCE_CHARS = 6_000;
@@ -84,14 +125,13 @@ const MAX_INTERNAL_EVIDENCE_PER_TIER = 1;
 const MAX_SECOND_HOP_IDS = 3;
 const MAX_OPTION_ENTRIES = 4;
 
-/** Strip leading markdown frontmatter/chrome (title, Date/URL/Subtitle lines) so excerpts open on prose. */
+/**
+ * Strip leading YAML / markdown chrome so excerpts open on prose. Title, date, era
+ * and themes are parsed first (see parseLeadingMatter) wherever a caller needs them;
+ * this wrapper is the prose half, used by every slice that reaches the model or the panel.
+ */
 function stripFrontmatter(text: string): string {
-  let t = text.replace(/\r/g, '').trimStart();
-  // Drop a leading H1 title line.
-  t = t.replace(/^#\s+[^\n]*\n+/, '');
-  // Drop leading metadata lines like "**Date:** …", "**URL:** …", "**Subtitle:** …".
-  t = t.replace(/^(\*\*(Date|URL|Subtitle|Author|Era|Source):\*\*[^\n]*\n+)+/i, '');
-  return t.trim();
+  return parseLeadingMatter(text).prose;
 }
 
 /**
@@ -182,55 +222,6 @@ function isConceptualQuestion(q: string): boolean {
   );
 }
 
-/**
- * Extract the retrieval keywords from a natural-language question. The MCP's
- * `investigate` and `search_knowledge` are phrasing-sensitive: "What can you tell me
- * about BRC-100s?" retrieves nothing, whilst "BRC-100" returns the BRC-100 document as
- * the top hit. Pull out the subject terms — protocol identifiers (BRC-100, BEEF,
- * OP_RETURN), capitalised/coined terms, and content words — so the fallback search
- * queries the subject, not the conversational wrapper. Returns undefined when no
- * useful keyword can be isolated (caller then uses the raw question).
- */
-export function extractKeywords(question: string): string | undefined {
-  const q = question.trim();
-  if (!q) return undefined;
-
-  // Strongest signal: explicit protocol/spec identifiers. BRC-100, OP_CHECKSIG, BEEF,
-  // SPV, Rúnar, UTXO, etc. A trailing plural 's' on a BRC id is stripped in the
-  // normalisation below so "BRC-100s" resolves to the spec id "BRC-100".
-  const idMatches = q.match(new RegExp(`\\b${PROTOCOL_ID_SOURCE}\\b`, 'gi'));
-  if (idMatches && idMatches.length > 0) {
-    const ids = [
-      ...new Set(
-        idMatches.map((m) => {
-          const brc = /^BRC-?(\d+?)s?$/i.exec(m);
-          return brc ? `BRC-${brc[1]}` : m;
-        }),
-      ),
-    ]
-      .slice(0, 3)
-      .join(' ');
-    return ids;
-  }
-
-  // Otherwise strip the conversational wrapper and keep content words. Comparative
-  // framing (compare/versus/similar/two/both…) describes the asker's phrasing, not the
-  // subject — it only dilutes the AND-semantics search on the MCP side.
-  const STOP = new Set(
-    ('a,an,and,are,as,at,be,been,but,by,can,could,did,do,does,for,from,had,has,have,he,her,his,how,i,if,in,into,is,it,its,me,my,of,on,or,so,tell,that,the,their,them,they,this,to,was,we,were,what,when,which,who,why,will,with,you,your,about,know,known,want,wanted,like,show,explain,describe,give,say,said,please,thanks,thank,' +
-      'compare,compares,compared,comparing,comparable,comparison,versus,vs,similar,similarly,similarity,difference,differences,differ,between,help,relate,relates,related,relation,contrast,two,both').split(','),
-  );
-  const words = q
-    // Slashes and dashes join distinct tokens ("NAR/DAR") — split them, don't fuse them.
-    .replace(/[?!.,;:"'()\/–—]/g, ' ')
-    .split(/\s+/)
-    .filter((w) => w.length > 1 && !STOP.has(w.toLowerCase()));
-  if (words.length === 0) return undefined;
-  // Keep it tight: the subject is usually in the first few content words. Then append
-  // the full names of any coined acronyms (NAR → Network Access Rules): the snapshot's
-  // essays tokenise as the spelled-out phrase, so the acronym alone retrieves nothing.
-  return expandTerms(words.slice(0, 6).join(' '));
-}
 
 /**
  * Candidate protocol/spec identifiers named by a block of evidence text, in mention
@@ -395,15 +386,24 @@ export function locatorToUrl(locator: string | undefined): string | undefined {
 
 interface RawHit {
   id: string;
+  kind?: string;
   locator?: string;
   excerpt?: string;
   title?: string;
   url?: string;
   /** Full stored body, populated via get_resource for citation-worthy hits. */
   body?: string;
+  /** ISO date parsed from front matter, when the hit did not already carry one. */
+  date?: string;
+  era?: string;
+  themes?: string[];
 }
 
-export function normaliseEvidence(pkg: unknown, question?: string): NormalisedEvidence {
+export function normaliseEvidence(
+  pkg: unknown,
+  question?: string,
+  opts?: { rng?: () => number; /** Question used for theme caps. Defaults to `question`. */ diversifyOn?: string },
+): NormalisedEvidence {
   const empty: NormalisedEvidence = {
     sufficient: false,
     claims: [],
@@ -426,9 +426,15 @@ export function normaliseEvidence(pkg: unknown, question?: string): NormalisedEv
       if (typeof hit.id !== 'string' || !hit.id) continue;
       const raw: RawHit = {
         id: hit.id,
+        kind: typeof hit.kind === 'string' ? hit.kind : undefined,
         locator: typeof hit.locator === 'string' ? hit.locator : undefined,
         excerpt: typeof hit.excerpt === 'string' ? hit.excerpt : undefined,
         title: typeof hit.title === 'string' ? hit.title : undefined,
+        date: typeof hit.date === 'string' ? hit.date : undefined,
+        era: typeof hit.era === 'string' ? hit.era : undefined,
+        themes: Array.isArray(hit.themes)
+          ? hit.themes.filter((theme): theme is string => typeof theme === 'string')
+          : undefined,
         url:
           typeof hit.url === 'string'
             ? hit.url
@@ -463,7 +469,48 @@ export function normaliseEvidence(pkg: unknown, question?: string): NormalisedEv
     }
   }
 
-  // Excerpts from the hits backing those claims first; pad with remaining hits.
+  // Claim-backed hits first, then the rest. Dedupe principle/essay pairs and
+  // near-identical titles before anything is sliced into the evidence block, and
+  // — for a broad question only — spread the slots across themes.
+  const orderedHits = [...hitsById.values()];
+  const prioritised = [
+    ...orderedHits.filter((hit) => referencedHitIds.has(hit.id)),
+    ...orderedHits.filter((hit) => !referencedHitIds.has(hit.id)),
+  ];
+  const deduped = dedupeEvidenceHits(prioritised);
+  for (const hit of deduped.hits) {
+    const orig = hitsById.get(hit.id);
+    if (!orig) continue;
+    orig.excerpt = hit.excerpt;
+    if (hit.date) orig.date = hit.date;
+    if (hit.era) orig.era = hit.era;
+    if (hit.themes?.length) orig.themes = hit.themes;
+    if (hit.title) orig.title = hit.title;
+  }
+  let sequence: EvidenceRecord[] = deduped.hits;
+  let leadAngle: string | undefined;
+  const diversifyOn = opts?.diversifyOn ?? question;
+  if (diversifyOn && shouldDiversifyQuestion(diversifyOn)) {
+    const packed = packBroadEvidence(sequence, diversifyOn, opts?.rng, { limit: MAX_EXCERPTS });
+    const kept = new Set(packed.hits.map((hit) => hit.id));
+    const removed = new Set(
+      sequence
+        .filter((hit) => !kept.has(hit.id))
+        .flatMap((hit) => [hit.id, hit.locator ?? '']),
+    );
+    sequence = packed.hits;
+    leadAngle = packed.leadAngle;
+    if (removed.size > 0) {
+      for (let i = claims.length - 1; i >= 0; i--) {
+        const claim = claims[i];
+        if (!claim || claim.refs.length === 0) continue;
+        if (claim.refs.every((ref) => removed.has(ref))) claims.splice(i, 1);
+      }
+    }
+  }
+
+  // Excerpts from the packed hits. Unreferenced padding still has to share a term
+  // with the question — the MCP returns many incidental hits.
   const excerpts: NormalisedEvidence['excerpts'] = [];
   const pushExcerpt = (hit: RawHit) => {
     const source = hit.body ?? hit.excerpt;
@@ -472,17 +519,11 @@ export function normaliseEvidence(pkg: unknown, question?: string): NormalisedEv
     if (excerpts.some((e) => e.ref === ref)) return;
     excerpts.push({ text: cleanSlice(source, MAX_EXCERPT_CHARS), ref });
   };
-  for (const id of referencedHitIds) {
-    const hit = hitsById.get(id);
-    if (hit) pushExcerpt(hit);
-  }
-  // Pad with remaining hits only when they share a term with the question — the MCP
-  // returns many incidental hits, and unrelated ones surface as irrelevant citations.
-  if (excerpts.length < MAX_EXCERPTS) {
-    for (const hit of hitsById.values()) {
-      if (question && !sharesTermWith(question, hit)) continue;
-      pushExcerpt(hit);
-    }
+  for (const hit of sequence) {
+    const orig = hitsById.get(hit.id);
+    if (!orig) continue;
+    if (question && !referencedHitIds.has(orig.id) && !sharesTermWith(question, orig)) continue;
+    pushExcerpt(orig);
   }
 
   const sketch = typeof p.answer_sketch === 'string' && p.answer_sketch ? p.answer_sketch : undefined;
@@ -501,7 +542,16 @@ export function normaliseEvidence(pkg: unknown, question?: string): NormalisedEv
         .slice(0, 3)
     : [];
 
-  return { sufficient: claims.length > 0, claims, excerpts, hitsByRef: hitsByRefAll, sketch, gaps, contradictions };
+  return {
+    sufficient: claims.length > 0,
+    claims,
+    excerpts,
+    hitsByRef: hitsByRefAll,
+    sketch,
+    gaps,
+    contradictions,
+    leadAngle,
+  };
 }
 
 function buildMcpGrounding(evidence: NormalisedEvidence): Grounding {
@@ -532,6 +582,7 @@ function buildMcpGrounding(evidence: NormalisedEvidence): Grounding {
       label: title,
       title,
       url,
+      date: hit?.date,
       excerpt: panelSource ? cleanSlice(panelSource, PANEL_EXCERPT_CHARS) : undefined,
       sourceClass: 'spec',
     });
@@ -567,7 +618,9 @@ function buildMcpGrounding(evidence: NormalisedEvidence): Grounding {
         evidence.excerpts
           .map((e) => {
             const n = refNumber(e.ref);
-            return n !== null ? `[${n}] "${e.text}"` : `- "${e.text}"`;
+            const dated = evidence.hitsByRef.get(e.ref)?.date;
+            const when = dated ? `(${dated}) ` : '';
+            return n !== null ? `[${n}] ${when}"${e.text}"` : `- ${when}"${e.text}"`;
           })
           .join('\n'),
     );
@@ -587,7 +640,12 @@ function buildMcpGrounding(evidence: NormalisedEvidence): Grounding {
 
   let text = sections.join('\n\n');
   if (text.length > MAX_EVIDENCE_CHARS) text = `${text.slice(0, MAX_EVIDENCE_CHARS)}…`;
-  return { mode: 'mcp', evidenceText: text, citations: citations.slice(0, MAX_CITATIONS) };
+  return {
+    mode: 'mcp',
+    evidenceText: text,
+    citations: citations.slice(0, MAX_CITATIONS),
+    leadAngle: evidence.leadAngle,
+  };
 }
 
 /**
@@ -614,6 +672,9 @@ function mergeGroundings(primary: Grounding | null, secondary: Grounding | null)
     evidenceText:
       evidenceText.length > MAX_EVIDENCE_CHARS ? `${evidenceText.slice(0, MAX_EVIDENCE_CHARS)}…` : evidenceText,
     citations: [...primary.citations, ...extra].slice(0, MAX_CITATIONS),
+    // The primary block is the one that was ordered around this angle. Do not borrow
+    // a secondary angle that would point at a different lead.
+    leadAngle: primary.leadAngle,
   };
 }
 
@@ -669,8 +730,16 @@ function corpusLabel(d: CorpusDoc): string {
   return `${kind}: "${d.title}" (${year})`;
 }
 
-/** Fetch full bodies for the citation-worthy hits so grounding + the panel use real text. */
-async function hydrateBodies(evidence: NormalisedEvidence, mcp: McpBridge): Promise<void> {
+/**
+ * Fetch full bodies for the citation-worthy hits so grounding + the panel use real text.
+ * `timeoutMs` is set for broad questions (fail-open to the excerpt). Fact and builder
+ * questions keep the bridge's own timeout. Successful reads are cached by locator.
+ */
+async function hydrateBodies(
+  evidence: NormalisedEvidence,
+  mcp: McpBridge,
+  opts?: { timeoutMs?: number },
+): Promise<void> {
   // Collect the locators we actually cite (linkable first), capped to keep it fast.
   const refs: string[] = [];
   for (const c of evidence.claims) for (const r of c.refs) refs.push(r);
@@ -681,21 +750,21 @@ async function hydrateBodies(evidence: NormalisedEvidence, mcp: McpBridge): Prom
       const hit = evidence.hitsByRef.get(ref);
       const locator = hit?.locator ?? ref;
       if (!locator || hit?.body) return;
-      try {
-        const res = await mcp.getResource(locator);
-        const text = resourceText(res);
-        if (text && hit) {
-          hit.body = text;
-          // normaliseEvidence baked excerpts from the short server-truncated text before
-          // hydration; re-slice from the full body so the MODEL reads complete evidence,
-          // not a mid-word truncation. (The citation panel already prefers hit.body.)
-          const ref = hit.locator ?? hit.id;
-          for (const e of evidence.excerpts) {
-            if (e.ref === ref) e.text = cleanSlice(text, MAX_EXCERPT_CHARS);
-          }
+      const source = await loadRicherSource(
+        locator,
+        async (uri) => resourceText(await mcp.getResource(uri)),
+        { timeoutMs: opts?.timeoutMs },
+      );
+      if (!source || !hit) return;
+      const combined = mergeDistinctProse(source.prose, hit.excerpt);
+      hit.body = combined;
+      if (!hit.date && source.date) hit.date = source.date;
+      if ((!hit.themes || hit.themes.length === 0) && source.themes.length > 0) hit.themes = source.themes;
+      const excerptRef = hit.locator ?? hit.id;
+      for (const excerpt of evidence.excerpts) {
+        if (excerpt.ref === excerptRef || excerpt.ref === ref) {
+          excerpt.text = cleanSlice(combined, MAX_EXCERPT_CHARS);
         }
-      } catch {
-        // A missing body is non-fatal: we keep the excerpt.
       }
     }),
   );
@@ -724,7 +793,7 @@ async function searchGrounding(
   question: string,
   mcp: McpBridge,
   corpus: SatoshiCorpus | null,
-  opts?: { techQuery?: string; variants?: string[]; originalQuestion?: string },
+  opts?: { techQuery?: string; variants?: string[]; originalQuestion?: string; rng?: () => number },
 ): Promise<Grounding | null> {
   // Pull later commentary (essays + corpus contradiction findings), technical spec
   // data, and Satoshi's own writings in parallel. No `era` filter — that would
@@ -795,36 +864,63 @@ async function searchGrounding(
   // locator scheme is filtered out of the model's reach.
   const seenUrls = new Set<string>();
   const seenInternal = new Set<string>();
-  const pickTier = (hits: Record<string, unknown>[], cap: number) => {
-    const picked: { title: string; url: string | undefined; locator: string }[] = [];
+  /** Linkable and internal hits, with front matter already lifted off the excerpt. */
+  interface PickedHit extends EvidenceRecord {
+    locator: string;
+    title: string;
+  }
+  const prepareHit = (hit: Record<string, unknown>): PickedHit | undefined => {
+    if (typeof hit !== 'object' || hit === null) return undefined;
+    const locator = typeof hit.locator === 'string' ? hit.locator : '';
+    if (!locator) return undefined;
+    const rawExcerpt = typeof hit.excerpt === 'string' ? hit.excerpt : '';
+    const matter = parseLeadingMatter(rawExcerpt);
+    const rawTitle = typeof hit.title === 'string' ? hit.title : '';
+    const themes = [
+      ...(Array.isArray(hit.themes) ? hit.themes.filter((theme): theme is string => typeof theme === 'string') : []),
+      ...matter.themes,
+    ];
+    return {
+      id: typeof hit.id === 'string' && hit.id ? hit.id : locator,
+      kind: typeof hit.kind === 'string' ? hit.kind : undefined,
+      locator,
+      title: cleanTitle(rawTitle) || matter.title || locator,
+      excerpt: matter.prose,
+      date: (typeof hit.date === 'string' ? hit.date : undefined) || matter.date,
+      era: (typeof hit.era === 'string' ? hit.era : undefined) || matter.era,
+      themes: [...new Set(themes.map((theme) => theme.toLowerCase()))],
+      url: locatorToUrl(locator),
+    };
+  };
+  const admitInternal = (prepared: PickedHit, bucket: PickedHit[], count: number): number => {
+    if (count >= MAX_INTERNAL_EVIDENCE_PER_TIER || seenInternal.has(prepared.locator)) return count;
+    // Gate on the stripped snippet as well as the title — a curated card's title need
+    // not contain the query term.
+    const gate: RawHit = {
+      id: prepared.id,
+      locator: prepared.locator,
+      title: prepared.excerpt ? `${prepared.title} ${prepared.excerpt}` : prepared.title,
+    };
+    if (!sharesTermWith(`${intent} ${question}`, gate)) return count;
+    seenInternal.add(prepared.locator);
+    bucket.push(prepared);
+    return count + 1;
+  };
+  const pickTier = (hits: Record<string, unknown>[], cap: number): PickedHit[] => {
+    const picked: PickedHit[] = [];
     let linkable = 0;
     let internal = 0;
     for (const hit of hits) {
-      if (typeof hit !== 'object' || hit === null) continue;
-      const locator = typeof hit.locator === 'string' ? hit.locator : '';
-      if (!locator) continue;
-      const title = typeof hit.title === 'string' ? hit.title : locator;
-      const url = locatorToUrl(locator);
-      if (url) {
-        if (linkable >= cap || seenUrls.has(url)) continue;
-        seenUrls.add(url);
+      const prepared = prepareHit(hit);
+      if (!prepared) continue;
+      if (prepared.url) {
+        if (linkable >= cap || seenUrls.has(prepared.url)) continue;
+        seenUrls.add(prepared.url);
         linkable++;
-        picked.push({ title, url, locator });
+        picked.push(prepared);
         continue;
       }
-      if (internal >= MAX_INTERNAL_EVIDENCE_PER_TIER || seenInternal.has(locator)) continue;
-      // Gate on the MCP's relevance snippet as well as title/locator — a curated card's
-      // title ("Bitcoin's 2014–2017 direction change…") need not contain the query term.
-      const excerpt = typeof hit.excerpt === 'string' ? hit.excerpt : '';
-      const gate: RawHit = {
-        id: typeof hit.id === 'string' ? hit.id : locator,
-        locator,
-        title: excerpt ? `${title} ${excerpt}` : title,
-      };
-      if (!sharesTermWith(`${intent} ${question}`, gate)) continue;
-      seenInternal.add(locator);
-      internal++;
-      picked.push({ title, url: undefined, locator });
+      internal = admitInternal(prepared, picked, internal);
     }
     return picked;
   };
@@ -846,46 +942,94 @@ async function searchGrounding(
     }
   };
   // Builder questions trade one essay slot for the option set the second hop assembles.
-  const essayPicked = pickTier(interleave(essayRawList.map(hitsOf)), builder ? 3 : 4);
+  // Broad questions are packed before the cap: principle/essay pairs collapse, one
+  // series cannot fill every slot, and one theme is moved to the front.
+  const essayCap = builder ? 3 : 4;
+  const essayLinkable: PickedHit[] = [];
+  const essayInternal: PickedHit[] = [];
+  let essayInternalCount = 0;
+  for (const hit of interleave(essayRawList.map(hitsOf))) {
+    const prepared = prepareHit(hit);
+    if (!prepared) continue;
+    if (prepared.url) {
+      essayLinkable.push(prepared);
+      continue;
+    }
+    essayInternalCount = admitInternal(prepared, essayInternal, essayInternalCount);
+  }
+  const dedupedEssays = dedupeEvidenceHits(essayLinkable).hits;
+  let leadAngle: string | undefined;
+  let essaySelected: PickedHit[];
+  const broad = !builder && shouldDiversifyQuestion(intent);
+  if (broad) {
+    const packed = packBroadEvidence(dedupedEssays, intent, opts?.rng, { limit: essayCap });
+    essaySelected = packed.hits;
+    leadAngle = packed.leadAngle;
+  } else {
+    essaySelected = dedupedEssays.slice(0, essayCap);
+  }
+  for (const essay of essaySelected) {
+    if (essay.url) seenUrls.add(essay.url);
+  }
+  const essayPicked = [...essaySelected, ...essayInternal];
   const techPicked = pickTier(interleave(techRawList.map(hitsOf)), 2);
 
   // Nothing from any tier — fail closed so the caller can fall back.
   if (essayPicked.length === 0 && techPicked.length === 0 && primaryDocs.length === 0) return null;
 
+  // Which selected entries get a fuller read. Broad questions enrich the essay slots
+  // (at most ENRICH_TOP_N) plus any selected tech/internal hit, under a short timeout.
+  // Fact and builder questions enrich every selected hit and keep the bridge timeout.
+  const richLocators = new Set<string>();
+  if (broad) {
+    for (const hit of essaySelected.slice(0, ENRICH_TOP_N)) richLocators.add(hit.locator);
+    for (const hit of essayInternal) richLocators.add(hit.locator);
+    for (const hit of techPicked) richLocators.add(hit.locator);
+  }
+
   // Fetch full bodies for a picked tier (evidence + panel excerpts). Entries without a
   // public URL return a null citation: their text still reaches the model as evidence,
-  // but they are never surfaced as a source (never emit a dead link).
+  // but they are never surfaced as a source (never emit a dead link). A failed or slow
+  // read keeps the stripped excerpt.
   const hydrate = async (
-    picked: { title: string; url: string | undefined; locator: string }[],
+    picked: PickedHit[],
     sourceClass: SourceClass,
+    fetchAll: boolean,
   ): Promise<{ citation: Citation | null; part: string }[]> => {
     return Promise.all(
-      picked.map(async (p) => {
-        let body: string | undefined;
-        try {
-          body = resourceText(await mcp.getResource(p.locator));
-        } catch {
-          body = undefined;
+      picked.map(async (p, index) => {
+        const allow = fetchAll || richLocators.has(p.locator) || (!broad && index < ENRICH_TOP_N);
+        let richer: Awaited<ReturnType<typeof loadRicherSource>> | undefined;
+        if (allow) {
+          richer = await loadRicherSource(
+            p.locator,
+            async (uri) => resourceText(await mcp.getResource(uri)),
+            broad ? { timeoutMs: ENRICH_TIMEOUT_MS } : {},
+          );
         }
-        const text = body ? cleanSlice(body, MAX_EXCERPT_CHARS) : '';
+        const prose = mergeDistinctProse(richer?.prose, p.excerpt);
+        const text = prose ? cleanSlice(prose, MAX_EXCERPT_CHARS) : '';
+        const date = p.date || richer?.date;
         const title = cleanTitle(p.title) ?? p.title;
+        const heading = date && sourceClass === 'later-commentary' ? `${title} (${date})` : title;
         const citation: Citation | null = p.url
           ? {
               label: title,
               title,
               url: p.url,
-              excerpt: body ? cleanSlice(body, PANEL_EXCERPT_CHARS) : undefined,
+              date,
+              excerpt: prose ? cleanSlice(prose, PANEL_EXCERPT_CHARS) : undefined,
               sourceClass,
             }
           : null;
-        return { citation, part: `${title}\n${text}` };
+        return { citation, part: text ? `${heading}\n${text}` : heading };
       }),
     );
   };
 
   const [essayTier, techTier] = await Promise.all([
-    hydrate(essayPicked, 'later-commentary'),
-    hydrate(techPicked, 'spec'),
+    hydrate(essayPicked, 'later-commentary', !broad),
+    hydrate(techPicked, 'spec', !broad),
   ]);
 
   // Second hop (builder questions only): the first hop's commentary names the candidate
@@ -904,7 +1048,7 @@ async function searchGrounding(
     if (hopIds.length > 0) {
       const hopRaw = await Promise.all(hopIds.map((id) => searchTier(id, TECH_KINDS)));
       const hopCap = Math.max(1, MAX_OPTION_ENTRIES - techPicked.length);
-      hopTier = await hydrate(pickTier(interleave(hopRaw.map(hitsOf)), hopCap), 'spec');
+      hopTier = await hydrate(pickTier(interleave(hopRaw.map(hitsOf)), hopCap), 'spec', true);
     }
   }
 
@@ -970,6 +1114,7 @@ async function searchGrounding(
     mode: 'mcp',
     evidenceText: viewpointNotice + '\n\n' + evidenceSections.join('\n\n'),
     citations: numbered.flatMap((e) => (e.citation ? [e.citation] : [])).slice(0, MAX_CITATIONS),
+    leadAngle,
   };
 }
 
@@ -1066,6 +1211,7 @@ function withScalingRecord(g: Grounding, scaling: ScalingRecord, opts?: { prepen
       ? scaling.evidenceText + (g.evidenceText ? `\n\n${g.evidenceText}` : '')
       : (g.evidenceText ? `${g.evidenceText}\n\n` : '') + scaling.evidenceText,
     citations: [...g.citations, ...extra].slice(0, MAX_CITATIONS),
+    leadAngle: g.leadAngle,
   };
 }
 
@@ -1085,6 +1231,12 @@ export interface RetrievalPlan {
   originalQuestion?: string;
   /** Prior conversation context, forwarded to the MCP's investigate for follow-ups. */
   context?: string;
+  /**
+   * Source of per-request randomness for the lead angle. Tests inject a constant.
+   * Defaults to Math.random. The chosen angle is stored on the grounding and reused
+   * for a revision; this function is not called again.
+   */
+  rng?: () => number;
 }
 
 export async function groundQuestion(
@@ -1173,9 +1325,12 @@ async function groundStandard(
             ),
           ),
         ].slice(0, 3);
-        let evidence = normaliseEvidence(null, `${intent} ${question}`);
+        let evidence = normaliseEvidence(null, `${intent} ${question}`, { diversifyOn: intent });
         for (const attempt of attempts) {
-          evidence = normaliseEvidence(await mcp.investigate(attempt, plan?.context), `${intent} ${question}`);
+          evidence = normaliseEvidence(await mcp.investigate(attempt, plan?.context), `${intent} ${question}`, {
+            rng: plan?.rng,
+            diversifyOn: intent,
+          });
           if (evidence.sufficient) break;
         }
         return evidence.sufficient ? evidence : null;
@@ -1185,6 +1340,7 @@ async function groundStandard(
         ? searchGrounding(question, mcp, deps.corpus, {
             variants: plan?.variants,
             originalQuestion: intent,
+            rng: plan?.rng,
             ...(isImplementationQuestion(intent) ? { techQuery: implementationTechQuery(intent) } : {}),
           }).catch(() => null)
         : Promise.resolve(null);
@@ -1197,7 +1353,13 @@ async function groundStandard(
       const investigateGrounding =
         evidence && investigateEngages(evidence, `${intent} ${question}`)
           ? await (async () => {
-              if (typeof mcp.getResource === 'function') await hydrateBodies(evidence, mcp);
+              if (typeof mcp.getResource === 'function') {
+                await hydrateBodies(
+                  evidence,
+                  mcp,
+                  shouldDiversifyQuestion(intent) ? { timeoutMs: ENRICH_TIMEOUT_MS } : undefined,
+                );
+              }
               return buildMcpGrounding(evidence);
             })()
           : null;
@@ -1219,8 +1381,18 @@ async function groundStandard(
     if (docs.length > 0) return buildCorpusGrounding(docs);
   }
 
-  // 3. Fail closed — the caller answers with the witty NO_KNOWLEDGE message.
+  // 3. Fail closed. Nothing retrieved. A text question gets the witty NO_KNOWLEDGE
+  //    line; an attached image still goes to a vision model (see stopsForNoKnowledge).
   return { mode: 'none', evidenceText: '', citations: [] };
+}
+
+/**
+ * A text question with nothing retrieved is answered without a model call.
+ * An attached image is not that case: the picture still has to reach a vision
+ * model. The reply is still reported as mode 'none' with no citations.
+ */
+export function stopsForNoKnowledge(mode: Grounding['mode'], hasImage: boolean): boolean {
+  return mode === 'none' && !hasImage;
 }
 
 const PERSONA_RULES = [
@@ -1266,6 +1438,29 @@ export function questionClass(q: string): 'fact' | 'contested' {
   }
   if (isConceptualQuestion(q)) return 'contested';
   return 'fact';
+}
+
+/**
+ * Theme diversification and the rotating lead angle apply to broad and conceptual
+ * questions. A protocol-fact lookup (BRC, opcode, SDK, other protocol id) and a
+ * builder question stay in retrieval rank order.
+ */
+export function shouldDiversifyQuestion(q: string): boolean {
+  const text = q.trim();
+  if (!text) return false;
+  if (isImplementationQuestion(text)) return false;
+  if (hasProtocolId(text)) return false;
+  if (/\bopcodes?\b/i.test(text)) return false;
+  if (isConceptualQuestion(text) || questionClass(text) === 'contested') return true;
+  return isBroadOverview(text);
+}
+
+/** "What is Bitcoin?" — a short definitional ask with no protocol identifier. */
+function isBroadOverview(q: string): boolean {
+  if (!/\b(what is|what are|what's|explain|tell me about|describe)\b/i.test(q)) return false;
+  const keywords = extractKeywords(q);
+  if (!keywords) return false;
+  return keywords.split(/\s+/).filter(Boolean).length <= 3;
 }
 
 /** Rotating phrasing cues — vary the opening/cadence without touching the facts. */
@@ -1334,6 +1529,11 @@ export interface PromptContext {
    */
   invitationSeed?: string;
   /**
+   * Theme the evidence block was ordered to lead with, for a broad question.
+   * The same value is reused for a revision of the answer.
+   */
+  leadAngle?: string;
+  /**
    * Cap on the evidence block's length. Free tiers pass a smaller budget so the whole
    * grounded prompt fits under their per-minute token ceilings (Groq's 8K TPM); paid
    * tiers omit it and get the full evidence. Truncation keeps the head of the block,
@@ -1346,17 +1546,76 @@ export interface PromptContext {
    * Facts, grounding, and the authorship and identity rules stay as written.
    */
   depth?: AnswerDepth;
+  /**
+   * The latest turn carries an image. Adds the IMAGE block. Mode 'none' uses the
+   * image-only variant: nothing was retrieved, so the picture is the question.
+   */
+  hasImage?: boolean;
 }
 
-/** Vocabulary and depth only — the rules above this block stay in force. */
+/** Facts, grounding, authorship, identity and invitation rules above stay in force. */
+const DEPTH_SCOPE =
+  'This changes vocabulary and depth only; facts, grounding, and the authorship and identity rules above stay as written.';
+
+/** Not already stated in the persona rules. Applies whenever a depth is set. */
+const DEPTH_NO_STOCK =
+  'Do not reuse stock phrases from earlier answers in this conversation.';
+
+/**
+ * Checkable constraints on wording, length and framing. They do not relax facts,
+ * grounding, authorship, identity or the invitation rules.
+ */
 const DEPTH_LINES: Record<AnswerDepth, string> = {
-  beginner:
-    'DEPTH: beginner — plain language, define each term on first use, one analogy at most, shorter paragraphs. This changes vocabulary and depth only; facts, grounding, and the authorship and identity rules above stay as written.',
-  developer:
-    'DEPTH: developer — precise, name BRC numbers, opcodes, SDK calls and data structures, give concrete mechanics. This changes vocabulary and depth only; facts, grounding, and the authorship and identity rules above stay as written.',
-  historian:
-    'DEPTH: historian — anchor in dates, threads, who said what and when, emphasise the 2008–2011 record and the sequence of events. This changes vocabulary and depth only; facts, grounding, and the authorship and identity rules above stay as written.',
+  beginner: [
+    'DEPTH: beginner — plain language, with no assumed prior knowledge.',
+    'Define every technical or economic term in the same sentence the first time it appears.',
+    'Use at most one everyday analogy.',
+    'Write short paragraphs.',
+    'Keep the answer to roughly 150–300 words unless the question demands more; do not pad a smaller question up to that range.',
+    DEPTH_NO_STOCK,
+    DEPTH_SCOPE,
+  ].join(' '),
+  developer: [
+    'DEPTH: developer — lead with the mechanism.',
+    'Name BRC numbers, opcodes, SDK calls and data structures from the EVIDENCE, and give short code-adjacent specifics from that evidence.',
+    'Do not name a BRC number, opcode, SDK call or data structure that is not in the EVIDENCE.',
+    'Use minimal rhetoric.',
+    DEPTH_NO_STOCK,
+    DEPTH_SCOPE,
+  ].join(' '),
+  historian: [
+    'DEPTH: historian — use chronological framing.',
+    'Give dates, and name the threads, posts and emails from the EVIDENCE: who said what, and when.',
+    'Distinguish the primary record from later commentary, and emphasise the 2008–2011 record and the sequence of events.',
+    'Do not supply a date, thread, post or email that is not in the EVIDENCE.',
+    DEPTH_NO_STOCK,
+    DEPTH_SCOPE,
+  ].join(' '),
 };
+
+/**
+ * Visual rules for a turn that carries an image. Kept separate from the persona so
+ * a retrieval miss can still describe the picture, while Bitcoin claims stay tied
+ * to the EVIDENCE. The private-key rule in the persona is not replaced.
+ */
+function imageInstructions(mode: Grounding['mode']): string {
+  const lines = [
+    mode === 'none' ? 'IMAGE (no retrieved evidence):' : 'IMAGE:',
+    'The user attached an image to this message. You can see it on their latest turn.',
+    'Describe what is actually visible, plainly, in your own voice. Describing what is visible does not need the EVIDENCE block.',
+    'Never claim a fact about the image that is not visible in it.',
+    'Never identify real people from their faces.',
+    'Relate it to Bitcoin only where the EVIDENCE (if any) supports it. If the image has nothing to do with Bitcoin, say so briefly, in voice, and do not invent a connection.',
+    'A Bitcoin claim still needs the EVIDENCE. Do not invent one to explain the picture.',
+    'If a private key, seed phrase, QR code, wallet secret or personal data is visible in the image, do not repeat, transcribe or decode it. Warn the user instead. The private-key rule above still applies.',
+  ];
+  if (mode === 'none') {
+    lines.push(
+      'There is no EVIDENCE block for this question. Describe the image, and do not supply Bitcoin knowledge the record did not return.',
+    );
+  }
+  return lines.join('\n');
+}
 
 export function buildSystemPrompt(
   mode: Grounding['mode'],
@@ -1375,6 +1634,10 @@ export function buildSystemPrompt(
   }
   const depthLine = ctx.depth ? DEPTH_LINES[ctx.depth] : undefined;
   if (depthLine) prompt += `\n\n${depthLine}`;
+  const leadAngle = ctx.leadAngle ?? grounding?.leadAngle;
+  if (leadAngle) {
+    prompt += `\n\nLEAD ANGLE: Open from this angle — ${leadAngle} — and treat the other evidence as supporting. Do not survey every source.`;
+  }
   if (grounding && grounding.evidenceText) {
     let evidence = grounding.evidenceText;
     if (ctx.evidenceChars !== undefined && evidence.length > ctx.evidenceChars) {
@@ -1382,6 +1645,7 @@ export function buildSystemPrompt(
     }
     prompt += `\n\nEVIDENCE (for the latest question only; do not reproduce the bracketed numbers in your answer):\n${evidence}`;
   }
+  if (ctx.hasImage) prompt += `\n\n${imageInstructions(mode)}`;
   return prompt;
 }
 

@@ -42,8 +42,8 @@ const ANSWER_CRITIQUE_SYSTEM = [
   '4. Altitude guard: if the user asked how something works (an explanation), NOT what to build, do NOT flag the answer for failing to recommend something. Only build/recommendation answers can be "suboptimal".',
   'Reply with ONLY a single-line JSON object, no prose, no markdown fences:',
   '{"verdict":"pass"|"revise","kind":"factual"|"forbidden"|"suboptimal","issues":["..."],"correction":"..."}',
-  '- "pass" means the answer is accurate, compliant, and optimal given the evidence.',
-  '- "revise" requires a non-empty issues array AND a correction string describing precisely what to change.',
+  '- "pass" means the answer is accurate, compliant, and optimal given the evidence. kind, issues and correction may all be omitted; {"verdict":"pass"} is a complete pass.',
+  '- "revise" requires at least one actionable issue (a non-empty string). kind and correction may be omitted; when you include a correction, state precisely what to change. A revise with no issue is not actionable.',
 ].join('\n');
 
 function truncate(text: string, max: number): string {
@@ -69,24 +69,91 @@ export function buildCritiqueRequest(
 }
 
 /**
- * Parse the reviewer's reply into a Critique. Returns undefined on any deviation —
- * unparseable JSON, an unknown verdict or kind, or a "revise" verdict without
- * actionable content — so the caller fails open and ships the original answer.
+ * Index of the `}` that closes the object opened at `start`, respecting strings.
+ * Returns -1 when the object is unclosed.
+ */
+function findBalancedObjectEnd(text: string, start: number): number {
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  for (let i = start; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === undefined) break;
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (ch === '\\') escaped = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') {
+      inString = true;
+      continue;
+    }
+    if (ch === '{') depth++;
+    else if (ch === '}') {
+      depth--;
+      if (depth === 0) return i;
+    }
+  }
+  return -1;
+}
+
+/**
+ * Every JSON object in the reply that carries a `verdict` key. Fences, prose and
+ * a later `{...}` that is not valid JSON are skipped. Nested objects are not
+ * collected separately once an outer object with a verdict has parsed: the outer
+ * object is the reviewer's reply.
+ */
+function verdictObjects(reply: string): Record<string, unknown>[] {
+  const found: Record<string, unknown>[] = [];
+  let i = 0;
+  while (i < reply.length) {
+    const start = reply.indexOf('{', i);
+    if (start === -1) break;
+    const end = findBalancedObjectEnd(reply, start);
+    if (end === -1) {
+      i = start + 1;
+      continue;
+    }
+    let parsed: unknown;
+    try {
+      // Models sometimes emit raw newlines/tabs inside JSON strings, which strict
+      // JSON.parse rejects. They are insignificant between tokens and safely become
+      // spaces inside string values.
+      parsed = JSON.parse(reply.slice(start, end + 1).replace(/[\r\n\t]+/g, ' '));
+    } catch {
+      i = start + 1;
+      continue;
+    }
+    if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+      const obj = parsed as Record<string, unknown>;
+      if ('verdict' in obj) {
+        found.push(obj);
+        i = end + 1;
+        continue;
+      }
+    }
+    i = start + 1;
+  }
+  return found;
+}
+
+/**
+ * Parse the reviewer's reply into a Critique. Returns undefined when the reply is
+ * unparseable, ambiguous (more than one verdict object), carries an unknown verdict
+ * or kind, or is a "revise" with no actionable issue — the caller then fails open
+ * and ships the original answer.
+ *
+ * A bare {"verdict":"pass"} is valid. kind, issues and correction may be omitted on
+ * a pass; a revise may omit kind and correction. Code fences, leading prose and
+ * trailing text around the JSON are ignored.
  */
 export function parseCritique(reply: string): Critique | undefined {
-  const match = /\{[\s\S]*\}/.exec(reply);
-  if (!match) return undefined;
-  let parsed: unknown;
-  try {
-    // Models sometimes emit raw newlines/tabs inside JSON strings, which strict
-    // JSON.parse rejects. They are insignificant between tokens and safely become
-    // spaces inside string values.
-    parsed = JSON.parse(match[0].replace(/[\r\n\t]+/g, ' '));
-  } catch {
-    return undefined;
-  }
-  if (typeof parsed !== 'object' || parsed === null) return undefined;
-  const obj = parsed as Record<string, unknown>;
+  const candidates = verdictObjects(reply);
+  // Two verdict objects (pass and revise, or a repeated blob) is ambiguous.
+  if (candidates.length !== 1) return undefined;
+  const obj = candidates[0];
+  if (!obj) return undefined;
 
   if (obj.verdict !== 'pass' && obj.verdict !== 'revise') return undefined;
   const verdict = obj.verdict;
@@ -99,24 +166,31 @@ export function parseCritique(reply: string): Critique | undefined {
     kind = obj.kind as CritiqueKind;
   }
 
-  if (!Array.isArray(obj.issues)) return undefined;
+  // Missing issues is an empty list. A present issues field that is not an array
+  // is malformed — fail open rather than guess.
+  if (obj.issues !== undefined && !Array.isArray(obj.issues)) return undefined;
   const issues: string[] = [];
-  for (const raw of obj.issues) {
-    const clean = (typeof raw === 'string' ? raw : String(raw)).replace(/\s+/g, ' ').trim();
-    if (!clean) continue;
-    issues.push(clean.length > MAX_ISSUE_CHARS ? clean.slice(0, MAX_ISSUE_CHARS) : clean);
-    if (issues.length >= MAX_ISSUES) break;
+  if (Array.isArray(obj.issues)) {
+    for (const raw of obj.issues) {
+      if (typeof raw !== 'string') continue;
+      const clean = raw.replace(/\s+/g, ' ').trim();
+      if (!clean) continue;
+      issues.push(clean.length > MAX_ISSUE_CHARS ? clean.slice(0, MAX_ISSUE_CHARS) : clean);
+      if (issues.length >= MAX_ISSUES) break;
+    }
   }
 
   let correction: string | undefined;
   if (obj.correction !== undefined) {
     if (typeof obj.correction !== 'string') return undefined;
     const clean = obj.correction.replace(/\s+/g, ' ').trim();
-    correction = clean.length > MAX_CORRECTION_CHARS ? clean.slice(0, MAX_CORRECTION_CHARS) : clean;
+    if (clean) {
+      correction = clean.length > MAX_CORRECTION_CHARS ? clean.slice(0, MAX_CORRECTION_CHARS) : clean;
+    }
   }
 
-  // A revise without actionable content is useless — fail open.
-  if (verdict === 'revise' && (issues.length === 0 || !correction)) return undefined;
+  // A revise with nothing to act on is useless — fail open.
+  if (verdict === 'revise' && issues.length === 0) return undefined;
 
   return { verdict, kind, issues, correction };
 }

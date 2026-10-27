@@ -228,6 +228,7 @@ async function runCase(c: EvalCase, p: Pipeline): Promise<CaseResult> {
           system: buildSystemPrompt(grounding.mode, grounding, {
             questionClass: questionClass(c.question),
             styleSeed: pickStyleSeed(),
+            leadAngle: grounding.leadAngle,
             evidenceChars: evidenceBudgetFor(firstUsable),
           }),
           history: [],

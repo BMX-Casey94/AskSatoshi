@@ -75,29 +75,89 @@ const MAX_OUTPUT_TOKENS = 4_096;
 // and cadence vary. Higher risks the persona inventing claims on opinionated evidence.
 const TEMPERATURE = 0.45;
 
+export function outputTokenLimit(tier: ModelTier): number {
+  return tier.maxOutputTokens ?? MAX_OUTPUT_TOKENS;
+}
+
+/**
+ * gpt-oss always reasons; 'low' keeps a free-tier request under Groq's 8K TPM.
+ * The vision preview must not receive the parameter — an unsupported field is a 400,
+ * and the image would never be seen.
+ */
+export function groqReasoningEffort(model: string): 'low' | undefined {
+  return model.includes('gpt-oss') ? 'low' : undefined;
+}
+
+export type GeminiPart = { text: string } | { inlineData: { data: string; mimeType: string } };
+
+export interface GeminiContent {
+  role: 'user' | 'model';
+  parts: GeminiPart[];
+}
+
+/**
+ * Gemini wire shape. History stays text: the image belongs to the latest turn only.
+ * Text and inlineData are separate parts — the API rejects a part that sets both.
+ * The system prompt is systemInstruction, not a content turn, so it cannot drop the image.
+ */
+export function buildGeminiContents(req: ChainRequest): {
+  systemInstruction: string;
+  contents: GeminiContent[];
+} {
+  const parts: GeminiPart[] = [{ text: req.userContent }];
+  if (req.image) {
+    parts.push({ inlineData: { data: req.image.data, mimeType: req.image.mimeType } });
+  }
+  return {
+    systemInstruction: req.system,
+    contents: [
+      ...req.history.map((m) => ({
+        role: m.role === 'assistant' ? ('model' as const) : ('user' as const),
+        parts: [{ text: m.content }] as GeminiPart[],
+      })),
+      { role: 'user' as const, parts },
+    ],
+  };
+}
+
+export type OpenAiContentPart =
+  | { type: 'text'; text: string }
+  | { type: 'image_url'; image_url: { url: string } };
+
+export interface OpenAiMessage {
+  role: 'system' | 'user' | 'assistant';
+  content: string | OpenAiContentPart[];
+}
+
+/**
+ * OpenAI-compatible wire shape (Groq and OpenRouter, including Gemini models hosted
+ * there). History stays plain text. The image is a data-URL part on the latest user
+ * message only, beside the question text. The system prompt is its own message.
+ */
+export function buildOpenAiMessages(req: ChainRequest): OpenAiMessage[] {
+  const content: string | OpenAiContentPart[] = req.image
+    ? [
+        { type: 'text', text: req.userContent },
+        {
+          type: 'image_url',
+          image_url: { url: `data:${req.image.mimeType};base64,${req.image.data}` },
+        },
+      ]
+    : req.userContent;
+  return [{ role: 'system', content: req.system }, ...req.history, { role: 'user', content }];
+}
+
 export function createGeminiProvider(apiKey: string): ProviderFn {
   const ai = new GoogleGenAI({ apiKey });
   return async (tier, req, onDelta, signal) => {
-    const userParts: ({ text: string } | { inlineData: { data: string; mimeType: string } })[] = [
-      { text: req.userContent },
-    ];
-    if (req.image) {
-      userParts.push({ inlineData: { data: req.image.data, mimeType: req.image.mimeType } });
-    }
-    const contents = [
-      ...req.history.map((m) => ({
-        role: m.role === 'assistant' ? ('model' as const) : ('user' as const),
-        parts: [{ text: m.content }],
-      })),
-      { role: 'user' as const, parts: userParts },
-    ];
+    const built = buildGeminiContents(req);
     const stream = await ai.models.generateContentStream({
       model: tier.model,
-      contents,
+      contents: built.contents,
       config: {
-        systemInstruction: req.system,
+        systemInstruction: built.systemInstruction,
         temperature: TEMPERATURE,
-        maxOutputTokens: tier.maxOutputTokens ?? MAX_OUTPUT_TOKENS,
+        maxOutputTokens: outputTokenLimit(tier),
         // Cap hidden thinking so it can't eat the whole output budget (2.5 series).
         thinkingConfig: { thinkingBudget: 1024 },
         abortSignal: signal,
@@ -132,28 +192,17 @@ export function createOpenAiCompatProvider(provider: 'groq' | 'openrouter', apiK
     maxRetries: 0, // retries and failover are owned by the chain, not the SDK
   });
   return async (tier, req, onDelta, signal) => {
-    const userContent = req.image
-      ? [
-          { type: 'text' as const, text: req.userContent },
-          {
-            type: 'image_url' as const,
-            image_url: { url: `data:${req.image.mimeType};base64,${req.image.data}` },
-          },
-        ]
-      : req.userContent;
     const params: Record<string, unknown> = {
       model: tier.model,
       stream: true,
       temperature: TEMPERATURE,
-      max_tokens: tier.maxOutputTokens ?? MAX_OUTPUT_TOKENS,
-      messages: [
-        { role: 'system', content: req.system },
-        ...req.history,
-        { role: 'user', content: userContent },
-      ],
+      max_tokens: outputTokenLimit(tier),
+      messages: buildOpenAiMessages(req),
     };
-    // gpt-oss always reasons; 'low' protects the 8K TPM free-tier ceiling.
-    if (provider === 'groq') params.reasoning_effort = 'low';
+    if (provider === 'groq') {
+      const effort = groqReasoningEffort(tier.model);
+      if (effort) params.reasoning_effort = effort;
+    }
     const stream = (await client.chat.completions.create(params as never, { signal })) as unknown as AsyncIterable<{
       choices?: { delta?: { content?: string }; finish_reason?: string | null }[];
     }>;

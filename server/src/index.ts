@@ -13,7 +13,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
-import { chatBodySchema, MAX_QUESTION_CHARS, sanitiseMessages } from './chatRequest.js';
+import { resolveChatInput } from './chatRequest.js';
 import {
   buildCritiqueRequest,
   buildRevisionRequest,
@@ -45,6 +45,7 @@ import {
   pickInvitationSeed,
   pickStyleSeed,
   questionClass,
+  stopsForNoKnowledge,
 } from './orchestrate.js';
 import {
   buildQueryUnderstandingRequest,
@@ -77,7 +78,6 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGIN ?? 'http://localhost:5173')
 
 const MAX_HISTORY_MESSAGES = 10;
 const MAX_HISTORY_CHARS = 12_000;
-const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
 /**
  * Bound on the query-understanding pass. It gates grounding, so it must stay cheap:
  * on timeout the request fails open to the deterministic regex path below.
@@ -245,27 +245,15 @@ function sseWrite(res: express.Response, event: string, data: unknown): void {
 }
 
 app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Response) => {
-  const parsed = chatBodySchema.safeParse(req.body);
-  if (!parsed.success) {
-    res.status(400).json({ error: witty('BAD_INPUT') });
+  // Schema, size, magic bytes, and the blank-with-image default. Image bytes are
+  // not logged. Oversize and magic mismatches are IMAGE_REJECTED; other bad bodies
+  // are BAD_INPUT. A blank latest turn with an image becomes the default question.
+  const resolved = resolveChatInput(req.body);
+  if (!resolved.ok) {
+    res.status(400).json({ error: witty(resolved.code) });
     return;
   }
-  // Blank history turns (e.g. an empty bubble left by an aborted stream) are dropped,
-  // never rejected — history is derived state. The latest turn survives sanitising and
-  // is validated strictly just below.
-  const messages = sanitiseMessages(parsed.data.messages);
-  const { image, depth } = parsed.data;
-
-  if (image && Buffer.byteLength(image.data, 'base64') > MAX_IMAGE_BYTES) {
-    res.status(400).json({ error: witty('IMAGE_REJECTED') });
-    return;
-  }
-
-  const question = messages[messages.length - 1]?.content ?? '';
-  if (!question.trim() || question.length > MAX_QUESTION_CHARS) {
-    res.status(400).json({ error: witty('BAD_INPUT') });
-    return;
-  }
+  const { messages, image, depth, question } = resolved.value;
 
   // Asleep before we spend anything.
   const preStatus = serviceStatus();
@@ -412,7 +400,11 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
       // prior context would pollute a standalone question's retrieval.
       context: priorUser && (!standalone || understanding?.followUp) ? priorUser : undefined,
     });
-    if (grounding.mode === 'none') {
+    // Nothing retrieved. A text question ends here: the no-knowledge line, mode
+    // 'none', empty citations, and no model call. An attached image is not a miss —
+    // the picture still has to reach a vision model. That path reports the same
+    // mode and empty citations once the model has answered.
+    if (stopsForNoKnowledge(grounding.mode, Boolean(image))) {
       sseWrite(res, 'delta', { text: noKnowledgeLine(question) });
       sseWrite(res, 'meta', { mode: 'none', citations: [], followUps: [] });
       sseWrite(res, 'done', {});
@@ -453,17 +445,19 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // funded OpenRouter primary) have a 1M context and get the full evidence.
     const firstUsable = eligibleTiers(keys, !!image).find((t) => breaker.isUsable(t.id));
     const evidenceBudget = evidenceBudgetFor(firstUsable);
-    // One prompt context for the draft and any revision. A fresh depth, style seed
-    // or invitation seed would shift the voice instructions while the revision is
-    // told to keep the same voice.
+    // One prompt context for the draft and any revision. A fresh depth, style seed,
+    // invitation seed or lead angle would shift the voice instructions while the
+    // revision is told to keep the same voice. The angle was chosen during grounding.
     const styleSeed = pickStyleSeed();
     const invitationSeed = pickInvitationSeed();
     const promptCtx = {
       questionClass: questionClass(question),
       styleSeed,
       invitationSeed,
+      leadAngle: grounding.leadAngle,
       evidenceChars: evidenceBudget,
       depth,
+      hasImage: Boolean(image),
     };
     // The draft is generated closed-door: tokens are buffered, never streamed, so the
     // user only ever sees the final reviewed answer. Buffering also makes mid-stream
@@ -504,12 +498,11 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     //    technology, and (for builder questions) whether the best-fit primitive was
     //    chosen — and a revise verdict triggers one rewrite. Only the settled text is
     //    ever delivered. Fail-open throughout: any error, timeout or garbled reply
-    //    ships the original draft. Skipped where there is nothing worth checking
-    //    (ungrounded, image, constrained, or trivially short answers) so the review
-    //    never burns quota needed by answers.
+    //    ships the original draft. Image requests skip review — the picture is not in
+    //    the evidence the reviewer sees, including when retrieval returned nothing.
+    //    Constrained and trivially short answers skip it too.
     let finalText = result.text;
     let wasRevised = false;
-    // (mode 'none' never reaches here — the no-knowledge branch returned already.)
     const reviewable =
       hasKeys && !constrained && !image && result.text.trim().length >= MIN_REVIEWABLE_ANSWER_CHARS;
     if (reviewable) {
@@ -590,6 +583,8 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // Usage floor: relevance to the question is not usage in the answer. Drop sources
     // the settled text does not reflect (deterministic, fail-open — see the function).
     // Runs once, after review, so the sources shown and cached match the delivered text.
+    // A retrieval miss that continued because of an image must not grow citations.
+    if (grounding.mode === 'none') citations = [];
     const finalCitations = filterUnusedCitations(finalText, citations);
     const followUps = deriveFollowUps(finalCitations, question);
 
@@ -608,7 +603,7 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // standalone oracle: its answer only makes sense against this conversation. The
     // write happens after the review pass so future visitors are served the revised
     // answer, not the pre-review draft.
-    if (cacheable && !understanding?.followUp) {
+    if (cacheable && !understanding?.followUp && grounding.mode !== 'none') {
       cache.set(question, { text: finalText, mode: grounding.mode, citations: finalCitations, followUps });
     }
     finish();

@@ -5,6 +5,8 @@
 
 import { useEffect, useId, useRef, type RefObject } from 'react';
 import type { TtsQuote, TtsStatus } from '../lib/tts';
+import { TTS_VOICE_DISCLOSURE, TTS_VOICE_LABEL } from '../lib/ttsVoice';
+import '../features.css';
 import { CloseIcon } from './icons';
 
 interface Props {
@@ -39,6 +41,7 @@ function formatEstimatedLength(chars: number, secondsPerThousand: number): strin
 
 export function ReadAloudPayModal({ quote, status, onCancel, onConfirm, returnFocusRef }: Props) {
   const titleId = useId();
+  const voiceNoteId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
   const confirmRef = useRef<HTMLButtonElement>(null);
   const confirmedRef = useRef(false);
@@ -111,60 +114,69 @@ export function ReadAloudPayModal({ quote, status, onCancel, onConfirm, returnFo
         >
           <CloseIcon size={18} />
         </button>
-        <div className="drawer-hero" aria-hidden="true">
-          <img
-            src="/Satoshi_Hero_Image_2.webp"
-            alt=""
-            className="drawer-hero-img"
-            draggable={false}
-          />
+        <div className="read-aloud-modal-scroll">
+          <div className="drawer-hero" aria-hidden="true">
+            <img
+              src="/Satoshi_Hero_Image_2.webp"
+              alt=""
+              className="drawer-hero-img"
+              draggable={false}
+            />
+          </div>
+          <div className="drawer-divider" role="presentation" />
+          <h2 id={titleId} className="read-aloud-modal-title">
+            Confirm payment
+          </h2>
+          <dl className="read-aloud-modal-details">
+            <div className="read-aloud-modal-row">
+              <dt>Purchase</dt>
+              <dd>Text-to-speech transcription</dd>
+            </div>
+            <div className="read-aloud-modal-row">
+              <dt>Characters</dt>
+              <dd>{quote.chars.toLocaleString('en-GB')}</dd>
+            </div>
+            <div className="read-aloud-modal-row">
+              <dt>Estimated length</dt>
+              <dd>{length}</dd>
+            </div>
+            <div className="read-aloud-modal-row">
+              <dt>Price</dt>
+              <dd>
+                {formatSats(quote.satoshis)} sats
+                {usd && <span className="read-aloud-modal-usd">{usd}</span>}
+              </dd>
+            </div>
+          </dl>
+          <p className="drawer-note read-aloud-modal-note">
+            Payment is taken from your BSV wallet (BRC-100). If we cannot generate
+            the audio after payment, we refund the quoted amount to the same wallet
+            immediately (minus a small miner fee). The refund should appear within
+            a few seconds as a 0-conf transaction.
+          </p>
         </div>
-        <div className="drawer-divider" role="presentation" />
-        <h2 id={titleId} className="read-aloud-modal-title">
-          Confirm payment
-        </h2>
-        <dl className="read-aloud-modal-details">
-          <div className="read-aloud-modal-row">
-            <dt>Purchase</dt>
-            <dd>Text-to-speech transcription</dd>
+        <div className="read-aloud-modal-footer">
+          <p id={voiceNoteId} className="read-aloud-voice-notice" role="note">
+            <span className="read-aloud-voice-kicker">{TTS_VOICE_LABEL}</span>
+            {TTS_VOICE_DISCLOSURE}
+          </p>
+          <div className="read-aloud-modal-actions">
+            <button type="button" className="read-aloud-modal-cancel" onClick={onCancel}>
+              Cancel
+            </button>
+            <button
+              ref={confirmRef}
+              type="button"
+              className="read-aloud-modal-confirm"
+              aria-describedby={voiceNoteId}
+              onClick={() => {
+                confirmedRef.current = true;
+                onConfirm();
+              }}
+            >
+              Confirm &amp; pay
+            </button>
           </div>
-          <div className="read-aloud-modal-row">
-            <dt>Characters</dt>
-            <dd>{quote.chars.toLocaleString('en-GB')}</dd>
-          </div>
-          <div className="read-aloud-modal-row">
-            <dt>Estimated length</dt>
-            <dd>{length}</dd>
-          </div>
-          <div className="read-aloud-modal-row">
-            <dt>Price</dt>
-            <dd>
-              {formatSats(quote.satoshis)} sats
-              {usd && <span className="read-aloud-modal-usd">{usd}</span>}
-            </dd>
-          </div>
-        </dl>
-        <p className="drawer-note read-aloud-modal-note">
-          Payment is taken from your BSV wallet (BRC-100). If we cannot generate
-          the audio after payment, we refund the quoted amount to the same wallet
-          immediately (minus a small miner fee). The refund should appear within
-          a few seconds as a 0-conf transaction.
-        </p>
-        <div className="read-aloud-modal-actions">
-          <button type="button" className="read-aloud-modal-cancel" onClick={onCancel}>
-            Cancel
-          </button>
-          <button
-            ref={confirmRef}
-            type="button"
-            className="read-aloud-modal-confirm"
-            onClick={() => {
-              confirmedRef.current = true;
-              onConfirm();
-            }}
-          >
-            Confirm &amp; pay
-          </button>
         </div>
       </div>
     </div>

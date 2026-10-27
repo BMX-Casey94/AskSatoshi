@@ -57,6 +57,59 @@ export function expandTerms(text: string): string {
   return out;
 }
 
+/**
+ * Extract the retrieval keywords from a natural-language question. The MCP's
+ * `investigate` and `search_knowledge` are phrasing-sensitive: "What can you tell me
+ * about BRC-100s?" retrieves nothing, whilst "BRC-100" returns the BRC-100 document as
+ * the top hit. Pull out the subject terms — protocol identifiers (BRC-100, BEEF,
+ * OP_RETURN), capitalised/coined terms, and content words — so the fallback search
+ * queries the subject, not the conversational wrapper. Returns undefined when no
+ * useful keyword can be isolated (caller then uses the raw question).
+ *
+ * Shared with the orchestrator (re-exported from there) so evidence packing and
+ * retrieval use one term list.
+ */
+export function extractKeywords(question: string): string | undefined {
+  const q = question.trim();
+  if (!q) return undefined;
+
+  // Strongest signal: explicit protocol/spec identifiers. BRC-100, OP_CHECKSIG, BEEF,
+  // SPV, Rúnar, UTXO, etc. A trailing plural 's' on a BRC id is stripped in the
+  // normalisation below so "BRC-100s" resolves to the spec id "BRC-100".
+  const idMatches = q.match(new RegExp(`\\b${PROTOCOL_ID_SOURCE}\\b`, 'gi'));
+  if (idMatches && idMatches.length > 0) {
+    const ids = [
+      ...new Set(
+        idMatches.map((m) => {
+          const brc = /^BRC-?(\d+?)s?$/i.exec(m);
+          return brc ? `BRC-${brc[1]}` : m;
+        }),
+      ),
+    ]
+      .slice(0, 3)
+      .join(' ');
+    return ids;
+  }
+
+  // Otherwise strip the conversational wrapper and keep content words. Comparative
+  // framing (compare/versus/similar/two/both…) describes the asker's phrasing, not the
+  // subject — it only dilutes the AND-semantics search on the MCP side.
+  const STOP = new Set(
+    ('a,an,and,are,as,at,be,been,but,by,can,could,did,do,does,for,from,had,has,have,he,her,his,how,i,if,in,into,is,it,its,me,my,of,on,or,so,tell,that,the,their,them,they,this,to,was,we,were,what,when,which,who,why,will,with,you,your,about,know,known,want,wanted,like,show,explain,describe,give,say,said,please,thanks,thank,' +
+      'compare,compares,compared,comparing,comparable,comparison,versus,vs,similar,similarly,similarity,difference,differences,differ,between,help,relate,relates,related,relation,contrast,two,both').split(','),
+  );
+  const words = q
+    // Slashes and dashes join distinct tokens ("NAR/DAR") — split them, don't fuse them.
+    .replace(/[?!.,;:"'()\/–—]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 1 && !STOP.has(w.toLowerCase()));
+  if (words.length === 0) return undefined;
+  // Keep it tight: the subject is usually in the first few content words. Then append
+  // the full names of any coined acronyms (NAR → Network Access Rules): the snapshot's
+  // essays tokenise as the spelled-out phrase, so the acronym alone retrieves nothing.
+  return expandTerms(words.slice(0, 6).join(' '));
+}
+
 /** Anaphora and back-references that mean "this message needs the conversation". */
 const FOLLOW_UP_REFERENCE =
   /\b(it|that|this|they|them|those|these|he|she|him|her|both|same)\b|\bwhat about\b|\bthe two\b/i;

@@ -178,13 +178,35 @@ describe('parseCritique', () => {
     ).toBeUndefined();
   });
 
-  it('returns undefined for a revise without a correction', () => {
-    expect(
-      parseCritique('{"verdict":"revise","kind":"forbidden","issues":["recommends Lightning"]}'),
-    ).toBeUndefined();
-    expect(
-      parseCritique('{"verdict":"revise","kind":"forbidden","issues":["recommends Lightning"],"correction":"  "}'),
-    ).toBeUndefined();
+  it('parses the bare pass production replies actually return', () => {
+    const c = parseCritique('{"verdict":"pass"}');
+    expect(c).toEqual({ verdict: 'pass', kind: undefined, issues: [], correction: undefined });
+  });
+
+  it('parses a revise that omits kind and correction when one issue is actionable', () => {
+    const c = parseCritique('{"verdict":"revise","issues":["recommends Lightning"]}');
+    expect(c).toEqual({
+      verdict: 'revise',
+      kind: undefined,
+      issues: ['recommends Lightning'],
+      correction: undefined,
+    });
+    const blankCorrection = parseCritique(
+      '{"verdict":"revise","kind":"forbidden","issues":["recommends Lightning"],"correction":"  "}',
+    );
+    expect(blankCorrection).toEqual({
+      verdict: 'revise',
+      kind: 'forbidden',
+      issues: ['recommends Lightning'],
+      correction: undefined,
+    });
+  });
+
+  it('returns undefined for a revise with no actionable issue', () => {
+    expect(parseCritique('{"verdict":"revise"}')).toBeUndefined();
+    expect(parseCritique('{"verdict":"revise","kind":"forbidden","correction":"Remove it."}')).toBeUndefined();
+    expect(parseCritique('{"verdict":"revise","issues":["   "]}')).toBeUndefined();
+    expect(parseCritique('{"verdict":"revise","issues":[1, true]}')).toBeUndefined();
   });
 
   it('accepts a pass verdict without a correction', () => {
@@ -236,6 +258,39 @@ describe('parseCritique', () => {
     );
     expect(c?.issues).toEqual(['line one line two']);
     expect(c?.correction).toBe('drop the claim');
+  });
+
+  it('parses a fenced bare pass with leading prose and trailing text', () => {
+    const c = parseCritique(
+      'Review complete.\n```json\n{"verdict":"pass"}\n```\nNothing to change. (bracket {note}.)',
+    );
+    expect(c).toEqual({ verdict: 'pass', kind: undefined, issues: [], correction: undefined });
+  });
+
+  it('parses pretty-printed JSON inside a fence', () => {
+    const c = parseCritique('```json\n{\n  "verdict": "pass"\n}\n```');
+    expect(c).toEqual({ verdict: 'pass', kind: undefined, issues: [], correction: undefined });
+  });
+
+  it('ignores a broken brace group and still reads a later verdict', () => {
+    expect(parseCritique('{not json} {"verdict":"pass"}')?.verdict).toBe('pass');
+  });
+
+  it('rejects ambiguous replies that contain more than one verdict', () => {
+    expect(
+      parseCritique('{"verdict":"pass"} {"verdict":"revise","issues":["invented a date"]}'),
+    ).toBeUndefined();
+    expect(parseCritique('{"verdict":"pass"}\n{"verdict":"pass"}')).toBeUndefined();
+  });
+
+  it('rejects a verdict object whose issues field is not an array', () => {
+    expect(parseCritique('{"verdict":"pass","issues":"none"}')).toBeUndefined();
+  });
+
+  it('rejects a correction that is not a string', () => {
+    expect(
+      parseCritique('{"verdict":"revise","issues":["invented a date"],"correction":{"text":"remove it"}}'),
+    ).toBeUndefined();
   });
 });
 

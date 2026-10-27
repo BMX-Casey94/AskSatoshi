@@ -50,25 +50,36 @@
   align-items: center;
   gap: 8px 10px;
   margin-top: 10px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .provenance-badge {
   position: relative;
   z-index: 1;
-  display: inline-flex;
+  display: inline-block;
   align-self: flex-start;
+  box-sizing: border-box;
   max-width: 100%;
+  min-width: 0;
   padding: 3px 10px;
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   background: var(--bg-raised);
   color: var(--text-muted);
   font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0;
   line-height: 1.35;
+  text-transform: none;
+  white-space: normal;
+  overflow-wrap: break-word;
+  hyphens: manual;
   cursor: help;
 }
 
 .provenance-badge:hover,
+.provenance-badge:focus,
 .provenance-badge:focus-visible {
   z-index: 6;
 }
@@ -79,6 +90,7 @@
 }
 
 .provenance-badge:hover::after,
+.provenance-badge:focus::after,
 .provenance-badge:focus-visible::after {
   content: attr(data-tip);
   position: absolute;
@@ -86,7 +98,7 @@
   bottom: calc(100% + 6px);
   z-index: 2;
   width: max-content;
-  max-width: min(280px, 70vw);
+  max-width: min(280px, calc(100vw - 32px));
   padding: 6px 8px;
   border-radius: 8px;
   background: var(--text);
@@ -97,6 +109,7 @@
   line-height: 1.4;
   text-transform: none;
   white-space: normal;
+  overflow-wrap: break-word;
   box-shadow: var(--shadow);
   pointer-events: none;
 }

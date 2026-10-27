@@ -28,6 +28,9 @@ interface Props {
   speechSupported: boolean;
   onMicToggle: () => void;
   image: AttachedImage | null;
+  imagePending?: boolean;
+  /** Session-only object URLs keyed by user message id. Never persisted. */
+  userImageUrls?: Readonly<Record<string, string>>;
   onAttach: (file: File) => void;
   onRemoveImage: () => void;
   theme: 'light' | 'dark';
@@ -86,6 +89,7 @@ export function ChatView(props: Props) {
         sending={props.sending}
         onRate={props.onRate}
         onAsk={props.onAsk}
+        userImageUrls={props.userImageUrls}
       />
       <div className="chat-dock">
         {props.showStorageNotice && (
@@ -116,6 +120,7 @@ export function ChatView(props: Props) {
           speechSupported={props.speechSupported}
           onMicToggle={props.onMicToggle}
           image={props.image}
+          imagePending={props.imagePending}
           onAttach={props.onAttach}
           onRemoveImage={props.onRemoveImage}
           onFocusChange={() => undefined}

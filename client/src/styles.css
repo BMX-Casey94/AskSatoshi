@@ -216,6 +216,7 @@ button:disabled {
 
 .composer {
   width: 100%;
+  min-width: 0;
   background: var(--composer-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-composer);
@@ -228,6 +229,10 @@ button:disabled {
 
 .composer:focus-within {
   border-color: var(--text-muted);
+}
+
+.composer--drop {
+  border-color: var(--accent);
 }
 
 .composer--asleep {
@@ -275,7 +280,11 @@ button:disabled {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
+  min-width: 0;
   margin-top: 4px;
+  container-type: inline-size;
+  container-name: composer-toolbar;
 }
 
 .composer-toolbar-left,
@@ -283,10 +292,19 @@ button:disabled {
   display: flex;
   align-items: center;
   gap: 4px;
+  min-width: 0;
 }
 
-.composer-globe {
-  cursor: default;
+.composer-toolbar-left {
+  flex: 1 1 auto;
+}
+
+.composer-toolbar-right {
+  flex: 0 0 auto;
+}
+
+.composer-toolbar-left > .icon-btn {
+  flex-shrink: 0;
 }
 
 .send-btn {

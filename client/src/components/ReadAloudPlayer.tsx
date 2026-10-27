@@ -4,7 +4,9 @@
  */
 
 import { useEffect, useId, useRef, useState, type ChangeEvent, type CSSProperties } from 'react';
+import '../features.css';
 import { formatPlaybackClock, TTS_DOWNLOAD_FILENAME, ttsDownloadUrl } from '../lib/ttsPlayer';
+import { TTS_VOICE_DISCLOSURE, TTS_VOICE_LABEL } from '../lib/ttsVoice';
 import { DownloadIcon, PauseIcon, PlayIcon } from './icons';
 
 interface Props {
@@ -150,6 +152,10 @@ export function ReadAloudPlayer({ src }: Props) {
           <DownloadIcon size={14} />
         </a>
       )}
+      <p className="read-aloud-voice-label" title={TTS_VOICE_DISCLOSURE}>
+        {TTS_VOICE_LABEL}
+        <span className="visually-hidden">. {TTS_VOICE_DISCLOSURE}</span>
+      </p>
       {failed && (
         <p className="read-aloud-player-error" role="alert">
           Could not play this audio.

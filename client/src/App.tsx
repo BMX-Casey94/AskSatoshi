@@ -14,13 +14,19 @@ import { Suggestions } from './components/Suggestions';
 import { ThemeToggle } from './components/ThemeToggle';
 import { MenuIcon } from './components/icons';
 import { getStatus, sendFeedback, streamChat } from './lib/api';
-import { Link } from './lib/router';
 import { exportThreadMarkdown } from './lib/exportThread';
+import {
+  IMAGE_NOTICE_READ,
+  ImageAttachError,
+  attachmentLabel,
+  messageTextForSend,
+  prepareImageFile,
+  rejectionNotice,
+} from './lib/imageAttach';
+import { Link } from './lib/router';
 import { createRecogniser } from './lib/speech';
 import { clearStore, isGroundingMode, loadDepth, loadStore, sanitizeFollowUps, saveDepth, saveStore } from './lib/storage';
 import type { AttachedImage, AwakeState, Depth, Message, Thread } from './types';
-
-const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
 
 function uid(): string {
   return crypto.randomUUID();
@@ -45,11 +51,16 @@ export function App() {
   const [retryAfter, setRetryAfter] = useState<string | undefined>();
   const [sleepLines, setSleepLines] = useState<string[] | undefined>();
   const [image, setImage] = useState<AttachedImage | null>(null);
+  const [imagePending, setImagePending] = useState(false);
+  /** Object URLs for images sent this session. Not written to localStorage. */
+  const [userImageUrls, setUserImageUrls] = useState<Record<string, string>>({});
   const [listening, setListening] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
 
   const abortRef = useRef<AbortController | null>(null);
+  const attachSeq = useRef(0);
+  const previewsRef = useRef<Record<string, string>>({});
   const feedbackSentRef = useRef<Set<string>>(new Set());
   const recogniser = useMemo(() => createRecogniser(), []);
   // Dictated text accumulates here so interim results replace rather than append.
@@ -106,26 +117,66 @@ export function App() {
 
   // ---- image attach -----------------------------------------------------------
 
+  const rememberPreview = (id: string, url: string) => {
+    const next = { ...previewsRef.current, [id]: url };
+    previewsRef.current = next;
+    setUserImageUrls(next);
+  };
+
+  const forgetPreviews = (ids: readonly string[]) => {
+    if (ids.length === 0) return;
+    const next = { ...previewsRef.current };
+    let changed = false;
+    for (const id of ids) {
+      const url = next[id];
+      if (!url) continue;
+      URL.revokeObjectURL(url);
+      delete next[id];
+      changed = true;
+    }
+    if (!changed) return;
+    previewsRef.current = next;
+    setUserImageUrls(next);
+  };
+
   const handleAttach = (file: File) => {
-    if (file.type === 'application/x-rejected') {
-      flashNotice('That image is heavier than a full block — PNG, JPEG or WebP, under 4 MB.');
+    const rejection = rejectionNotice(file);
+    if (rejection) {
+      flashNotice(rejection);
       return;
     }
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = String(reader.result);
-      const base64 = dataUrl.slice(dataUrl.indexOf(',') + 1);
-      setImage({
-        data: base64,
-        mimeType: file.type as AttachedImage['mimeType'],
-        previewUrl: URL.createObjectURL(file),
-        name: file.name.length > 28 ? `${file.name.slice(0, 28)}…` : file.name,
+    const seq = ++attachSeq.current;
+    setImagePending(true);
+    void prepareImageFile(file)
+      .then((prepared) => {
+        if (seq !== attachSeq.current) return;
+        const previewUrl = URL.createObjectURL(prepared.blob);
+        setImage((current) => {
+          if (seq !== attachSeq.current) {
+            URL.revokeObjectURL(previewUrl);
+            return current;
+          }
+          if (current) URL.revokeObjectURL(current.previewUrl);
+          return {
+            data: prepared.data,
+            mimeType: prepared.mimeType,
+            previewUrl,
+            name: attachmentLabel(file.name),
+          };
+        });
+      })
+      .catch((error: unknown) => {
+        if (seq !== attachSeq.current) return;
+        flashNotice(error instanceof ImageAttachError ? error.notice : IMAGE_NOTICE_READ);
+      })
+      .finally(() => {
+        if (seq === attachSeq.current) setImagePending(false);
       });
-    };
-    reader.readAsDataURL(file);
   };
 
   const handleRemoveImage = () => {
+    attachSeq.current += 1;
+    setImagePending(false);
     if (image) URL.revokeObjectURL(image.previewUrl);
     setImage(null);
   };
@@ -167,9 +218,13 @@ export function App() {
   };
 
   const send = (rawText?: string) => {
-    const text = (rawText ?? composer).trim();
-    if (!text && !image) return;
-    if (sending || asleep) return;
+    // An image with an empty box still needs a real question, or the server rejects it.
+    // The base64 stays on `sentImage` for this request only — never on the saved message.
+    const text = messageTextForSend(rawText ?? composer, image !== null);
+    if (!text || sending || asleep) return;
+    // The send button is disabled while a file is still scaling. A suggestion
+    // click in that moment should still ask its question.
+    if (imagePending && rawText === undefined) return;
     if (listening) handleMicToggle();
 
     const userMessage: Message = { id: uid(), role: 'user', content: text, ts: Date.now() };
@@ -212,6 +267,7 @@ export function App() {
 
     setComposer('');
     const sentImage = image;
+    if (sentImage) rememberPreview(userMessage.id, sentImage.previewUrl);
     setImage(null);
     setSending(true);
     setAwaitingFirstToken(true);
@@ -345,6 +401,7 @@ export function App() {
     if (idx < 0) return;
     const question = [...msgs.slice(0, idx)].reverse().find((m) => m.role === 'user');
     if (!question) return;
+    forgetPreviews([question.id]);
     updateActiveThread((t) => ({
       ...t,
       messages: t.messages.filter((m) => m.id !== failedAssistantId && m.id !== question.id),
@@ -368,6 +425,8 @@ export function App() {
   };
 
   const handleDeleteThread = (id: string) => {
+    const doomed = store.threads.find((t) => t.id === id);
+    if (doomed) forgetPreviews(doomed.messages.map((m) => m.id));
     setStore((s) => {
       const threads = s.threads.filter((t) => t.id !== id);
       return {
@@ -380,6 +439,7 @@ export function App() {
 
   const handleClearAll = () => {
     if (sending) handleStop();
+    forgetPreviews(Object.keys(previewsRef.current));
     clearStore();
     setStore({ version: 1, theme, threads: [], activeThreadId: null });
     setDrawerOpen(false);
@@ -441,6 +501,7 @@ export function App() {
               speechSupported={recogniser.supported}
               onMicToggle={handleMicToggle}
               image={image}
+              imagePending={imagePending}
               onAttach={handleAttach}
               onRemoveImage={handleRemoveImage}
               onFocusChange={setComposerFocused}
@@ -476,6 +537,8 @@ export function App() {
           speechSupported={recogniser.supported}
           onMicToggle={handleMicToggle}
           image={image}
+          imagePending={imagePending}
+          userImageUrls={userImageUrls}
           onAttach={handleAttach}
           onRemoveImage={handleRemoveImage}
           theme={theme}

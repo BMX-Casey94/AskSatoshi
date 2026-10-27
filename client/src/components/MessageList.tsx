@@ -8,6 +8,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ClipboardEvent } from 'react';
 import type { Citation, Message, SourceClass } from '../types';
 import { renderMarkdown } from '../lib/markdown';
+import { answerProvenance } from '../lib/provenance';
 import { TypingIndicator } from './TypingIndicator';
 import { CitationPanel } from './CitationPanel';
 import { ReadAloudButton } from './ReadAloudButton';
@@ -35,6 +36,8 @@ interface Props {
   onRate?: (id: string, rating: 'up' | 'down') => void;
   /** Ask a follow-up question as a new turn. */
   onAsk?: (question: string) => void;
+  /** In-memory previews for user messages sent with an image this session. */
+  userImageUrls?: Readonly<Record<string, string>>;
 }
 
 interface ScrollSnapshot {
@@ -182,6 +185,7 @@ export function MessageList({
   sending,
   onRate,
   onAsk,
+  userImageUrls,
 }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const tailContentRef = useRef<HTMLDivElement>(null);
@@ -295,16 +299,24 @@ export function MessageList({
 
   const renderMessage = (message: Message, index: number) => {
     if (message.role === 'user') {
+      const preview = userImageUrls?.[message.id];
       return (
         <div key={message.id} className="msg-row msg-row--user" data-msg-id={message.id}>
-          <div className="msg-bubble msg-bubble--user">{message.content}</div>
+          <div className={preview ? 'msg-bubble msg-bubble--user msg-bubble--with-image' : 'msg-bubble msg-bubble--user'}>
+            {preview
+              ? [
+                  <img key="img" src={preview} alt="Attached image" className="msg-user-image" />,
+                  <span key="text" className="msg-user-text">{message.content}</span>,
+                ]
+              : message.content}
+          </div>
         </div>
       );
     }
 
     const finished = !message.streaming && !message.errorCode && message.content.trim().length > 0;
-    const showProvenance = finished && Boolean(message.mode && message.mode !== 'none');
-    const showMeta = showProvenance || Boolean(message.revised);
+    const provenance = finished ? answerProvenance(message) : null;
+    const showMeta = provenance !== null || Boolean(message.revised);
 
     return (
       <div key={message.id} className="msg-row msg-row--assistant" data-msg-id={message.id}>
@@ -327,7 +339,7 @@ export function MessageList({
             />
             {showMeta && (
               <div className="answer-meta">
-                {showProvenance && <ProvenanceBadge mode={message.mode} />}
+                {provenance && <ProvenanceBadge provenance={provenance} />}
                 {message.revised && (
                   <span
                     className="msg-revised"

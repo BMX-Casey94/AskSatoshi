@@ -5,8 +5,9 @@
 
 import { useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
-import type { GroundingMode, Message } from '../types';
+import type { Message } from '../types';
 import { messagesToMarkdown } from '../lib/exportThread';
+import type { Provenance } from '../lib/provenance';
 import {
   COPIED_NOTICE_MS,
   buildTweetExcerpt,
@@ -18,28 +19,16 @@ import {
 } from '../lib/share';
 import '../answerActions.css';
 
-const PROVENANCE: Record<Exclude<GroundingMode, 'none'>, { label: string; tip: string }> = {
-  corpus: {
-    label: "Answered from Satoshi's own words",
-    tip: "Drawn from Satoshi Nakamoto's white paper, forum posts and e-mails.",
-  },
-  mcp: {
-    label: 'Answered from the protocol record (BRCs, Script, SDK)',
-    tip: 'Drawn from the Bitcoin protocol specifications, BRCs, Script and the SDK.',
-  },
-  reference: {
-    label: 'Answered from the curated historical record',
-    tip: 'Drawn from the curated historical record of the period.',
-  },
-};
-
-export function ProvenanceBadge({ mode }: { mode?: GroundingMode }) {
-  if (!mode || mode === 'none') return null;
-  const info = PROVENANCE[mode];
-  if (!info) return null;
+export function ProvenanceBadge({ provenance }: { provenance: Provenance }) {
   return (
-    <span className="provenance-badge" tabIndex={0} data-tip={info.tip} aria-label={`${info.label}. ${info.tip}`}>
-      {info.label}
+    <span
+      className="provenance-badge"
+      tabIndex={0}
+      data-tip={provenance.title}
+      data-kind={provenance.kind}
+      aria-label={`${provenance.label}. ${provenance.title}`}
+    >
+      {provenance.label}
     </span>
   );
 }

@@ -1,7 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
 import { Breaker } from './breaker.js';
 import { WittyException } from './errors.js';
-import { runChain, type ChainRequest, type ProviderFn } from './llm.js';
+import {
+  buildGeminiContents,
+  buildOpenAiMessages,
+  groqReasoningEffort,
+  outputTokenLimit,
+  runChain,
+  type ChainRequest,
+  type ProviderFn,
+} from './llm.js';
+import { eligibleTiers, FREE_MAX_OUTPUT_TOKENS, PAID_MAX_OUTPUT_TOKENS } from './models.config.js';
 
 const REQ: ChainRequest = {
   system: 'You are Satoshi.',
@@ -189,5 +198,104 @@ describe('runChain', () => {
     );
     expect(result.tierId).toBe('openrouter-flash-lite');
     expect(seenModels).toEqual(['google/gemini-3.1-flash-lite']);
+  });
+
+  it('fails an image over to the next vision tier and never calls a text-only model', async () => {
+    const seen: { id: string; model: string; image?: string }[] = [];
+    const watch =
+      (fail: boolean, text = 'seen'): ProviderFn =>
+      async (tier, req, onDelta) => {
+        seen.push({ id: tier.id, model: tier.model, image: req.image?.data });
+        expect(tier.vision).toBe(true);
+        expect(req.system).toBe(REQ.system);
+        expect(req.userContent).toBe(REQ.userContent);
+        expect(req.image?.mimeType).toBe('image/png');
+        if (fail) throw { status: 400, message: 'image rejected' };
+        onDelta(text);
+        return { text, truncated: false };
+      };
+    const result = await runChain(
+      { ...REQ, image: { data: 'iVBORw0K', mimeType: 'image/png' } },
+      {
+        keys: { gemini: 'g', groq: 'q', openrouter: 'o' },
+        breaker: new Breaker(),
+        onDelta: () => undefined,
+        providers: {
+          openrouter: watch(true),
+          gemini: watch(true),
+          groq: watch(false, 'from qwen'),
+        },
+      },
+    );
+    expect(result).toEqual({ text: 'from qwen', tierId: 'groq-qwen3.6-27b', truncated: false });
+    expect(seen).toEqual([
+      { id: 'openrouter-flash-lite', model: 'google/gemini-3.1-flash-lite', image: 'iVBORw0K' },
+      { id: 'gemini-3.6-flash', model: 'gemini-3.6-flash', image: 'iVBORw0K' },
+      { id: 'gemini-3.5-flash', model: 'gemini-3.5-flash', image: 'iVBORw0K' },
+      { id: 'groq-qwen3.6-27b', model: 'qwen/qwen3.6-27b', image: 'iVBORw0K' },
+    ]);
+  });
+});
+
+describe('vision payload', () => {
+  const imageReq: ChainRequest = {
+    system: 'SYS',
+    history: [
+      { role: 'user', content: 'earlier question' },
+      { role: 'assistant', content: 'earlier answer' },
+    ],
+    userContent: 'What does this image show?',
+    image: { data: 'iVBORw0K', mimeType: 'image/png' },
+  };
+
+  it('puts the image on the current Gemini turn and leaves history as text', () => {
+    const built = buildGeminiContents(imageReq);
+    expect(built.systemInstruction).toBe('SYS');
+    expect(built.systemInstruction).not.toContain('iVBORw0K');
+    expect(built.contents).toEqual([
+      { role: 'user', parts: [{ text: 'earlier question' }] },
+      { role: 'model', parts: [{ text: 'earlier answer' }] },
+      {
+        role: 'user',
+        parts: [
+          { text: 'What does this image show?' },
+          { inlineData: { data: 'iVBORw0K', mimeType: 'image/png' } },
+        ],
+      },
+    ]);
+  });
+
+  it('puts the image on the current OpenAI turn as a data URL and leaves history as text', () => {
+    expect(buildOpenAiMessages(imageReq)).toEqual([
+      { role: 'system', content: 'SYS' },
+      { role: 'user', content: 'earlier question' },
+      { role: 'assistant', content: 'earlier answer' },
+      {
+        role: 'user',
+        content: [
+          { type: 'text', text: 'What does this image show?' },
+          { type: 'image_url', image_url: { url: 'data:image/png;base64,iVBORw0K' } },
+        ],
+      },
+    ]);
+  });
+
+  it('omits image parts when there is no image', () => {
+    expect(buildGeminiContents(REQ).contents).toEqual([{ role: 'user', parts: [{ text: REQ.userContent }] }]);
+    const messages = buildOpenAiMessages(REQ);
+    expect(messages[messages.length - 1]).toEqual({ role: 'user', content: REQ.userContent });
+  });
+
+  it('does not ask Groq vision models for gpt-oss reasoning effort', () => {
+    expect(groqReasoningEffort('openai/gpt-oss-120b')).toBe('low');
+    expect(groqReasoningEffort('qwen/qwen3.6-27b')).toBeUndefined();
+  });
+
+  it('uses each vision tier output cap', () => {
+    const paid = eligibleTiers({ openrouter: 'o' }, true)[0];
+    const free = eligibleTiers({ gemini: 'g' }, true)[0];
+    expect(outputTokenLimit(paid!)).toBe(PAID_MAX_OUTPUT_TOKENS);
+    expect(outputTokenLimit(free!)).toBe(FREE_MAX_OUTPUT_TOKENS);
+    expect(outputTokenLimit({ id: 'x', provider: 'gemini', model: 'm', vision: true })).toBe(4_096);
   });
 });

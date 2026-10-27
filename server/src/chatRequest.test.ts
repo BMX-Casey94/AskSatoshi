@@ -1,10 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import {
   chatBodySchema,
+  DEFAULT_IMAGE_QUESTION,
+  effectiveQuestion,
   MAX_HISTORY_TURN_CHARS,
+  MAX_IMAGE_BASE64_CHARS,
+  MAX_IMAGE_BYTES,
   MAX_MESSAGES_PER_REQUEST,
   MAX_QUESTION_CHARS,
+  resolveChatInput,
   sanitiseMessages,
+  sniffImageMime,
+  validateChatImage,
 } from './chatRequest.js';
 
 const user = (content: string) => ({ role: 'user' as const, content });
@@ -100,5 +107,211 @@ describe('sanitiseMessages', () => {
   it('leaves a healthy conversation untouched', () => {
     const thread = [user('q1'), assistant('a1'), user('q2')];
     expect(sanitiseMessages(thread)).toEqual(thread);
+  });
+
+  it('keeps a blank latest turn so an image-only send can be defaulted', () => {
+    const result = sanitiseMessages([user('earlier'), assistant(''), user('   ')]);
+    expect(result.map((m) => m.content)).toEqual(['earlier', '   ']);
+    expect(effectiveQuestion(result[result.length - 1]!.content, true)).toEqual({
+      ok: true,
+      question: DEFAULT_IMAGE_QUESTION,
+    });
+    expect(effectiveQuestion(result[result.length - 1]!.content, false)).toEqual({
+      ok: false,
+      code: 'BAD_INPUT',
+    });
+  });
+});
+
+const PNG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+const JPEG = Buffer.from([0xff, 0xd8, 0xff]);
+const WEBP = Buffer.from([
+  0x52, 0x49, 0x46, 0x46, 0x0a, 0x00, 0x00, 0x00, 0x57, 0x45, 0x42, 0x50,
+]);
+
+function pngOfSize(bytes: number): string {
+  const buf = Buffer.alloc(bytes);
+  PNG.copy(buf);
+  return buf.toString('base64');
+}
+
+describe('image magic bytes', () => {
+  it('recognises PNG, JPEG and WebP headers and nothing else', () => {
+    expect(sniffImageMime(PNG)).toBe('image/png');
+    expect(sniffImageMime(PNG.subarray(0, 4))).toBe('image/png');
+    expect(sniffImageMime(JPEG)).toBe('image/jpeg');
+    expect(sniffImageMime(WEBP)).toBe('image/webp');
+    expect(sniffImageMime(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"></svg>'))).toBeUndefined();
+    expect(sniffImageMime(Buffer.from('GIF89a'))).toBeUndefined();
+    expect(
+      sniffImageMime(Buffer.from([0x52, 0x49, 0x46, 0x46, 0, 0, 0, 0, 0x57, 0x41, 0x56, 0x45])),
+    ).toBeUndefined();
+    expect(sniffImageMime(PNG.subarray(0, 3))).toBeUndefined();
+    expect(sniffImageMime(WEBP.subarray(0, 8))).toBeUndefined();
+  });
+
+  it('rejects a declared type that does not match the bytes, including SVG', () => {
+    expect(validateChatImage({ data: PNG.toString('base64'), mimeType: 'image/png' })).toEqual({
+      ok: true,
+      mimeType: 'image/png',
+    });
+    expect(validateChatImage({ data: JPEG.toString('base64'), mimeType: 'image/jpeg' })).toEqual({
+      ok: true,
+      mimeType: 'image/jpeg',
+    });
+    expect(validateChatImage({ data: WEBP.toString('base64'), mimeType: 'image/webp' })).toEqual({
+      ok: true,
+      mimeType: 'image/webp',
+    });
+    expect(validateChatImage({ data: PNG.toString('base64'), mimeType: 'image/jpeg' })).toEqual({
+      ok: false,
+      code: 'IMAGE_REJECTED',
+    });
+    expect(validateChatImage({ data: JPEG.toString('base64'), mimeType: 'image/png' })).toEqual({
+      ok: false,
+      code: 'IMAGE_REJECTED',
+    });
+    expect(validateChatImage({ data: WEBP.toString('base64'), mimeType: 'image/png' })).toEqual({
+      ok: false,
+      code: 'IMAGE_REJECTED',
+    });
+    const svg = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"></svg>').toString('base64');
+    expect(validateChatImage({ data: svg, mimeType: 'image/png' })).toEqual({
+      ok: false,
+      code: 'IMAGE_REJECTED',
+    });
+    expect(validateChatImage({ data: Buffer.from('GIF89a').toString('base64'), mimeType: 'image/png' })).toEqual({
+      ok: false,
+      code: 'IMAGE_REJECTED',
+    });
+  });
+});
+
+describe('effectiveQuestion', () => {
+  it('defaults a blank image question and still rejects a blank text question', () => {
+    expect(effectiveQuestion('', true)).toEqual({ ok: true, question: DEFAULT_IMAGE_QUESTION });
+    expect(effectiveQuestion('  \n', true)).toEqual({ ok: true, question: DEFAULT_IMAGE_QUESTION });
+    expect(effectiveQuestion('', false)).toEqual({ ok: false, code: 'BAD_INPUT' });
+    expect(effectiveQuestion('   ', false)).toEqual({ ok: false, code: 'BAD_INPUT' });
+  });
+
+  it('keeps a real question and still rejects an over-long one when an image is attached', () => {
+    expect(effectiveQuestion('What is this?', true)).toEqual({ ok: true, question: 'What is this?' });
+    expect(effectiveQuestion('  What is this?  ', false)).toEqual({
+      ok: true,
+      question: '  What is this?  ',
+    });
+    const over = 'a'.repeat(MAX_QUESTION_CHARS + 1);
+    expect(effectiveQuestion(over, true)).toEqual({ ok: false, code: 'BAD_INPUT' });
+    expect(effectiveQuestion(over, false)).toEqual({ ok: false, code: 'BAD_INPUT' });
+  });
+});
+
+describe('resolveChatInput', () => {
+  const png = PNG.toString('base64');
+
+  it('accepts a 4 MiB PNG and rejects one byte over as IMAGE_REJECTED', () => {
+    const exact = pngOfSize(MAX_IMAGE_BYTES);
+    expect(exact.length).toBe(5_592_408);
+    expect(exact.length).toBeLessThanOrEqual(MAX_IMAGE_BASE64_CHARS);
+    const ok = resolveChatInput({
+      messages: [user('What does this image show?')],
+      image: { data: exact, mimeType: 'image/png' },
+    });
+    expect(ok.ok).toBe(true);
+    if (ok.ok) expect(ok.value.image?.mimeType).toBe('image/png');
+
+    const over = pngOfSize(MAX_IMAGE_BYTES + 1);
+    expect(over.length).toBeLessThanOrEqual(MAX_IMAGE_BASE64_CHARS);
+    expect(
+      chatBodySchema.safeParse({
+        messages: [user('What does this image show?')],
+        image: { data: over, mimeType: 'image/png' },
+      }).success,
+    ).toBe(true);
+    expect(
+      resolveChatInput({
+        messages: [user('What does this image show?')],
+        image: { data: over, mimeType: 'image/png' },
+      }),
+    ).toEqual({ ok: false, code: 'IMAGE_REJECTED' });
+  });
+
+  it('reports a base64 string past the character ceiling as IMAGE_REJECTED, not BAD_INPUT', () => {
+    const huge = 'A'.repeat(MAX_IMAGE_BASE64_CHARS + 1);
+    expect(
+      chatBodySchema.safeParse({
+        messages: [user('hi')],
+        image: { data: huge, mimeType: 'image/png' },
+      }).success,
+    ).toBe(false);
+    expect(
+      resolveChatInput({
+        messages: [user('hi')],
+        image: { data: huge, mimeType: 'image/png' },
+      }),
+    ).toEqual({ ok: false, code: 'IMAGE_REJECTED' });
+  });
+
+  it('rejects loose base64 as BAD_INPUT and a magic mismatch as IMAGE_REJECTED', () => {
+    expect(
+      resolveChatInput({
+        messages: [user('hi')],
+        image: { data: 'aGk=\n', mimeType: 'image/png' },
+      }),
+    ).toEqual({ ok: false, code: 'BAD_INPUT' });
+    expect(
+      resolveChatInput({
+        messages: [user('hi')],
+        image: { data: 'aG==', mimeType: 'image/png' },
+      }),
+    ).toEqual({ ok: false, code: 'BAD_INPUT' });
+    expect(
+      resolveChatInput({
+        messages: [user('hi')],
+        image: { data: png, mimeType: 'image/svg+xml' },
+      }),
+    ).toEqual({ ok: false, code: 'BAD_INPUT' });
+    expect(
+      resolveChatInput({
+        messages: [user('hi')],
+        image: { data: Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"/>').toString('base64'), mimeType: 'image/png' },
+      }),
+    ).toEqual({ ok: false, code: 'IMAGE_REJECTED' });
+    expect(
+      resolveChatInput({
+        messages: [user('hi')],
+        image: { data: png, mimeType: 'image/jpeg' },
+      }),
+    ).toEqual({ ok: false, code: 'IMAGE_REJECTED' });
+  });
+
+  it('turns a blank latest message with an image into the default question and keeps the turn', () => {
+    const resolved = resolveChatInput({
+      messages: [user('earlier'), assistant(''), user('   ')],
+      image: { data: png, mimeType: 'image/png' },
+    });
+    expect(resolved.ok).toBe(true);
+    if (!resolved.ok) return;
+    expect(resolved.value.messages.map((m) => m.content)).toEqual(['earlier', '   ']);
+    expect(resolved.value.question).toBe(DEFAULT_IMAGE_QUESTION);
+    expect(resolved.value.image).toEqual({ data: png, mimeType: 'image/png' });
+  });
+
+  it('keeps BAD_INPUT for a blank message when there is no image', () => {
+    expect(resolveChatInput({ messages: [user('   ')] })).toEqual({ ok: false, code: 'BAD_INPUT' });
+    expect(resolveChatInput({ messages: [user('')] })).toEqual({ ok: false, code: 'BAD_INPUT' });
+  });
+
+  it('keeps a written question that arrives with an image', () => {
+    const resolved = resolveChatInput({
+      messages: [user('What does this image show?')],
+      image: { data: png, mimeType: 'image/png' },
+      depth: 'beginner',
+    });
+    expect(resolved.ok).toBe(true);
+    if (!resolved.ok) return;
+    expect(resolved.value.question).toBe('What does this image show?');
+    expect(resolved.value.depth).toBe('beginner');
   });
 });

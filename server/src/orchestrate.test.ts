@@ -614,7 +614,7 @@ describe('prompt construction', () => {
     expect(base).not.toContain('INVITATION SEED (construction for the closing invitation only');
     // A picked seed is a known construction and is injected verbatim.
     const seed = pickInvitationSeed();
-    expect(seed).toMatch(/^Phrase the invitation as /);
+    expect(seed).toMatch(/^(Phrase the invitation as |Do NOT end with a question)/);
     const sys = buildSystemPrompt('mcp', undefined, { invitationSeed: seed });
     expect(sys).toMatch(/INVITATION SEED/);
     expect(sys).toContain(seed);
@@ -673,6 +673,44 @@ describe('prompt construction', () => {
     const g = await groundQuestion('Why did you design SPV proofs?', { mcp, corpus: null });
     expect(g.evidenceText).toMatch(/primary lens/);
     expect(g.evidenceText).toMatch(/most sustained continuation of your design/);
+  });
+
+  it('injects a depth block that changes vocabulary only, and leaves it off by default', () => {
+    expect(buildSystemPrompt('mcp')).not.toContain('DEPTH:');
+    const grounding = {
+      mode: 'mcp' as const,
+      evidenceText: 'BEEF is defined by BRC-62.',
+      citations: [],
+    };
+    const beginner = buildSystemPrompt('mcp', grounding, {
+      depth: 'beginner',
+      questionClass: 'fact',
+      invitationSeed: 'Phrase the invitation as a plain imperative.',
+    });
+    expect(beginner).toMatch(
+      /DEPTH: beginner\s+[—–-]\s+plain language, define each term on first use, one analogy at most, shorter paragraphs/,
+    );
+    expect(beginner).toMatch(/vocabulary and depth only/);
+    expect(beginner).toMatch(/authorship and identity rules above stay as written/);
+    expect(beginner).toContain('QUESTION CLASS: fact');
+    expect(beginner).toContain('INVITATION SEED');
+    expect(beginner).toContain('Phrase the invitation as a plain imperative.');
+    expect(beginner).toMatch(/FOLLOW-UP INVITATION/);
+    expect(beginner).toMatch(/VARY THE PHRASING/);
+    expect(beginner).toMatch(/AUTHORSHIP BOUNDARY/);
+    expect(beginner).toMatch(/\bIDENTITY:/);
+    const evidenceBlock = beginner.indexOf('EVIDENCE (for the latest question only');
+    expect(evidenceBlock).toBeGreaterThan(beginner.indexOf('DEPTH:'));
+    expect(beginner).toContain('BEEF is defined by BRC-62.');
+
+    expect(buildSystemPrompt('mcp', undefined, { depth: 'developer' })).toMatch(
+      /precise, name BRC numbers, opcodes, SDK calls and data structures, give concrete mechanics/,
+    );
+    const historian = buildSystemPrompt('corpus', undefined, { depth: 'historian' });
+    expect(historian).toMatch(/DEPTH: historian/);
+    expect(historian).toMatch(/anchor in dates, threads, who said what and when/);
+    expect(historian).toMatch(/emphasise the 2008.2011 record and the sequence of events/);
+    expect(historian).toMatch(/historical forum posts and e-mails/);
   });
 });
 

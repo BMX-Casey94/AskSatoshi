@@ -57,6 +57,13 @@ export function SatoshiActivityPage() {
       .then((res) => {
         if (signal?.aborted) return;
         setData(res);
+        // Deep link from a citation ("See where this sits on the timeline"): ?date=YYYY-MM-DD
+        // narrows the charts to that year, provided the record has activity in it.
+        const dateParam = new URLSearchParams(window.location.search).get('date');
+        const linkedYear = dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam) ? Number(dateParam.slice(0, 4)) : null;
+        if (linkedYear !== null && availableYears(...res.subjects.map((s) => s.points)).includes(linkedYear)) {
+          setYearFilter(linkedYear);
+        }
         setState('ready');
       })
       .catch((err: unknown) => {

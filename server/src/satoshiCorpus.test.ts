@@ -1,5 +1,8 @@
-import { describe, expect, it } from 'vitest';
-import { SatoshiCorpus, type CorpusDoc } from './satoshiCorpus.js';
+import { mkdtempSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { afterAll, describe, expect, it } from 'vitest';
+import { corpusUpdatedAt, SatoshiCorpus, type CorpusDoc } from './satoshiCorpus.js';
 
 const DOCS: CorpusDoc[] = [
   {
@@ -136,5 +139,64 @@ describe('SatoshiCorpus.searchAll (multi-query)', () => {
     const single = corpus.search('Will transaction fees replace the block reward?');
     const multi = corpus.searchAll(['Will transaction fees replace the block reward?']);
     expect(multi.map((h) => h.id)).toEqual(single.map((h) => h.id));
+  });
+});
+
+describe('corpusUpdatedAt', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'corpus-updated-'));
+  afterAll(() => {
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it('reads pin.fetchedAt from the head of the file and canonicalises it', () => {
+    const path = join(dir, 'pin.json');
+    writeFileSync(
+      path,
+      JSON.stringify({ pin: { fetchedAt: '2020-06-01T12:00:00.000+01:00', commit: 'abc' }, documents: [] }),
+    );
+    expect(corpusUpdatedAt(path)).toBe('2020-06-01T11:00:00.000Z');
+  });
+
+  it('does not parse the document array — a truncated file still yields the pin date', () => {
+    const path = join(dir, 'truncated.json');
+    const junk = 'x'.repeat(80_000);
+    writeFileSync(path, `{\n  "pin": { "fetchedAt": "2011-12-13T14:15:16.000Z" },\n  "documents": [${junk}`);
+    expect(corpusUpdatedAt(path)).toBe('2011-12-13T14:15:16.000Z');
+  });
+
+  it('ignores a fetchedAt that appears only inside documents', () => {
+    const path = join(dir, 'decoy.json');
+    writeFileSync(
+      path,
+      JSON.stringify({
+        pin: { commit: 'abc' },
+        documents: [{ fetchedAt: '1999-01-01T00:00:00.000Z', text: 'decoy' }],
+      }),
+    );
+    expect(corpusUpdatedAt(path)).toBe(statSync(path).mtime.toISOString());
+    expect(corpusUpdatedAt(path)).not.toBe('1999-01-01T00:00:00.000Z');
+  });
+
+  it('falls back to mtime when fetchedAt is not a date', () => {
+    const path = join(dir, 'bad-date.json');
+    writeFileSync(path, JSON.stringify({ pin: { fetchedAt: 'yesterday' }, documents: [] }));
+    expect(corpusUpdatedAt(path)).toBe(statSync(path).mtime.toISOString());
+  });
+
+  it('re-reads an explicit path when the pin date changes', () => {
+    const path = join(dir, 'refresh.json');
+    writeFileSync(path, JSON.stringify({ pin: { fetchedAt: '2020-01-01T00:00:00.000Z' }, documents: [] }));
+    expect(corpusUpdatedAt(path)).toBe('2020-01-01T00:00:00.000Z');
+    writeFileSync(path, JSON.stringify({ pin: { fetchedAt: '2024-05-06T07:08:09.000Z' }, documents: [] }));
+    expect(corpusUpdatedAt(path)).toBe('2024-05-06T07:08:09.000Z');
+  });
+
+  it('returns undefined when the file is missing', () => {
+    expect(corpusUpdatedAt(join(dir, 'missing.json'))).toBeUndefined();
+  });
+
+  it('reports an ISO timestamp for the pinned corpus when that file is present', () => {
+    const updated = corpusUpdatedAt();
+    expect(updated).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
   });
 });

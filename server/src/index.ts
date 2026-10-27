@@ -1,7 +1,8 @@
 /**
  * Ask Satoshi — API server. Serves the chat endpoint (SSE), the awake/asleep status
- * endpoint, and the built client in production. No accounts, no chat persistence:
- * the only state held server-side is the quota breaker and the answer cache.
+ * endpoint, anonymous feedback tallies, and the built client in production. No accounts,
+ * no chat persistence: the only state held server-side is the quota breaker, the answer
+ * cache, and in-memory feedback counts (no identifiers).
  */
 
 import { existsSync } from 'node:fs';
@@ -21,8 +22,16 @@ import {
   parseCritique,
 } from './answerCritique.js';
 import { Breaker } from './breaker.js';
-import { AnswerCache } from './cache.js';
+import { AnswerCache, shouldCacheAnswer } from './cache.js';
 import { noKnowledgeLine, SLEEP_LINES, WITTY, witty, WittyException, type ErrorCode } from './errors.js';
+import {
+  FEEDBACK_LIMIT_PER_MIN,
+  FEEDBACK_RATE_LIMITED,
+  feedbackAdminDecision,
+  feedbackBodySchema,
+  FeedbackCounters,
+} from './feedback.js';
+import { deriveFollowUps } from './followUps.js';
 import { runChain, type ChainRequest } from './llm.js';
 import { McpBridge } from './mcp.js';
 import { configuredTiers, eligibleTiers, evidenceBudgetFor, type ProviderKeys } from './models.config.js';
@@ -47,7 +56,7 @@ import {
 } from './queryUnderstanding.js';
 import { getActivity } from './satoshiActivity.js';
 import { helmetOptions } from './security.js';
-import { loadCorpus } from './satoshiCorpus.js';
+import { corpusUpdatedAt, loadCorpus } from './satoshiCorpus.js';
 import { loadCuratedReference } from './curatedReference.js';
 import { assembleTts, ttsStartupLine } from './tts/index.js';
 
@@ -105,6 +114,7 @@ const keys: ProviderKeys = {
 
 const breaker = new Breaker();
 const cache = new AnswerCache();
+const feedback = new FeedbackCounters();
 const rewriteCache = new RewriteCache();
 const mcp = new McpBridge();
 const corpus = loadCorpus();
@@ -156,6 +166,17 @@ const burstLimiter = rateLimit({
 });
 const chatGuards: express.RequestHandler[] = BURST_LIMIT_PER_MIN > 0 ? [burstLimiter] : [];
 
+// Separate from the chat ceiling: thumbs are cheap, but a script should not be able
+// to inflate the anonymous totals. The limiter keys on IP the same way chat does;
+// the handler never reads or logs that address.
+const feedbackLimiter = rateLimit({
+  windowMs: 60_000,
+  limit: FEEDBACK_LIMIT_PER_MIN,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  message: FEEDBACK_RATE_LIMITED,
+});
+
 // ---------------------------------------------------------------------------
 // Status + health
 // ---------------------------------------------------------------------------
@@ -163,7 +184,8 @@ const chatGuards: express.RequestHandler[] = BURST_LIMIT_PER_MIN > 0 ? [burstLim
 function serviceStatus() {
   const ids = configuredTiers(keys).map((t) => t.id);
   const st = breaker.status(ids);
-  return { ...st, sleepLines: SLEEP_LINES };
+  const corpusUpdated = corpusUpdatedAt();
+  return corpusUpdated ? { ...st, sleepLines: SLEEP_LINES, corpusUpdated } : { ...st, sleepLines: SLEEP_LINES };
 }
 
 app.get('/api/status', (_req, res) => {
@@ -185,6 +207,35 @@ app.get('/api/satoshi-activity', (_req, res) => {
   res.json(getActivity());
 });
 
+// Anonymous thumbs. The body is rating plus an optional retrieval mode — anything else
+// is a 400, and the response carries no tally (that stays on the admin route).
+app.post('/api/feedback', feedbackLimiter, (req, res) => {
+  const parsedFeedback = feedbackBodySchema.safeParse(req.body);
+  if (!parsedFeedback.success) {
+    res.status(400).json({
+      error: { code: 'BAD_INPUT', message: 'Feedback needs a rating of up or down, and nothing else.' },
+    });
+    return;
+  }
+  feedback.record(parsedFeedback.data.rating, parsedFeedback.data.mode);
+  res.status(204).end();
+});
+
+// Aggregate counts for the operator. Unset FEEDBACK_ADMIN_TOKEN → 404, so the route
+// does not advertise itself. A configured token is compared in constant time.
+app.get('/api/feedback/summary', (req, res) => {
+  const decision = feedbackAdminDecision(req.get('authorization'), process.env.FEEDBACK_ADMIN_TOKEN);
+  if (decision === 'unconfigured') {
+    res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Not found.' } });
+    return;
+  }
+  if (decision === 'denied') {
+    res.status(401).json({ error: { code: 'UNAUTHORISED', message: 'Unauthorised.' } });
+    return;
+  }
+  res.json(feedback.summary());
+});
+
 // ---------------------------------------------------------------------------
 // Chat (SSE)
 // ---------------------------------------------------------------------------
@@ -203,7 +254,7 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
   // never rejected — history is derived state. The latest turn survives sanitising and
   // is validated strictly just below.
   const messages = sanitiseMessages(parsed.data.messages);
-  const { image } = parsed.data;
+  const { image, depth } = parsed.data;
 
   if (image && Buffer.byteLength(image.data, 'base64') > MAX_IMAGE_BYTES) {
     res.status(400).json({ error: witty('IMAGE_REJECTED') });
@@ -249,9 +300,16 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
   const priorMessages = messages.slice(0, -1);
   const priorUser = [...priorMessages].reverse().find((m) => m.role === 'user')?.content;
   const standalone = !isFollowUp(question) || priorMessages.length === 0;
-  // Contested/opinion questions are never cached as oracles — each ask gets a fresh,
+  // Contested questions are never cached as oracles — each ask gets a fresh,
   // freshly-grounded answer rather than the first visitor's phrasing served for hours.
-  const cacheable = standalone && !image && questionClass(question) !== 'contested';
+  // A non-default depth changes wording; the cache key is the question alone, so those
+  // requests bypass the cache on both the read and the write.
+  const cacheable = shouldCacheAnswer({
+    standalone,
+    hasImage: Boolean(image),
+    contested: questionClass(question) === 'contested',
+    depth,
+  });
   // If this thread already asked the same question, bypass the cache so the user gets a
   // freshly-phrased answer rather than a byte-identical repeat.
   const alreadyAskedInThread = priorMessages.some(
@@ -265,8 +323,9 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     if (serveFromCache) {
       const cached = cache.get(question);
       if (cached) {
+        const followUps = cached.followUps ?? deriveFollowUps(cached.citations, question);
         sseWrite(res, 'delta', { text: cached.text });
-        sseWrite(res, 'meta', { mode: cached.mode, citations: cached.citations, cached: true });
+        sseWrite(res, 'meta', { mode: cached.mode, citations: cached.citations, cached: true, followUps });
         sseWrite(res, 'done', {});
         finish();
         return;
@@ -355,7 +414,7 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     });
     if (grounding.mode === 'none') {
       sseWrite(res, 'delta', { text: noKnowledgeLine(question) });
-      sseWrite(res, 'meta', { mode: 'none', citations: [] });
+      sseWrite(res, 'meta', { mode: 'none', citations: [], followUps: [] });
       sseWrite(res, 'done', {});
       finish();
       return;
@@ -394,23 +453,25 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // funded OpenRouter primary) have a 1M context and get the full evidence.
     const firstUsable = eligibleTiers(keys, !!image).find((t) => breaker.isUsable(t.id));
     const evidenceBudget = evidenceBudgetFor(firstUsable);
-    // One style seed and one invitation seed for the answer AND any later revision of
-    // it — fresh seeds would shift the voice instructions while the revision is told to
-    // keep the same voice.
+    // One prompt context for the draft and any revision. A fresh depth, style seed
+    // or invitation seed would shift the voice instructions while the revision is
+    // told to keep the same voice.
     const styleSeed = pickStyleSeed();
     const invitationSeed = pickInvitationSeed();
+    const promptCtx = {
+      questionClass: questionClass(question),
+      styleSeed,
+      invitationSeed,
+      evidenceChars: evidenceBudget,
+      depth,
+    };
     // The draft is generated closed-door: tokens are buffered, never streamed, so the
     // user only ever sees the final reviewed answer. Buffering also makes mid-stream
     // provider failover safe — nothing was shown, so a fresh attempt cannot double a
     // visible answer.
     const result = await runChain(
       {
-        system: buildSystemPrompt(grounding.mode, grounding, {
-          questionClass: questionClass(question),
-          styleSeed,
-          invitationSeed,
-          evidenceChars: evidenceBudget,
-        }),
+        system: buildSystemPrompt(grounding.mode, grounding, promptCtx),
         history: picked,
         userContent: buildUserContent(question, grounding),
         image,
@@ -503,13 +564,8 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
             runChain(
               {
                 // Same persona prompt the answer was written under — the revision must
-                // stay in voice and grounded in the same evidence.
-                system: buildSystemPrompt(grounding.mode, grounding, {
-                  questionClass: questionClass(question),
-                  styleSeed,
-                  invitationSeed,
-                  evidenceChars: evidenceBudget,
-                }),
+                // stay in voice, at the same depth, and grounded in the same evidence.
+                system: buildSystemPrompt(grounding.mode, grounding, promptCtx),
                 history: picked,
                 userContent: rReq.userContent,
               },
@@ -535,6 +591,7 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // the settled text does not reflect (deterministic, fail-open — see the function).
     // Runs once, after review, so the sources shown and cached match the delivered text.
     const finalCitations = filterUnusedCitations(finalText, citations);
+    const followUps = deriveFollowUps(finalCitations, question);
 
     // 6. Deliver the settled answer in one shot — the same shape the cache path uses.
     sseWrite(res, 'delta', { text: finalText });
@@ -543,6 +600,7 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
       citations: finalCitations,
       tier: result.tierId,
       revised: wasRevised,
+      followUps,
     });
     sseWrite(res, 'done', {});
 
@@ -551,7 +609,7 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // write happens after the review pass so future visitors are served the revised
     // answer, not the pre-review draft.
     if (cacheable && !understanding?.followUp) {
-      cache.set(question, { text: finalText, mode: grounding.mode, citations: finalCitations });
+      cache.set(question, { text: finalText, mode: grounding.mode, citations: finalCitations, followUps });
     }
     finish();
   } catch (err) {

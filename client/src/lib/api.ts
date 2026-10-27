@@ -3,11 +3,17 @@
  * from the readable stream. All errors from the server arrive as typed witty events.
  */
 
-import type { AttachedImage, Citation, ActivityResponse, StatusResponse, SubjectActivity, SubjectId } from '../types';
+import type { AttachedImage, Citation, Depth, ActivityResponse, StatusResponse, SubjectActivity, SubjectId } from '../types';
 
 export interface ChatHandlers {
   onDelta: (text: string) => void;
-  onMeta: (meta: { mode?: string; citations?: Citation[]; tier?: string; revised?: boolean }) => void;
+  onMeta: (meta: {
+    mode?: string;
+    citations?: Citation[];
+    tier?: string;
+    revised?: boolean;
+    followUps?: string[];
+  }) => void;
   onError: (err: { code: string; message: string; retryAfter?: string }) => void;
   onDone: () => void;
   /**
@@ -27,6 +33,22 @@ export async function getStatus(signal?: AbortSignal): Promise<StatusResponse> {
   const res = await fetch('/api/status', { signal });
   if (!res.ok) throw new Error(`status ${res.status}`);
   return (await res.json()) as StatusResponse;
+}
+
+/**
+ * Anonymous answer rating. Fire-and-forget: sends only the rating and the retrieval
+ * mode — never the question, the answer or any identifier. Failures are ignored.
+ */
+export async function sendFeedback(rating: 'up' | 'down', mode?: string): Promise<void> {
+  try {
+    await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rating, ...(mode ? { mode } : {}) }),
+    });
+  } catch {
+    // Feedback is best-effort.
+  }
 }
 
 const SUBJECT_IDS = new Set<SubjectId>(['satoshi', 'wright', 'kleiman']);
@@ -81,12 +103,14 @@ export async function streamChat(
   image: AttachedImage | null,
   handlers: ChatHandlers,
   signal: AbortSignal,
+  depth: Depth = 'default',
 ): Promise<void> {
   const res = await fetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       messages,
+      ...(depth !== 'default' ? { depth } : {}),
       ...(image ? { image: { data: image.data, mimeType: image.mimeType } } : {}),
     }),
     signal,
@@ -136,7 +160,7 @@ export async function streamChat(
         if (typeof payload.text === 'string') handlers.onDelta(payload.text);
         break;
       case 'meta':
-        handlers.onMeta(payload as { mode?: string; citations?: Citation[]; tier?: string; revised?: boolean });
+        handlers.onMeta(payload as Parameters<ChatHandlers['onMeta']>[0]);
         break;
       case 'status':
         handlers.onStatus?.(payload as { phase?: string });

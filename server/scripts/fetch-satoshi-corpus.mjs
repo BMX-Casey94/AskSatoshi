@@ -205,6 +205,8 @@ async function main() {
     pin: {
       repo: REPO,
       commit: sha,
+      // ISO time GET /api/status reports as corpusUpdated. Readers fall back to the
+      // file mtime when this field is missing, so keep it on every future pin.
       fetchedAt: new Date().toISOString(),
       counts: {
         emails: documents.filter((d) => d.kind === 'email').length,

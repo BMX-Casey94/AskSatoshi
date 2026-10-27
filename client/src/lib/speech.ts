@@ -64,14 +64,24 @@ export function createRecogniser(): Recogniser {
     listening: false,
     start({ onInterim, onFinal, onEnd, onError }) {
       rec.onresult = (event) => {
-        let interim = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
+        // Rebuild the whole session transcript on every event. Appending from
+        // resultIndex duplicates words on engines (notably Android Chrome) that
+        // emit cumulative results ("hello", "hello world", ...) as separate entries.
+        const segments: string[] = [];
+        for (let i = 0; i < event.results.length; i++) {
           const result = event.results[i];
-          if (!result) continue;
-          if (result.isFinal) onFinal(result[0].transcript);
-          else interim += result[0].transcript;
+          const text = result?.[0]?.transcript?.trim();
+          if (!text) continue;
+          const prev = segments[segments.length - 1];
+          if (prev && text.toLowerCase().startsWith(prev.toLowerCase())) {
+            segments[segments.length - 1] = text; // cumulative repeat: replace
+          } else if (prev && prev.toLowerCase().startsWith(text.toLowerCase())) {
+            continue; // shorter echo of what we already have
+          } else {
+            segments.push(text);
+          }
         }
-        if (interim) onInterim(interim);
+        onInterim(segments.join(' '));
       };
       rec.onerror = (event) => {
         self.listening = false;

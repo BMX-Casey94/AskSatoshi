@@ -6,18 +6,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChatView } from './components/ChatView';
 import { Composer } from './components/Composer';
+import { CorpusStamp } from './components/CorpusStamp';
 import { Hero } from './components/Hero';
 import { HistoryDrawer } from './components/HistoryDrawer';
 import { SleepBanner } from './components/SleepBanner';
 import { Suggestions } from './components/Suggestions';
 import { ThemeToggle } from './components/ThemeToggle';
 import { MenuIcon } from './components/icons';
-import { getStatus, streamChat } from './lib/api';
+import { getStatus, sendFeedback, streamChat } from './lib/api';
 import { Link } from './lib/router';
 import { exportThreadMarkdown } from './lib/exportThread';
 import { createRecogniser } from './lib/speech';
-import { clearStore, loadStore, saveStore } from './lib/storage';
-import type { AttachedImage, AwakeState, Message, Thread } from './types';
+import { clearStore, isGroundingMode, loadDepth, loadStore, sanitizeFollowUps, saveDepth, saveStore } from './lib/storage';
+import type { AttachedImage, AwakeState, Depth, Message, Thread } from './types';
 
 const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
 
@@ -33,6 +34,8 @@ function threadTitle(firstQuestion: string): string {
 export function App() {
   const [store, setStore] = useState(loadStore);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => loadStore().theme ?? 'light');
+  const [depth, setDepth] = useState<Depth>(loadDepth);
+  const [corpusUpdated, setCorpusUpdated] = useState<string | undefined>();
   const [composer, setComposer] = useState('');
   const [composerFocused, setComposerFocused] = useState(false);
   const [sending, setSending] = useState(false);
@@ -47,6 +50,7 @@ export function App() {
   const [notice, setNotice] = useState<string | null>(null);
 
   const abortRef = useRef<AbortController | null>(null);
+  const feedbackSentRef = useRef<Set<string>>(new Set());
   const recogniser = useMemo(() => createRecogniser(), []);
   // Dictated text accumulates here so interim results replace rather than append.
   const dictatedBaseRef = useRef('');
@@ -74,6 +78,7 @@ export function App() {
       setAwakeState(st.state === 'unconfigured' ? 'asleep' : st.state);
       setRetryAfter(st.retryAfter);
       setSleepLines(st.sleepLines);
+      setCorpusUpdated(typeof st.corpusUpdated === 'string' ? st.corpusUpdated : undefined);
     } catch {
       // A failed status check must never put the UI to sleep spuriously.
     }
@@ -140,10 +145,9 @@ export function App() {
     dictatedBaseRef.current = composer;
     recogniser.start({
       onInterim: (text) => setComposer(joinDictation(dictatedBaseRef.current, text)),
-      onFinal: (text) => {
-        dictatedBaseRef.current = joinDictation(dictatedBaseRef.current, text);
-        setComposer(dictatedBaseRef.current);
-      },
+      // speech.ts rebuilds the transcript on every result and does not call this.
+      // The property stays because the recogniser type still requires it.
+      onFinal: () => undefined,
       onEnd: () => setListening(false),
       onError: () => {
         setListening(false);
@@ -259,9 +263,13 @@ export function App() {
       onMeta: (meta) => {
         // The answer arrives once, settled by the closed-door review; `revised`
         // marks answers the reviewer rewrote, so the badge reflects the final text.
+        const mode = isGroundingMode(meta.mode) ? meta.mode : undefined;
+        const followUps = sanitizeFollowUps(meta.followUps);
         patchAssistant({
           ...(meta.citations ? { citations: meta.citations } : {}),
           ...(meta.revised ? { revised: true } : {}),
+          ...(mode !== undefined ? { mode } : {}),
+          ...(followUps ? { followUps } : {}),
         });
       },
       onError: (err) => {
@@ -275,7 +283,7 @@ export function App() {
       onDone: () => {
         patchAssistant({ streaming: false });
       },
-    }, controller.signal)
+    }, controller.signal, depth)
       .catch(() => {
         // Aborts and network failures land here; the message keeps whatever tokens
         // arrived. If none did, drop the placeholder rather than leave an empty
@@ -302,6 +310,32 @@ export function App() {
   };
 
   const handleStop = () => abortRef.current?.abort();
+
+  const handleDepthChange = (next: Depth) => {
+    setDepth(next);
+    saveDepth(next);
+  };
+
+  // First rating on a message is sent once. The same thumb again is ignored.
+  // A later change updates the local mark and does not send a second vote.
+  const handleRate = (id: string, rating: 'up' | 'down') => {
+    const message = store.threads.flatMap((thread) => thread.messages).find((item) => item.id === id);
+    if (!message || message.role !== 'assistant' || message.rating === rating) return;
+    const firstVote = message.rating === undefined && !feedbackSentRef.current.has(id);
+    if (firstVote) feedbackSentRef.current.add(id);
+    setStore((current) => ({
+      ...current,
+      threads: current.threads.map((thread) => ({
+        ...thread,
+        messages: thread.messages.map((item) => (item.id === id ? { ...item, rating } : item)),
+      })),
+    }));
+    if (firstVote) void sendFeedback(rating, message.mode);
+  };
+
+  const handleAsk = (question: string) => {
+    send(question);
+  };
 
   // Retry a failed exchange: drop the error answer and its question, then resend the question.
   const handleRetry = (failedAssistantId: string) => {
@@ -410,6 +444,8 @@ export function App() {
               onAttach={handleAttach}
               onRemoveImage={handleRemoveImage}
               onFocusChange={setComposerFocused}
+              depth={depth}
+              onDepthChange={handleDepthChange}
             />
             {asleep && <SleepBanner retryAfter={retryAfter} lines={sleepLines} />}
             <Suggestions onPick={(q) => send(q)} disabled={asleep || sending} />
@@ -419,6 +455,7 @@ export function App() {
               Grounded in the writings and the protocol record. Free to use; chats stay on your
               device.
             </p>
+            <CorpusStamp updated={corpusUpdated} />
           </footer>
         </main>
       ) : (
@@ -448,6 +485,11 @@ export function App() {
           onExport={handleExport}
           showStorageNotice={!store.storageNoticeSeen}
           onDismissStorageNotice={() => setStore((s) => ({ ...s, storageNoticeSeen: true }))}
+          onRate={handleRate}
+          onAsk={handleAsk}
+          depth={depth}
+          onDepthChange={handleDepthChange}
+          corpusUpdated={corpusUpdated}
         />
       )}
 

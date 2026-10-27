@@ -4,10 +4,38 @@
  * free daily quota. Restart-safe to lose: quotas reset daily anyway.
  */
 
+export interface CachedCitation {
+  label: string;
+  url?: string;
+  title?: string;
+  excerpt?: string;
+  date?: string;
+  sourceClass?: 'satoshi-primary' | 'spec' | 'later-commentary' | 'historical-record';
+}
+
 export interface CachedAnswer {
   text: string;
   mode: 'mcp' | 'corpus' | 'reference';
-  citations: { label: string; url?: string }[];
+  citations: CachedCitation[];
+  /**
+   * Clickable next questions derived from the citations. When a legacy entry has
+   * none, the caller recomputes them from `citations` (title and sourceClass).
+   */
+  followUps?: string[];
+}
+
+/**
+ * Whether an answer may be stored under, and served from, the question-keyed cache.
+ * The key is the question alone. A request that sets depth changes wording, so it
+ * bypasses the cache on both the read and the write and leaves the default-depth entry alone.
+ */
+export function shouldCacheAnswer(input: {
+  standalone: boolean;
+  hasImage: boolean;
+  contested: boolean;
+  depth?: string;
+}): boolean {
+  return input.standalone && !input.hasImage && !input.contested && !input.depth;
 }
 
 export class AnswerCache {

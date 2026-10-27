@@ -1,0 +1,317 @@
+/* Answer actions, follow-ups, provenance and the scroll spacer.
+   Uses the same tokens as styles.css, including the dark theme. */
+
+.messages {
+  overflow-anchor: none;
+}
+
+.msg-row--user {
+  scroll-margin-top: 12px;
+}
+
+.msg-assistant,
+.cite-panel-excerpt {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.messages-tail {
+  display: flex;
+  flex-direction: column;
+}
+
+.messages-tail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.messages-end-spacer {
+  width: 100%;
+  height: 0;
+  flex: none;
+  overflow-anchor: none;
+  pointer-events: none;
+}
+
+.scroll-pill {
+  white-space: nowrap;
+  max-width: calc(100vw - 32px);
+}
+
+.scroll-pill:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.answer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-top: 10px;
+}
+
+.provenance-badge {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--bg-raised);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.35;
+  cursor: help;
+}
+
+.provenance-badge:hover,
+.provenance-badge:focus-visible {
+  z-index: 6;
+}
+
+.provenance-badge:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.provenance-badge:hover::after,
+.provenance-badge:focus-visible::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 6px);
+  z-index: 2;
+  width: max-content;
+  max-width: min(280px, 70vw);
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.4;
+  text-transform: none;
+  white-space: normal;
+  box-shadow: var(--shadow);
+  pointer-events: none;
+}
+
+.answer-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 4px;
+  margin-top: 10px;
+}
+
+.answer-tools .read-aloud {
+  margin-top: 0;
+  flex-direction: row;
+  align-items: center;
+}
+
+.answer-tools:has(.read-aloud-player),
+.answer-tools:has(.read-aloud-error-box) {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.answer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+}
+
+.answer-action {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 4px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 0.78rem;
+  line-height: 1.3;
+  user-select: none;
+}
+
+.answer-action:hover:not(:disabled) {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.answer-action:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.answer-action[aria-pressed='true'] {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.answer-action--icon {
+  width: 32px;
+  padding: 4px;
+}
+
+.answer-share {
+  position: relative;
+}
+
+.answer-share-menu {
+  position: fixed;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 220px;
+  max-width: min(320px, calc(100vw - 16px));
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+}
+
+.answer-share-item {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.answer-share-item:hover {
+  background: var(--hover);
+}
+
+.answer-share-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  background: var(--hover);
+}
+
+.answer-confirm {
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--text-muted);
+  padding: 0 6px;
+}
+
+.answer-confirm:empty {
+  display: none;
+}
+
+.follow-ups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.follow-up-chip {
+  appearance: none;
+  max-width: 100%;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  text-align: left;
+  user-select: none;
+}
+
+.follow-up-chip:hover:not(:disabled) {
+  background: var(--hover);
+  border-color: var(--text-muted);
+}
+
+.follow-up-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.cite-original {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+.cite-original-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.cite-original-title {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  font-weight: 650;
+}
+
+.cite-panel-excerpt--original {
+  border-left: 3px solid var(--accent);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.cite-original-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.cite-timeline-link {
+  align-self: flex-start;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cite-timeline-link:hover {
+  color: var(--accent);
+}
+
+.cite-timeline-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .messages {
+    scroll-behavior: auto;
+  }
+}

@@ -4,7 +4,7 @@
  * Retrieval is local BM25 (minisearch) — no network access at runtime.
  */
 
-import { existsSync, readFileSync } from 'node:fs';
+import { closeSync, existsSync, openSync, readFileSync, readSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import MiniSearch from 'minisearch';
@@ -181,4 +181,81 @@ export function loadCorpus(path?: string): SatoshiCorpus | null {
     console.warn('[corpus] failed to parse corpus file:', err instanceof Error ? err.message : err);
     return null;
   }
+}
+
+/**
+ * How many leading bytes to inspect for pin.fetchedAt. The fetch script writes `pin`
+ * before `documents`, and the pin object is a few hundred bytes; this stays well
+ * above that without reading the document array into memory.
+ */
+const CORPUS_PIN_PROBE_BYTES = 32_768;
+
+/** Default-path memo, invalidated when the file's mtime changes. */
+let defaultCorpusUpdated: { mtimeMs: number; value: string } | null = null;
+
+function corpusDataPath(): string {
+  // Literal join() relative to this module — same path loadCorpus uses, kept inline
+  // there so Vercel's file tracer can see the readFileSync. This helper is only for
+  // the small pin probe below.
+  return join(dirname(fileURLToPath(import.meta.url)), '..', 'data', 'satoshi-corpus.json');
+}
+
+/** ISO timestamp from pin.fetchedAt in the leading bytes, when it parses. */
+function probeFetchedAt(corpusPath: string): string | undefined {
+  let fd: number | undefined;
+  try {
+    fd = openSync(corpusPath, 'r');
+    const buf = Buffer.alloc(CORPUS_PIN_PROBE_BYTES);
+    const n = readSync(fd, buf, 0, buf.length, 0);
+    const head = buf.subarray(0, n).toString('utf8');
+    const documentsAt = head.indexOf('"documents"');
+    const pinHead = documentsAt >= 0 ? head.slice(0, documentsAt) : head;
+    const match = pinHead.match(/"fetchedAt"\s*:\s*"([^"\\]+)"/);
+    const raw = match?.[1];
+    if (!raw) return undefined;
+    const ms = Date.parse(raw);
+    if (Number.isNaN(ms)) return undefined;
+    return new Date(ms).toISOString();
+  } catch {
+    return undefined;
+  } finally {
+    if (fd !== undefined) closeSync(fd);
+  }
+}
+
+function readCorpusUpdated(corpusPath: string): { mtimeMs: number; value: string } | undefined {
+  let mtimeMs: number;
+  let mtimeIso: string;
+  try {
+    const st = statSync(corpusPath);
+    mtimeMs = st.mtimeMs;
+    mtimeIso = st.mtime.toISOString();
+  } catch {
+    return undefined;
+  }
+  return { mtimeMs, value: probeFetchedAt(corpusPath) ?? mtimeIso };
+}
+
+/**
+ * ISO timestamp of the pinned corpus snapshot. Reads pin.fetchedAt from the head of
+ * the file (the fetch script records it). When that field is missing or unparseable,
+ * falls back to the file's mtime. Undefined when the file is absent.
+ */
+export function corpusUpdatedAt(explicitPath?: string): string | undefined {
+  const corpusPath = explicitPath ?? corpusDataPath();
+  if (!explicitPath && defaultCorpusUpdated) {
+    try {
+      if (statSync(corpusPath).mtimeMs === defaultCorpusUpdated.mtimeMs) return defaultCorpusUpdated.value;
+    } catch {
+      defaultCorpusUpdated = null;
+      return undefined;
+    }
+  }
+  const read = readCorpusUpdated(corpusPath);
+  if (!read) {
+    if (!explicitPath) defaultCorpusUpdated = null;
+    return undefined;
+  }
+  if (!explicitPath) defaultCorpusUpdated = read;
+  return read.value;
 }

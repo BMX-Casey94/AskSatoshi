@@ -29,7 +29,18 @@ export interface Message {
   streaming?: boolean;
   /** True when the server's review pass replaced the streamed answer with a refined version. */
   revised?: boolean;
+  /** Retrieval path the answer was grounded in (provenance badge). */
+  mode?: GroundingMode;
+  /** Up to three suggested next questions, derived server-side from the sources used. */
+  followUps?: string[];
+  /** The user's thumbs rating for this answer, if any (stored locally only). */
+  rating?: 'up' | 'down';
 }
+
+export type GroundingMode = 'mcp' | 'corpus' | 'reference' | 'none';
+
+/** Answer depth the user can choose; sent with each chat request. */
+export type Depth = 'default' | 'beginner' | 'developer' | 'historian';
 
 export interface Thread {
   id: string;
@@ -54,6 +65,8 @@ export interface StatusResponse {
   state: AwakeState;
   retryAfter?: string;
   sleepLines?: string[];
+  /** ISO date the pinned Satoshi corpus snapshot was last refreshed, when known. */
+  corpusUpdated?: string;
 }
 
 export type ActivityKind = 'posts' | 'emails';

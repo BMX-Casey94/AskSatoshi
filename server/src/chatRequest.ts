@@ -41,9 +41,19 @@ const messageSchema = z.object({
   content: z.string().max(MAX_HISTORY_TURN_CHARS),
 });
 
+/**
+ * Answer depth. Absent means the default voice. A set depth changes vocabulary and
+ * how far the explanation is developed; facts stay as written. Those requests bypass
+ * the question-keyed answer cache (see shouldCacheAnswer).
+ */
+export const ANSWER_DEPTHS = ['beginner', 'developer', 'historian'] as const;
+export const answerDepthSchema = z.enum(ANSWER_DEPTHS);
+export type AnswerDepth = z.infer<typeof answerDepthSchema>;
+
 export const chatBodySchema = z.object({
   messages: z.array(messageSchema).min(1).max(MAX_MESSAGES_PER_REQUEST),
   image: imageSchema.optional(),
+  depth: answerDepthSchema.optional(),
 });
 
 /**

@@ -4,7 +4,9 @@
  */
 
 import { useEffect, useRef } from 'react';
-import type { AttachedImage } from '../types';
+import type { AttachedImage, Depth } from '../types';
+import '../features.css';
+import { DepthSelect } from './DepthSelect';
 import { ArrowUpIcon, CloseIcon, GlobeIcon, MicIcon, PaperclipIcon, StopIcon } from './icons';
 
 interface Props {
@@ -22,6 +24,8 @@ interface Props {
   onAttach: (file: File) => void;
   onRemoveImage: () => void;
   onFocusChange: (focused: boolean) => void;
+  depth: Depth;
+  onDepthChange: (depth: Depth) => void;
   autoFocus?: boolean;
 }
 
@@ -68,7 +72,8 @@ export function Composer(props: Props) {
   };
 
   return (
-    <div className={`composer${props.asleep ? ' composer--asleep' : ''}`}>
+    <div className="composer-wrap">
+      <div className={`composer${props.asleep ? ' composer--asleep' : ''}`}>
       {props.image && (
         <div className="composer-attachment">
           <img src={props.image.previewUrl} alt="Attached" className="composer-attachment-img" />
@@ -172,6 +177,8 @@ export function Composer(props: Props) {
           )}
         </div>
       </div>
+      </div>
+      <DepthSelect value={props.depth} onChange={props.onDepthChange} />
     </div>
   );
 }

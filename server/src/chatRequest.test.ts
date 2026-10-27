@@ -51,6 +51,21 @@ describe('chatBodySchema', () => {
     expect(chatBodySchema.safeParse({ messages: [{ role: 'user', content: 42 }] }).success).toBe(false);
   });
 
+  it('accepts beginner, developer and historian depth, and treats absence as the default', () => {
+    for (const depth of ['beginner', 'developer', 'historian'] as const) {
+      expect(chatBodySchema.safeParse({ messages: [user('What is SPV?')], depth }).success).toBe(true);
+    }
+    const omitted = chatBodySchema.safeParse({ messages: [user('What is SPV?')] });
+    expect(omitted.success).toBe(true);
+    if (omitted.success) expect(omitted.data.depth).toBeUndefined();
+  });
+
+  it('rejects a depth outside the three levels', () => {
+    expect(chatBodySchema.safeParse({ messages: [user('Hi')], depth: 'default' }).success).toBe(false);
+    expect(chatBodySchema.safeParse({ messages: [user('Hi')], depth: 'expert' }).success).toBe(false);
+    expect(chatBodySchema.safeParse({ messages: [user('Hi')], depth: '' }).success).toBe(false);
+  });
+
   it('accepts a valid image and rejects bad mime types', () => {
     const withImage = chatBodySchema.safeParse({
       messages: [user('what is in this image?')],

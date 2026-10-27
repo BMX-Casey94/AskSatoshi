@@ -12,9 +12,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Citation } from '../types';
 import { renderMarkdown } from '../lib/markdown';
+import { Link } from '../lib/router';
 import { sourceHostLabel } from '../lib/sourceOrigin';
 import { excerptToMarkdown } from '../lib/sourceText';
+import { COPIED_NOTICE_MS, copyText, formatUkDate, markdownToPlainText, timelineHref } from '../lib/share';
 import { ChevronDownIcon, ChevronUpIcon, CloseIcon, ExternalLinkIcon } from './icons';
+import '../answerActions.css';
 
 interface Props {
   /** The answer's source list plus the 1-based number to show; null closes the panel. */
@@ -27,21 +30,6 @@ interface Props {
 /** Keep in sync with the cite-swap keyframe durations in styles.css. */
 const SWAP_OUT_MS = 160;
 const SWAP_IN_MS = 220;
-
-/** Format an ISO / YYYY-MM-DD date for UK display (e.g. 11 December 2010). */
-function formatCitationDate(iso: string): string | null {
-  const dayOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
-  const d = dayOnly
-    ? new Date(Date.UTC(Number(dayOnly[1]), Number(dayOnly[2]) - 1, Number(dayOnly[3])))
-    : new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  });
-}
 
 export function CitationPanel({ open, onClose, onNavigate }: Props) {
   // `shown` trails `open` while the outgoing source animates away.
@@ -98,6 +86,17 @@ export function CitationPanel({ open, onClose, onNavigate }: Props) {
     return () => window.removeEventListener('keydown', onKey);
   }, [open, onClose, onNavigate]);
 
+  const [quoteNotice, setQuoteNotice] = useState('');
+  const quoteTimerRef = useRef<number | undefined>(undefined);
+  const openExcerpt = open ? open.citations[open.index - 1]?.excerpt : undefined;
+
+  useEffect(() => () => window.clearTimeout(quoteTimerRef.current), []);
+
+  useEffect(() => {
+    setQuoteNotice('');
+    window.clearTimeout(quoteTimerRef.current);
+  }, [open?.index, openExcerpt]);
+
   const shownCitation = shown ? shown.citations[shown.index - 1] : undefined;
   const excerptHtml = useMemo(
     () =>
@@ -115,8 +114,22 @@ export function CitationPanel({ open, onClose, onNavigate }: Props) {
   const swapClass = swapStage === 'idle' ? '' : ` cite-panel-body--${swapStage}-${dirRef.current}`;
   const { index } = shown;
   const title = shownCitation.title ?? shownCitation.label;
-  const dateLabel = shownCitation.date ? formatCitationDate(shownCitation.date) : null;
+  const dateLabel = shownCitation.date ? formatUkDate(shownCitation.date) : null;
   const originLabel = shownCitation.url ? sourceHostLabel(shownCitation.url) : null;
+  const showOriginal = shownCitation.sourceClass === 'satoshi-primary' && Boolean(excerptHtml);
+  const showTimeline =
+    shownCitation.sourceClass === 'satoshi-primary' && Boolean(shownCitation.date?.trim());
+
+  const copyQuote = () => {
+    const excerpt = shownCitation.excerpt;
+    if (!excerpt) return;
+    const plain = markdownToPlainText(excerptToMarkdown(excerpt));
+    void copyText(plain).then((ok) => {
+      setQuoteNotice(ok ? 'Copied' : "Couldn't copy that");
+      window.clearTimeout(quoteTimerRef.current);
+      quoteTimerRef.current = window.setTimeout(() => setQuoteNotice(''), COPIED_NOTICE_MS);
+    });
+  };
 
   return (
     <>
@@ -148,14 +161,42 @@ export function CitationPanel({ open, onClose, onNavigate }: Props) {
               <CloseIcon size={18} />
             </button>
           </div>
-          <h3 className="cite-panel-title">{title}</h3>
-          {dateLabel && <p className="cite-panel-date">{dateLabel}</p>}
-          {excerptHtml && (
-            <blockquote
-              className="cite-panel-excerpt"
-              // Sanitised by DOMPurify inside renderMarkdown.
-              dangerouslySetInnerHTML={{ __html: excerptHtml }}
-            />
+          {showOriginal ? (
+            <figure className="cite-original">
+              <figcaption className="cite-original-kicker">In the original words</figcaption>
+              {dateLabel && <p className="cite-panel-date">{dateLabel}</p>}
+              <h3 className="cite-original-title">{title}</h3>
+              <blockquote
+                className="cite-panel-excerpt cite-panel-excerpt--original"
+                // Sanitised by DOMPurify inside renderMarkdown.
+                dangerouslySetInnerHTML={{ __html: excerptHtml }}
+              />
+              <div className="cite-original-actions">
+                <button type="button" className="answer-action" onClick={copyQuote} aria-label="Copy quote">
+                  Copy quote
+                </button>
+                <span className="answer-confirm" role="status" aria-live="polite" aria-atomic="true">
+                  {quoteNotice}
+                </span>
+              </div>
+            </figure>
+          ) : (
+            <>
+              <h3 className="cite-panel-title">{title}</h3>
+              {dateLabel && <p className="cite-panel-date">{dateLabel}</p>}
+              {excerptHtml && (
+                <blockquote
+                  className="cite-panel-excerpt"
+                  // Sanitised by DOMPurify inside renderMarkdown.
+                  dangerouslySetInnerHTML={{ __html: excerptHtml }}
+                />
+              )}
+            </>
+          )}
+          {showTimeline && (
+            <Link href={timelineHref(shownCitation.date)} className="cite-timeline-link">
+              See where this sits on the timeline
+            </Link>
           )}
           {shownCitation.url ? (
             <div className="cite-panel-open-row">

@@ -4,7 +4,7 @@
  * record is useful outside the app.
  */
 
-import type { Thread } from '../types';
+import type { Message, Thread } from '../types';
 
 const CLASS_LABEL: Record<string, string> = {
   'satoshi-primary': "Satoshi's writings (2008–2011)",
@@ -23,18 +23,22 @@ function fmtDate(ts: number): string {
   });
 }
 
-export function exportThreadMarkdown(thread: Thread): string {
+/** Markdown for a message list. `exportThreadMarkdown` uses the thread's own title and time. */
+export function messagesToMarkdown(
+  messages: Message[],
+  meta: { title: string; updatedAt: number },
+): string {
   const lines: string[] = [];
-  lines.push(`# ${thread.title}`);
+  lines.push(`# ${meta.title}`);
   lines.push('');
   lines.push(
-    `_Exported from Ask Satoshi. ${fmtDate(thread.updatedAt)}._`,
+    `_Exported from Ask Satoshi. ${fmtDate(meta.updatedAt)}._`,
   );
   lines.push('');
   lines.push('---');
   lines.push('');
 
-  for (const m of thread.messages) {
+  for (const m of messages) {
     if (m.role === 'user') {
       lines.push(`## You`);
       lines.push('');
@@ -66,4 +70,11 @@ export function exportThreadMarkdown(thread: Thread): string {
   }
 
   return lines.join('\n');
+}
+
+export function exportThreadMarkdown(thread: Thread): string {
+  return messagesToMarkdown(thread.messages, {
+    title: thread.title,
+    updatedAt: thread.updatedAt,
+  });
 }

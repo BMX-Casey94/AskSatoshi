@@ -3,8 +3,9 @@
  * column, and the composer docked at the bottom with the sleep banner beneath it.
  */
 
-import type { AttachedImage, Message } from '../types';
+import type { AttachedImage, Depth, Message } from '../types';
 import { Composer } from './Composer';
+import { CorpusStamp } from './CorpusStamp';
 import { MessageList } from './MessageList';
 import { SleepBanner } from './SleepBanner';
 import { ThemeToggle } from './ThemeToggle';
@@ -36,6 +37,11 @@ interface Props {
   onExport: () => void;
   showStorageNotice: boolean;
   onDismissStorageNotice: () => void;
+  onRate: (id: string, rating: 'up' | 'down') => void;
+  onAsk: (question: string) => void;
+  depth: Depth;
+  onDepthChange: (depth: Depth) => void;
+  corpusUpdated?: string;
 }
 
 export function ChatView(props: Props) {
@@ -78,6 +84,8 @@ export function ChatView(props: Props) {
         chatPhase={props.chatPhase}
         onRetry={props.onRetry}
         sending={props.sending}
+        onRate={props.onRate}
+        onAsk={props.onAsk}
       />
       <div className="chat-dock">
         {props.showStorageNotice && (
@@ -111,11 +119,14 @@ export function ChatView(props: Props) {
           onAttach={props.onAttach}
           onRemoveImage={props.onRemoveImage}
           onFocusChange={() => undefined}
+          depth={props.depth}
+          onDepthChange={props.onDepthChange}
         />
         {props.asleep && <SleepBanner retryAfter={props.retryAfter} lines={props.sleepLines} />}
         <p className="chat-footnote">
           Answers are grounded in the cited sources. Free to use; chats stay on your device.
         </p>
+        <CorpusStamp updated={props.corpusUpdated} />
       </div>
     </div>
   );

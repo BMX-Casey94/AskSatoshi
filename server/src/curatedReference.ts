@@ -106,6 +106,16 @@ export function isImplementationQuestion(q: string): boolean {
   return IMPLEMENTATION_BUILD.test(q);
 }
 
+/**
+ * Timecoin / Time Chain / Hashcoin questions. "Time coin" (two words) is matched, as is
+ * the spelling "timechain"; plain "time chain" is not, because it is ordinary English.
+ */
+const TIMECOIN_TERM = /\b(time\s?coins?|timechain|hashcoin|timedoc)\b/i;
+
+export function isTimecoinQuestion(q: string): boolean {
+  return TIMECOIN_TERM.test(q);
+}
+
 /** Tech-retrieval hint so builder questions hit BRC-100 / SPV rather than a BTC prior. */
 export const IMPLEMENTATION_TECH_QUERY = 'BRC-100 BRC-62 OP_RETURN SPV wallet overlay SDK';
 
@@ -135,16 +145,19 @@ export class CuratedReference {
   private readonly pinned: DossierEntry[];
   readonly scaling: ScalingRecord | null;
   readonly implementation: ImplementationRecord | null;
+  readonly timecoin: ScalingRecord | null;
 
   constructor(
     entries: DossierEntry[],
     scaling: ScalingRecord | null,
     implementation: ImplementationRecord | null = null,
+    timecoin: ScalingRecord | null = null,
   ) {
     this.all = entries;
     this.pinned = entries.filter((e) => e.pin);
     this.scaling = scaling;
     this.implementation = implementation;
+    this.timecoin = timecoin;
     this.mini = new MiniSearch<DossierEntry>({
       fields: ['title', 'text', 'category'],
       storeFields: ['id', 'category', 'title', 'date', 'url', 'text', 'pin'],
@@ -243,12 +256,15 @@ export function loadCuratedReference(
   dossierPath?: string,
   scalingPath?: string,
   implementationPath?: string,
+  timecoinPath?: string,
 ): CuratedReference | null {
   let entries: DossierEntry[] = [];
   let scaling: ScalingRecord | null = null;
   let implementation: ImplementationRecord | null = null;
+  let timecoin: ScalingRecord | null = null;
 
-  if (dossierPath || scalingPath || implementationPath) {
+  if (dossierPath || scalingPath || implementationPath || timecoinPath) {
+    if (timecoinPath) timecoin = loadPinnedJson(timecoinPath, 'timecoin record');
     if (dossierPath && existsSync(dossierPath)) {
       try {
         entries = parseDossier(readFileSync(dossierPath, 'utf8'));
@@ -276,11 +292,14 @@ export function loadCuratedReference(
     if (!scaling) console.warn(`[curated] ${scalingFile} not found — scaling record disabled.`);
     implementation = loadPinnedJson(implementationFile, 'implementation record');
     if (!implementation) console.warn(`[curated] ${implementationFile} not found — implementation record disabled.`);
+    const timecoinFile = join(dataDir, 'timecoin-record.json');
+    timecoin = loadPinnedJson(timecoinFile, 'timecoin record');
+    if (!timecoin) console.warn(`[curated] ${timecoinFile} not found — timecoin record disabled.`);
   }
 
-  if (entries.length === 0 && !scaling && !implementation) return null;
+  if (entries.length === 0 && !scaling && !implementation && !timecoin) return null;
   console.log(
-    `[curated] loaded ${entries.length} dossier entries${scaling ? ' + scaling record' : ''}${implementation ? ' + implementation record' : ''}`,
+    `[curated] loaded ${entries.length} dossier entries${scaling ? ' + scaling record' : ''}${implementation ? ' + implementation record' : ''}${timecoin ? ' + timecoin record' : ''}`,
   );
-  return new CuratedReference(entries, scaling, implementation);
+  return new CuratedReference(entries, scaling, implementation, timecoin);
 }

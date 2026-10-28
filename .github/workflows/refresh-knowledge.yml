@@ -1,0 +1,70 @@
+name: Refresh knowledge sources
+
+# Weekly refresh of the pinned knowledge sources. Nothing is deployed from here: the job
+# opens a pull request so the diff can be reviewed before anything reaches the VPS.
+#
+# One-off repository setting needed: Settings -> Actions -> General -> Workflow
+# permissions -> "Allow GitHub Actions to create and approve pull requests".
+
+on:
+  schedule:
+    - cron: '17 5 * * 1' # Mondays, 05:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: refresh-knowledge
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Update the BSV knowledge package (patch and minor only)
+        run: npm update bsv-aio-mcp
+
+      - name: Re-pin Satoshi's posts and e-mails
+        run: npm run fetch-corpus --workspace server
+        continue-on-error: true
+
+      - name: Refresh CoinGeek news
+        run: npm run fetch-news --workspace server
+        continue-on-error: true
+
+      - name: Typecheck, test and build
+        run: |
+          npm run typecheck
+          npm --prefix server run test
+          npm run build
+
+      - name: Open a pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: automation/refresh-knowledge
+          delete-branch: true
+          commit-message: 'Refresh pinned knowledge sources'
+          title: 'Refresh pinned knowledge sources'
+          body: |
+            Automated weekly refresh: `bsv-aio-mcp`, the Satoshi corpus and CoinGeek news.
+
+            Review the diff before merging. After merging, deploy with
+            `cd /opt/ask-satoshi && sudo bash deploy/setup.sh` and check `/api/health`.
+          add-paths: |
+            package.json
+            package-lock.json
+            server/data/satoshi-corpus.json
+            server/data/coingeek-news.json

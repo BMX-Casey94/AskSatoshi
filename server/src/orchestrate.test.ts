@@ -651,6 +651,15 @@ describe('prompt construction', () => {
     expect(sys).toMatch(/sworn testimony/);
   });
 
+  it('states plainly that it is an AI and never denies it', () => {
+    for (const mode of ['mcp', 'corpus', 'reference', 'none'] as const) {
+      const sys = buildSystemPrompt(mode);
+      expect(sys).toMatch(/WHAT YOU ARE/);
+      expect(sys).toMatch(/AI recreation of Satoshi/);
+      expect(sys).toMatch(/NEVER say or imply "I am not an AI"/);
+    }
+  });
+
   it('rejects keys-as-proof: possession of a key is not identity', () => {
     const sys = buildSystemPrompt('mcp');
     expect(sys).toMatch(/KEYS ARE NOT PROOF/);

@@ -4,6 +4,7 @@
  */
 
 import type { AttachedImage, Depth, Message } from '../types';
+import { AiNotice } from './AiNotice';
 import { Composer } from './Composer';
 import { CorpusStamp } from './CorpusStamp';
 import { MessageList } from './MessageList';
@@ -128,9 +129,7 @@ export function ChatView(props: Props) {
           onDepthChange={props.onDepthChange}
         />
         {props.asleep && <SleepBanner retryAfter={props.retryAfter} lines={props.sleepLines} />}
-        <p className="chat-footnote">
-          Answers are grounded in the cited sources. Free to use; chats stay on your device.
-        </p>
+        <AiNotice className="chat-footnote" />
         <CorpusStamp updated={props.corpusUpdated} />
       </div>
     </div>

@@ -10,6 +10,7 @@ import {
   isIdentityQuestion,
   isImplementationQuestion,
   isScalingQuestion,
+  isTimecoinQuestion,
   loadCuratedReference,
   type DossierEntry,
   type ScalingRecord,
@@ -49,6 +50,17 @@ const IMPLEMENTATION: ScalingRecord = {
       title: 'BRC-100 Wallet-to-Application Interface',
       url: 'https://github.com/bsv-blockchain/BRCs/blob/master/wallet/0100.md',
       excerpt: 'The wallet-to-application interface.',
+    },
+  ],
+};
+
+const TIMECOIN: ScalingRecord = {
+  evidenceText: 'TIMECOIN — ATTRIBUTED RECORD: his account, the court findings, his dispute.',
+  citations: [
+    {
+      label: 'COPA v Wright [2024] EWHC 1198 (Ch) (BAILII)',
+      url: 'https://www.bailii.org/ew/cases/EWHC/Ch/2024/1198.html',
+      excerpt: 'Findings on the Timecoin documents.',
     },
   ],
 };
@@ -323,5 +335,42 @@ describe('groundQuestion with curated reference', () => {
     expect(g.evidenceText).toContain('BRC-100');
     expect(g.citations.some((c) => c.url?.includes('0100.md'))).toBe(true);
     expect(g.citations.find((c) => c.url?.includes('0100.md'))?.sourceClass).toBe('historical-record');
+  });
+
+  it('prepends the Timecoin record, including when the question reads as an identity question', async () => {
+    const curated = new CuratedReference(dossier, null, null, TIMECOIN);
+    const g = await groundQuestion('What did Craig Wright mean by Timecoin?', { mcp: thinMcp(), corpus: null, curated });
+    expect(g.evidenceText.startsWith('TIMECOIN')).toBe(true);
+    expect(g.citations.some((c) => c.url?.includes('bailii.org'))).toBe(true);
+  });
+
+  it('leaves unrelated questions alone when a Timecoin record is loaded', async () => {
+    const curated = new CuratedReference([], null, null, TIMECOIN);
+    const g = await groundQuestion('zxqwv unrelated gibberish', { mcp: thinMcp(), corpus: null, curated });
+    expect(g.evidenceText).toBe('');
+  });
+});
+
+describe('isTimecoinQuestion', () => {
+  it('matches Timecoin spellings', () => {
+    expect(isTimecoinQuestion('What is Timecoin?')).toBe(true);
+    expect(isTimecoinQuestion('Was TimeChain real?')).toBe(true);
+    expect(isTimecoinQuestion('Tell me about the Time coin paper')).toBe(true);
+    expect(isTimecoinQuestion('What is the Hashcoin white paper?')).toBe(true);
+  });
+  it('does not match ordinary time or coin talk', () => {
+    expect(isTimecoinQuestion('How long does a block take, time wise?')).toBe(false);
+    expect(isTimecoinQuestion('What is a coin?')).toBe(false);
+  });
+});
+
+describe('shipped timecoin record', () => {
+  const file = join(dirname(fileURLToPath(import.meta.url)), '..', 'data', 'timecoin-record.json');
+  const rec = JSON.parse(readFileSync(file, 'utf8')) as ScalingRecord;
+  it('has real citation URLs and never asserts foul play as fact', () => {
+    expect(rec.citations.length).toBeGreaterThan(3);
+    for (const c of rec.citations) expect(c.url).toMatch(/^https:\/\//);
+    expect(rec.evidenceText).toContain('must not assert one');
+    expect(rec.evidenceText).toContain('totally without merit');
   });
 });

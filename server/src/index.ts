@@ -58,7 +58,7 @@ import {
 import { getActivity } from './satoshiActivity.js';
 import { helmetOptions } from './security.js';
 import { corpusUpdatedAt, loadCorpus } from './satoshiCorpus.js';
-import { loadCoinGeekNews } from './coingeekNews.js';
+import { loadCoinGeekNews, newsFetchedAt } from './coingeekNews.js';
 import { withNewsEvidence } from './newsGrounding.js';
 import { loadCuratedReference } from './curatedReference.js';
 import { assembleTts, ttsStartupLine } from './tts/index.js';
@@ -187,7 +187,12 @@ const feedbackLimiter = rateLimit({
 function serviceStatus() {
   const ids = configuredTiers(keys).map((t) => t.id);
   const st = breaker.status(ids);
-  const corpusUpdated = corpusUpdatedAt();
+  // "Sources last refreshed" is the newest of the pinned snapshots (Satoshi corpus,
+  // CoinGeek news) — either refresh counts, so the stamp never lags a news update.
+  const corpusUpdated = [corpusUpdatedAt(), newsFetchedAt()]
+    .filter((v): v is string => Boolean(v))
+    .sort()
+    .at(-1);
   return corpusUpdated ? { ...st, sleepLines: SLEEP_LINES, corpusUpdated } : { ...st, sleepLines: SLEEP_LINES };
 }
 

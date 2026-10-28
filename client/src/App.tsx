@@ -5,6 +5,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChatView } from './components/ChatView';
+import { AiNotice } from './components/AiNotice';
 import { Composer } from './components/Composer';
 import { CorpusStamp } from './components/CorpusStamp';
 import { Hero } from './components/Hero';
@@ -539,10 +540,7 @@ export function App() {
             <Suggestions onPick={(q) => send(q)} disabled={asleep || sending} />
           </div>
           <footer className="landing-footer">
-            <p className="landing-footer-copy">
-              Grounded in the writings and the protocol record. Free to use; chats stay on your
-              device.
-            </p>
+            <AiNotice className="landing-footer-copy" />
             <CorpusStamp updated={corpusUpdated} />
           </footer>
         </main>

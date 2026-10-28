@@ -1,19 +1,149 @@
 {
   "pin": {
     "source": "https://coingeek.com/",
-    "fetchedAt": "2026-10-27T22:23:08.736Z",
+    "fetchedAt": "2026-10-28T15:24:10.575Z",
     "counts": {
-      "items": 5137,
-      "fetched": 5137
+      "items": 5142,
+      "fetched": 5139
     },
     "oldest": "2023-10-28T05:00:28.000Z",
-    "newest": "2026-10-27T12:00:00.000Z",
+    "newest": "2026-10-28T14:00:00.000Z",
     "method": "wp-rest",
     "months": 36,
     "complete": true,
-    "requests": 53
+    "requests": 192
   },
   "items": [
+    {
+      "id": "coingeek-625879",
+      "url": "https://coingeek.com/tether-pimps-mining-development-kit-to-connect-mining-ai-whatever",
+      "title": "Tether pimps Mining Development Kit to connect mining, AI, whatever",
+      "date": "2026-10-28T14:00:00.000Z",
+      "excerpt": "Bitcoin hashrate nears 1,100 EH/s, Heatbit launches a $899 water heater miner, and Tether debuts its open-source Mining Development Kit.",
+      "modified": "2026-10-28T10:42:43.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "AI",
+        "Artificial Intelligence",
+        "Avalon A1566HA",
+        "Bitforest Investment",
+        "Bitmain BM1370",
+        "Bitwater",
+        "Block",
+        "Block Reward Mining",
+        "BTC",
+        "Canaan",
+        "F2Pool",
+        "Foundry",
+        "Heatbit",
+        "Michael Potter",
+        "MicroBT",
+        "Mining Development Kit",
+        "Nangeng Zhang",
+        "Ocean",
+        "Paolo Ardoino",
+        "Proto",
+        "SpiderPool",
+        "Tether",
+        "USDT"
+      ]
+    },
+    {
+      "id": "coingeek-625871",
+      "url": "https://coingeek.com/digicon-2026-turning-connections-into-business-opportunities-video",
+      "title": "DigiCon 2026: Turning connections into business opportunities",
+      "date": "2026-10-28T12:00:00.000Z",
+      "excerpt": "Interoperability takes center stage at DigiCon 2026 in Manila, where 2,000+ professionals discussed AI agents, marketing ops, and collaboration.",
+      "modified": "2026-10-28T12:07:28.000Z",
+      "categories": [
+        "Business",
+        "Events"
+      ],
+      "tags": [
+        "AI",
+        "Artificial Intelligence",
+        "Christian Busch",
+        "DigiCon",
+        "DigiCon 2026",
+        "Digital Marketing Association of the Philippines",
+        "Miko David",
+        "Philippines"
+      ]
+    },
+    {
+      "id": "coingeek-625854",
+      "url": "https://coingeek.com/canada-new-stablecoin-rules-occ-wants-us-banks-to-issue-stables",
+      "title": "Canada’s new stablecoin rules; OCC wants US banks to issue stables",
+      "date": "2026-10-28T10:00:00.000Z",
+      "excerpt": "Canada’s stablecoin shake-up puts crypto oversight in focus as U.S. explore new issuance options and Tether faces scrutiny over its Washington lobbying.",
+      "modified": "2026-10-28T09:52:06.000Z",
+      "categories": [
+        "Finance"
+      ],
+      "tags": [
+        "Bank",
+        "Bo Hines",
+        "Canada",
+        "Cantor Fitzgerald",
+        "GENIUS Act",
+        "Independent Community Bankers of America",
+        "Nxum Group",
+        "Office of the Comptroller of the Currency",
+        "Paolo Ardoino",
+        "Regulation",
+        "Richard Blumenthal",
+        "Stablecoin Act",
+        "Stablecoins",
+        "Tether",
+        "United States",
+        "USDT"
+      ]
+    },
+    {
+      "id": "coingeek-625761",
+      "url": "https://coingeek.com/jensen-huang-says-ai-is-a-five-layer-cake-so-is-bitcoin",
+      "title": "Jensen Huang says AI is a five-layer cake—so is Bitcoin",
+      "date": "2026-10-28T08:00:00.000Z",
+      "excerpt": "NVIDIA’s CEO, Jensen Huang, compares AI and Bitcoin to five-layer stacks, highlighting their complementary roles in verification and infrastructure.",
+      "modified": "2026-10-26T22:39:41.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "AI",
+        "Artificial Intelligence",
+        "Bitcoin",
+        "Bitcoin SV",
+        "BSV Blockchain",
+        "Jensen Huang",
+        "Nvidia",
+        "Proof of Work"
+      ]
+    },
+    {
+      "id": "coingeek-625756",
+      "url": "https://coingeek.com/bybit-secures-license-for-crypto-exchange-services-in-dubai",
+      "title": "Bybit secures license for crypto exchange services in Dubai",
+      "date": "2026-10-28T06:00:00.000Z",
+      "excerpt": "Bybit secures a VARA license for exchange services in Dubai, completing a four-year approval process amid recovery from a major hack.",
+      "modified": "2026-10-26T22:21:30.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Ben Zhou",
+        "Bybit",
+        "Dubai",
+        "Peter Loo",
+        "Regulation",
+        "United Arab Emirates",
+        "VARA",
+        "Virtual Asset Service Provider",
+        "Virtual Assets Regulatory Authority"
+      ]
+    },
     {
       "id": "coingeek-625812",
       "url": "https://coingeek.com/over-one-third-of-okxice-tokenized-share-targets-opt-out",
@@ -650,8 +780,8 @@
         "Helen Liu",
         "Middle East",
         "Mykolas Majauskas",
-        "Robert Pasicko",
         "Robert Pašičko",
+        "Robert Pasicko",
         "United Arab Emirates",
         "United Nations Development Programme"
       ]

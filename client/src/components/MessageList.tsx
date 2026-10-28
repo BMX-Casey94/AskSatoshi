@@ -349,11 +349,12 @@ export function MessageList({
                     refined for accuracy
                   </span>
                 )}
+                <ReadAloudButton text={message.content} placement="meta" />
               </div>
             )}
             {finished && (
               <div className="answer-tools">
-                <ReadAloudButton text={message.content} />
+                {!showMeta && <ReadAloudButton text={message.content} placement="actions" />}
                 <AnswerActions
                   message={message}
                   question={precedingQuestion(messages, index)}

@@ -54,6 +54,22 @@
   max-width: 100%;
 }
 
+.answer-meta .read-aloud--meta {
+  margin-top: 0;
+  margin-left: auto;
+  flex-direction: row;
+  align-items: center;
+}
+
+.answer-meta .read-aloud--meta:has(.read-aloud-player),
+.answer-meta .read-aloud--meta:has(.read-aloud-error-box) {
+  flex-basis: 100%;
+  width: 100%;
+  margin-left: 0;
+  flex-direction: column;
+  align-items: stretch;
+}
+
 .provenance-badge {
   position: relative;
   z-index: 1;
@@ -128,7 +144,7 @@
   margin-top: 10px;
 }
 
-.answer-tools .read-aloud {
+.answer-tools .read-aloud--actions {
   margin-top: 0;
   flex-direction: row;
   align-items: center;

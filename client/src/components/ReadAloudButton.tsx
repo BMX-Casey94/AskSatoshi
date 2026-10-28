@@ -20,6 +20,8 @@ import { ReadAloudPlayer } from './ReadAloudPlayer';
 
 interface Props {
   text: string;
+  /** meta: right of the provenance badge; actions: before copy/share when there is no badge row */
+  placement?: 'meta' | 'actions';
 }
 
 type Phase = 'idle' | 'quoting' | 'confirm' | 'paying' | 'synthesising' | 'ready';
@@ -30,7 +32,7 @@ interface ErrorState {
   refundTxid?: string;
 }
 
-export function ReadAloudButton({ text }: Props) {
+export function ReadAloudButton({ text, placement = 'actions' }: Props) {
   const [status, setStatus] = useState<TtsStatus | null>(null);
   const [phase, setPhase] = useState<Phase>('idle');
   const [quote, setQuote] = useState<TtsQuote | null>(null);
@@ -119,9 +121,11 @@ export function ReadAloudButton({ text }: Props) {
   if (!status?.enabled) return null;
   if (!plain || plain.length > status.maxChars) return null;
 
+  const rootClass = `read-aloud read-aloud--${placement}`;
+
   if (phase === 'ready' && audioUrl) {
     return (
-      <div className="read-aloud">
+      <div className={rootClass}>
         <ReadAloudPlayer src={audioUrl} />
       </div>
     );
@@ -130,7 +134,7 @@ export function ReadAloudButton({ text }: Props) {
   const inFlight = busy || phase === 'quoting' || phase === 'paying' || phase === 'synthesising';
 
   return (
-    <div className="read-aloud">
+    <div className={rootClass}>
       {phase === 'paying' ? (
         <span className="read-aloud-status" role="status">
           Check your wallet…

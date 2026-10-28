@@ -38,7 +38,9 @@ export function withDirectoryEvidence(
 
   const body = renderDirectoryEvidence(hits, directory.meta, directory.now());
   const block = `${DIRECTORY_EVIDENCE_HEADER}\n${CATALOGUE_CAVEAT}\n${DIRECTORY_PROVENANCE_NOTE}\n\n${body}`;
-  const evidenceText = grounding.evidenceText ? `${grounding.evidenceText}\n\n${block}` : block;
+  // The catalogue leads. Evidence is trimmed from the tail on free tiers, and the model
+  // weighs the head most, so a listing question must not bury its answer behind essays.
+  const evidenceText = grounding.evidenceText ? `${block}\n\n${grounding.evidenceText}` : block;
   return {
     usedDirectory: true,
     grounding: {
@@ -47,6 +49,8 @@ export function withDirectoryEvidence(
       // model the evidence is a third-party list to weigh and attribute, not Satoshi's own writing.
       mode: grounding.mode === 'none' ? 'reference' : grounding.mode,
       evidenceText,
+      // A lead angle tells the model not to survey sources; here the list IS the answer.
+      leadAngle: undefined,
       citations: [...grounding.citations, ...directoryCitations(hits)],
     },
   };

@@ -28,7 +28,7 @@ export const CATALOGUE_CAVEAT =
  * It must not be spoken as a complete set, an endorsement, or an uptime check.
  */
 export const DIRECTORY_PROVENANCE_NOTE =
-  'Say that this is a partial list. Never claim the catalogue is complete. Never endorse an app. Never state that an app is currently operational. Present at most a few. The date on a row is the catalogue\'s own date for that listing, not a release date and not evidence the service is running. Do not treat the catalogue\'s platform label as a device or store list. Prefer the bsvradar.com link when you cite a listing.';
+  'Say that this is a partial list. Never claim the catalogue is complete. Never endorse an app. Never state that an app is currently operational. Present between three and six listings, each by name with one plain line on what it is for and its link; naming a listing is reporting the catalogue, not endorsing it. The date on a row is the catalogue\'s own date for that listing, not a release date and not evidence the service is running. Do not treat the catalogue\'s platform label as a device or store list. Prefer the bsvradar.com link when you cite a listing.';
 
 export const DIRECTORY_EVIDENCE_HEADER =
   'APP DIRECTORY (BSV Radar — partial community catalogue, listing is not endorsement, status may be out of date):';
@@ -93,6 +93,11 @@ const DIRECTORY_PATTERNS: readonly RegExp[] = [
 
 const LISTING_CUE =
   /\b(?:exist|exists|available|listed|catalogue|catalog|directory|list|show|any|are\s+there|is\s+there)\b/i;
+
+/** Recommendation phrasing: "name some good BSV apps", "which apps should I try on BSV". */
+const RECO_CUE =
+  /\b(?:name|recommend|suggest|examples?\s+of|good|best|top|popular|favou?rite|notable|worth\s+(?:trying|using|a\s+look)|should\s+i\s+(?:try|use)|can\s+you\s+(?:name|recommend|suggest))\b/i;
+const CHAIN_ANY = new RegExp(`\\b${CHAIN}\\b`, 'i');
 
 const CHAIN_NOUN = new RegExp(`\\b${CHAIN}\\s+${LISTING_NOUN}\\b`, 'i');
 
@@ -491,6 +496,7 @@ export function looksLikeAppDirectoryQuestion(question: string): boolean {
   if (SATOSHI_RECORD.test(q)) return false;
   if (DIRECTORY_PATTERNS.some((pattern) => pattern.test(q))) return true;
   if (CHAIN_NOUN.test(q) && LISTING_CUE.test(q)) return true;
+  if (RECO_CUE.test(q) && APP_NOUN.test(q) && CHAIN_ANY.test(q)) return true;
   if (BLOCK_NOUN.test(q) && ASK_CUE.test(q)) return true;
   if (ORG_NOUN.test(q) && ASK_CUE.test(q)) return true;
   return false;

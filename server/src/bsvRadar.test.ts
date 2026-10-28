@@ -311,6 +311,12 @@ describe('looksLikeAppDirectoryQuestion', () => {
       ['Explain BRC-62', false],
       ['How does a Merkle branch show inclusion?', false],
       ['Is there an exchange of value in the white paper?', false],
+      ['Can you name some good BSV Apps?', true],
+      ['Recommend some BSV apps', true],
+      ['Which BSV apps should I try?', true],
+      ['What are the best apps for Bitcoin SV?', true],
+      ['What is the best way to design an app?', false],
+      ['Why is BSV good for micropayments?', false],
     ];
     for (const [question, expected] of cases) {
       expect(looksLikeAppDirectoryQuestion(question), question).toBe(expected);

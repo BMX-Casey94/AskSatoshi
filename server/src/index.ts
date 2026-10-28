@@ -44,6 +44,7 @@ import {
   parseCitationFilter,
   pickInvitationSeed,
   pickStyleSeed,
+  DIRECTORY_STYLE_SEED,
   questionClass,
   stopsForNoKnowledge,
 } from './orchestrate.js';
@@ -472,7 +473,7 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // One prompt context for the draft and any revision. A fresh depth, style seed,
     // invitation seed or lead angle would shift the voice instructions while the
     // revision is told to keep the same voice. The angle was chosen during grounding.
-    const styleSeed = pickStyleSeed(question, depth);
+    const styleSeed = usedDirectory ? DIRECTORY_STYLE_SEED : pickStyleSeed(question, depth);
     const invitationSeed = pickInvitationSeed();
     const promptCtx = {
       questionClass: questionClass(question),

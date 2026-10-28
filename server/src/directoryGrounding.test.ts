@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CATALOGUE_CAVEAT, DIRECTORY_PROVENANCE_NOTE, type DirectoryHit, type DirectorySource } from './bsvRadar.js';
+import { CATALOGUE_CAVEAT, DIRECTORY_EVIDENCE_HEADER, DIRECTORY_PROVENANCE_NOTE, type DirectoryHit, type DirectorySource } from './bsvRadar.js';
 import { withDirectoryEvidence } from './directoryGrounding.js';
 import type { Grounding } from './orchestrate.js';
 
@@ -49,7 +49,9 @@ describe('withDirectoryEvidence', () => {
     const result = withDirectoryEvidence(base, 'What wallets exist on BSV?', undefined, stub([hit()]));
     expect(result.usedDirectory).toBe(true);
     expect(result.grounding.mode).toBe('mcp');
-    expect(result.grounding.evidenceText.startsWith('Existing evidence.')).toBe(true);
+    // Directory evidence leads: it must survive free-tier truncation, which keeps the head.
+    expect(result.grounding.evidenceText.startsWith(DIRECTORY_EVIDENCE_HEADER)).toBe(true);
+    expect(result.grounding.evidenceText).toContain('Existing evidence.');
     expect(result.grounding.evidenceText).toContain(
       'APP DIRECTORY (BSV Radar — partial community catalogue, listing is not endorsement, status may be out of date):',
     );
@@ -59,7 +61,7 @@ describe('withDirectoryEvidence', () => {
     expect(result.grounding.evidenceText).toContain('Never claim the catalogue is complete');
     expect(result.grounding.evidenceText).toContain('Never endorse an app');
     expect(result.grounding.evidenceText).toContain('Never state that an app is currently operational');
-    expect(result.grounding.evidenceText).toContain('at most a few');
+    expect(result.grounding.evidenceText).toContain('between three and six listings');
     expect(result.grounding.evidenceText).toContain('HandCash (Wallets)');
     expect(result.grounding.evidenceText).toContain('https://handcash.io');
     expect(result.grounding.evidenceText).toContain('catalogue page https://bsvradar.com/apps/handcash');

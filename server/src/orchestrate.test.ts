@@ -665,6 +665,18 @@ describe('prompt construction', () => {
     expect(rec.evidenceText).toContain('Dr Craig Wright');
   });
 
+  it('has a directory register and gives listing questions a direct opener, never the distinction seed', () => {
+    expect(buildSystemPrompt('reference')).toMatch(/DIRECTORY REGISTER/);
+    for (const q of ['What games exist on BSV', 'Can you name some good BSV Apps?', 'Which BSV apps should I try?']) {
+      for (const depth of [undefined, 'beginner', 'developer', 'historian'] as const) {
+        for (const r of [0, 0.34, 0.67, 0.99]) {
+          expect(pickStyleSeed(q, depth, () => r), `${q} ${depth} ${r}`).not.toBe('Open by drawing one distinction, then answer.');
+        }
+      }
+    }
+    expect(pickStyleSeed('How does SPV work?', undefined, () => 0.9)).toBeTruthy();
+  });
+
   it('states plainly that it is an AI and never denies it', () => {
     for (const mode of ['mcp', 'corpus', 'reference', 'none'] as const) {
       const sys = buildSystemPrompt(mode);

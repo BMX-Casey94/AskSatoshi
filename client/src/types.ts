@@ -31,6 +31,8 @@ export interface Message {
   revised?: boolean;
   /** Retrieval path the answer was grounded in (provenance badge). */
   mode?: GroundingMode;
+  /** True when nothing in the record matched and the answer is the model's general knowledge. */
+  general?: boolean;
   /** Up to three suggested next questions, derived server-side from the sources used. */
   followUps?: string[];
   /** The user's thumbs rating for this answer, if any (stored locally only). */

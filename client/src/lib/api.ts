@@ -13,6 +13,7 @@ export interface ChatHandlers {
     tier?: string;
     revised?: boolean;
     followUps?: string[];
+    general?: boolean;
   }) => void;
   onError: (err: { code: string; message: string; retryAfter?: string }) => void;
   onDone: () => void;

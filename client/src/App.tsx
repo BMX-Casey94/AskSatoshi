@@ -353,6 +353,7 @@ export function App() {
           ...(meta.citations ? { citations: meta.citations } : {}),
           ...(meta.revised ? { revised: true } : {}),
           ...(mode !== undefined ? { mode } : {}),
+          ...(meta.general === true ? { general: true } : {}),
           ...(followUps ? { followUps } : {}),
         });
       },

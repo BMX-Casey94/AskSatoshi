@@ -622,6 +622,8 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     sseWrite(res, 'delta', { text: finalText });
     sseWrite(res, 'meta', {
       mode: grounding.mode,
+      // A retrieval miss answered by the model: the client labels it "general knowledge".
+      ...(grounding.mode === 'none' && !image ? { general: true } : {}),
       citations: finalCitations,
       tier: result.tierId,
       revised: wasRevised,

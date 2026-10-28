@@ -37,6 +37,18 @@ function subsets(items: readonly ClassName[]): ClassName[][] {
   return out;
 }
 
+describe('answerProvenance (general knowledge)', () => {
+  it('labels a retrieval miss answered by the model, whatever else is present', () => {
+    const p = answerProvenance({ mode: 'none', general: true, citations: [] });
+    expect(p?.kind).toBe('general');
+    expect(p?.label).toBe('General knowledge, not from the record');
+    expect(p?.title).toContain('Nothing in the record matched');
+  });
+  it('shows nothing for a plain miss without the general flag', () => {
+    expect(answerProvenance({ mode: 'none', citations: [] })).toBeNull();
+  });
+});
+
 describe('answerProvenance', () => {
   it('keeps mixed labels to one narrow line', () => {
     expect(PROVENANCE_LABEL_LIMIT).toBeLessThanOrEqual(52);

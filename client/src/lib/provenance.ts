@@ -28,7 +28,7 @@ const CLASS_ORDER = [
 
 const CLASS_SET: ReadonlySet<string> = new Set(CLASS_ORDER);
 
-export type ProvenanceKind = SourceClass | 'mixed' | Exclude<GroundingMode, 'none'>;
+export type ProvenanceKind = SourceClass | 'mixed' | 'general' | Exclude<GroundingMode, 'none'>;
 
 export interface Provenance {
   /** Visible pill text. Mixed answers are shortened to one narrow line. */
@@ -41,7 +41,16 @@ export interface Provenance {
 export interface ProvenanceInput {
   citations?: readonly { sourceClass?: string | null }[] | null;
   mode?: string | null;
+  /** Retrieval found nothing; the answer came from the model's general knowledge. */
+  general?: boolean | null;
 }
+
+const GENERAL_PROVENANCE: Provenance = {
+  kind: 'general',
+  label: 'General knowledge, not from the record',
+  title:
+    "Nothing in the record matched this question, so this answer comes from the language model's general knowledge. Treat it as unverified.",
+};
 
 const SINGLE_LABEL: Record<SourceClass, string> = {
   'satoshi-primary': "Answered from Satoshi's own words (2008–2011)",
@@ -168,6 +177,7 @@ function mixedTitle(classes: readonly SourceClass[]): string {
 }
 
 export function answerProvenance(input: ProvenanceInput): Provenance | null {
+  if (input.general === true) return GENERAL_PROVENANCE;
   const citations = presentCitations(input.citations);
   const classes = classesInWeightOrder(citations);
   if (classes.length === 1) {

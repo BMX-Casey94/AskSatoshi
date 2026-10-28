@@ -127,6 +127,7 @@ function parseMessage(value: unknown): Message | null {
     if (citations.length > 0) message.citations = citations;
   }
   if (isGroundingMode(row.mode)) message.mode = row.mode;
+  if (row.general === true) message.general = true;
   const followUps = sanitizeFollowUps(row.followUps);
   if (followUps) message.followUps = followUps;
   if (typeof row.rating === 'string' && RATINGS.has(row.rating as Message['rating'])) {

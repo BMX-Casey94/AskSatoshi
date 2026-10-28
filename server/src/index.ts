@@ -429,7 +429,7 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // 'none', empty citations, and no model call. An attached image is not a miss —
     // the picture still has to reach a vision model. That path reports the same
     // mode and empty citations once the model has answered.
-    if (stopsForNoKnowledge(grounding.mode, Boolean(image))) {
+    if (stopsForNoKnowledge(grounding.mode, Boolean(image), hasKeys)) {
       sseWrite(res, 'delta', { text: noKnowledgeLine(question) });
       sseWrite(res, 'meta', { mode: 'none', citations: [], followUps: [] });
       sseWrite(res, 'done', {});
@@ -529,7 +529,12 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     let finalText = result.text;
     let wasRevised = false;
     const reviewable =
-      hasKeys && !constrained && !image && result.text.trim().length >= MIN_REVIEWABLE_ANSWER_CHARS;
+      hasKeys &&
+      !constrained &&
+      !image &&
+      // No evidence to review against: a miss answered from general knowledge is not reviewable.
+      grounding.mode !== 'none' &&
+      result.text.trim().length >= MIN_REVIEWABLE_ANSWER_CHARS;
     if (reviewable) {
       // The wait from here is review, not retrieval — tell the client so its progress
       // label stays honest instead of claiming tokens are flowing.

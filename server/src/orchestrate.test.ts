@@ -578,6 +578,11 @@ describe('prompt construction', () => {
   it('tells the model about an image, and uses an image-only variant when nothing was retrieved', () => {
     expect(stopsForNoKnowledge('none', false)).toBe(true);
     expect(stopsForNoKnowledge('none', true)).toBe(false);
+    // With a model available a miss is answered from general knowledge, not a canned line.
+    expect(stopsForNoKnowledge('none', false, true)).toBe(false);
+    expect(buildSystemPrompt('none')).toContain('NO RECORD');
+    expect(buildSystemPrompt('none', undefined, { hasImage: true })).not.toContain('NO RECORD');
+    expect(buildSystemPrompt('mcp')).not.toContain('NO RECORD');
     expect(stopsForNoKnowledge('mcp', true)).toBe(false);
     expect(stopsForNoKnowledge('corpus', false)).toBe(false);
     expect(stopsForNoKnowledge('reference', true)).toBe(false);

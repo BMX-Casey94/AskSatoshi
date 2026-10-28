@@ -681,13 +681,19 @@ button:disabled {
   border-bottom: 1px solid transparent;
   word-break: break-word;
   transition: color 0.12s ease, border-color 0.12s ease;
-  /* Keep wrapped titles aligned under the first line, not under the number. */
+  /* Keep wrapped titles aligned under the first line, not under the number.
+     The title stays beside the chip and wraps in the remaining width, rather
+     than dropping onto its own line whenever it is longer than that gap. */
   flex: 1;
   min-width: 0;
   display: flex;
   align-items: baseline;
   gap: 0.5em;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+}
+.source-title {
+  min-width: 0;
+  flex: 1 1 auto;
 }
 .source-link:hover {
   color: var(--accent);

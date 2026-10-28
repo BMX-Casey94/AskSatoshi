@@ -1,5 +1,6 @@
-/** Small footer line for the corpus refresh date. Renders nothing when unknown. */
+/** Footer line: corpus refresh date, then the Terms & Privacy link. */
 
+import { Link } from '../lib/router';
 import { formatCorpusUpdated } from '../lib/corpusDate';
 
 interface Props {
@@ -7,8 +8,20 @@ interface Props {
 }
 
 export function CorpusStamp({ updated }: Props) {
-  if (!updated) return null;
-  const formatted = formatCorpusUpdated(updated);
-  if (!formatted) return null;
-  return <p className="corpus-stamp">Sources last refreshed {formatted}</p>;
+  const formatted = updated ? formatCorpusUpdated(updated) : null;
+  return (
+    <p className="corpus-stamp">
+      {formatted && (
+        <>
+          <span>Sources last refreshed {formatted}</span>
+          <span className="corpus-stamp-sep" aria-hidden="true">
+            ·
+          </span>
+        </>
+      )}
+      <Link href="/terms" className="corpus-stamp-link">
+        Terms &amp; Privacy
+      </Link>
+    </p>
+  );
 }

@@ -381,20 +381,19 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
           understanding = parseQueryUnderstanding(rewriteRes.text, question, priorUser);
           if (understanding) rewriteCache.set(cacheKey, understanding);
         }
-        // Dev-visible trace for tuning the pass: what the question became for retrieval,
-        // or why the pass produced nothing (timeout/provider error vs. discarded reply).
+        // Privacy: operational logs record the outcome of the pass only, never the user's
+        // words or the rewritten query. Set DEBUG_REWRITE=1 locally to see the content.
+        if (process.env.DEBUG_REWRITE === '1' && process.env.NODE_ENV !== 'production') {
+          console.info(`[rewrite] "${question.slice(0, 80)}" → "${understanding?.query ?? ''}"`);
+        }
         if (understanding) {
           console.info(
-            `[rewrite] "${question.slice(0, 80)}" → "${understanding.query}"` +
-              (understanding.variants.length ? ` | variants: ${understanding.variants.join(' ‖ ')}` : '') +
-              (understanding.followUp ? ' | followUp' : ''),
+            `[rewrite] ok (variants: ${understanding.variants.length}${understanding.followUp ? ', followUp' : ''})`,
           );
         } else if (rewriteRes) {
-          console.info(
-            `[rewrite] discarded "${question.slice(0, 60)}" ← ${rewriteRes.text.replace(/\s+/g, ' ').slice(0, 240)}`,
-          );
+          console.info('[rewrite] discarded (unparseable reply)');
         } else {
-          console.info(`[rewrite] no reply (timeout or provider error) for "${question.slice(0, 60)}"`);
+          console.info('[rewrite] no reply (timeout or provider error)');
         }
       }
     }
@@ -564,7 +563,7 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
         }
         if (critique?.verdict === 'revise') {
           console.info(
-            `[chat] critique: revise (${critique.kind ?? 'unclassified'}) — ${critique.issues.join('; ')}`,
+            `[chat] critique: revise (${critique.kind ?? 'unclassified'}, ${critique.issues.length} issue(s))`,
           );
           const rReq = buildRevisionRequest(question, result.text, critique);
           const rRes = await Promise.race([

@@ -1,8 +1,17 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { stampLegalDate } from './scripts/stampLegalDate.mjs';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    {
+      name: 'legal-date',
+      buildStart() {
+        stampLegalDate();
+      },
+    },
+    react(),
+  ],
   // Static assets (hero images, icon) belong in client/public — Vite copies them into
   // the build. The build emits to the repo-root public/ folder, which Vercel serves
   // from its CDN (express.static is ignored there) and `npm start` serves locally.

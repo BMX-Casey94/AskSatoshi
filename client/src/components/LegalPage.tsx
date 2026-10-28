@@ -5,13 +5,13 @@
  */
 
 import { useEffect, useState } from 'react';
+import { LEGAL_UPDATED_LABEL } from '../legalRevision';
 import { Link } from '../lib/router';
 import { loadStore, saveStore } from '../lib/storage';
 import { HomeIcon } from './icons';
 import { ThemeToggle } from './ThemeToggle';
 
 const CONTACT = (import.meta.env as Record<string, string | undefined>).VITE_CONTACT_EMAIL?.trim();
-const LAST_UPDATED = '28 October 2026';
 
 export function LegalPage() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => loadStore().theme ?? 'light');
@@ -38,15 +38,17 @@ export function LegalPage() {
       </header>
 
       <main className="activity-main legal-main">
-        <p className="activity-lead">Last updated {LAST_UPDATED}.</p>
+        <p className="activity-lead">Last updated {LEGAL_UPDATED_LABEL}.</p>
 
+        {/* legal-copy:start */}
         <h2 id="terms">Terms of use</h2>
 
         <h3>What this is</h3>
         <p>
-          Ask Satoshi is an AI service. It answers questions about Bitcoin in the voice of Satoshi
-          Nakamoto, using his 2008–2011 writings, the BSV protocol record, curated reference
-          material and dated news reporting. It is a recreation. It is not written, reviewed or
+          Ask Satoshi is an AI service provided for curiosity, education and entertainment. It
+          answers questions about Bitcoin in the voice of Satoshi Nakamoto, using his 2008–2011
+          writings, the BSV protocol record, curated reference material, essays by Dr Craig Wright
+          and others, and dated news reporting (for example from CoinGeek). It is a recreation. It is not written, reviewed or
           endorsed by Satoshi Nakamoto, and it is not a person.
         </p>
 
@@ -148,8 +150,8 @@ export function LegalPage() {
         <h3>What our server handles</h3>
         <p>
           The server receives your IP address, which is used briefly to apply rate limits and to
-          protect the service from abuse. Short excerpts of questions can appear in operational
-          logs used to keep the service running and to fix faults. We do not build profiles, sell
+          protect the service from abuse. Operational logs record technical events only, not the text
+          of your questions. We do not build profiles, sell
           data or use it for advertising. Answer ratings (thumbs up or down) are counted anonymously
           and are not linked to you.
         </p>
@@ -177,6 +179,7 @@ export function LegalPage() {
             </p>
           </>
         )}
+        {/* legal-copy:end */}
       </main>
     </div>
   );

@@ -78,8 +78,12 @@ body {
 
 .app {
   height: 100dvh;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
+  overflow-x: clip;
 }
 
 button {
@@ -148,6 +152,9 @@ button:disabled {
 
 .landing {
   min-height: 100dvh;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -208,7 +215,13 @@ button:disabled {
 }
 
 .landing-footer {
-  padding: 18px 0 20px;
+  /* Stay inside the screen even if a sibling is wider than the viewport. */
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 18px 16px 20px;
   font-size: 0.78rem;
   color: var(--text-muted);
   text-align: center;
@@ -394,7 +407,9 @@ button:disabled {
   justify-content: center;
   gap: 8px;
   margin-top: 20px;
-  max-width: var(--max-col);
+  width: 100%;
+  max-width: min(var(--max-col), 100%);
+  min-width: 0;
 }
 
 .suggestion-pill {
@@ -404,6 +419,8 @@ button:disabled {
   border-radius: var(--radius-pill);
   padding: 9px 16px;
   font-size: 0.86rem;
+  max-width: 100%;
+  white-space: normal;
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 
@@ -484,6 +501,9 @@ button:disabled {
 
 .chat {
   height: 100dvh;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
 }
@@ -1388,9 +1408,10 @@ button:disabled {
 
 .chat-dock {
   padding: 8px 20px 10px;
-  max-width: calc(var(--max-col) + 40px);
+  max-width: min(calc(var(--max-col) + 40px), 100%);
   margin: 0 auto;
   width: 100%;
+  min-width: 0;
 }
 
 .chat-footnote {

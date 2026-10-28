@@ -79,6 +79,29 @@ describe('parseStoredStore', () => {
     expect(store.threads[0]?.messages[0]?.citations?.[0]?.sourceClass).toBe('news');
   });
 
+  it('keeps a BSV Radar directory citation on reload', () => {
+    const store = parseStoredStore({
+      version: 1,
+      threads: [
+        thread([
+          message({
+            citations: [
+              {
+                label: 'HandCash',
+                title: 'HandCash',
+                url: 'https://bsvradar.com/apps/handcash',
+                date: '2026-05-29',
+                excerpt: 'A user-friendly BSV wallet with social features',
+                sourceClass: 'directory',
+              },
+            ],
+          }),
+        ]),
+      ],
+    });
+    expect(store.threads[0]?.messages[0]?.citations?.[0]?.sourceClass).toBe('directory');
+  });
+
   it('drops a bad optional field and keeps the message', () => {
     const store = parseStoredStore({
       version: 1,

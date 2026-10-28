@@ -17,7 +17,8 @@
     "start": "node server/dist/index.js",
     "test": "npm --prefix server run test",
     "typecheck": "npm --prefix server run typecheck && npm --prefix client run typecheck",
-    "fetch-corpus": "npm --prefix server run fetch-corpus"
+    "fetch-corpus": "npm --prefix server run fetch-corpus",
+    "fetch-bsvradar": "npm --prefix server run fetch-bsvradar"
   },
   "dependencies": {
     "express": "^5.2.1"

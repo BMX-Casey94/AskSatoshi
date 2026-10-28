@@ -10,7 +10,7 @@ export interface CachedCitation {
   title?: string;
   excerpt?: string;
   date?: string;
-  sourceClass?: 'satoshi-primary' | 'spec' | 'later-commentary' | 'historical-record' | 'news';
+  sourceClass?: 'satoshi-primary' | 'spec' | 'later-commentary' | 'historical-record' | 'news' | 'directory';
 }
 
 export interface CachedAnswer {

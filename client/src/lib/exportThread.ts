@@ -12,6 +12,7 @@ const CLASS_LABEL: Record<string, string> = {
   'later-commentary': 'Later commentary',
   'historical-record': 'Historical record & testimony',
   news: 'News (CoinGeek)',
+  directory: 'App directory (BSV Radar)',
 };
 
 function fmtDate(ts: number): string {

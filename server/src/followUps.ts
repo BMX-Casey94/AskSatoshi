@@ -8,7 +8,7 @@
 export const MAX_FOLLOW_UPS = 3;
 export const MAX_FOLLOW_UP_CHARS = 90;
 
-export type FollowUpSourceClass = 'satoshi-primary' | 'spec' | 'later-commentary' | 'historical-record' | 'news';
+export type FollowUpSourceClass = 'satoshi-primary' | 'spec' | 'later-commentary' | 'historical-record' | 'news' | 'directory';
 
 export interface FollowUpSource {
   label: string;
@@ -109,6 +109,8 @@ function templateFor(sourceClass: FollowUpSource['sourceClass']): (subject: stri
       return (subject) => `What does the historical record say about ${subject}?`;
     case 'news':
       return (subject) => `What has been reported about ${subject}?`;
+    case 'directory':
+      return (subject) => `What else is listed alongside ${subject}?`;
     default:
       return (subject) => `What else is recorded about ${subject}?`;
   }

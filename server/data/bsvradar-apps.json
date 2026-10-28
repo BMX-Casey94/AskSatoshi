@@ -1,0 +1,5941 @@
+{
+  "pin": {
+    "source": "https://bsvradar.com/llms-full.txt",
+    "sourceClass": "directory",
+    "fetchedAt": "2026-10-28T16:34:42.721Z",
+    "sourceFileDate": "2026-10-28",
+    "method": "llms-full",
+    "counts": {
+      "apps": 181,
+      "categories": 13,
+      "blocks": 205,
+      "organisations": 42
+    },
+    "caveat": "BSV Radar is a partial, community catalogue; listing is not endorsement; status may be out of date."
+  },
+  "items": [
+    {
+      "id": "bananablocks",
+      "name": "BananaBlocks",
+      "category": "Block explorers",
+      "summary": "Explore the Bitcoin SV blockchain",
+      "radarUrl": "https://bsvradar.com/apps/bananablocks",
+      "tags": [
+        "Accepts BSV",
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://bananablocks.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-04-20",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitails",
+      "name": "Bitails",
+      "category": "Block explorers",
+      "summary": "Unlock BSV blockchain insights",
+      "radarUrl": "https://bsvradar.com/apps/bitails",
+      "tags": [
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://bitails.io",
+      "platform": "Web",
+      "lastUpdated": "2026-05-09",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "whatsonchain",
+      "name": "WhatsOnChain",
+      "category": "Block explorers",
+      "summary": "The go-to blockchain explorer for BSV",
+      "radarUrl": "https://bsvradar.com/apps/whatsonchain",
+      "tags": [
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://whatsonchain.com",
+      "platform": "Web",
+      "lastUpdated": "2026-05-05",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsvlol",
+      "name": "bsv.lol",
+      "category": "Block explorers",
+      "summary": "Visualize BSV transactions live",
+      "radarUrl": "https://bsvradar.com/apps/bsvlol",
+      "tags": [
+        "Developer tool"
+      ],
+      "url": "https://bsv.lol/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-04",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "saibun",
+      "name": "saibun",
+      "category": "Block explorers",
+      "summary": "Split UTXOs with precision",
+      "radarUrl": "https://bsvradar.com/apps/saibun",
+      "tags": [],
+      "url": "https://saibun.io",
+      "platform": "Web",
+      "lastUpdated": "2026-05-09",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-maps",
+      "name": "BSV Maps",
+      "category": "Block explorers",
+      "summary": "Live Blockchain Traffic Live",
+      "radarUrl": "https://bsvradar.com/apps/bsv-maps",
+      "tags": [
+        "Accepts BSV",
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://www.localbitcoinsv.com",
+      "platform": "Web",
+      "lastUpdated": "2026-05-13",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "foxplorer",
+      "name": "Foxplorer",
+      "category": "Block explorers",
+      "summary": "A block explorer for PixelFox 1sat ordinals",
+      "radarUrl": "https://bsvradar.com/apps/foxplorer",
+      "tags": [
+        "Accepts BSV",
+        "BRC-100",
+        "Developer tool"
+      ],
+      "url": "https://foxplorer.org",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "gaiaexplorer",
+      "name": "GaiaExplorer",
+      "category": "Block explorers",
+      "summary": "Explore the BSV blockchain with interactive graph visualisation",
+      "radarUrl": "https://bsvradar.com/apps/gaiaexplorer",
+      "tags": [],
+      "url": "https://gaia-explorer.com",
+      "platform": "Web",
+      "lastUpdated": "2026-04-16",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "nora",
+      "name": "Nora",
+      "category": "Block explorers",
+      "summary": "Register files on the BSV blockchain",
+      "radarUrl": "https://bsvradar.com/apps/nora",
+      "tags": [
+        "Time-sealing",
+        "Professional"
+      ],
+      "url": "https://github.com/justin-case-studio/nora",
+      "platform": "Web",
+      "lastUpdated": "2026-05-12",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "satoshiio",
+      "name": "Satoshi.io",
+      "category": "Block explorers",
+      "summary": "Bitcoin SV Block explorer (Mainnet, Testnet)",
+      "radarUrl": "https://bsvradar.com/apps/satoshiio",
+      "tags": [
+        "Developer tool"
+      ],
+      "url": "https://satoshi.io",
+      "platform": "Web",
+      "lastUpdated": "2026-05-07",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "teranode-explorer",
+      "name": "Teranode Explorer",
+      "category": "Block explorers",
+      "summary": "Unlock the power of BSV",
+      "radarUrl": "https://bsvradar.com/apps/teranode-explorer",
+      "tags": [],
+      "url": "https://explorer.utxoengineer.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-04",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "mintpage",
+      "name": "MintPage",
+      "category": "Collectibles",
+      "summary": "Design and deploy on BSV",
+      "radarUrl": "https://bsvradar.com/apps/mintpage",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://mintpage.pro",
+      "platform": "Web",
+      "lastUpdated": "2026-05-18",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "x17b",
+      "name": "X17B",
+      "category": "Collectibles",
+      "summary": "Download Substack content offline",
+      "radarUrl": "https://bsvradar.com/apps/x17b",
+      "tags": [
+        "Accepts BSV",
+        "BRC-100"
+      ],
+      "url": "https://www.x17b.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-06-15",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "blackrug",
+      "name": "BlackRug",
+      "category": "Collectibles",
+      "summary": "Rare Pepe Trading Card Treasury Company",
+      "radarUrl": "https://bsvradar.com/apps/blackrug",
+      "tags": [],
+      "url": "https://blackrug.org",
+      "platform": "Web",
+      "lastUpdated": "2026-04-21",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "buttercup",
+      "name": "ButterCup",
+      "category": "Collectibles",
+      "summary": "Build and publish BSV blockchain mini-apps in seconds. Powered by AI, backed by on-chain Melt…",
+      "radarUrl": "https://bsvradar.com/apps/buttercup",
+      "tags": [
+        "Accepts BSV",
+        "Developer tool"
+      ],
+      "url": "https://buttercupdapp.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-25",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "copdex",
+      "name": "Copédex",
+      "category": "Collectibles",
+      "summary": "Your one-stop-shop for Rare Pepe authenticity",
+      "radarUrl": "https://bsvradar.com/apps/copdex",
+      "tags": [],
+      "url": "https://copedex.com",
+      "platform": "Web",
+      "lastUpdated": "2026-04-27",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "sonicstar",
+      "name": "SonicStar",
+      "category": "Collectibles",
+      "summary": "Mint your music on the blockchain",
+      "radarUrl": "https://bsvradar.com/apps/sonicstar",
+      "tags": [
+        "Accepts BSV",
+        "Time-sealing",
+        "BRC-100",
+        "BRC Wallet"
+      ],
+      "url": "https://sonicstar.net",
+      "platform": "Web",
+      "lastUpdated": "2026-04-27",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "vibeglowup",
+      "name": "VibeGlowUp",
+      "category": "Collectibles",
+      "summary": "AI powered virtual try on clothes, hairstyles, create fantasy outfits. Mint NFTs.",
+      "radarUrl": "https://bsvradar.com/apps/vibeglowup",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://vibeglowup.com",
+      "platform": "Web",
+      "lastUpdated": "2026-04-20",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitcoinisbsvcom",
+      "name": "bitcoinisbsv(dot)com",
+      "category": "Collectibles",
+      "summary": "",
+      "radarUrl": "https://bsvradar.com/apps/bitcoinisbsvcom",
+      "tags": [
+        "Accepts BSV",
+        "Professional"
+      ],
+      "url": "http://www.bitcoinisbsv.com",
+      "platform": "Web",
+      "lastUpdated": "2026-06-18",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "everdraw",
+      "name": "Everdraw",
+      "category": "Collectibles",
+      "summary": "A professional open-source drawing application with blockchain-backed artwork ownership.",
+      "radarUrl": "https://bsvradar.com/apps/everdraw",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://everdraw.art",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-ordinals-market",
+      "name": "BSV Ordinals Market",
+      "category": "Collectibles",
+      "summary": "Buy unique 1Sat Ordinals",
+      "radarUrl": "https://bsvradar.com/apps/bsv-ordinals-market",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://ordinal-hub.vercel.app/",
+      "platform": "Web",
+      "lastUpdated": "2026-08-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "the-ai-bitcoin-revolution-book",
+      "name": "The AI-Bitcoin Revolution Book",
+      "category": "Education",
+      "summary": "Revolutionize your business with AI and BitcoinSV",
+      "radarUrl": "https://bsvradar.com/apps/the-ai-bitcoin-revolution-book",
+      "tags": [
+        "Accepts BSV",
+        "Developer tool"
+      ],
+      "url": "https://aibitcoinrevolution.com",
+      "platform": "Web",
+      "lastUpdated": "2026-05-05",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "what-should-i-make-for-dinner",
+      "name": "What Should I Make for Dinner?",
+      "category": "Education",
+      "summary": "Turn grocery lists into dinner ideas",
+      "radarUrl": "https://bsvradar.com/apps/what-should-i-make-for-dinner",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://ai-chef-assistant--ruthheasman.replit.app/",
+      "platform": "Web",
+      "lastUpdated": "2026-04-21",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitschool",
+      "name": "BitSchool",
+      "category": "Education",
+      "summary": "Master Bitcoin SV through interactive learning",
+      "radarUrl": "https://bsvradar.com/apps/bitschool",
+      "tags": [],
+      "url": "https://bitschool.online",
+      "platform": "Web",
+      "lastUpdated": "2026-04-16",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "higher-learning-bsv",
+      "name": "Higher Learning BSV",
+      "category": "Education",
+      "summary": "Dedicated e-learning platform",
+      "radarUrl": "https://bsvradar.com/apps/higher-learning-bsv",
+      "tags": [
+        "BRC-100",
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://bsvblockchain.360learning.com/groupSelfRegistration/68a42cd5836849f26cdd19d9",
+      "platform": "Web",
+      "lastUpdated": "2026-04-26",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitcoinsvwiki",
+      "name": "BitcoinSV Wiki",
+      "category": "Education",
+      "summary": "Comprehensive information resource for Bitcoin SV",
+      "radarUrl": "https://bsvradar.com/apps/bitcoinsvwiki",
+      "tags": [
+        "Professional"
+      ],
+      "url": "https://wiki.bitcoinsv.io",
+      "platform": "Web",
+      "lastUpdated": "2026-05-01",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "quickstart-docs",
+      "name": "Quickstart Docs",
+      "category": "Education",
+      "summary": "Interactive developer documentation for the BSV WalletClient.",
+      "radarUrl": "https://bsvradar.com/apps/quickstart-docs",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://fast.brc.dev/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-01",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "build-easy-on-bsv",
+      "name": "Build Easy on BSV",
+      "category": "Education",
+      "summary": "Live, hands-on session companion for building Bitcoin SV apps on Replit.",
+      "radarUrl": "https://bsvradar.com/apps/build-easy-on-bsv",
+      "tags": [
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://buildeasyonbsv.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-09-21",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "satolearn",
+      "name": "Satolearn",
+      "category": "Education",
+      "summary": "Educational platform for Bitcoin and blockchain skills",
+      "radarUrl": "https://bsvradar.com/apps/satolearn",
+      "tags": [
+        "Accepts BSV",
+        "Professional"
+      ],
+      "url": "https://www.satolearn.com",
+      "platform": "Web",
+      "lastUpdated": "2026-04-12",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "thats-btc-not-bitcoin",
+      "name": "Thats BTC Not BitCoin",
+      "category": "Education",
+      "summary": "The complete history of bitcoin becoming coopted",
+      "radarUrl": "https://bsvradar.com/apps/thats-btc-not-bitcoin",
+      "tags": [],
+      "url": "https://thatsbtcnotbitcoin.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-04-22",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "twostack",
+      "name": "TwoStack",
+      "category": "Education",
+      "summary": "Tools and Docs for bitcoin application developers",
+      "radarUrl": "https://bsvradar.com/apps/twostack",
+      "tags": [
+        "Developer tool"
+      ],
+      "url": "https://www.twostack.org",
+      "platform": "Web",
+      "lastUpdated": "2026-04-27",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "ask-satoshi",
+      "name": "Ask Satoshi",
+      "category": "Education",
+      "summary": "Ask Satoshi — Bitcoin-based AI Chat Interface",
+      "radarUrl": "https://bsvradar.com/apps/ask-satoshi",
+      "tags": [
+        "BRC-100",
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://ask-satoshi.online",
+      "platform": "Web",
+      "lastUpdated": "2026-09-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "blockchain-scaling-data-bsv-btc-eth",
+      "name": "Blockchain Scaling Data: BSV, BTC, ETH,",
+      "category": "Education",
+      "summary": "Scaling blockchain data for AI and research",
+      "radarUrl": "https://bsvradar.com/apps/blockchain-scaling-data-bsv-btc-eth",
+      "tags": [],
+      "url": "https://BitcoinSv.guide",
+      "platform": "Web",
+      "lastUpdated": "2026-04-22",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-fundamentals",
+      "name": "BSV Fundamentals",
+      "category": "Education",
+      "summary": "Master BSV from the ground up",
+      "radarUrl": "https://bsvradar.com/apps/bsv-fundamentals",
+      "tags": [
+        "Developer tool"
+      ],
+      "url": "https://utxoengineer.com/course/",
+      "platform": "Web",
+      "lastUpdated": "2026-06-18",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-patent-forge",
+      "name": "BSV Patent Forge",
+      "category": "Education",
+      "summary": "Innovate on the BSV blockchain",
+      "radarUrl": "https://bsvradar.com/apps/bsv-patent-forge",
+      "tags": [
+        "Accepts BSV",
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://bsvpatentforge.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-16",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "meter",
+      "name": "Meter",
+      "category": "Education",
+      "summary": "A demo showing digital meters built with sCrypt smart contracts on BSV.",
+      "radarUrl": "https://bsvradar.com/apps/meter",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://meter.bapp.dev",
+      "platform": "Web",
+      "lastUpdated": "2026-05-05",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "units-of-belief",
+      "name": "Units of Belief",
+      "category": "Education",
+      "summary": "Visualizing Bitcoin's moral compass",
+      "radarUrl": "https://bsvradar.com/apps/units-of-belief",
+      "tags": [],
+      "url": "https://unitsofbelief.vercel.app/",
+      "platform": "Web",
+      "lastUpdated": "2026-06-15",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitcoinsvit",
+      "name": "BitcoinSV.it",
+      "category": "Education",
+      "summary": "BSV explained and compared to BTC and BCH, plus free tools",
+      "radarUrl": "https://bsvradar.com/apps/bitcoinsvit",
+      "tags": [],
+      "url": "https://bitcoinsv.it/",
+      "platform": "Web",
+      "lastUpdated": "2026-08-09",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "dustcollector",
+      "name": "dustcollector",
+      "category": "Education",
+      "summary": "The Bitcoin curator",
+      "radarUrl": "https://bsvradar.com/apps/dustcollector",
+      "tags": [
+        "Accepts BSV",
+        "Professional"
+      ],
+      "url": "https://dustcollector",
+      "platform": "Web",
+      "lastUpdated": "2026-06-13",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "satoshi-price-index",
+      "name": "Satoshi Price Index",
+      "category": "Education",
+      "summary": "Track satoshi purchasing power over time",
+      "radarUrl": "https://bsvradar.com/apps/satoshi-price-index",
+      "tags": [],
+      "url": "https://www.satoshipriceindex.xyz/",
+      "platform": "Web",
+      "lastUpdated": "2026-06-13",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "slictionary",
+      "name": "SLictionary",
+      "category": "Education",
+      "summary": "A crowd-sourced dictionary which algorithmically improves with time and usage, via ranking useful efficient definitions",
+      "radarUrl": "https://bsvradar.com/apps/slictionary",
+      "tags": [],
+      "url": "https://www.slictionary.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-06-12",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "1satsnap",
+      "name": "1SatSnap",
+      "category": "Enterprise",
+      "summary": "A cryptographic fingerprint, anchored to Bitcoin. Your original file never leaves your device.",
+      "radarUrl": "https://bsvradar.com/apps/1satsnap",
+      "tags": [
+        "Accepts BSV",
+        "Time-sealing",
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://www.1satsnap.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-10-09",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "buy-sell-swap-crypto-instantly",
+      "name": "Buy, Sell & Swap Crypto Instantly",
+      "category": "Exchanges",
+      "summary": "Trade 480+ cryptos instantly worldwide",
+      "radarUrl": "https://bsvradar.com/apps/buy-sell-swap-crypto-instantly",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://onramp.money/",
+      "platform": "Web",
+      "lastUpdated": "2026-04-21",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "beymo-app",
+      "name": "Beymo App",
+      "category": "Exchanges",
+      "summary": "Buy and sell BSV peer-to-peer",
+      "radarUrl": "https://bsvradar.com/apps/beymo-app",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://www.beymo.app",
+      "platform": "Web",
+      "lastUpdated": "2026-04-30",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "ramp-network",
+      "name": "Ramp Network",
+      "category": "Exchanges",
+      "summary": "Buy, sell or swap BSV",
+      "radarUrl": "https://bsvradar.com/apps/ramp-network",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://app.rampnetwork.com/exchange?defaultFlow=ONRAMP&enabledFlows=ONRAMP%2COFFRAMP%2CSWAP&hostApiKey=wn25y7nx6cyb4oqutc5obnnywwwt4gz36yw5fypw&inAsset=EUR&inAssetValue=10000&outAsset=BSV_BSV&signature=rjn%2F%2FJjqldxQy539%2FJnRlN8zaPTbb3eljr%2F%2FU6z0d%2F3IWSbTKNnUsppIMTQj6JUsqIlBTpeCoywKZce24vROBA%3D%3D&timestamp=1777921142614",
+      "platform": "Web",
+      "lastUpdated": "2026-05-04",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "alchemy-pay",
+      "name": "Alchemy Pay",
+      "category": "Exchanges",
+      "summary": "Buy BSV with your credit card",
+      "radarUrl": "https://bsvradar.com/apps/alchemy-pay",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://ramp.alchemypay.org/?crypto=BCHSV&fiat=EUR&network=BCHSV#/index",
+      "platform": "Web",
+      "lastUpdated": "2026-05-04",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "buy-bitcoinsvbsv-with-usdollarusd",
+      "name": "Buy BitcoinSV(BSV) with U.S.Dollar(USD)",
+      "category": "Exchanges",
+      "summary": "Buy BSV with USD, EUR, GBP, etc",
+      "radarUrl": "https://bsvradar.com/apps/buy-bitcoinsvbsv-with-usdollarusd",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://www.gate.com/crypto/buy-usd-bsv-onramper",
+      "platform": "Web",
+      "lastUpdated": "2026-05-04",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "cexio",
+      "name": "cex.io",
+      "category": "Exchanges",
+      "summary": "Buy BSV with credit card",
+      "radarUrl": "https://bsvradar.com/apps/cexio",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://cex.io/buysell",
+      "platform": "Web",
+      "lastUpdated": "2026-05-04",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "exchange-bitcoin-sv-at-the-best-price",
+      "name": "ChangeNow.io",
+      "category": "Exchanges",
+      "summary": "Instant BSV exchange at best rates",
+      "radarUrl": "https://bsvradar.com/apps/exchange-bitcoin-sv-at-the-best-price",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://changenow.io/currencies/bitcoin-sv?from=eur&to=bsv&fiatMode=true&amount=100",
+      "platform": "Web",
+      "lastUpdated": "2026-05-20",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "coinify",
+      "name": "Coinify",
+      "category": "Exchanges",
+      "summary": "Buy and sell crypto with ease",
+      "radarUrl": "https://bsvradar.com/apps/coinify",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://www.mycoinify.com/trade/?targetPage=buy&defaultCryptoCurrency=BSV",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "guardarian",
+      "name": "Guardarian",
+      "category": "Exchanges",
+      "summary": "Buy BSV online with low fees",
+      "radarUrl": "https://bsvradar.com/apps/guardarian",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://guardarian.com/buy-bsv",
+      "platform": "Web",
+      "lastUpdated": "2026-05-04",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "liberty-crypto-exchange-lcx",
+      "name": "Liberty Crypto Exchange (LCX)",
+      "category": "Exchanges",
+      "summary": "Buy BSV with EUR on orderbook",
+      "radarUrl": "https://bsvradar.com/apps/liberty-crypto-exchange-lcx",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://lcx.com/en/trade/BSV-EUR",
+      "platform": "Web",
+      "lastUpdated": "2026-05-20",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "onramper",
+      "name": "Onramper",
+      "category": "Exchanges",
+      "summary": "Buy BSV with local ease",
+      "radarUrl": "https://bsvradar.com/apps/onramper",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://www.onramper.com/buy",
+      "platform": "Web",
+      "lastUpdated": "2026-05-04",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "therealbitcoinfun",
+      "name": "therealbitcoin.fun",
+      "category": "Exchanges",
+      "summary": "Every chain changed the rules. BSV changed them back. Swap 1,100+ assets to BSV.",
+      "radarUrl": "https://bsvradar.com/apps/therealbitcoinfun",
+      "tags": [
+        "Sells BSV",
+        "BRC Wallet"
+      ],
+      "url": "https://therealbitcoin.fun",
+      "platform": "Web",
+      "lastUpdated": "2026-10-09",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitchart",
+      "name": "BitChart",
+      "category": "Finance",
+      "summary": "Full price history of the BSV Blockchain.",
+      "radarUrl": "https://bsvradar.com/apps/bitchart",
+      "tags": [],
+      "url": "https://bitchart.org",
+      "platform": "Web",
+      "lastUpdated": "2026-05-05",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "dxs",
+      "name": "DXS",
+      "category": "Finance",
+      "summary": "Earn Bitcoins on Brokerless Trading Platform",
+      "radarUrl": "https://bsvradar.com/apps/dxs",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://dxs.app",
+      "platform": "Web",
+      "lastUpdated": "2026-04-12",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "giftchain",
+      "name": "Giftchain",
+      "category": "Finance",
+      "summary": "Generate gift cards on the blockchain.",
+      "radarUrl": "https://bsvradar.com/apps/giftchain",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://giftchain.entangleit.com",
+      "platform": "Web",
+      "lastUpdated": "2026-05-05",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "legacy-payments",
+      "name": "Legacy Payments",
+      "category": "Finance",
+      "summary": "Send and receive BSV using traditional Bitcoin addresses.",
+      "radarUrl": "https://bsvradar.com/apps/legacy-payments",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://legacy.atx.systems",
+      "platform": "Web",
+      "lastUpdated": "2026-04-20",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "pay-quickr",
+      "name": "Pay-QuickR",
+      "category": "Finance",
+      "summary": "Fast and secure phone to phone BSV payments using QR codes.",
+      "radarUrl": "https://bsvradar.com/apps/pay-quickr",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://pay-quickr.atx.systems",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "paymail-bridge",
+      "name": "Paymail Bridge",
+      "category": "Finance",
+      "summary": "Register a paymail alias and collect BSV payments from external wallets.",
+      "radarUrl": "https://bsvradar.com/apps/paymail-bridge",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://paymail.us",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "peerpay",
+      "name": "PeerPay",
+      "category": "Finance",
+      "summary": "Simple Peer-to-peer Payments",
+      "radarUrl": "https://bsvradar.com/apps/peerpay",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://peerpay.metanet.app/",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "tool-on-bsv",
+      "name": "TOOL on BSV",
+      "category": "Finance",
+      "summary": "Personal Pay per Prompt AI",
+      "radarUrl": "https://bsvradar.com/apps/tool-on-bsv",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://toolbsv.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "number-cruncher-3d",
+      "name": "Number Cruncher 3D",
+      "category": "Gaming",
+      "summary": "Solve 3D math puzzles with precision",
+      "radarUrl": "https://bsvradar.com/apps/number-cruncher-3d",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://numbercrunchermath.com",
+      "platform": "Web",
+      "lastUpdated": "2026-04-20",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "magic-faucet-match",
+      "name": "Magic Faucet: Match-3 & BSV",
+      "category": "Gaming",
+      "summary": "BSV-faucet mixed up with a match-3 game",
+      "radarUrl": "https://bsvradar.com/apps/magic-faucet-match",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://play.google.com/store/apps/details?id=bsv.magic.faucet",
+      "platform": "Web",
+      "lastUpdated": "2026-06-10",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "pixelwar",
+      "name": "PixelWar",
+      "category": "Gaming",
+      "summary": "PixelWar is a collaborative pixel art canvas that lets you create together.",
+      "radarUrl": "https://bsvradar.com/apps/pixelwar",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://pixelwar.click",
+      "platform": "Web",
+      "lastUpdated": "2026-04-30",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "ageless-republic",
+      "name": "Ageless Republic",
+      "category": "Gaming",
+      "summary": "Open world rpg",
+      "radarUrl": "https://bsvradar.com/apps/ageless-republic",
+      "tags": [],
+      "url": "https://agelessrepublic.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-04-21",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "blockspace",
+      "name": "BLOCKSPACE",
+      "category": "Gaming",
+      "summary": "BLOCKSPACE — a precise transaction-space game, based on Stix from the C64 80s game.",
+      "radarUrl": "https://bsvradar.com/apps/blockspace",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://blockspace-ruthheasman.replit.app/",
+      "platform": "Web",
+      "lastUpdated": "2026-09-20",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "terapong",
+      "name": "TERAPONG",
+      "category": "Gaming",
+      "summary": "Retro CRT Pong where every bounce fires a real on-chain BSV micropayment. Watch SATS·TX/s climb,…",
+      "radarUrl": "https://bsvradar.com/apps/terapong",
+      "tags": [],
+      "url": "https://terapong-game.replit.app/",
+      "platform": "Web",
+      "lastUpdated": "2026-09-20",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "tx-blaster",
+      "name": "TX Blaster",
+      "category": "Gaming",
+      "summary": "Max throughput BSV transaction blaster",
+      "radarUrl": "https://bsvradar.com/apps/tx-blaster",
+      "tags": [
+        "Developer tool"
+      ],
+      "url": "https://txblaster.xyz",
+      "platform": "Web",
+      "lastUpdated": "2026-05-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "888-lucky-guess",
+      "name": "888 Lucky Guess",
+      "category": "Gaming",
+      "summary": "Provably Fair Player vs Player",
+      "radarUrl": "https://bsvradar.com/apps/888-lucky-guess",
+      "tags": [],
+      "url": "https://888luckyguess.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-01",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-halloween-memory-game",
+      "name": "BSV Halloween Memory Game",
+      "category": "Gaming",
+      "summary": "Bringing the Women of BSV Halloween NFTs back in memory game form!",
+      "radarUrl": "https://bsvradar.com/apps/bsv-halloween-memory-game",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://bsv-halloween-snap-game.replit.app/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-30",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "lil-poker",
+      "name": "Lil Poker",
+      "category": "Gaming",
+      "summary": "Play poker with friends online",
+      "radarUrl": "https://bsvradar.com/apps/lil-poker",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://www.lilpoker.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-07-06",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "gopnikz",
+      "name": "Goplandia",
+      "category": "Gaming",
+      "summary": "First person shooter with NFT items",
+      "radarUrl": "https://bsvradar.com/apps/gopnikz",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://squat.zone",
+      "platform": "Web",
+      "lastUpdated": "2026-07-01",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "lil-bit",
+      "name": "Lil Bit",
+      "category": "Gaming",
+      "summary": "On-chain Sports Book, Casino & Prediction Market.",
+      "radarUrl": "https://bsvradar.com/apps/lil-bit",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://www.lilb.it/",
+      "platform": "Web",
+      "lastUpdated": "2026-06-07",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "coinflip",
+      "name": "CoinFlip",
+      "category": "Gaming",
+      "summary": "Flip a coin, earn some sats.",
+      "radarUrl": "https://bsvradar.com/apps/coinflip",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://coinflip.babbage.systems",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "peerjump",
+      "name": "PeerJump",
+      "category": "Gaming",
+      "summary": "How high can you climb?",
+      "radarUrl": "https://bsvradar.com/apps/peerjump",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://peerjump.fun/",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "squirtingsats",
+      "name": "SquirtingSats",
+      "category": "Gaming",
+      "summary": "Squirt Satoshis to random wallets publicly",
+      "radarUrl": "https://bsvradar.com/apps/squirtingsats",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://www.squirtingsats.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-15",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "thryll-arcade",
+      "name": "Thryll Arcade",
+      "category": "Gaming",
+      "summary": "Ad-free blockchain gaming with a transparent on-chain raffle on every play.",
+      "radarUrl": "https://bsvradar.com/apps/thryll-arcade",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://thryll.online",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitcoin-clicker",
+      "name": "Bitcoin Clicker",
+      "category": "Gaming",
+      "summary": "Clicker game that runs on BSV",
+      "radarUrl": "https://bsvradar.com/apps/bitcoin-clicker",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://awesomekalin.github.io/Bitcoin-Clicker/",
+      "platform": "Web",
+      "lastUpdated": "2026-09-20",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "brouter",
+      "name": "Brouter",
+      "category": "Gaming",
+      "summary": "Predict outcomes, earn sats",
+      "radarUrl": "https://bsvradar.com/apps/brouter",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://brouter.ai/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-04",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "grafverse",
+      "name": "grafverse",
+      "category": "Gaming",
+      "summary": "Own what you make",
+      "radarUrl": "https://bsvradar.com/apps/grafverse",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV",
+        "BRC Wallet"
+      ],
+      "url": "https://grafverse.com",
+      "platform": "Web",
+      "lastUpdated": "2026-08-09",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "hypertypist",
+      "name": "HyperTypist",
+      "category": "Gaming",
+      "summary": "Test your typing speed and save immutable records to the blockchain.",
+      "radarUrl": "https://bsvradar.com/apps/hypertypist",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://hypertypist.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "oddspub",
+      "name": "OddsPub",
+      "category": "Gaming",
+      "summary": "Settling iGaming with certainty",
+      "radarUrl": "https://bsvradar.com/apps/oddspub",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://www.oddspub.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-27",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "peergame",
+      "name": "PeerGame",
+      "category": "Gaming",
+      "summary": "BSV-based games with no registration, instant payouts, and fairness",
+      "radarUrl": "https://bsvradar.com/apps/peergame",
+      "tags": [
+        "Accepts BSV",
+        "Time-locking"
+      ],
+      "url": "https://peergame.com",
+      "platform": "Web",
+      "lastUpdated": "2026-04-11",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "zoide",
+      "name": "Zoide",
+      "category": "Marketplaces",
+      "summary": "Non-custodial BSV NFT marketplace with minting, auctions, trading, bulk tools and holder rewards.",
+      "radarUrl": "https://bsvradar.com/apps/zoide",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://zoide.io",
+      "platform": "Web",
+      "lastUpdated": "2026-04-28",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "3dordiio",
+      "name": "3D Ordi",
+      "category": "Marketplaces",
+      "summary": "Ordinals (NFTs) in Immersive Galleries",
+      "radarUrl": "https://bsvradar.com/apps/3dordiio",
+      "tags": [
+        "Accepts BSV",
+        "Time-sealing"
+      ],
+      "url": "https://3dordi.io",
+      "platform": "Web",
+      "lastUpdated": "2026-07-06",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "1satmarket",
+      "name": "1sat.market",
+      "category": "Marketplaces",
+      "summary": "A peer to peer decentralised exchange (dex) for 1sat ordinals",
+      "radarUrl": "https://bsvradar.com/apps/1satmarket",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV",
+        "Time-locking"
+      ],
+      "url": "https://1sat.market",
+      "platform": "Web",
+      "lastUpdated": "2026-05-01",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-marketplace",
+      "name": "BSV Marketplace",
+      "category": "Marketplaces",
+      "summary": "Buy unique, sell with freedom",
+      "radarUrl": "https://bsvradar.com/apps/bsv-marketplace",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://bsvtraders.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-29",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "peermark",
+      "name": "PeerMark",
+      "category": "Marketplaces",
+      "summary": "Register, secure and monetise your assets",
+      "radarUrl": "https://bsvradar.com/apps/peermark",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV",
+        "Time-locking",
+        "Professional"
+      ],
+      "url": "https://beta.peermark.online",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "canonic",
+      "name": "Canonic.xyz",
+      "category": "Marketplaces",
+      "summary": "Build and deploy serverless applications on the BSV blockchain",
+      "radarUrl": "https://bsvradar.com/apps/canonic",
+      "tags": [
+        "Accepts BSV",
+        "Time-locking"
+      ],
+      "url": "https://canonic.xyz",
+      "platform": "Web",
+      "lastUpdated": "2026-04-11",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "doremi-p2p",
+      "name": "Doremi p2p",
+      "category": "Marketplaces",
+      "summary": "Shop curated items with Bitcoin",
+      "radarUrl": "https://bsvradar.com/apps/doremi-p2p",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://doremiveloce.notion.site/p2p",
+      "platform": "Web",
+      "lastUpdated": "2026-05-03",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "home",
+      "name": "Home",
+      "category": "Marketplaces",
+      "summary": "Buy and sell directly with neighbors",
+      "radarUrl": "https://bsvradar.com/apps/home",
+      "tags": [
+        "Accepts BSV",
+        "Time-locking",
+        "Time-sealing",
+        "BRC-100",
+        "BRC Wallet",
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://qart.app",
+      "platform": "Web",
+      "lastUpdated": "2026-04-22",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-plaza",
+      "name": "BSV PLAZA",
+      "category": "Marketplaces",
+      "summary": "Experience the future of digital commerce",
+      "radarUrl": "https://bsvradar.com/apps/bsv-plaza",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://bsvplaza.shop/",
+      "platform": "Web",
+      "lastUpdated": "2026-04-27",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "fundfeature",
+      "name": "FundFeature",
+      "category": "Marketplaces",
+      "summary": "Crowdfunding platform for BSV application features",
+      "radarUrl": "https://bsvradar.com/apps/fundfeature",
+      "tags": [
+        "Accepts BSV",
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://fundfeature.com",
+      "platform": "Web",
+      "lastUpdated": "2026-04-21",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "metamarket",
+      "name": "MetaMarket",
+      "category": "Marketplaces",
+      "summary": "Micropayment powered marketplace for buying and selling 3D model files.",
+      "radarUrl": "https://bsvradar.com/apps/metamarket",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://metamarket.bapp.dev",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "nftsales",
+      "name": "Big Red",
+      "category": "Marketplaces",
+      "summary": "Buy your own copy of curated Smart NFTs in one click — on-chain, instant, yours to resell.",
+      "radarUrl": "https://bsvradar.com/apps/nftsales",
+      "tags": [
+        "Accepts BSV",
+        "BRC Wallet"
+      ],
+      "url": "https://nft.sale",
+      "platform": "Web",
+      "lastUpdated": "2026-07-07",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsvradar",
+      "name": "BSV Radar",
+      "category": "Media",
+      "summary": "Unlock the BSV ecosystem",
+      "radarUrl": "https://bsvradar.com/apps/bsvradar",
+      "tags": [],
+      "url": "https://bsvradar.com",
+      "platform": "Web",
+      "lastUpdated": "2026-05-06",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "brandcasterstudio",
+      "name": "BrandCaster.studio",
+      "category": "Media",
+      "summary": "AI-generated brand bibles and social media assets in minutes",
+      "radarUrl": "https://bsvradar.com/apps/brandcasterstudio",
+      "tags": [
+        "Accepts BSV",
+        "BRC-100"
+      ],
+      "url": "https://brandcaster.studio/",
+      "platform": "Web",
+      "lastUpdated": "2026-08-08",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "indigo-live",
+      "name": "Indigo Live",
+      "category": "Media",
+      "summary": "Pay-per-second Live Streaming Platform",
+      "radarUrl": "https://bsvradar.com/apps/indigo-live",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://indigolive.io",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "permastack",
+      "name": "Permastack",
+      "category": "Media",
+      "summary": "Publish forever on BSV",
+      "radarUrl": "https://bsvradar.com/apps/permastack",
+      "tags": [
+        "Time-sealing"
+      ],
+      "url": "https://permastackpress.com/p/2",
+      "platform": "Web",
+      "lastUpdated": "2026-07-04",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "soundbase",
+      "name": "Soundbase",
+      "category": "Media",
+      "summary": "Unlock indie music with micropayments",
+      "radarUrl": "https://bsvradar.com/apps/soundbase",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://soundbase.click",
+      "platform": "Web",
+      "lastUpdated": "2026-05-16",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "opub",
+      "name": "{OPUB}",
+      "category": "Media",
+      "summary": "Explore, search and verify creator publications on BSV",
+      "radarUrl": "https://bsvradar.com/apps/opub",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV",
+        "Time-locking",
+        "Time-sealing",
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://dobruk.pl/opub",
+      "platform": "Web",
+      "lastUpdated": "2026-05-05",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "ark",
+      "name": "ARK",
+      "category": "Media",
+      "summary": "Take control of your learning with a permanent library on the blockchain",
+      "radarUrl": "https://bsvradar.com/apps/ark",
+      "tags": [
+        "Time-sealing"
+      ],
+      "url": "https://ark.page/",
+      "platform": "Web",
+      "lastUpdated": "2026-04-20",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsvtube",
+      "name": "BSVTube",
+      "category": "Media",
+      "summary": "Decentralized video on BSV",
+      "radarUrl": "https://bsvradar.com/apps/bsvtube",
+      "tags": [
+        "Accepts BSV",
+        "Time-sealing"
+      ],
+      "url": "https://bsvtube.com/?meet=new",
+      "platform": "Web",
+      "lastUpdated": "2026-05-04",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "dropblocks",
+      "name": "DropBlocks",
+      "category": "Media",
+      "summary": "Decentralized file storage using BSV blockchain and UHRP protocol.",
+      "radarUrl": "https://bsvradar.com/apps/dropblocks",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://dropblocks.org",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-times",
+      "name": "BSV TIMES",
+      "category": "Media",
+      "summary": "an independent publication covering BSV Blockchain as infrastructure.",
+      "radarUrl": "https://bsvradar.com/apps/bsv-times",
+      "tags": [],
+      "url": "https://bsvtimes.com",
+      "platform": "Web",
+      "lastUpdated": "2026-06-03",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "tonicpow",
+      "name": "TonicPow",
+      "category": "Media",
+      "summary": "Tonics are peer to peer advertisements",
+      "radarUrl": "https://bsvradar.com/apps/tonicpow",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://tonicpow.com",
+      "platform": "Web",
+      "lastUpdated": "2026-04-22",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-telegram-group",
+      "name": "BSV Telegram Group",
+      "category": "Media",
+      "summary": "This is the official group of BitCoin (BSV) as envisioned by Craig/Satoshi",
+      "radarUrl": "https://bsvradar.com/apps/bsv-telegram-group",
+      "tags": [],
+      "url": "https://t.me/BitCoin_S_V",
+      "platform": "Web",
+      "lastUpdated": "2026-04-21",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "marscast",
+      "name": "MarsCast",
+      "category": "Media",
+      "summary": "Micropayment-powered martian weather data.",
+      "radarUrl": "https://bsvradar.com/apps/marscast",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://marscast.babbage.systems",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "metanet-apps-2",
+      "name": "Metanet Apps",
+      "category": "Media",
+      "summary": "Decentralized apps on the Metanet",
+      "radarUrl": "https://bsvradar.com/apps/metanet-apps-2",
+      "tags": [],
+      "url": "https://metanetapps.com",
+      "platform": "Web",
+      "lastUpdated": "2026-04-15",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "stuff",
+      "name": "Stuff",
+      "category": "Media",
+      "summary": "On-chain stuff",
+      "radarUrl": "https://bsvradar.com/apps/stuff",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://your-files-and-stuff.lovable.app",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "who-i-am",
+      "name": "Who I Am",
+      "category": "Media",
+      "summary": "Reveal your identity across BSV",
+      "radarUrl": "https://bsvradar.com/apps/who-i-am",
+      "tags": [
+        "Accepts BSV",
+        "BRC-100",
+        "Professional"
+      ],
+      "url": "https://whoiam.bsvblockchain.tech",
+      "platform": "Web",
+      "lastUpdated": "2026-05-15",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "wonkerly",
+      "name": "Wonkerly",
+      "category": "Media",
+      "summary": "Tolerate with style",
+      "radarUrl": "https://bsvradar.com/apps/wonkerly",
+      "tags": [],
+      "url": "https://wonkerly.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-07-04",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "zedvibe-music-streaming",
+      "name": "ZedVibe Music Streaming",
+      "category": "Media",
+      "summary": "Pay per second music streaming with gamified rev share",
+      "radarUrl": "https://bsvradar.com/apps/zedvibe-music-streaming",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://zedvibe.org",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "coingeek",
+      "name": "CoinGeek",
+      "category": "Media",
+      "summary": "News outlet for Bitcoin Satoshi vision",
+      "radarUrl": "https://bsvradar.com/apps/coingeek",
+      "tags": [],
+      "url": "https://coingeek.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-07-28",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "intellegio",
+      "name": "Intellegio",
+      "category": "Media",
+      "summary": "Get the conversation distilled",
+      "radarUrl": "https://bsvradar.com/apps/intellegio",
+      "tags": [
+        "Sells BSV",
+        "Time-sealing"
+      ],
+      "url": "https://intellegio.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-29",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "thermin-visual",
+      "name": "Æthermin",
+      "category": "Other",
+      "summary": "Theremin instrument with visual effects that will relax you.",
+      "radarUrl": "https://bsvradar.com/apps/thermin-visual",
+      "tags": [],
+      "url": "https://ordfs.network/content/f09b6204db062b5b9a1e7b3ad905d6562c7467f865482be9de1f2662e1f3431f_0",
+      "platform": "Web",
+      "lastUpdated": "2026-06-18",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "timestampedio",
+      "name": "Timestamped.io",
+      "category": "Other",
+      "summary": "Prove your data existed. Prove it didn't change. Prove it's yours.",
+      "radarUrl": "https://bsvradar.com/apps/timestampedio",
+      "tags": [
+        "Time-sealing",
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://timestamped.io",
+      "platform": "Web",
+      "lastUpdated": "2026-05-09",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "gaialog",
+      "name": "GaiaLog",
+      "category": "Other",
+      "summary": "Monitor Earth's pulse in real-time",
+      "radarUrl": "https://bsvradar.com/apps/gaialog",
+      "tags": [
+        "Professional"
+      ],
+      "url": "https://gaialog.world",
+      "platform": "Web",
+      "lastUpdated": "2026-05-05",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "mintblue",
+      "name": "mintBlue",
+      "category": "Other",
+      "summary": "Your Fast Track to EU Compliance Data Governance",
+      "radarUrl": "https://bsvradar.com/apps/mintblue",
+      "tags": [
+        "Developer tool"
+      ],
+      "url": "https://mintblue.com",
+      "platform": "Web",
+      "lastUpdated": "2026-05-05",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "unisot",
+      "name": "UNISOT",
+      "category": "Other",
+      "summary": "Supply Chain Management solutions for Enterprises",
+      "radarUrl": "https://bsvradar.com/apps/unisot",
+      "tags": [],
+      "url": "https://unisot.com",
+      "platform": "Web",
+      "lastUpdated": "2026-05-05",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "kora-extra-virgin-olive-oil",
+      "name": "Kora Extra Virgin Olive Oil",
+      "category": "Other",
+      "summary": "Sealed on the blockchain",
+      "radarUrl": "https://bsvradar.com/apps/kora-extra-virgin-olive-oil",
+      "tags": [
+        "Time-sealing"
+      ],
+      "url": "https://kora.doremisystems.com",
+      "platform": "Web",
+      "lastUpdated": "2026-07-10",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "indelibleone",
+      "name": "Indelible.one",
+      "category": "Productivity",
+      "summary": "A continuity engine for AI on Bitcoin. SPV node federation = app layer, mycelium for Bitcoin.",
+      "radarUrl": "https://bsvradar.com/apps/indelibleone",
+      "tags": [
+        "Time-sealing",
+        "BRC-100",
+        "BRC Wallet",
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://indelible.one/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "airchive",
+      "name": "Airchive",
+      "category": "Productivity",
+      "summary": "Live aircraft and flight telemetry data records on the BSV blockchain.",
+      "radarUrl": "https://bsvradar.com/apps/airchive",
+      "tags": [
+        "Time-sealing",
+        "Professional"
+      ],
+      "url": "https://airchive.uk",
+      "platform": "Web",
+      "lastUpdated": "2026-08-01",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "rapid-reader",
+      "name": "Rapid Reader",
+      "category": "Productivity",
+      "summary": "Read faster, comprehend more",
+      "radarUrl": "https://bsvradar.com/apps/rapid-reader",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://rapidreader.net",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "21e8",
+      "name": "21e8",
+      "category": "Productivity",
+      "summary": "Something something magic numbers",
+      "radarUrl": "https://bsvradar.com/apps/21e8",
+      "tags": [],
+      "url": "https://21e8.com",
+      "platform": "Web",
+      "lastUpdated": "2026-05-05",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "anvilcast",
+      "name": "AnvilCast",
+      "category": "Productivity",
+      "summary": "Screen sharing with wallet-verified identity — no sign-up, no accounts",
+      "radarUrl": "https://bsvradar.com/apps/anvilcast",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://anvil.sendbsv.com/cast/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-30",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bicomedia",
+      "name": "Bico.Media",
+      "category": "Productivity",
+      "summary": "Add any file to the BSV blockchain & display it as a web page",
+      "radarUrl": "https://bsvradar.com/apps/bicomedia",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://add.bico.media",
+      "platform": "Web",
+      "lastUpdated": "2026-04-12",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bit-sign",
+      "name": "Bit Sign",
+      "category": "Productivity",
+      "summary": "Sign, seal, and share documents with blockchain-verified proof.",
+      "radarUrl": "https://bsvradar.com/apps/bit-sign",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://www.bit-sign.online",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitcoin-mint",
+      "name": "Bitcoin Mint",
+      "category": "Productivity",
+      "summary": "Design, print, stamp, and mint currency on BSV.",
+      "radarUrl": "https://bsvradar.com/apps/bitcoin-mint",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://bitcoin-mint.com",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "edwinpai",
+      "name": "EdwinPAI",
+      "category": "Productivity",
+      "summary": "Decentralized AI ownership and execution",
+      "radarUrl": "https://bsvradar.com/apps/edwinpai",
+      "tags": [
+        "Time-sealing"
+      ],
+      "url": "https://edwinpai.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "immutify",
+      "name": "Immutify",
+      "category": "Productivity",
+      "summary": "Publish cryptographic proof of existence for any idea or content on BSV.",
+      "radarUrl": "https://bsvradar.com/apps/immutify",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://immutify.metanet.app",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "metanet-calendar",
+      "name": "Metanet Calendar",
+      "category": "Productivity",
+      "summary": "Own your events",
+      "radarUrl": "https://bsvradar.com/apps/metanet-calendar",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://calendar.metanet.app/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "metanet-docs",
+      "name": "Metanet Docs",
+      "category": "Productivity",
+      "summary": "Create and edit encrypted docs synced on the blockchain.",
+      "radarUrl": "https://bsvradar.com/apps/metanet-docs",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://docs.metanet.app",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "ordfields-twonks-migrator",
+      "name": "OrdFields Twonks Migrator",
+      "category": "Productivity",
+      "summary": "Move your Twonks (Twetch NFTs) to Yours wallet",
+      "radarUrl": "https://bsvradar.com/apps/ordfields-twonks-migrator",
+      "tags": [],
+      "url": "https://ordfields.vercel.app/about",
+      "platform": "Web",
+      "lastUpdated": "2026-06-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "secure-blockchain-voting-platform",
+      "name": "Secure Blockchain Voting Platform",
+      "category": "Productivity",
+      "summary": "Transparent voting for a better future",
+      "radarUrl": "https://bsvradar.com/apps/secure-blockchain-voting-platform",
+      "tags": [
+        "Time-sealing",
+        "Professional"
+      ],
+      "url": "https://www.votari.app",
+      "platform": "Web",
+      "lastUpdated": "2026-05-05",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "startupscoutco",
+      "name": "StartupScout.co",
+      "category": "Productivity",
+      "summary": "AI-powered startup analysis at your fingertips",
+      "radarUrl": "https://bsvradar.com/apps/startupscoutco",
+      "tags": [
+        "Accepts BSV",
+        "Developer tool"
+      ],
+      "url": "https://startupscout.co",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "teragun",
+      "name": "Teragun",
+      "category": "Productivity",
+      "summary": "Stress test BSV transactions and evaluate network performance.",
+      "radarUrl": "https://bsvradar.com/apps/teragun",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://teragun.com",
+      "platform": "Web",
+      "lastUpdated": "2026-05-05",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "todo",
+      "name": "ToDo",
+      "category": "Productivity",
+      "summary": "Create and complete TODO items, with a reward.",
+      "radarUrl": "https://bsvradar.com/apps/todo",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://todo.metanet.app",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "etched",
+      "name": "Etched",
+      "category": "Productivity",
+      "summary": "An internet archive tool that permanently timestamps and stores web pages",
+      "radarUrl": "https://bsvradar.com/apps/etched",
+      "tags": [],
+      "url": "https://etched.page",
+      "platform": "Web",
+      "lastUpdated": "2026-04-10",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "foundry",
+      "name": "Foundry",
+      "category": "Productivity",
+      "summary": "Deploy any static Website or App on-chain — drag a folder, your BSV wallet signs, fully automated.",
+      "radarUrl": "https://bsvradar.com/apps/foundry",
+      "tags": [
+        "BRC-100",
+        "Developer tool"
+      ],
+      "url": "https://anvil.sendbsv.com/app/Foundry",
+      "platform": "Web",
+      "lastUpdated": "2026-05-30",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "treechat",
+      "name": "Treechat",
+      "category": "Social",
+      "summary": "Upvote with money, no ads or censorship",
+      "radarUrl": "https://bsvradar.com/apps/treechat",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://treechat.ai",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "lamint",
+      "name": "LaMint",
+      "category": "Social",
+      "summary": "Support your favorite creators",
+      "radarUrl": "https://bsvradar.com/apps/lamint",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://lamint.io/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-15",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "rnar-2",
+      "name": "Rúnar",
+      "category": "Social",
+      "summary": "Write Bitcoin smart contracts in TypeScript and more",
+      "radarUrl": "https://bsvradar.com/apps/rnar-2",
+      "tags": [],
+      "url": "https://github.com/icellan/runar",
+      "platform": "Web",
+      "lastUpdated": "2026-04-21",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "rare-pepe-club",
+      "name": "Rare Pepe Club",
+      "category": "Social",
+      "summary": "Join the exclusive Rare Pepe Club",
+      "radarUrl": "https://bsvradar.com/apps/rare-pepe-club",
+      "tags": [],
+      "url": "https://rarepepe.club",
+      "platform": "Web",
+      "lastUpdated": "2026-04-21",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "authsig",
+      "name": "AuthSig",
+      "category": "Social",
+      "summary": "Verify authorship of any content with a cryptographic signature on BSV.",
+      "radarUrl": "https://bsvradar.com/apps/authsig",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://authsig.metanet.app",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "crypton",
+      "name": "Crypton",
+      "category": "Social",
+      "summary": "Secure messaging with QR codes",
+      "radarUrl": "https://bsvradar.com/apps/crypton",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://crypton.metanet.app",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "gloss",
+      "name": "Gloss",
+      "category": "Social",
+      "summary": "Real-time updates from people building on the Metanet.",
+      "radarUrl": "https://bsvradar.com/apps/gloss",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://gloss.metanet.app",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "metanet-microblog",
+      "name": "Metanet Microblog",
+      "category": "Social",
+      "summary": "Decentralized social media where your posts are stored on-chain.",
+      "radarUrl": "https://bsvradar.com/apps/metanet-microblog",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://microblog.bitspv.com",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "nullify-chat",
+      "name": "Nullify Chat",
+      "category": "Social",
+      "summary": "Privacy-first messaging with true on-chain revocation.",
+      "radarUrl": "https://bsvradar.com/apps/nullify-chat",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://app.nullify.onl",
+      "platform": "Web",
+      "lastUpdated": "2026-05-02",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "pollr",
+      "name": "Pollr",
+      "category": "Social",
+      "summary": "On-chain polls",
+      "radarUrl": "https://bsvradar.com/apps/pollr",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://pollr.gg",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "socialcert",
+      "name": "SocialCert",
+      "category": "Social",
+      "summary": "Get certificates that bind social attributes to your BSV identity key.",
+      "radarUrl": "https://bsvradar.com/apps/socialcert",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://socialcert.net",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "tlon",
+      "name": "Tlon.cc",
+      "category": "Social",
+      "summary": "Knowledge mining and meme curation platform on BSV",
+      "radarUrl": "https://bsvradar.com/apps/tlon",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://tlon.cc",
+      "platform": "Web",
+      "lastUpdated": "2026-04-11",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "truelink",
+      "name": "TrueLink",
+      "category": "Social",
+      "summary": "Build your personal page that lives on the Metanet — permanent, portable, and truly yours.",
+      "radarUrl": "https://bsvradar.com/apps/truelink",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://truelink.metanet.app/",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "moralo",
+      "name": "Moralo",
+      "category": "Social",
+      "summary": "Dating with one conversation at a time - full attention, no chatting into the void.",
+      "radarUrl": "https://bsvradar.com/apps/moralo",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://moralodating.com",
+      "platform": "Web",
+      "lastUpdated": "2026-10-20",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "relax4000",
+      "name": "Relax4000",
+      "category": "Social",
+      "summary": "Retro tech musings and more",
+      "radarUrl": "https://bsvradar.com/apps/relax4000",
+      "tags": [
+        "Accepts BSV",
+        "Time-sealing"
+      ],
+      "url": "https://www.relax4000.pl/",
+      "platform": "Web",
+      "lastUpdated": "2026-06-26",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "handcash",
+      "name": "HandCash",
+      "category": "Wallets",
+      "summary": "A user-friendly BSV wallet with social features",
+      "radarUrl": "https://bsvradar.com/apps/handcash",
+      "tags": [
+        "Accepts BSV",
+        "Developer tool"
+      ],
+      "url": "https://handcash.io",
+      "platform": "Web",
+      "lastUpdated": "2026-05-29",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-browser",
+      "name": "BSV Browser",
+      "category": "Wallets",
+      "summary": "Surf the web, own your data",
+      "radarUrl": "https://bsvradar.com/apps/bsv-browser",
+      "tags": [
+        "BRC-100",
+        "BRC Wallet"
+      ],
+      "url": "https://mobile.bsvb.tech/",
+      "platform": "Web",
+      "lastUpdated": "2026-10-22",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "electrumsv",
+      "name": "ElectrumSVP",
+      "category": "Wallets",
+      "summary": "Looking for a place to keep track of Bitcoin SV on your desktop computer? You have come to the right place",
+      "radarUrl": "https://bsvradar.com/apps/electrumsv",
+      "tags": [
+        "Accepts BSV",
+        "Developer tool"
+      ],
+      "url": "https://electrumsv.io/",
+      "platform": "Web",
+      "lastUpdated": "2026-06-26",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "1satchel",
+      "name": "1Satchel",
+      "category": "Wallets",
+      "summary": "Sell anything. On-chain. Like Linktree — but every link can charge for itself.",
+      "radarUrl": "https://bsvradar.com/apps/1satchel",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://1satchel.com",
+      "platform": "Web",
+      "lastUpdated": "2026-06-26",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "hodos-browser",
+      "name": "Hodos Browser",
+      "category": "Wallets",
+      "summary": "Native BSV browsing, every time",
+      "radarUrl": "https://bsvradar.com/apps/hodos-browser",
+      "tags": [
+        "BRC-100",
+        "BRC Wallet",
+        "Developer tool"
+      ],
+      "url": "https://hodosbrowser.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-10-18",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "exodus",
+      "name": "Exodus",
+      "category": "Wallets",
+      "summary": "Multi-asset wallet with built-in exchange and BSV support",
+      "radarUrl": "https://bsvradar.com/apps/exodus",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://exodus.com",
+      "platform": "Web",
+      "lastUpdated": "2026-05-29",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "paiybit",
+      "name": "PaiyBit",
+      "category": "Wallets",
+      "summary": "Pay-per-use content, no subscriptions",
+      "radarUrl": "https://bsvradar.com/apps/paiybit",
+      "tags": [
+        "Accepts BSV",
+        "Time-locking",
+        "Professional"
+      ],
+      "url": "https://www.paiybit.com",
+      "platform": "Web",
+      "lastUpdated": "2026-04-21",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "yourswallet",
+      "name": "Yours Wallet",
+      "category": "Wallets",
+      "summary": "A user-friendly BSV wallet with integrated services",
+      "radarUrl": "https://bsvradar.com/apps/yourswallet",
+      "tags": [
+        "Accepts BSV",
+        "Time-locking",
+        "BRC Wallet",
+        "Developer tool"
+      ],
+      "url": "https://yours.org/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-01",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "metanetexplorer",
+      "name": "Metanet Explorer",
+      "category": "Wallets",
+      "summary": "Simplify blockchain app development with secure identity management",
+      "radarUrl": "https://bsvradar.com/apps/metanetexplorer",
+      "tags": [
+        "Accepts BSV",
+        "Developer tool"
+      ],
+      "url": "https://projectbabbage.com/metanet-mobile",
+      "platform": "Web",
+      "lastUpdated": "2026-05-29",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "primatecash",
+      "name": "Primate.cash",
+      "category": "Wallets",
+      "summary": "Secure your BSV and MNEE funds",
+      "radarUrl": "https://bsvradar.com/apps/primatecash",
+      "tags": [],
+      "url": "https://primate.cash",
+      "platform": "Web",
+      "lastUpdated": "2026-06-26",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-desktop",
+      "name": "BSV Desktop",
+      "category": "Wallets",
+      "summary": "Wallet. Identity. App catalog. All on your machine.",
+      "radarUrl": "https://bsvradar.com/apps/bsv-desktop",
+      "tags": [
+        "Accepts BSV",
+        "BRC Wallet"
+      ],
+      "url": "https://desktop.bsvb.tech",
+      "platform": "Web",
+      "lastUpdated": "2026-10-24",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "metanet-desktop-wallet",
+      "name": "MetaNet Desktop",
+      "category": "Wallets",
+      "summary": "An open-source wallet replacing the legacy MetaNet Client",
+      "radarUrl": "https://bsvradar.com/apps/metanet-desktop-wallet",
+      "tags": [
+        "Accepts BSV",
+        "BRC Wallet",
+        "Developer tool"
+      ],
+      "url": "https://github.com/bitcoin-sv/metanet-desktop",
+      "platform": "Web",
+      "lastUpdated": "2026-05-29",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "rockwallet",
+      "name": "RockWallet",
+      "category": "Wallets",
+      "summary": "Buy BSV via creditcard straight from your wallet.",
+      "radarUrl": "https://bsvradar.com/apps/rockwallet",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://www.rockwallet.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-29",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "casheio",
+      "name": "CASHEIO",
+      "category": "Wallets",
+      "summary": "CASHEIO — send BSV, sign on-chain, and text encrypted, all from one wallet.",
+      "radarUrl": "https://bsvradar.com/apps/casheio",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://casheio.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "centi",
+      "name": "Centi",
+      "category": "Wallets",
+      "summary": "OUR MISSION Electronic cash payments to benefit consumers and merchants alike",
+      "radarUrl": "https://bsvradar.com/apps/centi",
+      "tags": [],
+      "url": "https://centi.ch/",
+      "platform": "Web",
+      "lastUpdated": "2026-05-29",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "goji-wallet",
+      "name": "Goji Wallet",
+      "category": "Wallets",
+      "summary": "Creator tips, global savings circles and shared payments",
+      "radarUrl": "https://bsvradar.com/apps/goji-wallet",
+      "tags": [],
+      "url": "https://www.gojiwallet.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-04-15",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "henceforth",
+      "name": "henceforth",
+      "category": "Wallets",
+      "summary": "Unlock your digital legacy",
+      "radarUrl": "https://bsvradar.com/apps/henceforth",
+      "tags": [
+        "Accepts BSV",
+        "Time-locking",
+        "Time-sealing",
+        "BRC-100",
+        "BRC Wallet",
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://apps.apple.com/app/henceforth/id1602896145",
+      "platform": "Web",
+      "lastUpdated": "2026-05-23",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "metanet-highway",
+      "name": "Metanet Highway",
+      "category": "Wallets",
+      "summary": "Private BSV management with a fresh address generated for every transaction.",
+      "radarUrl": "https://bsvradar.com/apps/metanet-highway",
+      "tags": [],
+      "url": "https://metanethighway.com",
+      "platform": "Web",
+      "lastUpdated": "2026-06-26",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "project-access",
+      "name": "Project Access",
+      "category": "Wallets",
+      "summary": "Unlock exclusive content, pay per view",
+      "radarUrl": "https://bsvradar.com/apps/project-access",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://www.projectaccess.app",
+      "platform": "Web",
+      "lastUpdated": "2026-04-24",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "secure-backup-recovery",
+      "name": "Secure Backup & Recovery",
+      "category": "Wallets",
+      "summary": "Split a secure key into shares using Shamir's Secret Sharing for safe distributed backup.",
+      "radarUrl": "https://bsvradar.com/apps/secure-backup-recovery",
+      "tags": [],
+      "url": "https://secure.atx.systems",
+      "platform": "Web",
+      "lastUpdated": "2026-06-26",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "simplycash",
+      "name": "Simply Cash",
+      "category": "Wallets",
+      "summary": "iOS and Android BSV wallet with support for sweeping coins and paymail",
+      "radarUrl": "https://bsvradar.com/apps/simplycash",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://simply.cash",
+      "platform": "Web",
+      "lastUpdated": "2026-01-16",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "metanetscape-navigator",
+      "name": "MetaNetscape Navigator",
+      "category": "Wallets",
+      "summary": "Your gateway to the decentralized web",
+      "radarUrl": "https://bsvradar.com/apps/metanetscape-navigator",
+      "tags": [
+        "BRC-100",
+        "BRC Wallet"
+      ],
+      "url": "https://metanetscape.com",
+      "platform": "Web",
+      "lastUpdated": "2026-04-27",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "mnemonic",
+      "name": "Mnemonic",
+      "category": "Wallets",
+      "summary": "Recover funds from old BSV wallets using BIP39/BIP32 HD keys.",
+      "radarUrl": "https://bsvradar.com/apps/mnemonic",
+      "tags": [],
+      "url": "https://mnemonic-brc100.vercel.app",
+      "platform": "Web",
+      "lastUpdated": "2026-06-26",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "smart-nfts",
+      "name": "SMART NFTs",
+      "category": "Wallets",
+      "summary": "Content you truly own that pays you every time it spreads.",
+      "radarUrl": "https://bsvradar.com/apps/smart-nfts",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV",
+        "BRC Wallet"
+      ],
+      "url": "https://smartnfts.com",
+      "platform": "Web",
+      "lastUpdated": "2026-07-22",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "wwwpaymetoolcom",
+      "name": "www.paymetool.com",
+      "category": "Wallets",
+      "summary": "Paste Pay Me anywhere and get paid.",
+      "radarUrl": "https://bsvradar.com/apps/wwwpaymetoolcom",
+      "tags": [
+        "Accepts BSV",
+        "Professional"
+      ],
+      "url": "https://www.craigs.app/pay-me",
+      "platform": "Web",
+      "lastUpdated": "2026-04-30",
+      "firstSeen": "2026-10-28"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "swiftbsv",
+      "name": "SwiftBSV",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "A pure‑Swift SDK for Bitcoin SV providing keys, addresses, HD wallets, transactions, scripts, signatures, encryption and SPV verification.",
+      "radarUrl": "https://bsvradar.com/blocks/swiftbsv",
+      "tags": [
+        "Swift",
+        "Native Bitcoin Script"
+      ],
+      "url": "https://github.com/henryhudson/SwiftBSV",
+      "docs": "https://github.com/henryhudson/SwiftBSV/blob/main/Documentation/swiftbsv.pdf",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "Henry Hudson",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "gigamonkey",
+      "name": "Gigamonkey",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "A C++ library providing basic Bitcoin functions.",
+      "radarUrl": "https://bsvradar.com/blocks/gigamonkey",
+      "tags": [
+        "C++"
+      ],
+      "url": "https://github.com/Gigamonkey-BSV/Gigamonkey",
+      "maturity": "production",
+      "maintainer": "GigaMonkey",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-sdk",
+      "name": "go-sdk",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "Comprehensive Go SDK for the BSV blockchain",
+      "radarUrl": "https://bsvradar.com/blocks/go-sdk",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-sdk",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "py-sdk",
+      "name": "py-sdk",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "Python SDK for the BSV ecosystem",
+      "radarUrl": "https://bsvradar.com/blocks/py-sdk",
+      "tags": [
+        "Python"
+      ],
+      "url": "https://github.com/bsv-blockchain/py-sdk",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "secp256k1-native",
+      "name": "secp256k1-native",
+      "category": "Core SDKs > Script & Crypto Libraries",
+      "summary": "Ruby secp256k1 implementation with an optional C extension to mitigate side channel attacks",
+      "radarUrl": "https://bsvradar.com/blocks/secp256k1-native",
+      "tags": [
+        "Ruby",
+        "C"
+      ],
+      "url": "https://github.com/sgbett/secp256k1-native",
+      "docs": "https://sgbett.github.io/secp256k1-native/",
+      "maturity": "beta",
+      "license": "MIT",
+      "maintainer": "Simon Bettison",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "ts-sdk",
+      "name": "ts-sdk",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "Unified TypeScript SDK for the BSV blockchain",
+      "radarUrl": "https://bsvradar.com/blocks/ts-sdk",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/ts-sdk",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-elixir-sdk",
+      "name": "BSV Elixir SDK",
+      "category": "Core SDKs > Transaction Builders",
+      "summary": "A feature-complete Bitcoin SV SDK for Elixir providing primitives, script, transactions, wallet, tokens, and SPV.",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-elixir-sdk",
+      "tags": [
+        "Elixir"
+      ],
+      "url": "https://github.com/Bittoku/bsv_sdk_elixir",
+      "docs": "https://hexdocs.pm/bsv_sdk/BSV.html",
+      "maturity": "beta",
+      "license": "MIT",
+      "maintainer": "Bittoku KK",
+      "version": "1.5",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-rust-sdk",
+      "name": "BSV Rust SDK",
+      "category": "Core SDKs > Transaction Builders",
+      "summary": "Rust implementation of the BSV SDK",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-rust-sdk",
+      "tags": [
+        "Rust"
+      ],
+      "url": "https://github.com/Bittoku/bsv-sdk-rust",
+      "docs": "https://docs.rs/bittoku-bsv",
+      "maturity": "beta",
+      "license": "MIT",
+      "maintainer": "STAS",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-typescript-sdk",
+      "name": "BSV TypeScript SDK",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "The comprehensive TypeScript SDK for developing scalable applications on the BSV Blockchain.",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-typescript-sdk",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/ts-stack/tree/main/packages/sdk",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-ruby-sdk",
+      "name": "bsv-ruby-sdk",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "A comprehensive Ruby SDK for the BSV Blockchain, based in the BSV reference implementations",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-ruby-sdk",
+      "tags": [
+        "Ruby"
+      ],
+      "url": "https://github.com/sgbett/bsv-ruby-sdk",
+      "docs": "https://sgbett.github.io/bsv-ruby-sdk/",
+      "maturity": "beta",
+      "license": "Open BSV License",
+      "maintainer": "Simon Bettison",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-universal-sdk",
+      "name": "bsv-universal-sdk",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "Universal BSV game and contract engine — secure-by-construction, dealerless, non-custodial.",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-universal-sdk",
+      "tags": [
+        "TypeScript",
+        "Go"
+      ],
+      "url": "https://github.com/prof-faustus/bsv-universal-sdk",
+      "maturity": "alpha",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-wallet-helper",
+      "name": "bsv-wallet-helper",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "BRC-100 wallet adapter for bsv/sdk + 1Sat helpers",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-wallet-helper",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/bsv-wallet-helper",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsvz",
+      "name": "bsvz",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "Bitcoin SV primitives for Zig.",
+      "radarUrl": "https://bsvradar.com/blocks/bsvz",
+      "tags": [
+        "Zig"
+      ],
+      "url": "https://github.com/b-open-io/bsvz",
+      "maturity": "alpha",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-bc",
+      "name": "go-bc",
+      "category": "Core SDKs > Script & Crypto Libraries",
+      "summary": "The go-to Bitcoin Block Chain library for BSV",
+      "radarUrl": "https://bsvradar.com/blocks/go-bc",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-bc",
+      "maturity": "production",
+      "license": "ISC",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-bt",
+      "name": "go-bt",
+      "category": "Core SDKs > Transaction Builders",
+      "summary": "The go-to Bitcoin Transaction library for BSV",
+      "radarUrl": "https://bsvradar.com/blocks/go-bt",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-bt",
+      "maturity": "production",
+      "license": "ISC",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-chaincfg",
+      "name": "go-chaincfg",
+      "category": "Core SDKs > Script & Crypto Libraries",
+      "summary": "BSV network + genesis settings (Go)",
+      "radarUrl": "https://bsvradar.com/blocks/go-chaincfg",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-chaincfg",
+      "maturity": "production",
+      "license": "ISC",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-stack",
+      "name": "go-stack",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "BSV Go monorepo — SDK, wallet, overlay, messaging, broadcast",
+      "radarUrl": "https://bsvradar.com/blocks/go-stack",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-stack",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-subtree",
+      "name": "go-subtree",
+      "category": "Core SDKs > Transaction Builders",
+      "summary": "Bitcoin SV Subtree transaction structures (Go)",
+      "radarUrl": "https://bsvradar.com/blocks/go-subtree",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-subtree",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-tx-map",
+      "name": "go-tx-map",
+      "category": "Core SDKs > Transaction Builders",
+      "summary": "Concurrent-safe Go transaction-hash + KV maps",
+      "radarUrl": "https://bsvradar.com/blocks/go-tx-map",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-tx-map",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-wire",
+      "name": "go-wire",
+      "category": "Core SDKs > Script & Crypto Libraries",
+      "summary": "BSV Wire Protocol implementation in Go",
+      "radarUrl": "https://bsvradar.com/blocks/go-wire",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-wire",
+      "maturity": "production",
+      "license": "ISC",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "rs-sdk",
+      "name": "rs-sdk",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "Rust translation of the BSV TS/Go SDK",
+      "radarUrl": "https://bsvradar.com/blocks/rs-sdk",
+      "tags": [
+        "Rust"
+      ],
+      "url": "https://github.com/bsv-blockchain/rs-sdk",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "run-javascript-sdk",
+      "name": "Run JavaScript SDK",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "JavaScript SDK for the Run protocol on BSV",
+      "radarUrl": "https://bsvradar.com/blocks/run-javascript-sdk",
+      "tags": [
+        "JavaScript"
+      ],
+      "url": "https://github.com/runcraft-bitcoin/run-sdk",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "RunCraft",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "satoshi-token",
+      "name": "satoshi-token",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "Convert BSV satoshi values to and from whole-token display formats.",
+      "radarUrl": "https://bsvradar.com/blocks/satoshi-token",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/satoshi-token",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "simple",
+      "name": "simple",
+      "category": "Core SDKs > BSV SDKs",
+      "summary": "Simple library to build with the BSV TypeScript SDK",
+      "radarUrl": "https://bsvradar.com/blocks/simple",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/simple",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitcoin-basic-script-to-basic-decompiler-basic-to-script-compile",
+      "name": "Bitcoin BASIC - Script to BASIC Decompiler - BASIC to Script Compiler",
+      "category": "Developer Tooling > Debugging Tools",
+      "summary": "Every infix language has a stack machine underneath. Script is what BASIC's expression evaluator looks like with the front end deleted — so this puts the front end back, and takes it off again.",
+      "radarUrl": "https://bsvradar.com/blocks/bitcoin-basic-script-to-basic-decompiler-basic-to-script-compile",
+      "tags": [
+        "Native Bitcoin Script"
+      ],
+      "url": "https://github.com/sun-dive/grafverse/blob/master/basic.html",
+      "docs": "https://grafverse.com/basic.html",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "Sun-Dive",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bigblocks-dev-bitcoin-development-platform-2",
+      "name": "Bitcoin UI blocks for React.",
+      "category": "Developer Tooling > UI Blocks & Component Libraries",
+      "summary": "BigBlocks.dev provides production‑ready libraries, authentication components, MCP servers, and VS Code tools for building Bitcoin applications.",
+      "radarUrl": "https://bsvradar.com/blocks/bigblocks-dev-bitcoin-development-platform-2",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/b-open-io/bigblocks-registry",
+      "docs": "https://showcase.bigblocks.dev/docs",
+      "maturity": "production",
+      "maintainer": "bsvradar",
+      "version": "0.0.1",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "m840",
+      "name": "M840",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Spectral stability analysis of weighted graph Laplacians (academic paper).",
+      "radarUrl": "https://bsvradar.com/blocks/m840",
+      "tags": [
+        "Python"
+      ],
+      "url": "https://github.com/prof-faustus/M840",
+      "maturity": "experimental",
+      "license": "MIT",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "1sat-university",
+      "name": "1sat-university",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Educational curriculum for BSV blockchain development.",
+      "radarUrl": "https://bsvradar.com/blocks/1sat-university",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/1sat-university",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "amountinator-react",
+      "name": "amountinator-react",
+      "category": "Developer Tooling > UI Blocks & Component Libraries",
+      "summary": "React components for currency amounts + conversion",
+      "radarUrl": "https://bsvradar.com/blocks/amountinator-react",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/amountinator-react",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "beef-inspector",
+      "name": "Beef Inspector",
+      "category": "Developer Tooling > Debugging Tools",
+      "summary": "BEEF payload debugging tool for BSV transactions",
+      "radarUrl": "https://bsvradar.com/blocks/beef-inspector",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain-demos/beef-inspector",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitcoincalculator",
+      "name": "BitcoinCalculator",
+      "category": "Developer Tooling > CLI Tools",
+      "summary": "A calculator app for Bitcoin keys, signatures, scripts, and transactions.",
+      "radarUrl": "https://bsvradar.com/blocks/bitcoincalculator",
+      "tags": [
+        "C++"
+      ],
+      "url": "https://github.com/Gigamonkey-BSV/BitcoinCalculator",
+      "maturity": "alpha",
+      "license": "Open BSV License",
+      "maintainer": "Daniel Krawisz",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitcoinsx-ide",
+      "name": "BitcoinSX IDE",
+      "category": "Developer Tooling > IDEs & Editor Plugins",
+      "summary": "Bitcoin script editor and simulator",
+      "radarUrl": "https://bsvradar.com/blocks/bitcoinsx-ide",
+      "tags": [
+        "Native Bitcoin Script"
+      ],
+      "maturity": "production",
+      "maintainer": "Brendan Lee",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "brc100-ui-react-components",
+      "name": "brc100-ui-react-components",
+      "category": "Developer Tooling > UI Blocks & Component Libraries",
+      "summary": "Reusable BRC-100 wallet React components",
+      "radarUrl": "https://bsvradar.com/blocks/brc100-ui-react-components",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/brc100-ui-react-components",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-mcp",
+      "name": "bsv-mcp",
+      "category": "Developer Tooling > CLI Tools",
+      "summary": "An MCP server for Bitcoin SV.",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-mcp",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/bsv-mcp",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-poker",
+      "name": "bsv-poker",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Dealerless non-custodial multiplayer poker on BSV with bonded sub-sat payment channels.",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-poker",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/prof-faustus/bsv-poker",
+      "maturity": "alpha",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-poker-zh",
+      "name": "bsv-poker-zh",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Simplified-Chinese localisation of bsv-poker (dealerless BSV poker).",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-poker-zh",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/prof-faustus/bsv-poker-zh",
+      "maturity": "alpha",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-skills",
+      "name": "bsv-skills",
+      "category": "Developer Tooling > CLI Tools",
+      "summary": "Core BSV blockchain operations plugin for Claude Code.",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-skills",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/b-open-io/bsv-skills",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-wallet-postgres-rubygems-org-your-community-gem-host",
+      "name": "bsv-wallet-postgres | RubyGems.org | your community gem host",
+      "category": "Developer Tooling > UI Blocks & Component Libraries",
+      "summary": "PostgreSQL backend store implementation for the ruby BSV Wallet gem",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-wallet-postgres-rubygems-org-your-community-gem-host",
+      "tags": [
+        "Ruby"
+      ],
+      "url": "https://rubygems.org/gems/bsv-wallet-postgres",
+      "maturity": "alpha",
+      "license": "Open BSV License",
+      "maintainer": "Simon Bettison",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "cardtable",
+      "name": "cardtable",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Dealerless distributed card-game protocol on BSV.",
+      "radarUrl": "https://bsvradar.com/blocks/cardtable",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/prof-faustus/cardtable",
+      "maturity": "experimental",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "cardtable-zh",
+      "name": "cardtable-zh",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Simplified-Chinese localisation of the cardtable BSV card-game system.",
+      "radarUrl": "https://bsvradar.com/blocks/cardtable-zh",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/prof-faustus/cardtable-zh",
+      "maturity": "experimental",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "cars-cli",
+      "name": "cars-cli",
+      "category": "Developer Tooling > CLI Tools",
+      "summary": "CLI for the Cloud Automated Runtime System (CARS)",
+      "radarUrl": "https://bsvradar.com/blocks/cars-cli",
+      "tags": [
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/cars-cli",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "cars-node",
+      "name": "cars-node",
+      "category": "Developer Tooling > CLI Tools",
+      "summary": "Node software for the Cloud Automated Runtime System",
+      "radarUrl": "https://bsvradar.com/blocks/cars-node",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/cars-node",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "create-bsv-app",
+      "name": "create-bsv-app",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "CLI for bootstrapping BSV React apps",
+      "radarUrl": "https://bsvradar.com/blocks/create-bsv-app",
+      "tags": [
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/create-bsv-app",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-alert-system",
+      "name": "go-alert-system",
+      "category": "Developer Tooling > Monitoring & Observability",
+      "summary": "Lightweight Go RPC alerting service for BSV nodes",
+      "radarUrl": "https://bsvradar.com/blocks/go-alert-system",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-alert-system",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "gorillacloud",
+      "name": "gorillacloud",
+      "category": "Developer Tooling > CLI Tools",
+      "summary": "Full-stack hosting colocated with BSV blockchain infrastructure.",
+      "radarUrl": "https://bsvradar.com/blocks/gorillacloud",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/gorillacloud",
+      "maturity": "alpha",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "identity-react",
+      "name": "identity-react",
+      "category": "Developer Tooling > UI Blocks & Component Libraries",
+      "summary": "React components for MetaNet identity resolution",
+      "radarUrl": "https://bsvradar.com/blocks/identity-react",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/identity-react",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "ingress-infra",
+      "name": "ingress-infra",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Ingress proxy infrastructure for BSV Layered Multicast scaled networks.",
+      "radarUrl": "https://bsvradar.com/blocks/ingress-infra",
+      "tags": [],
+      "url": "https://github.com/lightwebinc/ingress-infra",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "integrated-infra",
+      "name": "integrated-infra",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Integrated infrastructure deployment for BSV Layered Multicast scaled networks.",
+      "radarUrl": "https://bsvradar.com/blocks/integrated-infra",
+      "tags": [],
+      "url": "https://github.com/lightwebinc/integrated-infra",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "konareef-share-agents-companies-can-trust",
+      "name": "konareef — Share Agents Companies Can Trust",
+      "category": "Developer Tooling > CLI Tools",
+      "summary": "konareef lets developers package agent workflows as reusable reefpods and gives companies proof, budgets, and data-access controls so teams can safely run AI on internal work.",
+      "radarUrl": "https://bsvradar.com/blocks/konareef-share-agents-companies-can-trust",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://konareef.ai",
+      "docs": "https://konareef.ai/docs/",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Bittoku KK",
+      "version": "0.1.0",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "lars",
+      "name": "lars",
+      "category": "Developer Tooling > Testing & Local Networks",
+      "summary": "Local Automated Runtime System for BSV apps",
+      "radarUrl": "https://bsvradar.com/blocks/lars",
+      "tags": [
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/lars",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "listener-infra",
+      "name": "listener-infra",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Listener infrastructure for BSV Layered Multicast scaled networks.",
+      "radarUrl": "https://bsvradar.com/blocks/listener-infra",
+      "tags": [],
+      "url": "https://github.com/lightwebinc/listener-infra",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "manifest-infra",
+      "name": "manifest-infra",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Shard manifest service infrastructure for BSV Layered Multicast scaled networks.",
+      "radarUrl": "https://bsvradar.com/blocks/manifest-infra",
+      "tags": [],
+      "url": "https://github.com/lightwebinc/manifest-infra",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "mental-poker-zh",
+      "name": "mental-poker-zh",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Simplified-Chinese localisation of the Mental Poker (BSV) spec and oracle.",
+      "radarUrl": "https://bsvradar.com/blocks/mental-poker-zh",
+      "tags": [
+        "Python"
+      ],
+      "url": "https://github.com/prof-faustus/mental-poker-zh",
+      "maturity": "experimental",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "multicast-kube-infra",
+      "name": "multicast-kube-infra",
+      "category": "Developer Tooling > Testing & Local Networks",
+      "summary": "Kubernetes deployment automation for BSV Layered Multicast test environments.",
+      "radarUrl": "https://bsvradar.com/blocks/multicast-kube-infra",
+      "tags": [],
+      "url": "https://github.com/lightwebinc/multicast-kube-infra",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "multicast-test",
+      "name": "multicast-test",
+      "category": "Developer Tooling > Testing & Local Networks",
+      "summary": "Component integration testing harnesses for BSV Layered Multicast.",
+      "radarUrl": "https://bsvradar.com/blocks/multicast-test",
+      "tags": [],
+      "url": "https://github.com/lightwebinc/multicast-test",
+      "maturity": "alpha",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "overlay-express-examples",
+      "name": "overlay-express-examples",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Example projects using overlay-express",
+      "radarUrl": "https://bsvradar.com/blocks/overlay-express-examples",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/overlay-express-examples",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "preimage",
+      "name": "Preimage",
+      "category": "Developer Tooling > Debugging Tools",
+      "summary": "Transaction preimage analysis utility",
+      "radarUrl": "https://bsvradar.com/blocks/preimage",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain-demos/preimage",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "retransmission-infra",
+      "name": "retransmission-infra",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Retransmission infrastructure for BSV Layered Multicast scaled networks.",
+      "radarUrl": "https://bsvradar.com/blocks/retransmission-infra",
+      "tags": [],
+      "url": "https://github.com/lightwebinc/retransmission-infra",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "retry-endpoint-helm",
+      "name": "retry-endpoint-helm",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Helm chart for the BSV Layered Multicast retry-endpoint service.",
+      "radarUrl": "https://bsvradar.com/blocks/retry-endpoint-helm",
+      "tags": [],
+      "url": "https://github.com/lightwebinc/retry-endpoint-helm",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "sdi143",
+      "name": "sdi143",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Replication package for JIS-2026-016 — Compliance Theater in AI-Integrated Reporting.",
+      "radarUrl": "https://bsvradar.com/blocks/sdi143",
+      "tags": [
+        "Python"
+      ],
+      "url": "https://github.com/prof-faustus/sdi143",
+      "maturity": "experimental",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "shard-listener-helm",
+      "name": "shard-listener-helm",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Helm chart for the BSV Layered Multicast shard-listener service.",
+      "radarUrl": "https://bsvradar.com/blocks/shard-listener-helm",
+      "tags": [],
+      "url": "https://github.com/lightwebinc/shard-listener-helm",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "shard-manifest-helm",
+      "name": "shard-manifest-helm",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Helm chart for the BSV Layered Multicast shard-manifest service.",
+      "radarUrl": "https://bsvradar.com/blocks/shard-manifest-helm",
+      "tags": [],
+      "url": "https://github.com/lightwebinc/shard-manifest-helm",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "shard-proxy-helm",
+      "name": "shard-proxy-helm",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Helm chart for the BSV Layered Multicast shard-proxy service.",
+      "radarUrl": "https://bsvradar.com/blocks/shard-proxy-helm",
+      "tags": [],
+      "url": "https://github.com/lightwebinc/shard-proxy-helm",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "subtx-generator-helm",
+      "name": "subtx-generator-helm",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Helm chart for the BSV Layered Multicast subtx-generator service.",
+      "radarUrl": "https://bsvradar.com/blocks/subtx-generator-helm",
+      "tags": [],
+      "url": "https://github.com/lightwebinc/subtx-generator-helm",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "theme-token",
+      "name": "theme-token",
+      "category": "Developer Tooling > UI Blocks & Component Libraries",
+      "summary": "Token-based theme system for BSV apps.",
+      "radarUrl": "https://bsvradar.com/blocks/theme-token",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/theme-token",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "uhrp-react",
+      "name": "uhrp-react",
+      "category": "Developer Tooling > UI Blocks & Component Libraries",
+      "summary": "UHRP-enabled React components for media",
+      "radarUrl": "https://bsvradar.com/blocks/uhrp-react",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/uhrp-react",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "wallet-toolbox-examples",
+      "name": "wallet-toolbox-examples",
+      "category": "Developer Tooling > Boilerplates & Starter Apps",
+      "summary": "Example projects using BRC-100 wallets",
+      "radarUrl": "https://bsvradar.com/blocks/wallet-toolbox-examples",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/wallet-toolbox-examples",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "whoiam",
+      "name": "WhoIAm",
+      "category": "Developer Tooling > UI Blocks & Component Libraries",
+      "summary": "UI components of the SocialCert identity app",
+      "radarUrl": "https://bsvradar.com/blocks/whoiam",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/WhoIAm",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bmap-api",
+      "name": "bmap-api",
+      "category": "Indexers & Data Access > Chain Data APIs & Explorers",
+      "summary": "BMAP Planaria for B + MAP-based BSV apps.",
+      "radarUrl": "https://bsvradar.com/blocks/bmap-api",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/bmap-api",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "chaintracks-server",
+      "name": "chaintracks-server",
+      "category": "Indexers & Data Access > Chain Data APIs & Explorers",
+      "summary": "High-performance Chaintracks REST + CDN server",
+      "radarUrl": "https://bsvradar.com/blocks/chaintracks-server",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/chaintracks-server",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-chaintracks",
+      "name": "go-chaintracks",
+      "category": "Indexers & Data Access > Chain Data APIs & Explorers",
+      "summary": "Real-time BSV header orchestration in Go",
+      "radarUrl": "https://bsvradar.com/blocks/go-chaintracks",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-chaintracks",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-junglebus",
+      "name": "go-junglebus",
+      "category": "Indexers & Data Access > Chain Data APIs & Explorers",
+      "summary": "Go client for JungleBus BSV transaction streaming.",
+      "radarUrl": "https://bsvradar.com/blocks/go-junglebus",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/b-open-io/go-junglebus",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "memserve",
+      "name": "memserve",
+      "category": "Indexers & Data Access > Chain Data APIs & Explorers",
+      "summary": "In-memory hash-sharded transaction-lookup fabric over Teranode with pay-per-use BSV payment channels.",
+      "radarUrl": "https://bsvradar.com/blocks/memserve",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/prof-faustus/memserve",
+      "maturity": "beta",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "merkle-service",
+      "name": "merkle-service",
+      "category": "Indexers & Data Access > Chain Data APIs & Explorers",
+      "summary": "High-throughput Merkle-proof delivery service",
+      "radarUrl": "https://bsvradar.com/blocks/merkle-service",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/merkle-service",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "teranode",
+      "name": "Teranode",
+      "category": "Nodes & Network Infrastructure > Node Implementations",
+      "summary": "BSV Blockchain Teranode — high-throughput node",
+      "radarUrl": "https://bsvradar.com/blocks/teranode",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/teranode",
+      "docs": "https://bsv-blockchain.github.io/teranode/",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "version": "0.14.5",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "teranode-quickstart",
+      "name": "teranode-quickstart",
+      "category": "Nodes & Network Infrastructure > Node Implementations",
+      "summary": "Docker quickstart for running a Teranode node",
+      "radarUrl": "https://bsvradar.com/blocks/teranode-quickstart",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/teranode-quickstart",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "arcade",
+      "name": "arcade",
+      "category": "Nodes & Network Infrastructure > Transaction Processors",
+      "summary": "Next-gen BSV transaction broadcaster for Teranode",
+      "radarUrl": "https://bsvradar.com/blocks/arcade",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/arcade",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "block-headers-service",
+      "name": "block-headers-service",
+      "category": "Nodes & Network Infrastructure > Mining & SPV Infrastructure",
+      "summary": "Headers-only peer with private Merkle-root API",
+      "radarUrl": "https://bsvradar.com/blocks/block-headers-service",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/block-headers-service",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-multicast",
+      "name": "bsv-multicast",
+      "category": "Nodes & Network Infrastructure > Transaction Processors",
+      "summary": "BSV Layered Multicast — scale BSV transaction processing to 1B TPS.",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-multicast",
+      "tags": [],
+      "url": "https://github.com/lightwebinc/bsv-multicast",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-bn",
+      "name": "go-bn",
+      "category": "Nodes & Network Infrastructure > Node Implementations",
+      "summary": "The go-to Bitcoin Node RPC library",
+      "radarUrl": "https://bsvradar.com/blocks/go-bn",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-bn",
+      "maturity": "production",
+      "license": "Apache-2.0",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-p2p",
+      "name": "go-p2p",
+      "category": "Nodes & Network Infrastructure > Node Implementations",
+      "summary": "Enterprise P2P networking for BSV (Go)",
+      "radarUrl": "https://bsvradar.com/blocks/go-p2p",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-p2p",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-p2p-message-bus",
+      "name": "go-p2p-message-bus",
+      "category": "Nodes & Network Infrastructure > Node Implementations",
+      "summary": "Channel-based libp2p messaging library",
+      "radarUrl": "https://bsvradar.com/blocks/go-p2p-message-bus",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-p2p-message-bus",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-teranode-p2p-client",
+      "name": "go-teranode-p2p-client",
+      "category": "Nodes & Network Infrastructure > Node Implementations",
+      "summary": "Go client for Teranode's P2P gossip network",
+      "radarUrl": "https://bsvradar.com/blocks/go-teranode-p2p-client",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-teranode-p2p-client",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "mfspv",
+      "name": "mfspv",
+      "category": "Nodes & Network Infrastructure > Mining & SPV Infrastructure",
+      "summary": "Merkle-Forest SPV: sender-held inclusion proofs for BSV/Teranode at 10⁶–10¹¹ tx/s.",
+      "radarUrl": "https://bsvradar.com/blocks/mfspv",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/prof-faustus/mfspv",
+      "maturity": "beta",
+      "license": "Open BSV License",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "pow20-miner-zig",
+      "name": "pow20-miner-zig",
+      "category": "Nodes & Network Infrastructure > Mining & SPV Infrastructure",
+      "summary": "POW20 token miner — zero-allocation SHA256d in Zig.",
+      "radarUrl": "https://bsvradar.com/blocks/pow20-miner-zig",
+      "tags": [
+        "Zig"
+      ],
+      "url": "https://github.com/b-open-io/pow20-miner-zig",
+      "maturity": "alpha",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "retry-endpoint",
+      "name": "retry-endpoint",
+      "category": "Nodes & Network Infrastructure > Transaction Processors",
+      "summary": "NACK-based retransmission caching endpoint for BSV Layered Multicast.",
+      "radarUrl": "https://bsvradar.com/blocks/retry-endpoint",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/lightwebinc/retry-endpoint",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "shard-common",
+      "name": "shard-common",
+      "category": "Nodes & Network Infrastructure > Transaction Processors",
+      "summary": "Shared library for BSV Layered Multicast sharded data transmission services.",
+      "radarUrl": "https://bsvradar.com/blocks/shard-common",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/lightwebinc/shard-common",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "shard-listener",
+      "name": "shard-listener",
+      "category": "Nodes & Network Infrastructure > Transaction Processors",
+      "summary": "Subtree-aware filtering egress gateway listener for BSV Layered Multicast.",
+      "radarUrl": "https://bsvradar.com/blocks/shard-listener",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/lightwebinc/shard-listener",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "shard-manifest",
+      "name": "shard-manifest",
+      "category": "Nodes & Network Infrastructure > Transaction Processors",
+      "summary": "Shard group manifest advertisement service for BSV Layered Multicast.",
+      "radarUrl": "https://bsvradar.com/blocks/shard-manifest",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/lightwebinc/shard-manifest",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "shard-proxy",
+      "name": "shard-proxy",
+      "category": "Nodes & Network Infrastructure > Transaction Processors",
+      "summary": "Sharding ingress proxy for BSV Layered Multicast scaled networks.",
+      "radarUrl": "https://bsvradar.com/blocks/shard-proxy",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/lightwebinc/shard-proxy",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "subtx-generator",
+      "name": "subtx-generator",
+      "category": "Nodes & Network Infrastructure > Transaction Processors",
+      "summary": "Test transaction generator with subtree and sequence frame support for BSV Layered Multicast.",
+      "radarUrl": "https://bsvradar.com/blocks/subtx-generator",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/lightwebinc/subtx-generator",
+      "maturity": "alpha",
+      "license": "Apache-2.0",
+      "maintainer": "Light",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "sv-node",
+      "name": "SV Node",
+      "category": "Nodes & Network Infrastructure > Node Implementations",
+      "summary": "SV Node is a full node implementation for the BSV Blockchain",
+      "radarUrl": "https://bsvradar.com/blocks/sv-node",
+      "tags": [
+        "C++"
+      ],
+      "url": "https://github.com/bitcoin-sv/bitcoin-sv",
+      "docs": "https://docs.bsvblockchain.org/network-topology/nodes/sv-node",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "version": "1.2.2",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "teranode-operator",
+      "name": "teranode-operator",
+      "category": "Nodes & Network Infrastructure > Node Implementations",
+      "summary": "Kubernetes operator for Teranode",
+      "radarUrl": "https://bsvradar.com/blocks/teranode-operator",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/teranode-operator",
+      "maturity": "production",
+      "license": "Apache-2.0",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "ts-p2p",
+      "name": "ts-p2p",
+      "category": "Nodes & Network Infrastructure > Node Implementations",
+      "summary": "Listen to Teranode P2P messages (TypeScript)",
+      "radarUrl": "https://bsvradar.com/blocks/ts-p2p",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/ts-p2p",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "apps-overlay-services",
+      "name": "apps-overlay-services",
+      "category": "Overlay Services > Domain-Specific Overlays",
+      "summary": "Metanet App Catalog overlay",
+      "radarUrl": "https://bsvradar.com/blocks/apps-overlay-services",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/apps-overlay-services",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "kvstore-services",
+      "name": "kvstore-services",
+      "category": "Overlay Services > Overlay Components & Frameworks",
+      "summary": "KVStore overlay services",
+      "radarUrl": "https://bsvradar.com/blocks/kvstore-services",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/kvstore-services",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "1sat-stack",
+      "name": "1sat-stack",
+      "category": "Overlay Services > Token Overlay Services",
+      "summary": "Go implementation of the full 1Sat overlay stack.",
+      "radarUrl": "https://bsvradar.com/blocks/1sat-stack",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/b-open-io/1sat-stack",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsocial-overlay",
+      "name": "bsocial-overlay",
+      "category": "Overlay Services > Domain-Specific Overlays",
+      "summary": "BSocial protocol overlay — social posts on BSV.",
+      "radarUrl": "https://bsvradar.com/blocks/bsocial-overlay",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/b-open-io/bsocial-overlay",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv21-overlay",
+      "name": "bsv21-overlay",
+      "category": "Overlay Services > Token Overlay Services",
+      "summary": "BSV-21 token overlay engine in Go.",
+      "radarUrl": "https://bsvradar.com/blocks/bsv21-overlay",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/b-open-io/bsv21-overlay",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-overlay-discovery-services",
+      "name": "go-overlay-discovery-services",
+      "category": "Overlay Services > Overlay Engines",
+      "summary": "Overlay network discovery services (Go)",
+      "radarUrl": "https://bsvradar.com/blocks/go-overlay-discovery-services",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-overlay-discovery-services",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-overlay-services",
+      "name": "go-overlay-services",
+      "category": "Overlay Services > Overlay Engines",
+      "summary": "BSV Overlay Services Engine in Go",
+      "radarUrl": "https://bsvradar.com/blocks/go-overlay-services",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-overlay-services",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "natural-chain",
+      "name": "Natural Chain",
+      "category": "Overlay Services > Domain-Specific Overlays",
+      "summary": "Natural-gas supply chain tracking on BSV",
+      "radarUrl": "https://bsvradar.com/blocks/natural-chain",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain-demos/natural-chain",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "openclaw-overlay-plugin",
+      "name": "openclaw-overlay-plugin",
+      "category": "Overlay Services > Overlay Components & Frameworks",
+      "summary": "OpenClaw plugin for the BSV Overlay Network",
+      "radarUrl": "https://bsvradar.com/blocks/openclaw-overlay-plugin",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/openclaw-overlay-plugin",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "overlay-broadcast",
+      "name": "overlay-broadcast",
+      "category": "Overlay Services > Overlay Components & Frameworks",
+      "summary": "BSV-native broadcast encryption over a key-graph overlay.",
+      "radarUrl": "https://bsvradar.com/blocks/overlay-broadcast",
+      "tags": [
+        "Rust"
+      ],
+      "url": "https://github.com/prof-faustus/overlay-broadcast",
+      "maturity": "alpha",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "overlay-discovery-services",
+      "name": "overlay-discovery-services",
+      "category": "Overlay Services > Overlay Engines",
+      "summary": "Overlay services for SHIP/SLAP advertisers",
+      "radarUrl": "https://bsvradar.com/blocks/overlay-discovery-services",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/overlay-discovery-services",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "overlay-express",
+      "name": "overlay-express",
+      "category": "Overlay Services > Overlay Components & Frameworks",
+      "summary": "Express helpers for BSV Overlay Services",
+      "radarUrl": "https://bsvradar.com/blocks/overlay-express",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/overlay-express",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "overlay-services",
+      "name": "overlay-services",
+      "category": "Overlay Services > Overlay Engines",
+      "summary": "BSV Blockchain Overlay Services Engine (TypeScript)",
+      "radarUrl": "https://bsvradar.com/blocks/overlay-services",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/overlay-services",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "pollr",
+      "name": "Pollr",
+      "category": "Overlay Services > Domain-Specific Overlays",
+      "summary": "Decentralised polling on BSV",
+      "radarUrl": "https://bsvradar.com/blocks/pollr",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/p2ppsr/Pollr",
+      "maturity": "beta",
+      "license": "Open BSV License",
+      "maintainer": "Project Babbage",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "registry-services",
+      "name": "registry-services",
+      "category": "Overlay Services > Domain-Specific Overlays",
+      "summary": "Overlay services for basket / protocol / cert registrations",
+      "radarUrl": "https://bsvradar.com/blocks/registry-services",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/registry-services",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "supply-chain-action-builder",
+      "name": "Supply Chain Action Builder",
+      "category": "Overlay Services > Domain-Specific Overlays",
+      "summary": "Blockchain-based supply chain management",
+      "radarUrl": "https://bsvradar.com/blocks/supply-chain-action-builder",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain-demos/dynamic-supplychains",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "handcash-mpp",
+      "name": "handcash-mpp",
+      "category": "Payment & Commerce > Open payment protocols",
+      "summary": "A TypeScript library that implements the HandCash Machine Payments Protocol for building paid HTTP APIs on Bitcoin SV.",
+      "radarUrl": "https://bsvradar.com/blocks/handcash-mpp",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/GenericCPU/handcash-mpp",
+      "docs": "https://github.com/GenericCPU/handcash-mpp/blob/main/examples/README.md",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "HandCash",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-micropay-middleware",
+      "name": "BSV Micropay Middleware",
+      "category": "Payment & Commerce > Open payment protocols",
+      "summary": "BSV Micropay is a TypeScript toolkit that lets any web service charge sub-cent fees per API call using Bitcoin SV, with zero billing infrastructure and zero human interaction in the payment loop.",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-micropay-middleware",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://bsvmicropay.com/",
+      "docs": "https://bsvmicropay.com/",
+      "maturity": "beta",
+      "license": "Open BSV License",
+      "maintainer": "Ruth Designs Digital",
+      "version": "0.1.0",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "crowdfunding-platform",
+      "name": "Crowdfunding Platform",
+      "category": "Payment & Commerce > Open payment protocols",
+      "summary": "402 Payment Protocol + token distribution crowdfunding demo",
+      "radarUrl": "https://bsvradar.com/blocks/crowdfunding-platform",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain-demos/crowfunding-workshop-demo",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "402-extension",
+      "name": "402-extension",
+      "category": "Payment & Commerce > Open payment protocols",
+      "summary": "Chrome extension for HTTP 402 BSV payments",
+      "radarUrl": "https://bsvradar.com/blocks/402-extension",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/402-extension",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "402-pay",
+      "name": "402-pay",
+      "category": "Payment & Commerce > Open payment protocols",
+      "summary": "402 Payment Protocol helpers",
+      "radarUrl": "https://bsvradar.com/blocks/402-pay",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/402-pay",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bonded-subsat-channel",
+      "name": "bonded-subsat-channel",
+      "category": "Payment & Commerce > Open payment protocols",
+      "summary": "Bonded sub-satoshi payment channels on BSV (post-Genesis).",
+      "radarUrl": "https://bsvradar.com/blocks/bonded-subsat-channel",
+      "tags": [
+        "Python"
+      ],
+      "url": "https://github.com/prof-faustus/bonded-subsat-channel",
+      "maturity": "experimental",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-paymaster",
+      "name": "bsv-paymaster",
+      "category": "Payment & Commerce > Open payment protocols",
+      "summary": "On-chain gas sponsorship for BSV — covenant-based paymaster.",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-paymaster",
+      "tags": [
+        "Zig"
+      ],
+      "url": "https://github.com/b-open-io/bsv-paymaster",
+      "maturity": "alpha",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-paymail",
+      "name": "go-paymail",
+      "category": "Payment & Commerce > Open payment protocols",
+      "summary": "Paymail toolkit for Go (full-stack)",
+      "radarUrl": "https://bsvradar.com/blocks/go-paymail",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-paymail",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "pay-quickr",
+      "name": "Pay-QuickR",
+      "category": "Payment & Commerce > Invoicing & Checkout SDKs",
+      "summary": "BSV wallet integration + payments demo",
+      "radarUrl": "https://bsvradar.com/blocks/pay-quickr",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain-demos/Pay-QuickR",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "payment-express-middleware",
+      "name": "payment-express-middleware",
+      "category": "Payment & Commerce > Open payment protocols",
+      "summary": "BSV service-monetization Express middleware",
+      "radarUrl": "https://bsvradar.com/blocks/payment-express-middleware",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/payment-express-middleware",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "sendbsv-bsv-payments-for-woocommerce",
+      "name": "SendBSV BSV Payments for WooCommerce",
+      "category": "Payment & Commerce > Invoicing & Checkout SDKs",
+      "summary": "WordPress plugin that lets WooCommerce accept Bitcoin SV payments directly to a self-custodied wallet, with an optional SPV-first hosted invoicing mode.",
+      "radarUrl": "https://bsvradar.com/blocks/sendbsv-bsv-payments-for-woocommerce",
+      "tags": [
+        "PHP",
+        "JavaScript"
+      ],
+      "url": "https://github.com/BSVanon/bsv-woocommerce-gateway",
+      "docs": "https://wordpress.org/plugins/bsvanon-bitcoin-sv-payments/",
+      "maturity": "production",
+      "license": "GPL",
+      "maintainer": "BSVanon",
+      "version": "7.0.0",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "ts-paymail",
+      "name": "ts-paymail",
+      "category": "Payment & Commerce > Open payment protocols",
+      "summary": "Paymail TypeScript implementation",
+      "radarUrl": "https://bsvradar.com/blocks/ts-paymail",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/ts-paymail",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "x402-bsv-stateless-settlement-gated-http-protocol",
+      "name": "x402-BSV — Stateless Settlement-Gated HTTP Protocol",
+      "category": "Payment & Commerce > Open payment protocols",
+      "summary": "x402-BSV: a stateless, per-request settlement-gated HTTP protocol using Bitcoin SV.",
+      "radarUrl": "https://bsvradar.com/blocks/x402-bsv-stateless-settlement-gated-http-protocol",
+      "tags": [
+        "TypeScript",
+        "Go",
+        "Python"
+      ],
+      "url": "https://x402.merkleworks.io/",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "rui da silva",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "runar",
+      "name": "Runar",
+      "category": "Smart Contracts > Smart Contract Languages",
+      "summary": "Write Bitcoin smart contracts in TypeScript, Go, Rust, or Solidity",
+      "radarUrl": "https://bsvradar.com/blocks/runar",
+      "tags": [
+        "TypeScript",
+        "Go",
+        "Rust",
+        "Solidity"
+      ],
+      "url": "https://github.com/icellan/runar",
+      "docs": "https://runar.build/",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "ts-templates",
+      "name": "ts-templates",
+      "category": "Smart Contracts > Contract Templates & Examples",
+      "summary": "BSV Bitcoin Script templates (TypeScript)",
+      "radarUrl": "https://bsvradar.com/blocks/ts-templates",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/ts-templates",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-script-templates",
+      "name": "go-script-templates",
+      "category": "Smart Contracts > Contract Templates & Examples",
+      "summary": "Bitcoin Script templates for the BSV Go SDK",
+      "radarUrl": "https://bsvradar.com/blocks/go-script-templates",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-script-templates",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "scrypt",
+      "name": "sCrypt",
+      "category": "Smart Contracts > Smart Contract Languages",
+      "summary": "Smart Contract Language for Bitcoin SV",
+      "radarUrl": "https://bsvradar.com/blocks/scrypt",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/sCrypt-Inc/scrypt-ts",
+      "docs": "https://docs.scrypt.io",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "sCrypt Inc",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-templates",
+      "name": "go-templates",
+      "category": "Smart Contracts > Contract Templates & Examples",
+      "summary": "Bitcoin Script templates for the BSV Go SDK.",
+      "radarUrl": "https://bsvradar.com/blocks/go-templates",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/b-open-io/go-templates",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "zig-templates",
+      "name": "zig-templates",
+      "category": "Smart Contracts > Contract Templates & Examples",
+      "summary": "Bitcoin Script templates for 1Sat Ordinals — Zig implementation.",
+      "radarUrl": "https://bsvradar.com/blocks/zig-templates",
+      "tags": [
+        "Zig"
+      ],
+      "url": "https://github.com/b-open-io/zig-templates",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "anchorchain",
+      "name": "anchorchain",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Anchor AI memory states immutably on the BSV blockchain.",
+      "radarUrl": "https://bsvradar.com/blocks/anchorchain",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/prof-faustus/anchorchain",
+      "maturity": "alpha",
+      "license": "MIT",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "1sat-sdk",
+      "name": "1sat-sdk",
+      "category": "Token & Data Protocols > Non Fungible Token (NFT) Protocols",
+      "summary": "TypeScript SDK for the 1Sat Ordinals protocol.",
+      "radarUrl": "https://bsvradar.com/blocks/1sat-sdk",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/1sat-sdk",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "athanor",
+      "name": "athanor",
+      "category": "Token & Data Protocols > Fungible Token Protocols",
+      "summary": "BSV blockchain indexer and wallet backend — Phoenix/Elixir",
+      "radarUrl": "https://bsvradar.com/blocks/athanor",
+      "tags": [
+        "Elixir"
+      ],
+      "url": "https://github.com/Bittoku/athanor",
+      "docs": "https://stastech.org/docs/athanor",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "Bittoku KK",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitcoinschema",
+      "name": "bitcoinschema",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Bitcoin Schema TypeScript library — B, MAP, AIP, BAP protocol clients.",
+      "radarUrl": "https://bsvradar.com/blocks/bitcoinschema",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/bitcoinschema",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "btms",
+      "name": "btms",
+      "category": "Token & Data Protocols > Fungible Token Protocols",
+      "summary": "Basic Token Management System",
+      "radarUrl": "https://bsvradar.com/blocks/btms",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/btms",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "cto-bsv",
+      "name": "cto-bsv",
+      "category": "Token & Data Protocols > Fungible Token Protocols",
+      "summary": "Confidential Transferable Object (CTO) protocol on BSV.",
+      "radarUrl": "https://bsvradar.com/blocks/cto-bsv",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/prof-faustus/cto-bsv",
+      "maturity": "alpha",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "estates",
+      "name": "estates",
+      "category": "Token & Data Protocols > Non Fungible Token (NFT) Protocols",
+      "summary": "Dealerless, fully-on-chain property game on BSV with 1Sat NFT deeds.",
+      "radarUrl": "https://bsvradar.com/blocks/estates",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/prof-faustus/estates",
+      "maturity": "alpha",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "gasp-core",
+      "name": "gasp-core",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Graph Aware Sync Protocol implementation",
+      "radarUrl": "https://bsvradar.com/blocks/gasp-core",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/gasp-core",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-ordfs-server",
+      "name": "go-ordfs-server",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Go implementation of the OrdFS gateway server.",
+      "radarUrl": "https://bsvradar.com/blocks/go-ordfs-server",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/b-open-io/go-ordfs-server",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "lite-storage-server",
+      "name": "lite-storage-server",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Lightweight UHRP storage server",
+      "radarUrl": "https://bsvradar.com/blocks/lite-storage-server",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/lite-storage-server",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "metanet-apps",
+      "name": "metanet-apps",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Publish your Metanet app on BSV",
+      "radarUrl": "https://bsvradar.com/blocks/metanet-apps",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/metanet-apps",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "ordfs-server",
+      "name": "ordfs-server",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "HTTP gateway server for OrdFS — content-addressed BSV files.",
+      "radarUrl": "https://bsvradar.com/blocks/ordfs-server",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/ordfs-server",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "p2p-medical",
+      "name": "P2P Medical",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Encrypted peer-to-peer medical data exchange",
+      "radarUrl": "https://bsvradar.com/blocks/p2p-medical",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain-demos/p2p-medical",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "pow20-runar",
+      "name": "pow20-runar",
+      "category": "Token & Data Protocols > Fungible Token Protocols",
+      "summary": "POW20 proof-of-work BSV-21 token contract — Runar implementation.",
+      "radarUrl": "https://bsvradar.com/blocks/pow20-runar",
+      "tags": [
+        "Zig"
+      ],
+      "url": "https://github.com/b-open-io/pow20-runar",
+      "maturity": "alpha",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "prescription-tokens",
+      "name": "Prescription Tokens",
+      "category": "Token & Data Protocols > Fungible Token Protocols",
+      "summary": "Tokenisation of medicine and pharmaceuticals on BSV",
+      "radarUrl": "https://bsvradar.com/blocks/prescription-tokens",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain-demos/prescription-tokens",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "revocable-nft-tee",
+      "name": "revocable-nft-tee",
+      "category": "Token & Data Protocols > Non Fungible Token (NFT) Protocols",
+      "summary": "Forward-revocable TEE-sealed encrypted NFT on BSV.",
+      "radarUrl": "https://bsvradar.com/blocks/revocable-nft-tee",
+      "tags": [
+        "Rust"
+      ],
+      "url": "https://github.com/prof-faustus/revocable-nft-tee",
+      "maturity": "experimental",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "sendbsv-rates-oracle",
+      "name": "SendBSV Rates Oracle",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Multi-currency Bitcoin SV price oracle: median BSV price across 7+ exchanges, 7 fiat currencies, signed rate envelopes, served as a subscription API.",
+      "radarUrl": "https://bsvradar.com/blocks/sendbsv-rates-oracle",
+      "tags": [
+        "JavaScript"
+      ],
+      "url": "https://rates.sendbsv.com/",
+      "docs": "https://rates.sendbsv.com/",
+      "maturity": "production",
+      "license": "Proprietary",
+      "maintainer": "BSVanon",
+      "version": "2.0.2",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "storage-server",
+      "name": "storage-server",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Reference UHRP storage host implementation",
+      "radarUrl": "https://bsvradar.com/blocks/storage-server",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/storage-server",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "tea-package",
+      "name": "tea-package",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Triple-Entry Verifiable Accounting (TEA) enterprise package on BSV.",
+      "radarUrl": "https://bsvradar.com/blocks/tea-package",
+      "tags": [
+        "Python"
+      ],
+      "url": "https://github.com/prof-faustus/tea-package",
+      "maturity": "alpha",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "triple-entry-bsv-sql",
+      "name": "triple-entry-bsv-sql",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Tokenised triple-entry ledger on BSV backed by PostgreSQL.",
+      "radarUrl": "https://bsvradar.com/blocks/triple-entry-bsv-sql",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/prof-faustus/triple-entry-bsv-sql",
+      "maturity": "experimental",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "triple-entry-evidence",
+      "name": "triple-entry-evidence",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Reference implementation of triple-entry accounting evidence (TEA).",
+      "radarUrl": "https://bsvradar.com/blocks/triple-entry-evidence",
+      "tags": [
+        "Python"
+      ],
+      "url": "https://github.com/prof-faustus/triple-entry-evidence",
+      "maturity": "experimental",
+      "license": "MIT",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "triple-entry-evidence-bsv",
+      "name": "triple-entry-evidence-bsv",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "BSV-native TEA evidence with ECDH linkage and scoped disclosure.",
+      "radarUrl": "https://bsvradar.com/blocks/triple-entry-evidence-bsv",
+      "tags": [
+        "Rust"
+      ],
+      "url": "https://github.com/prof-faustus/triple-entry-evidence-bsv",
+      "maturity": "experimental",
+      "license": "MIT",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "truth-machine",
+      "name": "Truth Machine",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Data integrity and on-chain hashing demo",
+      "radarUrl": "https://bsvradar.com/blocks/truth-machine",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain-demos/truth-machine",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "uhrp-storage",
+      "name": "UHRP Storage",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Universal Hash Resolution Protocol for content addressing",
+      "radarUrl": "https://bsvradar.com/blocks/uhrp-storage",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://uhrp-ui.bapp.dev/",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "Project Babbage",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "uhrp-services",
+      "name": "uhrp-services",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Universal Hash Resolution Protocol overlay",
+      "radarUrl": "https://bsvradar.com/blocks/uhrp-services",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/uhrp-services",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "utilitary-token-platform",
+      "name": "Utilitary Token Platform",
+      "category": "Token & Data Protocols > Fungible Token Protocols",
+      "summary": "PushDrop-based fungible token platform with overlay",
+      "radarUrl": "https://bsvradar.com/blocks/utilitary-token-platform",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain-demos/utility-tokens",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "verifiable-accounting",
+      "name": "verifiable-accounting",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Verifiable accounting arithmetic without disclosure using Bulletproofs on BSV.",
+      "radarUrl": "https://bsvradar.com/blocks/verifiable-accounting",
+      "tags": [
+        "Rust"
+      ],
+      "url": "https://github.com/prof-faustus/verifiable-accounting",
+      "maturity": "experimental",
+      "license": "MIT",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "verifiable-accounting-bsv",
+      "name": "verifiable-accounting-bsv",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "Per-field selective disclosure audit evidence anchored on BSV.",
+      "radarUrl": "https://bsvradar.com/blocks/verifiable-accounting-bsv",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/prof-faustus/verifiable-accounting-bsv",
+      "maturity": "experimental",
+      "license": "MIT",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "verifiable-accounting-chain",
+      "name": "verifiable-accounting-chain",
+      "category": "Token & Data Protocols > On-chain Data Protocols",
+      "summary": "PKI-rooted spend-linked chain of triple-entry records on BSV.",
+      "radarUrl": "https://bsvradar.com/blocks/verifiable-accounting-chain",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/prof-faustus/verifiable-accounting-chain",
+      "maturity": "experimental",
+      "license": "MIT",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-browser",
+      "name": "bsv-browser",
+      "category": "Wallets & Identity > Reference Wallet Implementations",
+      "summary": "Mobile browser for BSV identity + micropayments",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-browser",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/bsv-browser",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "handcash-connect-sdk-js",
+      "name": "handcash-connect-sdk-js",
+      "category": "Wallets & Identity > Wallet-as-a-Service",
+      "summary": "Server‑side Node.js SDK for securely interacting with HandCash accounts.",
+      "radarUrl": "https://bsvradar.com/blocks/handcash-connect-sdk-js",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/HandCash/handcash-connect-sdk-js",
+      "docs": "https://handcash.github.io/handcash-connect-sdk-js-beta-docs/#/user-authorization",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "HandCash",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "1sat-wallet-toolbox",
+      "name": "1sat-wallet-toolbox",
+      "category": "Wallets & Identity > Wallet Toolboxes & Infrastructure",
+      "summary": "BRC-100 wallet toolbox tailored to 1Sat Ordinals.",
+      "radarUrl": "https://bsvradar.com/blocks/1sat-wallet-toolbox",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/1sat-wallet-toolbox",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "agid",
+      "name": "AGiD",
+      "category": "Wallets & Identity > Identity & Certifiers",
+      "summary": "Agentic Identity Framework for AI agents on BSV",
+      "radarUrl": "https://bsvradar.com/blocks/agid",
+      "tags": [
+        "TypeScript"
+      ],
+      "maturity": "production",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "auth-express-middleware",
+      "name": "auth-express-middleware",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "BSV mutual-authentication Express middleware",
+      "radarUrl": "https://bsvradar.com/blocks/auth-express-middleware",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/auth-express-middleware",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "authsocket",
+      "name": "authsocket",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "Mutually-authenticated WebSockets (server)",
+      "radarUrl": "https://bsvradar.com/blocks/authsocket",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/authsocket",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "authsocket-client",
+      "name": "authsocket-client",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "Mutually-authenticated WebSockets (client)",
+      "radarUrl": "https://bsvradar.com/blocks/authsocket-client",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/authsocket-client",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitcoin-auth",
+      "name": "bitcoin-auth",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "Bitcoin signature-based authentication for Node.js apps.",
+      "radarUrl": "https://bsvradar.com/blocks/bitcoin-auth",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/bitcoin-auth",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitcoin-backup",
+      "name": "bitcoin-backup",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "Backup helpers for Bitcoin SV wallets and identities.",
+      "radarUrl": "https://bsvradar.com/blocks/bitcoin-backup",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/bitcoin-backup",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bottlebird",
+      "name": "bottlebird",
+      "category": "Wallets & Identity > Reference Wallet Implementations",
+      "summary": "Web browser with native BSV blockchain support.",
+      "radarUrl": "https://bsvradar.com/blocks/bottlebird",
+      "tags": [
+        "C"
+      ],
+      "url": "https://github.com/b-open-io/bottlebird",
+      "maturity": "alpha",
+      "license": "BSD-2-Clause",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-desktop",
+      "name": "bsv-desktop",
+      "category": "Wallets & Identity > Reference Wallet Implementations",
+      "summary": "Electron desktop wallet for BSV",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-desktop",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/bsv-desktop",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-messagebox-cloudflare",
+      "name": "bsv-messagebox-cloudflare",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "BSV peer-to-peer messaging on Cloudflare Workers",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-messagebox-cloudflare",
+      "tags": [
+        "Rust"
+      ],
+      "url": "https://github.com/bsv-blockchain/bsv-messagebox-cloudflare",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-wallet",
+      "name": "bsv-wallet",
+      "category": "Wallets & Identity > Wallet Toolboxes & Infrastructure",
+      "summary": "A Ruby implementation of the BRC-100 wallet interface for managing UTXO lifecycle, transaction construction, broadcasting, and proof management.",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-wallet",
+      "tags": [
+        "Ruby"
+      ],
+      "url": "https://github.com/sgbett/bsv-wallet",
+      "docs": "https://sgbett.github.io/bsv-wallet/",
+      "maturity": "experimental",
+      "license": "Open BSV License",
+      "maintainer": "Simon Bettison",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-wallet-infra-cloudflare",
+      "name": "bsv-wallet-infra-cloudflare",
+      "category": "Wallets & Identity > Wallet-as-a-Service",
+      "summary": "BSV wallet storage server on Cloudflare Workers",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-wallet-infra-cloudflare",
+      "tags": [
+        "Rust"
+      ],
+      "url": "https://github.com/bsv-blockchain/bsv-wallet-infra-cloudflare",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-x402",
+      "name": "bsv-x402",
+      "category": "Wallets & Identity > Wallet Toolboxes & Infrastructure",
+      "summary": "A JavaScript client library for BSV micropayments over HTTP 402 / Browser Plugins",
+      "radarUrl": "https://bsvradar.com/blocks/bsv-x402",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/sgbett/bsv-x402",
+      "maturity": "experimental",
+      "license": "Open BSV License",
+      "maintainer": "Simon Bettison",
+      "version": "0.9.1",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "certification-platform",
+      "name": "Certification Platform",
+      "category": "Wallets & Identity > Identity & Certifiers",
+      "summary": "BSV-native certification with BRC-52/53 certificates",
+      "radarUrl": "https://bsvradar.com/blocks/certification-platform",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain-demos/certification-platform",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "desktop-wallet-management",
+      "name": "Desktop Wallet Management",
+      "category": "Wallets & Identity > Wallet Toolboxes & Infrastructure",
+      "summary": "Educational proof-of-concept for desktop wallet patterns",
+      "radarUrl": "https://bsvradar.com/blocks/desktop-wallet-management",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain-demos/desktop-wallet-data",
+      "maturity": "alpha",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "did-client",
+      "name": "did-client",
+      "category": "Wallets & Identity > Identity & Certifiers",
+      "summary": "Discover DID records on BSV",
+      "radarUrl": "https://bsvradar.com/blocks/did-client",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/did-client",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "did-services",
+      "name": "did-services",
+      "category": "Wallets & Identity > Identity & Certifiers",
+      "summary": "Decentralized Identifier overlay services",
+      "radarUrl": "https://bsvradar.com/blocks/did-services",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/did-services",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-bsv-middleware",
+      "name": "go-bsv-middleware",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "BSV middleware for auth + micropayments (Go)",
+      "radarUrl": "https://bsvradar.com/blocks/go-bsv-middleware",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-bsv-middleware",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "go-wallet-toolbox",
+      "name": "go-wallet-toolbox",
+      "category": "Wallets & Identity > Wallet Toolboxes & Infrastructure",
+      "summary": "BRC-100 wallet toolbox (Go)",
+      "radarUrl": "https://bsvradar.com/blocks/go-wallet-toolbox",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/go-wallet-toolbox",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "idattr-onchain",
+      "name": "idattr-onchain",
+      "category": "Wallets & Identity > Identity & Certifiers",
+      "summary": "Anchor BSV identity-registry roots on-chain via BIP143/FORKID transactions.",
+      "radarUrl": "https://bsvradar.com/blocks/idattr-onchain",
+      "tags": [
+        "Rust"
+      ],
+      "url": "https://github.com/prof-faustus/idattr-onchain",
+      "maturity": "experimental",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "identity-attribution",
+      "name": "identity-attribution",
+      "category": "Wallets & Identity > Identity & Certifiers",
+      "summary": "Sparse-Merkle identity registry with ZK proofs and BSV anchoring.",
+      "radarUrl": "https://bsvradar.com/blocks/identity-attribution",
+      "tags": [
+        "Rust"
+      ],
+      "url": "https://github.com/prof-faustus/identity-attribution",
+      "maturity": "experimental",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "identity-services",
+      "name": "identity-services",
+      "category": "Wallets & Identity > Identity & Certifiers",
+      "summary": "Public identity resolution overlay",
+      "radarUrl": "https://bsvradar.com/blocks/identity-services",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/identity-services",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "message-box-client",
+      "name": "message-box-client",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "Client-side tools for P2P messaging",
+      "radarUrl": "https://bsvradar.com/blocks/message-box-client",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/message-box-client",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "message-box-server",
+      "name": "message-box-server",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "BSV identity-based message box server",
+      "radarUrl": "https://bsvradar.com/blocks/message-box-server",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/message-box-server",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "messagebox-platform",
+      "name": "MessageBox Platform",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "End-to-end encrypted decentralised messaging",
+      "radarUrl": "https://bsvradar.com/blocks/messagebox-platform",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain-demos/messagebox-platform",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "messagebox-server",
+      "name": "messagebox-server",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "BSV identity-based message box server.",
+      "radarUrl": "https://bsvradar.com/blocks/messagebox-server",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/messagebox-server",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "nft-wallet-bsv",
+      "name": "nft-wallet-bsv",
+      "category": "Wallets & Identity > Reference Wallet Implementations",
+      "summary": "Non-custodial BSV full-Script wallet with encrypted-NFT atomic swap.",
+      "radarUrl": "https://bsvradar.com/blocks/nft-wallet-bsv",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/prof-faustus/nft-wallet-bsv",
+      "maturity": "alpha",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "py-middleware",
+      "name": "py-middleware",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "BSV server middleware for auth + micropayments (Python)",
+      "radarUrl": "https://bsvradar.com/blocks/py-middleware",
+      "tags": [
+        "Python"
+      ],
+      "url": "https://github.com/bsv-blockchain/py-middleware",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "py-wallet-toolbox",
+      "name": "py-wallet-toolbox",
+      "category": "Wallets & Identity > Wallet Toolboxes & Infrastructure",
+      "summary": "BRC-100 wallet toolbox (Python)",
+      "radarUrl": "https://bsvradar.com/blocks/py-wallet-toolbox",
+      "tags": [
+        "Python"
+      ],
+      "url": "https://github.com/bsv-blockchain/py-wallet-toolbox",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "register",
+      "name": "Register",
+      "category": "Wallets & Identity > Identity & Certifiers",
+      "summary": "Digital identity registration on BSV",
+      "radarUrl": "https://bsvradar.com/blocks/register",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/bsv-blockchain-demos/register",
+      "maturity": "beta",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "registrant",
+      "name": "registrant",
+      "category": "Wallets & Identity > Identity & Certifiers",
+      "summary": "Register MetaNet protocols, baskets, and cert types",
+      "radarUrl": "https://bsvradar.com/blocks/registrant",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/registrant",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "rust-wallet-toolbox",
+      "name": "rust-wallet-toolbox",
+      "category": "Wallets & Identity > Wallet Toolboxes & Infrastructure",
+      "summary": "BRC-100 wallet toolbox (Rust)",
+      "radarUrl": "https://bsvradar.com/blocks/rust-wallet-toolbox",
+      "tags": [
+        "Rust"
+      ],
+      "url": "https://github.com/bsv-blockchain/rust-wallet-toolbox",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "sigma-auth",
+      "name": "Sigma Auth",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "Secure identity for AI and apps",
+      "radarUrl": "https://bsvradar.com/blocks/sigma-auth",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/b-open-io/better-auth-plugin",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "bOpen.io",
+      "version": "0.0.90",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "spv-wallet",
+      "name": "spv-wallet",
+      "category": "Wallets & Identity > Wallet-as-a-Service",
+      "summary": "Open-source non-custodial hosted BSV wallet",
+      "radarUrl": "https://bsvradar.com/blocks/spv-wallet",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/spv-wallet",
+      "docs": "https://docs.bsvblockchain.org/network-topology/spv-wallet",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "spv-wallet-go-client",
+      "name": "spv-wallet-go-client",
+      "category": "Wallets & Identity > Wallet-as-a-Service",
+      "summary": "Go client for spv-wallet",
+      "radarUrl": "https://bsvradar.com/blocks/spv-wallet-go-client",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/spv-wallet-go-client",
+      "docs": "https://docs.bsvblockchain.org/network-topology/spv-wallet",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "spv-wallet-js-client",
+      "name": "spv-wallet-js-client",
+      "category": "Wallets & Identity > Wallet-as-a-Service",
+      "summary": "TypeScript client for spv-wallet",
+      "radarUrl": "https://bsvradar.com/blocks/spv-wallet-js-client",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/spv-wallet-js-client",
+      "docs": "https://docs.bsvblockchain.org/network-topology/spv-wallet",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "spv-wallet-web-backend",
+      "name": "spv-wallet-web-backend",
+      "category": "Wallets & Identity > Wallet-as-a-Service",
+      "summary": "Custodial wallet web-backend for spv-wallet",
+      "radarUrl": "https://bsvradar.com/blocks/spv-wallet-web-backend",
+      "tags": [
+        "Go"
+      ],
+      "url": "https://github.com/bsv-blockchain/spv-wallet-web-backend",
+      "docs": "https://docs.bsvblockchain.org/network-topology/spv-wallet",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "tee-sim",
+      "name": "tee-sim",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "Software-simulated TEE / secure element for BSV identity.",
+      "radarUrl": "https://bsvradar.com/blocks/tee-sim",
+      "tags": [
+        "Rust"
+      ],
+      "url": "https://github.com/prof-faustus/tee-sim",
+      "maturity": "experimental",
+      "maintainer": "prof-faustus",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "tokenpass-desktop",
+      "name": "tokenpass-desktop",
+      "category": "Wallets & Identity > Reference Wallet Implementations",
+      "summary": "Desktop wallet for the Tokenpass identity system.",
+      "radarUrl": "https://bsvradar.com/blocks/tokenpass-desktop",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/tokenpass-desktop",
+      "maturity": "production",
+      "license": "MIT",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "ump-services",
+      "name": "ump-services",
+      "category": "Wallets & Identity > Identity & Certifiers",
+      "summary": "User Management Protocol overlay",
+      "radarUrl": "https://bsvradar.com/blocks/ump-services",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/ump-services",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "vault-manager",
+      "name": "vault-manager",
+      "category": "Wallets & Identity > Wallet Toolboxes & Infrastructure",
+      "summary": "Offline-first tool for managing BSV coins in cold storage",
+      "radarUrl": "https://bsvradar.com/blocks/vault-manager",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/vault-manager",
+      "docs": "https://github.com/bsv-blockchain/vault-manager/blob/master/MANUAL.md",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "deggen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "wab",
+      "name": "wab",
+      "category": "Wallets & Identity > Authentication & MFA",
+      "summary": "Wallet Authentication Backend reference server",
+      "radarUrl": "https://bsvradar.com/blocks/wab",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/wab",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "wallet-infra",
+      "name": "wallet-infra",
+      "category": "Wallets & Identity > Wallet-as-a-Service",
+      "summary": "BSV Wallet Infrastructure",
+      "radarUrl": "https://bsvradar.com/blocks/wallet-infra",
+      "tags": [
+        "TypeScript"
+      ],
+      "url": "https://github.com/bsv-blockchain/wallet-infra",
+      "maturity": "production",
+      "license": "Open BSV License",
+      "maintainer": "BSV Association",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "wallet-toolbox",
+      "name": "wallet-toolbox",
+      "category": "Wallets & Identity > Wallet Toolboxes & Infrastructure",
+      "summary": "BRC-100 wallet toolbox.",
+      "radarUrl": "https://bsvradar.com/blocks/wallet-toolbox",
+      "tags": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "url": "https://github.com/b-open-io/wallet-toolbox",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "zig-wallet-toolbox",
+      "name": "zig-wallet-toolbox",
+      "category": "Wallets & Identity > Wallet Toolboxes & Infrastructure",
+      "summary": "BRC-100 wallet toolbox for Zig — targets 1sat-stack.",
+      "radarUrl": "https://bsvradar.com/blocks/zig-wallet-toolbox",
+      "tags": [
+        "Zig"
+      ],
+      "url": "https://github.com/b-open-io/zig-wallet-toolbox",
+      "maturity": "production",
+      "maintainer": "bOpen",
+      "firstSeen": "2026-10-28"
+    }
+  ],
+  "organisations": [
+    {
+      "id": "bsva",
+      "name": "BSV Association",
+      "radarUrl": "https://bsvradar.com/orgs/bsva",
+      "apps": 5,
+      "blocks": 102,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bopen",
+      "name": "bOpen",
+      "radarUrl": "https://bsvradar.com/orgs/bopen",
+      "blocks": 29,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "ruth-designs-digital",
+      "name": "Ruth Designs Digital",
+      "radarUrl": "https://bsvradar.com/orgs/ruth-designs-digital",
+      "apps": 7,
+      "blocks": 1,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "catallaxycapital",
+      "name": "Catallaxy Capital",
+      "radarUrl": "https://bsvradar.com/orgs/catallaxycapital",
+      "apps": 5,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bittoku-kk",
+      "name": "Bittoku KK",
+      "radarUrl": "https://bsvradar.com/orgs/bittoku-kk",
+      "blocks": 3,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "handcash",
+      "name": "HandCash",
+      "radarUrl": "https://bsvradar.com/orgs/handcash",
+      "apps": 1,
+      "blocks": 2,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "gigamonkey",
+      "name": "GigaMonkey",
+      "radarUrl": "https://bsvradar.com/orgs/gigamonkey",
+      "blocks": 1,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "gopnikz",
+      "name": "Gopnikz",
+      "radarUrl": "https://bsvradar.com/orgs/gopnikz",
+      "apps": 1,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "knovigator",
+      "name": "Knovigator",
+      "radarUrl": "https://bsvradar.com/orgs/knovigator",
+      "apps": 1,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "lamint",
+      "name": "LaMint",
+      "radarUrl": "https://bsvradar.com/orgs/lamint",
+      "apps": 1,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "projectbabbage",
+      "name": "Project Babbage",
+      "radarUrl": "https://bsvradar.com/orgs/projectbabbage",
+      "blocks": 1,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "stas",
+      "name": "STAS",
+      "radarUrl": "https://bsvradar.com/orgs/stas",
+      "blocks": 1,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "tonicpow",
+      "name": "TonicPow",
+      "radarUrl": "https://bsvradar.com/orgs/tonicpow",
+      "apps": 1,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "unknown",
+      "name": "Unknown",
+      "radarUrl": "https://bsvradar.com/orgs/unknown",
+      "apps": 1,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "zoidenft",
+      "name": "ZoideNFT",
+      "radarUrl": "https://bsvradar.com/orgs/zoidenft",
+      "apps": 1,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "aursis",
+      "name": "aursis",
+      "radarUrl": "https://bsvradar.com/orgs/aursis",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "b0ase",
+      "name": "b0ase",
+      "radarUrl": "https://bsvradar.com/orgs/b0ase",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "b0ase-com",
+      "name": "b0ase.com",
+      "radarUrl": "https://bsvradar.com/orgs/b0ase-com",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bitails",
+      "name": "Bitails",
+      "radarUrl": "https://bsvradar.com/orgs/bitails",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bittoku",
+      "name": "Bittoku",
+      "radarUrl": "https://bsvradar.com/orgs/bittoku",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-maps",
+      "name": "BSV Maps",
+      "radarUrl": "https://bsvradar.com/orgs/bsv-maps",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsv-cx",
+      "name": "bsv.cx",
+      "radarUrl": "https://bsvradar.com/orgs/bsv-cx",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bsvsearch",
+      "name": "BSVSearch",
+      "radarUrl": "https://bsvradar.com/orgs/bsvsearch",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "ceboruco-studios",
+      "name": "Ceboruco Studios",
+      "radarUrl": "https://bsvradar.com/orgs/ceboruco-studios",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "civicstudio",
+      "name": "Civic Studio",
+      "radarUrl": "https://bsvradar.com/orgs/civicstudio",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "doremi",
+      "name": "Doremi",
+      "radarUrl": "https://bsvradar.com/orgs/doremi",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "eldersafe",
+      "name": "Eldersafe",
+      "radarUrl": "https://bsvradar.com/orgs/eldersafe",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "fai",
+      "name": "Faiā",
+      "radarUrl": "https://bsvradar.com/orgs/fai",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "forgechainos",
+      "name": "ForgeChainOS",
+      "radarUrl": "https://bsvradar.com/orgs/forgechainos",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "gavin",
+      "name": "gavin",
+      "radarUrl": "https://bsvradar.com/orgs/gavin",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "hacked-it",
+      "name": "Hacked it",
+      "radarUrl": "https://bsvradar.com/orgs/hacked-it",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "indelible-federation",
+      "name": "Indelible Federation",
+      "radarUrl": "https://bsvradar.com/orgs/indelible-federation",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "justin-case-studio",
+      "name": "Justin Case Studio",
+      "radarUrl": "https://bsvradar.com/orgs/justin-case-studio",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "lightweb-inc",
+      "name": "Lightweb Inc.",
+      "radarUrl": "https://bsvradar.com/orgs/lightweb-inc",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "lil-bit",
+      "name": "Lil Bit",
+      "radarUrl": "https://bsvradar.com/orgs/lil-bit",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "noorg",
+      "name": "noorg",
+      "radarUrl": "https://bsvradar.com/orgs/noorg",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "noscerte-ltd",
+      "name": "Noscerte Ltd",
+      "radarUrl": "https://bsvradar.com/orgs/noscerte-ltd",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "orangegateway",
+      "name": "Orange Gateway",
+      "radarUrl": "https://bsvradar.com/orgs/orangegateway",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "safire-solutions",
+      "name": "SaFire Solutions",
+      "radarUrl": "https://bsvradar.com/orgs/safire-solutions",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "semantos",
+      "name": "Semantos",
+      "radarUrl": "https://bsvradar.com/orgs/semantos",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "twostack",
+      "name": "TwoStack",
+      "radarUrl": "https://bsvradar.com/orgs/twostack",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "vivat-humanitas",
+      "name": "Vivat Humanitas",
+      "radarUrl": "https://bsvradar.com/orgs/vivat-humanitas",
+      "firstSeen": "2026-10-28"
+    }
+  ]
+}

@@ -100,6 +100,12 @@
   background: color-mix(in srgb, var(--news-ink, #6b3f86) 8%, var(--bg-raised));
 }
 
+.provenance-badge[data-kind='directory'] {
+  color: var(--directory-ink, #0c5c56);
+  border-color: color-mix(in srgb, var(--directory-ink, #0c5c56) 45%, var(--border));
+  background: color-mix(in srgb, var(--directory-ink, #0c5c56) 8%, var(--bg-raised));
+}
+
 .provenance-badge:hover,
 .provenance-badge:focus,
 .provenance-badge:focus-visible {

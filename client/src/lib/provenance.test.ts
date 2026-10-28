@@ -268,6 +268,30 @@ describe('answerProvenance', () => {
     });
   });
 
+  describe('app directory', () => {
+    it('names the BSV Radar catalogue when that is the only kind', () => {
+      expect(answerProvenance({ citations: [cite('directory')], mode: 'reference' })).toEqual({
+        kind: 'directory',
+        label: 'Answered from the app directory',
+        title:
+          'The cited sources are the BSV Radar app directory, a partial community catalogue and not an endorsement.',
+      });
+    });
+
+    it('lists the directory after news in a mix', () => {
+      const provenance = answerProvenance({
+        citations: [cite('directory'), cite('news')],
+      });
+      expect(provenance).toEqual({
+        kind: 'mixed',
+        label: 'Drawn from 2 kinds of source: news and directory',
+        title:
+          'Drawn from 2 kinds of source, in order of evidentiary weight: CoinGeek news reporting and the BSV Radar app directory.',
+      });
+      expect(provenance?.label.length).toBeLessThanOrEqual(PROVENANCE_LABEL_LIMIT);
+    });
+  });
+
   it('does not reorder the caller\'s citations', () => {
     const citations = [cite('historical-record'), cite('satoshi-primary')];
     answerProvenance({ citations });

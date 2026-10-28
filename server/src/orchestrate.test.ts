@@ -1,4 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   buildCitationFilter,
   buildSystemPrompt,
@@ -649,6 +652,17 @@ describe('prompt construction', () => {
     expect(sys).toMatch(/patent portfolio/);
     expect(sys).toMatch(/private signing sessions/);
     expect(sys).toMatch(/sworn testimony/);
+  });
+
+  it('has a documented-record register keyed to the Timecoin record marker', () => {
+    const sys = buildSystemPrompt('reference');
+    expect(sys).toMatch(/DOCUMENTED-RECORD REGISTER/);
+    expect(sys).toContain('TIMECOIN — ATTRIBUTED RECORD');
+    const rec = JSON.parse(
+      readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'data', 'timecoin-record.json'), 'utf8'),
+    ) as { evidenceText: string };
+    expect(rec.evidenceText.startsWith('TIMECOIN — ATTRIBUTED RECORD')).toBe(true);
+    expect(rec.evidenceText).toContain('Dr Craig Wright');
   });
 
   it('states plainly that it is an AI and never denies it', () => {

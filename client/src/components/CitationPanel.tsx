@@ -115,7 +115,9 @@ export function CitationPanel({ open, onClose, onNavigate }: Props) {
   const swapClass = swapStage === 'idle' ? '' : ` cite-panel-body--${swapStage}-${dirRef.current}`;
   const { index } = shown;
   const title = shownCitation.title ?? shownCitation.label;
-  const dateLabel = shownCitation.date ? formatUkDate(shownCitation.date) : null;
+  const formatted = shownCitation.date ? formatUkDate(shownCitation.date) : null;
+  const dateLabel =
+    formatted && shownCitation.sourceClass === 'directory' ? `Catalogue date ${formatted}` : formatted;
   const staleNote = olderReportingNote(shownCitation);
   const dateBlock = dateLabel ? (
     <>
@@ -202,6 +204,11 @@ export function CitationPanel({ open, onClose, onNavigate }: Props) {
                 />
               )}
             </>
+          )}
+          {shownCitation.sourceClass === 'directory' && (
+            <p className="cite-panel-directory">
+              From the BSV Radar catalogue — a partial, community list; not an endorsement
+            </p>
           )}
           {showTimeline && (
             <Link href={timelineHref(shownCitation.date)} className="cite-timeline-link">

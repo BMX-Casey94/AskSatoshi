@@ -23,6 +23,7 @@ const SOURCE_CLASS_LABEL: Record<SourceClass, string> = {
   'later-commentary': 'Later commentary',
   'historical-record': 'Historical record',
   news: 'News (CoinGeek)',
+  directory: 'App directory',
 };
 
 const NEAR_BOTTOM = 80;

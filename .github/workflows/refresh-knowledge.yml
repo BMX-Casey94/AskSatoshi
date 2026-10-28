@@ -45,6 +45,10 @@ jobs:
         run: npm run fetch-news --workspace server
         continue-on-error: true
 
+      - name: Refresh the BSV Radar app directory
+        run: npm run fetch-bsvradar --workspace server
+        continue-on-error: true
+
       - name: Typecheck, test and build
         run: |
           npm run typecheck
@@ -59,7 +63,7 @@ jobs:
           commit-message: 'Refresh pinned knowledge sources'
           title: 'Refresh pinned knowledge sources'
           body: |
-            Automated weekly refresh: `bsv-aio-mcp`, the Satoshi corpus and CoinGeek news.
+            Automated weekly refresh: `bsv-aio-mcp`, the Satoshi corpus, CoinGeek news and the BSV Radar app directory.
 
             Review the diff before merging. After merging, deploy with
             `cd /opt/ask-satoshi && sudo bash deploy/setup.sh` and check `/api/health`.
@@ -68,3 +72,4 @@ jobs:
             package-lock.json
             server/data/satoshi-corpus.json
             server/data/coingeek-news.json
+            server/data/bsvradar-apps.json

@@ -6,8 +6,9 @@
  * satoshi-primary citation is present.
  *
  * Kinds are listed from strongest evidence to weakest: Satoshi's 2008–2011
- * writings, the protocol specification, the later essays, then the curated
- * historical record. A mix uses short names so the line fits a narrow screen;
+ * writings, the protocol specification, the later essays, the curated
+ * historical record, CoinGeek news, then the BSV Radar app directory. A mix
+ * uses short names so the line fits a narrow screen;
  * `title` is the full sentence shown in the tooltip.
  */
 
@@ -22,6 +23,7 @@ const CLASS_ORDER = [
   'later-commentary',
   'historical-record',
   'news',
+  'directory',
 ] as const satisfies readonly SourceClass[];
 
 const CLASS_SET: ReadonlySet<string> = new Set(CLASS_ORDER);
@@ -47,6 +49,7 @@ const SINGLE_LABEL: Record<SourceClass, string> = {
   'later-commentary': 'Answered from the later essays and commentary',
   'historical-record': 'Answered from the curated historical record',
   news: 'Answered from CoinGeek news reporting (dated)',
+  directory: 'Answered from the app directory',
 };
 
 /** Full kind names, in the same order as CLASS_ORDER. No item contains "and". */
@@ -56,6 +59,7 @@ const FULL_NAME: Record<SourceClass, string> = {
   'later-commentary': 'the later essays',
   'historical-record': 'the curated historical record',
   news: 'CoinGeek news reporting',
+  directory: 'the BSV Radar app directory',
 };
 
 /**
@@ -68,6 +72,7 @@ const SHORT_NAME: Record<SourceClass, string> = {
   'later-commentary': 'essays',
   'historical-record': 'history',
   news: 'news',
+  directory: 'directory',
 };
 
 const FALLBACK: Record<Exclude<GroundingMode, 'none'>, Provenance> = {
@@ -132,6 +137,8 @@ function singleTitle(sourceClass: SourceClass, someUnclassified: boolean): strin
       return `${who} from the curated historical record.`;
     case 'news':
       return `${who} CoinGeek news reporting, and the articles are dated.`;
+    case 'directory':
+      return `${who} the BSV Radar app directory, a partial community catalogue and not an endorsement.`;
     default: {
       const unexpected: never = sourceClass;
       return unexpected;

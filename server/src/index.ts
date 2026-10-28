@@ -60,6 +60,8 @@ import { helmetOptions } from './security.js';
 import { corpusUpdatedAt, loadCorpus } from './satoshiCorpus.js';
 import { loadCoinGeekNews, newsFetchedAt } from './coingeekNews.js';
 import { withNewsEvidence } from './newsGrounding.js';
+import { directoryFetchedAt, loadBsvRadar } from './bsvRadar.js';
+import { withDirectoryEvidence } from './directoryGrounding.js';
 import { loadCuratedReference } from './curatedReference.js';
 import { assembleTts, ttsStartupLine } from './tts/index.js';
 
@@ -121,6 +123,7 @@ const rewriteCache = new RewriteCache();
 const mcp = new McpBridge();
 const corpus = loadCorpus();
 const news = loadCoinGeekNews();
+const directory = loadBsvRadar();
 const curated = loadCuratedReference();
 const tts = assembleTts();
 
@@ -188,8 +191,8 @@ function serviceStatus() {
   const ids = configuredTiers(keys).map((t) => t.id);
   const st = breaker.status(ids);
   // "Sources last refreshed" is the newest of the pinned snapshots (Satoshi corpus,
-  // CoinGeek news) — either refresh counts, so the stamp never lags a news update.
-  const corpusUpdated = [corpusUpdatedAt(), newsFetchedAt()]
+  // CoinGeek news, BSV Radar directory) — any refresh counts, so the stamp never lags one of them.
+  const corpusUpdated = [corpusUpdatedAt(), newsFetchedAt(), directoryFetchedAt()]
     .filter((v): v is string => Boolean(v))
     .sort()
     .at(-1);
@@ -412,7 +415,15 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     });
     // Pinned CoinGeek reporting joins the evidence only for event-type questions (judged
     // on the user's own words). Such answers are time-sensitive, so they skip the cache.
-    const { grounding, usedNews } = withNewsEvidence(baseGrounding, question, understanding?.variants, news);
+    const { grounding: newsGrounding, usedNews } = withNewsEvidence(baseGrounding, question, understanding?.variants, news);
+    // Pinned BSV Radar listings join the evidence only for catalogue questions (judged
+    // on the user's own words). The catalogue goes stale, so those answers skip the cache.
+    const { grounding, usedDirectory } = withDirectoryEvidence(
+      newsGrounding,
+      question,
+      understanding?.variants,
+      directory,
+    );
     // Nothing retrieved. A text question ends here: the no-knowledge line, mode
     // 'none', empty citations, and no model call. An attached image is not a miss —
     // the picture still has to reach a vision model. That path reports the same
@@ -616,7 +627,7 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
     // standalone oracle: its answer only makes sense against this conversation. The
     // write happens after the review pass so future visitors are served the revised
     // answer, not the pre-review draft.
-    if (cacheable && !usedNews && !understanding?.followUp && grounding.mode !== 'none') {
+    if (cacheable && !usedNews && !usedDirectory && !understanding?.followUp && grounding.mode !== 'none') {
       cache.set(question, { text: finalText, mode: grounding.mode, citations: finalCitations, followUps });
     }
     finish();

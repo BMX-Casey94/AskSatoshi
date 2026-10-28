@@ -434,10 +434,10 @@ describe('conceptual blend (searchGrounding)', () => {
         const kinds = filters?.kind ?? [];
         const hits: unknown[] = [];
         if (kinds.includes('essay')) {
-          hits.push({ id: 'e:1', kind: 'essay', title: 'Scaling Bitcoin', locator: 'csw://essay/medium/scaling' });
+          hits.push({ id: 'e:1', kind: 'essay', title: 'Scaling Bitcoin SPV design', locator: 'csw://essay/medium/scaling' });
         }
         if (kinds.includes('brc') || kinds.includes('doc')) {
-          hits.push({ id: 'b:62', kind: 'brc', title: 'BRC-62', locator: 'bsv-blockchain/BRCs/transactions/0062.md' });
+          hits.push({ id: 'b:62', kind: 'brc', title: 'BRC-62 Simplified Payment Verification proofs', locator: 'bsv-blockchain/BRCs/transactions/0062.md' });
         }
         return { hits };
       },
@@ -473,7 +473,7 @@ describe('conceptual blend (searchGrounding)', () => {
     // Remove essay results by making the essay kind return nothing.
     mcp.searchKnowledge = (async (_q: string, filters?: { kind?: string[] }) => {
       if (filters?.kind?.includes('essay')) return { hits: [] };
-      return { hits: [{ id: 'b:62', kind: 'brc', title: 'BRC-62', locator: 'bsv-blockchain/BRCs/transactions/0062.md' }] };
+      return { hits: [{ id: 'b:62', kind: 'brc', title: 'BRC-62 SPV proofs', locator: 'bsv-blockchain/BRCs/transactions/0062.md' }] };
     }) as McpBridge['searchKnowledge'];
     const g = await groundQuestion('Why did you design SPV proofs?', { mcp, corpus: null });
     expect(g.mode).toBe('mcp');
@@ -488,8 +488,8 @@ describe('conceptual blend (searchGrounding)', () => {
       if (filters?.kind?.includes('essay')) {
         return {
           hits: [
-            { id: 'e:1', kind: 'essay', title: 'Scaling Bitcoin', locator: 'csw://essay/medium/scaling' },
-            { id: 'p:1', kind: 'principle', title: 'Scaling Bitcoin', locator: 'education/medium--scaling.md' },
+            { id: 'e:1', kind: 'essay', title: 'Scaling Bitcoin SPV design', locator: 'csw://essay/medium/scaling' },
+            { id: 'p:1', kind: 'principle', title: 'Scaling Bitcoin SPV design', locator: 'education/medium--scaling.md' },
           ],
         };
       }
@@ -766,7 +766,7 @@ describe('prompt construction', () => {
       investigate: async () => INSUFFICIENT_PKG,
       searchKnowledge: async (_q: string, filters?: { kind?: string[] }) => ({
         hits: filters?.kind?.includes('essay')
-          ? [{ id: 'e:1', kind: 'essay', title: 'Scaling Bitcoin', locator: 'csw://essay/medium/scaling' }]
+          ? [{ id: 'e:1', kind: 'essay', title: 'Scaling Bitcoin SPV design', locator: 'csw://essay/medium/scaling' }]
           : [],
       }),
       getResource: async () => ({ text: 'Bitcoin must scale on-chain.' }),
@@ -849,6 +849,27 @@ describe('prompt construction', () => {
     expect(historian).toMatch(/authorship and identity rules above stay as written/);
     expect(historian).toMatch(/historical forum posts and e-mails/);
     expect(historian).toMatch(/FOLLOW-UP INVITATION/);
+  });
+
+  it('forbids recasting an off-topic word such as Sourdough as a Bitcoin lesson', () => {
+    const none = buildSystemPrompt('none');
+    expect(none).toContain('OFF-TOPIC:');
+    expect(none).toContain('Do NOT draw an analogy from the off-topic subject to Bitcoin');
+    expect(none).toContain('larger blocks');
+    expect(none).toContain('rent-extracting intermediaries');
+    expect(none).toContain('decline in one or two sentences and stop');
+    expect(none).toContain('Do not answer the off-topic subject itself');
+    expect(none).toMatch(/Keep an on-topic general-background answer under about 250 words/);
+
+    const grounded = buildSystemPrompt('mcp', {
+      mode: 'mcp',
+      evidenceText: '[1] The block size was always a policy limit.',
+      citations: [{ label: 'block size' }],
+    });
+    expect(grounded).toContain('OFF-TOPIC:');
+    expect(grounded).toContain('not a metaphor and not a lesson');
+    expect(grounded).toContain('An unrelated word or everyday subject is not a conversational message');
+    expect(grounded).not.toContain('NO RECORD');
   });
 });
 
@@ -1119,14 +1140,14 @@ describe('retrieval plan (query understanding)', () => {
         if (q.includes('withdrew')) {
           return {
             hits: [
-              { id: 'e:1', kind: 'essay', title: 'The myth of forks', locator: 'csw://essay/medium/the-myth-of-forks-be04f8e5fe4a' },
+              { id: 'e:1', kind: 'essay', title: 'The myth of forks: Satoshi withdrew', locator: 'csw://essay/medium/the-myth-of-forks-be04f8e5fe4a' },
             ],
           };
         }
         if (q.includes('departure')) {
           return {
             hits: [
-              { id: 'e:2', kind: 'principle', title: 'The myth of forks', locator: 'education/medium--the-myth-of-forks-be04f8e5fe4a.md' },
+              { id: 'e:2', kind: 'principle', title: 'The myth of forks: Satoshi withdrew', locator: 'education/medium--the-myth-of-forks-be04f8e5fe4a.md' },
             ],
           };
         }
@@ -1159,7 +1180,7 @@ describe('retrieval plan (query understanding)', () => {
             hits: [1, 2, 3, 4].map((i) => ({
               id: `n:${i}`,
               kind: 'essay',
-              title: `Noise essay ${i}`,
+              title: `Noise withdrew essay ${i}`,
               locator: `csw://essay/medium/noise-${i}`,
             })),
           };
@@ -1168,7 +1189,7 @@ describe('retrieval plan (query understanding)', () => {
         if (q.includes('withdrew')) {
           return {
             hits: [
-              { id: 'e:1', kind: 'essay', title: 'The myth of forks', locator: 'csw://essay/medium/the-myth-of-forks-be04f8e5fe4a' },
+              { id: 'e:1', kind: 'essay', title: 'The myth of forks: Satoshi withdrew', locator: 'csw://essay/medium/the-myth-of-forks-be04f8e5fe4a' },
             ],
           };
         }
@@ -1259,7 +1280,7 @@ describe('retrieval plan (query understanding)', () => {
               {
                 id: 'e:1',
                 kind: 'essay',
-                title: 'The Miner Is Not a Monarch',
+                title: 'The Miner Is Not a Monarch: Network Access Rules (NAR)',
                 locator: 'csw://essay/substack/the-miner-is-not-a-monarch',
               },
             ],
@@ -1308,7 +1329,7 @@ describe('retrieval plan (query understanding)', () => {
               {
                 id: 'e:1',
                 kind: 'essay',
-                title: 'Transparency Is Not Centralisation',
+                title: 'Transparency Is Not Centralisation: Network Access Rules (NAR)',
                 locator: 'csw://essay/substack/transparency-is-not-centralisation',
               },
             ],
@@ -1396,7 +1417,7 @@ describe('builder option set (second-hop retrieval)', () => {
         }
         if (kinds.includes('essay')) {
           return {
-            hits: [{ id: 'e:1', kind: 'essay', title: 'Walletless applications', locator: 'csw://essay/medium/wallets' }],
+            hits: [{ id: 'e:1', kind: 'essay', title: 'Walletless applications to build SPV proofs at scale', locator: 'csw://essay/medium/wallets' }],
           };
         }
         return { hits: [] };
@@ -1646,7 +1667,7 @@ describe('broad-question evidence packing', () => {
               {
                 id: 'symbol:go-sdk:op',
                 kind: 'doc',
-                title: 'OP codes',
+                title: 'OP codes, tax and how to build',
                 locator: 'repo://go-sdk/docs/concepts/OP.md',
                 excerpt: 'Opcode reference for the Go SDK.',
               },
@@ -1729,7 +1750,7 @@ describe('broad-question evidence packing', () => {
     expect(fact.evidenceText).not.toContain('TAIL principle:medium:twenty-one-million');
 
     const builder = await groundQuestion(
-      'How do I build a payment app?',
+      'How do I build a tax payment app?',
       { mcp: broadMcp(), corpus: null },
       { rng: () => 0.99 },
     );
@@ -1823,7 +1844,7 @@ describe('depth-aware retrieval for a Merkle-branch question', () => {
   const essays = [1, 2, 3, 4].map((n) => ({
     id: `e:${n}`,
     kind: 'essay',
-    title: `Design constraint essay ${n}`,
+    title: `Merkle design constraint essay ${n}`,
     locator: `csw://essay/medium/merkle-essay-${n}`,
     excerpt: `Essay prose ${n} about simplified payment verification and a design constraint.`,
   }));
@@ -1934,16 +1955,18 @@ describe('depth-aware retrieval for a Merkle-branch question', () => {
     expect(beginner.evidenceText).toBe(standard.evidenceText);
     expect(beginner.citations).toEqual(standard.citations);
     expect(standard.mode).toBe('mcp');
-    expect(standard.evidenceText.indexOf('LATER COMMENTARY')).toBeLessThan(
-      standard.evidenceText.indexOf('TECHNICAL SPECIFICATION'),
+    expect(standard.evidenceText.indexOf('TECHNICAL SPECIFICATION')).toBeLessThan(
+      standard.evidenceText.indexOf('LATER COMMENTARY'),
     );
-    expect(standard.evidenceText).toContain('Design constraint essay 4');
-    expect(standard.evidenceText).toContain('Merkle test vector');
+    expect(standard.evidenceText).toContain('Merkle design constraint essay 1');
+    expect(standard.evidenceText).not.toContain('Merkle design constraint essay 4');
+    expect(standard.evidenceText).not.toContain('Merkle test vector');
+    expect(standard.evidenceText).toContain('BRC-62');
     expect(standard.evidenceText).not.toContain('BUDGET_MARK');
-    expect(standard.evidenceText).not.toContain('BRC-62');
     expect(standard.evidenceText).not.toContain('2008-10-31');
-    expect(standard.evidenceText).not.toContain('Merkle branch and the header');
-    expect(standard.citations.filter((citation) => citation.sourceClass === 'satoshi-primary')).toHaveLength(0);
+    expect(standard.citations.filter((citation) => citation.sourceClass === 'satoshi-primary')).toHaveLength(1);
+    expect(standard.citations.filter((citation) => citation.sourceClass === 'spec')).toHaveLength(3);
+    expect(standard.citations.filter((citation) => citation.sourceClass === 'later-commentary')).toHaveLength(1);
 
     expect(developer.evidenceText.indexOf('TECHNICAL SPECIFICATION')).toBeLessThan(
       developer.evidenceText.indexOf('LATER COMMENTARY'),
@@ -1951,13 +1974,14 @@ describe('depth-aware retrieval for a Merkle-branch question', () => {
     expect(developer.evidenceText).toContain('BUDGET_MARK');
     expect(developer.evidenceText).toContain('double SHA-256');
     expect(developer.evidenceText).toContain('BRC-62');
-    expect(developer.evidenceText).not.toContain('Design constraint essay 4');
+    expect(developer.evidenceText).not.toContain('Merkle design constraint essay 4');
     expect(developer.evidenceText).not.toContain('Merkle test vector');
-    expect(developer.citations.filter((citation) => citation.sourceClass === 'spec').length).toBeGreaterThan(
-      standard.citations.filter((citation) => citation.sourceClass === 'spec').length,
-    );
+    expect(developer.citations.filter((citation) => citation.sourceClass === 'spec')).toHaveLength(4);
     expect(developer.citations.filter((citation) => citation.sourceClass === 'later-commentary').length).toBeLessThan(
       standard.citations.filter((citation) => citation.sourceClass === 'later-commentary').length,
+    );
+    expect(developer.citations.filter((citation) => citation.sourceClass === 'spec').length).toBeGreaterThan(
+      standard.citations.filter((citation) => citation.sourceClass === 'spec').length,
     );
 
     expect(historian.mode).toBe('mcp');
@@ -1970,7 +1994,7 @@ describe('depth-aware retrieval for a Merkle-branch question', () => {
     expect(historian.evidenceText).toContain('timestamped');
     const primaries = historian.citations.filter((citation) => citation.sourceClass === 'satoshi-primary');
     expect(primaries.map((citation) => citation.date)).toEqual(dates);
-    expect(historian.evidenceText).toContain('Design constraint essay 1');
+    expect(historian.evidenceText).toContain('Merkle design constraint essay 1');
   });
 
   it('merges corpus primaries into a sufficient protocol-fact answer when search is unavailable', async () => {
@@ -1989,7 +2013,7 @@ describe('depth-aware retrieval for a Merkle-branch question', () => {
             {
               id: 'brc:62',
               kind: 'brc',
-              title: 'BRC-62',
+              title: 'BRC-62 Merkle branch',
               locator: 'brc://spec/62',
               excerpt: 'A Merkle branch links the transaction to the block.',
             },
@@ -2051,7 +2075,7 @@ describe('depth-aware retrieval for a Merkle-branch question', () => {
               {
                 id: 'e:1',
                 kind: 'essay',
-                title: 'Walletless applications',
+                title: 'Walletless applications to build SPV proofs at scale',
                 locator: 'csw://essay/medium/wallets',
                 excerpt: 'Applications should talk to the wallet through BRC-100.',
               },
@@ -2072,5 +2096,252 @@ describe('depth-aware retrieval for a Merkle-branch question', () => {
     expect(g.evidenceText).toContain('IMPLEMENTATION OPTIONS');
     expect(g.evidenceText).toContain('DECISION CRITERIA');
     expect(g.evidenceText).not.toContain('BUDGET_MARK');
+  });
+});
+
+describe('citation relevance and reserved slots', () => {
+  it('falls closed to mode none when every public title misses the question', async () => {
+    const mcp = {
+      connected: true,
+      investigate: async () => INSUFFICIENT_PKG,
+      searchKnowledge: async (_q: string, filters?: { kind?: string[] }) => {
+        if (!filters?.kind?.includes('essay')) return { hits: [] };
+        return {
+          hits: [
+            { id: 'e:1', kind: 'essay', title: 'The 21 million coin supply', locator: 'csw://essay/medium/supply' },
+            { id: 'e:2', kind: 'essay', title: 'Scaling Bitcoin on chain', locator: 'csw://essay/medium/scaling' },
+          ],
+        };
+      },
+      getResource: async () => ({ text: 'A long essay about something else entirely.' }),
+    } as unknown as McpBridge;
+    const g = await groundQuestion('Who invented the telephone in France?', { mcp, corpus: null });
+    expect(g.mode).toBe('none');
+    expect(g.citations).toEqual([]);
+    expect(g.evidenceText).toBe('');
+  });
+
+  it('does not keep an investigate hit whose body mentions the subject and whose title does not', async () => {
+    const g = await groundQuestion('Who invented the telephone?', {
+      mcp: fakeMcp({
+        claims: [
+          {
+            text: 'International telephone numbers use a different normalisation rule.',
+            support: ['b:189'],
+            status: 'supports',
+          },
+        ],
+        hits: [
+          {
+            id: 'b:189',
+            kind: 'brc',
+            title: 'Identity, Certificates, Discovery, and Personal Trust',
+            locator: 'bsv-blockchain/BRCs/wallet/0189.md',
+            excerpt: 'International telephone numbers must not be stripped.',
+          },
+        ],
+        gaps: [],
+        contradictions: [],
+      }),
+      corpus: null,
+    });
+    expect(g.mode).toBe('none');
+    expect(g.citations).toEqual([]);
+    expect(g.evidenceText).toBe('');
+  });
+
+  it('keeps an on-topic internal card and does not backfill the spec slot with an unrelated BRC', async () => {
+    const mcp = {
+      connected: true,
+      investigate: async () => INSUFFICIENT_PKG,
+      searchKnowledge: async (_q: string, filters?: { kind?: string[] }) => {
+        if (filters?.kind?.includes('brc') || filters?.kind?.includes('doc')) {
+          return {
+            hits: [
+              {
+                id: 'analysis:bitcoin-scaling-history',
+                kind: 'doc',
+                title: "Bitcoin's 2014–2017 direction change",
+                locator: 'analysis://bitcoin-scaling-history',
+                excerpt: 'How Bitcoin was hijacked from peer-to-peer electronic cash.',
+              },
+              {
+                id: 'b:45',
+                kind: 'brc',
+                title: 'BRC-45 overlay catalogue',
+                locator: 'bsv-blockchain/BRCs/overlay/0045.md',
+                excerpt: 'An overlay index with no bearing on the question.',
+              },
+            ],
+          };
+        }
+        return { hits: [] };
+      },
+      getResource: async () => ({ text: 'The documented record of how Bitcoin was hijacked.' }),
+    } as unknown as McpBridge;
+    const g = await groundQuestion('Why was Bitcoin hijacked?', { mcp, corpus: null });
+    expect(g.mode).toBe('mcp');
+    expect(g.evidenceText).toContain('how Bitcoin was hijacked');
+    expect(g.citations.some((citation) => citation.url?.includes('0045.md'))).toBe(false);
+    expect(g.citations).toHaveLength(0);
+  });
+
+  it('leads with the on-subject collector when search and investigate disagree', async () => {
+    const mcp = {
+      connected: true,
+      investigate: async () => ({
+        claims: [{ text: 'BRC-62 defines the background evaluation format.', support: ['b:62'], status: 'supports' }],
+        hits: [
+          {
+            id: 'b:62',
+            kind: 'brc',
+            title: 'BRC-62 background evaluation',
+            locator: 'bsv-blockchain/BRCs/transactions/0062.md',
+            excerpt: 'BRC-62 defines BEEF.',
+          },
+        ],
+        gaps: [],
+        contradictions: [],
+      }),
+      searchKnowledge: async (_q: string, filters?: { kind?: string[] }) => {
+        if (!(filters?.kind?.includes('brc') || filters?.kind?.includes('doc'))) return { hits: [] };
+        return {
+          hits: [
+            {
+              id: 'b:phone',
+              kind: 'brc',
+              title: 'Telephone rates in France',
+              locator: 'bsv-blockchain/BRCs/overlay/0099.md',
+              excerpt: 'Nothing about the named specification.',
+            },
+            {
+              id: 'b:real',
+              kind: 'brc',
+              title: 'BRC-62 transaction format',
+              locator: 'bsv-blockchain/BRCs/transactions/0062-format.md',
+              excerpt: 'BRC-62 transaction bytes.',
+            },
+          ],
+        };
+      },
+      getResource: async () => ({ text: 'BRC-62 defines the format.' }),
+    } as unknown as McpBridge;
+    const g = await groundQuestion('What is BRC-62?', { mcp, corpus: null });
+    expect(g.citations[0]?.title).toBe('BRC-62 background evaluation');
+  });
+
+  it('keeps the pinned capacity citation when retrieved citations already fill the panel', async () => {
+    const mcp = {
+      connected: true,
+      investigate: async () => INSUFFICIENT_PKG,
+      searchKnowledge: async (_q: string, filters?: { kind?: string[] }) => {
+        if (!filters?.kind?.includes('essay')) return { hits: [] };
+        return {
+          hits: [1, 2, 3, 4, 5].map((n) => ({
+            id: `e:${n}`,
+            kind: 'essay',
+            title: `On-chain scaling essay ${n}`,
+            locator: `csw://essay/medium/scale-${n}`,
+            excerpt: `Scaling essay ${n} on throughput.`,
+          })),
+        };
+      },
+      getResource: async () => ({ text: 'On-chain scaling is the measured path.' }),
+    } as unknown as McpBridge;
+    const curated = new CuratedReference(
+      [],
+      {
+        evidenceText: 'DEMONSTRATED CAPACITY — 79.09 x 10^9 TPS.',
+        citations: [
+          {
+            label: 'Horizontal Scaling (SSRN)',
+            title: 'Horizontal Scaling of UTXO-Based Transaction Processing',
+            url: 'https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7219719',
+          },
+        ],
+      },
+      null,
+    );
+    const g = await groundQuestion('Can Bitcoin scale to a million TPS?', { mcp, corpus: null, curated });
+    expect(g.citations.some((citation) => citation.url?.includes('abstract_id=7219719'))).toBe(true);
+    expect(g.citations).toHaveLength(5);
+    expect(g.evidenceText).toContain('DEMONSTRATED CAPACITY');
+  });
+
+  it('keeps the BRC-100 slot when a builder panel is already full', async () => {
+    const mcp = {
+      connected: true,
+      investigate: async () => INSUFFICIENT_PKG,
+      searchKnowledge: async (q: string, filters?: { kind?: string[] }) => {
+        if (q === 'BRC-100') return { hits: [] };
+        if (filters?.kind?.includes('essay')) {
+          return {
+            hits: [1, 2, 3, 4, 5].map((n) => ({
+              id: `e:${n}`,
+              kind: 'essay',
+              title: `How to build a payment application ${n}`,
+              locator: `csw://essay/medium/pay-${n}`,
+              excerpt: `Build notes ${n}.`,
+            })),
+          };
+        }
+        if (filters?.kind?.includes('brc') || filters?.kind?.includes('doc')) {
+          return {
+            hits: [1, 2].map((n) => ({
+              id: `b:${n}`,
+              kind: 'brc',
+              title: `Build primitive ${n}`,
+              locator: `bsv-blockchain/BRCs/scripts/000${n}.md`,
+              excerpt: `Primitive ${n} for a build.`,
+            })),
+          };
+        }
+        return { hits: [] };
+      },
+      getResource: async () => ({ text: 'Use a wallet when you build this.' }),
+    } as unknown as McpBridge;
+    const curated = new CuratedReference([], null, {
+      evidenceText: 'IMPLEMENTATION STACK — BRC-100 leads the wallet interface.',
+      citations: [
+        {
+          label: 'BRC-100',
+          title: 'BRC-100',
+          url: 'https://github.com/bsv-blockchain/BRCs/blob/master/wallet/0100.md',
+        },
+      ],
+    });
+    const g = await groundQuestion('How do I build a payment app?', { mcp, corpus: null, curated });
+    expect(g.citations.some((citation) => citation.url?.includes('0100.md'))).toBe(true);
+    expect(g.citations.length).toBeLessThanOrEqual(5);
+    expect(g.evidenceText.startsWith('IMPLEMENTATION STACK')).toBe(true);
+  });
+
+  it('grounds a Satoshi-quote question on dated posts that share the subject', async () => {
+    const docs: CorpusDoc[] = [
+      {
+        id: 'size',
+        kind: 'post',
+        title: 'Re: increase the block size limit',
+        date: '2010-10-04T00:00:00Z',
+        url: 'https://satoshi.nakamotoinstitute.org/posts/bitcointalk/485/',
+        text: 'The block size limit can be phased in, so older versions are already obsolete.',
+      },
+      {
+        id: 'fees',
+        kind: 'post',
+        title: 'Re: Always pay the transaction fee?',
+        date: '2010-07-01T00:00:00Z',
+        url: 'https://satoshi.nakamotoinstitute.org/posts/bitcointalk/1/',
+        text: 'You should always pay the fee. The reward will not always be there.',
+      },
+    ];
+    const g = await groundQuestion('What did Satoshi say about the block size limit?', {
+      mcp: null,
+      corpus: new SatoshiCorpus(docs),
+    });
+    expect(g.mode).toBe('corpus');
+    expect(g.citations.some((citation) => citation.url?.includes('/485/'))).toBe(true);
+    expect(g.citations.some((citation) => citation.url?.includes('/bitcointalk/1/'))).toBe(false);
+    expect(g.citations[0]?.date).toBe('2010-10-04');
   });
 });

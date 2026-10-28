@@ -66,6 +66,30 @@ describe('SatoshiCorpus', () => {
     expect(hits[0]?.text).toContain('Your block will never become valid because nobody received it.');
   });
 
+  it('matches BRC-100 as a whole token and does not rank the 10038 mail', () => {
+    const corpus = new SatoshiCorpus([
+      {
+        id: 'mail-10038',
+        kind: 'email',
+        title: 'select failed 10038 fix',
+        date: '2009-01-16T00:00:00Z',
+        url: 'https://satoshi.nakamotoinstitute.org/emails/cryptography/10038/',
+        text: 'The select failed 10038 fix was a database error, not a protocol rule.',
+      },
+      {
+        id: 'note-brc-100',
+        kind: 'post',
+        title: 'BRC-100 wallet interface',
+        date: '2010-12-01T00:00:00Z',
+        url: 'https://satoshi.nakamotoinstitute.org/posts/bitcointalk/brc-100/',
+        text: 'BRC-100 is the wallet-to-application interface.',
+      },
+    ]);
+    const hits = corpus.search('What is BRC-100?');
+    expect(hits.map((hit) => hit.id)).toContain('note-brc-100');
+    expect(hits.map((hit) => hit.id)).not.toContain('mail-10038');
+  });
+
   it('ranks the block-size-limit thread above stop-word distractors', () => {
     // Regression: "Was the block size always meant to be small?" used to rank
     // "Always pay transaction fee?" first — BM25 scored "was/the/always" as signal.

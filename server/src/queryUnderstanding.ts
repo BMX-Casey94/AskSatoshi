@@ -58,6 +58,95 @@ export function expandTerms(text: string): string {
 }
 
 /**
+ * Short substitute queries for vocabulary the FTS index does not share with the
+ * question. These are issued beside the keyword query, never ANDed into it:
+ * appending "withdrew" to "leave Bitcoin" would require both words in one document.
+ * NAR/DAR stay on the append path in expandTerms.
+ */
+const PHRASE_EXPANSIONS: [RegExp, string][] = [
+  [/\b1\s*mb\b/i, 'block size limit'],
+  [/\bleave\b/i, 'withdrew'],
+  [/\bleft\b/i, 'withdrew'],
+];
+
+export function phraseExpansionQueries(text: string): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const [pattern, expansion] of PHRASE_EXPANSIONS) {
+    if (!pattern.test(text)) continue;
+    const key = expansion.toLowerCase();
+    if (seen.has(key) || text.toLowerCase().includes(key)) continue;
+    seen.add(key);
+    out.push(expansion);
+  }
+  return out;
+}
+
+/**
+ * Known head-noun phrases. A long AND query ("Merkle branch prove inclusion") misses
+ * the document that only says "merkle"; the short phrase is searched as well.
+ */
+const HEAD_COMPOUNDS: [RegExp, string][] = [
+  [/\bblock\s+size\b/i, 'block size'],
+  [/\bdouble[-\s]?spending\b/i, 'double spend'],
+  [/\bdouble[-\s]?spend\b/i, 'double spend'],
+  [/\bproof\s+of\s+work\b/i, 'proof of work'],
+  [/\bhash\s+functions?\b/i, 'hash function'],
+  [/\bpublic[-\s]?keys?\b/i, 'public key'],
+  [/\bprivate\s+keys?\b/i, 'private key'],
+  [/\bmerkle\b/i, 'merkle'],
+  [/\bcoinbases?\b/i, 'coinbase'],
+  [/\bop_return\b/i, 'OP_RETURN'],
+  [/\butxos?\b/i, 'UTXO'],
+];
+
+const HEAD_VERBS = new Set([
+  'prove', 'proves', 'proving', 'create', 'creates', 'creating', 'created', 'prevent', 'prevents',
+  'prevented', 'show', 'shows', 'need', 'needs', 'work', 'works', 'make', 'makes', 'stay', 'stays',
+  'mean', 'means', 'meant', 'include', 'included', 'includes',
+]);
+
+/**
+ * A second, short FTS query: a known compound ("block size", "merkle", "coinbase")
+ * or, when the keyword string is long, its first non-verb subject word. Undefined
+ * when that phrase is already the whole keyword query.
+ */
+export function headNounQuery(text: string): string | undefined {
+  const keywords = extractKeywords(text);
+  const tokens = keywords?.split(/\s+/).filter(Boolean) ?? [];
+  const keywordNorm = tokens.join(' ').toLowerCase();
+  for (const [pattern, phrase] of HEAD_COMPOUNDS) {
+    if (!pattern.test(text)) continue;
+    if (keywordNorm === phrase.toLowerCase()) return undefined;
+    if (tokens.length >= 2 || (tokens.length === 1 && tokens[0]!.toLowerCase() !== phrase.toLowerCase())) {
+      return phrase;
+    }
+  }
+  if (tokens.length < 3) return undefined;
+  const head = tokens.find((token) => {
+    const low = token.toLowerCase();
+    return low.length > 3 && !HEAD_VERBS.has(low) && !/^(bitcoin|bitcoins|satoshi)$/i.test(low);
+  });
+  if (!head) return undefined;
+  if (head.toLowerCase() === keywordNorm) return undefined;
+  return head;
+}
+
+/** Phrase expansions plus the head-noun query, deduped, for a second search pass. */
+export function supplementaryQueries(text: string): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const query of [...phraseExpansionQueries(text), headNounQuery(text) ?? '']) {
+    const trimmed = query.trim();
+    const key = trimmed.toLowerCase();
+    if (!trimmed || seen.has(key)) continue;
+    seen.add(key);
+    out.push(trimmed);
+  }
+  return out;
+}
+
+/**
  * Extract the retrieval keywords from a natural-language question. The MCP's
  * `investigate` and `search_knowledge` are phrasing-sensitive: "What can you tell me
  * about BRC-100s?" retrieves nothing, whilst "BRC-100" returns the BRC-100 document as

@@ -62,9 +62,18 @@ const STOP_WORDS = new Set(
   ).split(','),
 );
 
+/**
+ * Keep a BRC id as one token. The default splitter turns "BRC-100" into "brc" and
+ * "100", and prefix search then ranks the "select failed 10038" mail as a hit.
+ */
+function tokenize(text: string): string[] {
+  return text.match(/BRC-?\d+s?|OP_[A-Za-z0-9_]+|[A-Za-z0-9]+/gi) ?? [];
+}
+
 /** Lowercase (MiniSearch's default) plus stop-word and stray-single-letter removal. */
 function processTerm(term: string): string | null {
-  const t = term.toLowerCase();
+  const brc = /^brc-?(\d+)s?$/i.exec(term);
+  const t = brc ? `brc-${brc[1]}` : term.toLowerCase();
   if (STOP_WORDS.has(t)) return null;
   if (t.length === 1 && !/\d/.test(t)) return null;
   return t;
@@ -87,6 +96,7 @@ export class SatoshiCorpus {
     this.mini = new MiniSearch<CorpusDoc>({
       fields: ['title', 'text'],
       storeFields: ['id', 'kind', 'title', 'date', 'url', 'text'],
+      tokenize,
       processTerm,
       searchOptions: {
         // The corpus's strongest signal is the thread title; body text is noisy.

@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import {
   buildQueryUnderstandingRequest,
   expandTerms,
+  headNounQuery,
   parseQueryUnderstanding,
+  phraseExpansionQueries,
   rewriteCacheKey,
   RewriteCache,
   shouldSkipRewrite,
@@ -20,6 +22,31 @@ describe('expandTerms', () => {
 
   it('is idempotent when the expansion is already present', () => {
     expect(expandTerms('DAR Digital Asset Recovery')).toBe('DAR Digital Asset Recovery');
+  });
+});
+
+describe('phraseExpansionQueries', () => {
+  it('issues 1MB and leave/left as separate queries, and leaves NAR on the append path', () => {
+    expect(phraseExpansionQueries('What is the 1MB limit?')).toEqual(['block size limit']);
+    expect(phraseExpansionQueries('Was the 1 MB cap deliberate?')).toEqual(['block size limit']);
+    expect(phraseExpansionQueries('Why did you leave Bitcoin?')).toEqual(['withdrew']);
+    expect(phraseExpansionQueries('Why did you left the project?')).toEqual(['withdrew']);
+    expect(phraseExpansionQueries('Why did you leave after you withdrew?')).toEqual([]);
+    expect(expandTerms('NAR/DAR')).toBe('NAR/DAR Network Access Rules Digital Asset Recovery');
+    expect(phraseExpansionQueries('What is NAR?')).toEqual([]);
+    expect(phraseExpansionQueries('darwin award')).toEqual([]);
+  });
+});
+
+describe('headNounQuery', () => {
+  it('adds a short subject query only when the keyword query is longer', () => {
+    expect(headNounQuery('How does a Merkle branch prove inclusion?')).toBe('merkle');
+    expect(headNounQuery('What is a coinbase transaction?')).toBe('coinbase');
+    expect(headNounQuery('Was the block size always meant to stay small?')).toBe('block size');
+    expect(headNounQuery('How is double-spending prevented?')).toBe('double spend');
+    expect(headNounQuery('Why was Bitcoin hijacked?')).toBeUndefined();
+    expect(headNounQuery('block size')).toBeUndefined();
+    expect(headNounQuery('merkle')).toBeUndefined();
   });
 });
 

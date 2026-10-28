@@ -31,6 +31,7 @@ import {
   feedbackBodySchema,
   FeedbackCounters,
 } from './feedback.js';
+import { bareInputClarification, isBareOffTopicShape } from './bareInput.js';
 import { deriveFollowUps } from './followUps.js';
 import { runChain, type ChainRequest } from './llm.js';
 import { McpBridge } from './mcp.js';
@@ -315,7 +316,14 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
   const alreadyAskedInThread = priorMessages.some(
     (m) => m.role === 'user' && AnswerCache.key(m.content) === AnswerCache.key(question),
   );
-  const serveFromCache = cacheable && !alreadyAskedInThread;
+  // A bare off-topic word ("Sourdough") must not be served from a cached essay, and
+  // must not spend a rewrite call. Title-relevant evidence, checked after grounding,
+  // can still let it through.
+  const bareShape = isBareOffTopicShape(question, {
+    hasImage: Boolean(image),
+    followUp: !standalone,
+  });
+  const serveFromCache = cacheable && !alreadyAskedInThread && !bareShape;
 
   try {
     // 1. Cache first — identical standalone questions cost nothing. Follow-ups and
@@ -369,7 +377,7 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
       );
     }
     let understanding: QueryUnderstanding | undefined;
-    if (hasKeys && !image && !constrained && !shouldSkipRewrite(question)) {
+    if (hasKeys && !image && !constrained && !bareShape && !shouldSkipRewrite(question)) {
       const cacheKey = rewriteCacheKey(question, priorUser);
       understanding = rewriteCache.get(cacheKey);
       if (!understanding) {
@@ -425,6 +433,22 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
       understanding?.variants,
       directory,
     );
+    // A bare noun with nothing title-relevant is not a question. Answer it here, in
+    // voice, without a model call, so it cannot be recast as a Bitcoin lesson.
+    // Same client flags as any other ungrounded reply: general, no citations, and
+    // this return skips review and the cache write.
+    const clarification = bareInputClarification(question, grounding, {
+      hasImage: Boolean(image),
+      followUp: !standalone,
+    });
+    if (clarification) {
+      sseWrite(res, 'delta', { text: clarification });
+      sseWrite(res, 'meta', { mode: 'none', general: true, citations: [], followUps: [] });
+      sseWrite(res, 'done', {});
+      finish();
+      return;
+    }
+
     // Nothing retrieved. A text question ends here: the no-knowledge line, mode
     // 'none', empty citations, and no model call. An attached image is not a miss —
     // the picture still has to reach a vision model. That path reports the same

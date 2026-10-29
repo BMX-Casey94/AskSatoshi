@@ -32,9 +32,17 @@ describe('phraseExpansionQueries', () => {
     expect(phraseExpansionQueries('Why did you leave Bitcoin?')).toEqual(['withdrew']);
     expect(phraseExpansionQueries('Why did you left the project?')).toEqual(['withdrew']);
     expect(phraseExpansionQueries('Why did you leave after you withdrew?')).toEqual([]);
+    expect(phraseExpansionQueries('What did you mean by nodes can leave and rejoin?')).toEqual([]);
+    expect(phraseExpansionQueries('The signature is on the left.')).toEqual([]);
+    expect(phraseExpansionQueries('Why did you leave the block size alone?')).toEqual([]);
+    expect(phraseExpansionQueries('you left')).toEqual(['withdrew']);
+    expect(phraseExpansionQueries('why did he leave')).toEqual(['withdrew']);
+    expect(phraseExpansionQueries('Satoshi left Bitcoin in 2011')).toEqual(['withdrew']);
     expect(expandTerms('NAR/DAR')).toBe('NAR/DAR Network Access Rules Digital Asset Recovery');
     expect(phraseExpansionQueries('What is NAR?')).toEqual([]);
     expect(phraseExpansionQueries('darwin award')).toEqual([]);
+    expect(phraseExpansionQueries('Did someone co-opt Bitcoin?')).toEqual(['hijacked']);
+    expect(phraseExpansionQueries('Was it coopted?')).toEqual(['hijacked']);
   });
 });
 

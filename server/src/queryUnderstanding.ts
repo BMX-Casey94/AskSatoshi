@@ -65,20 +65,39 @@ export function expandTerms(text: string): string {
  */
 const PHRASE_EXPANSIONS: [RegExp, string][] = [
   [/\b1\s*mb\b/i, 'block size limit'],
-  [/\bleave\b/i, 'withdrew'],
-  [/\bleft\b/i, 'withdrew'],
+  // The direction-change card says "hijacked". "co-opt" never appears in it.
+  [/\bco-?opt(?:ed|ing|s)?\b/i, 'hijacked'],
 ];
+
+/**
+ * "withdrew" is the document's word for a departure. It must not fire on every
+ * "left": "nodes can leave and rejoin", "on the left", and "leave the block size"
+ * are different questions. The cue is departure phrasing — why someone left,
+ * "you left", "left Bitcoin", "left the project".
+ */
+export function isDepartureLeaving(text: string): boolean {
+  const protocolObject = /\b(?:leave|left|leaving)\s+(?:the\s+)?(?:block|size|limit|fee|fees)\b/i;
+  if (protocolObject.test(text)) return false;
+  if (/\b(?:leave|left|leaving)\s+(?:bitcoin|the\s+project)\b/i.test(text)) return true;
+  // "you left", "why did he leave", "Satoshi left". The person has to sit next to
+  // the verb so "why did the nodes leave" and "you mean by nodes can leave" do not.
+  if (/\b(?:you|he|she|i|satoshi|nakamoto)\s+(?:leave|left|leaving)\b/i.test(text)) return true;
+  return false;
+}
 
 export function phraseExpansionQueries(text: string): string[] {
   const out: string[] = [];
   const seen = new Set<string>();
-  for (const [pattern, expansion] of PHRASE_EXPANSIONS) {
-    if (!pattern.test(text)) continue;
+  const add = (expansion: string) => {
     const key = expansion.toLowerCase();
-    if (seen.has(key) || text.toLowerCase().includes(key)) continue;
+    if (seen.has(key) || text.toLowerCase().includes(key)) return;
     seen.add(key);
     out.push(expansion);
+  };
+  for (const [pattern, expansion] of PHRASE_EXPANSIONS) {
+    if (pattern.test(text)) add(expansion);
   }
+  if (isDepartureLeaving(text)) add('withdrew');
   return out;
 }
 

@@ -21,7 +21,7 @@ import {
   shouldDiversifyQuestion,
 } from './orchestrate.js';
 import { SatoshiCorpus, type CorpusDoc } from './satoshiCorpus.js';
-import { CuratedReference } from './curatedReference.js';
+import { CuratedReference, loadCuratedReference } from './curatedReference.js';
 import type { McpBridge } from './mcp.js';
 
 const SPV_DOC: CorpusDoc = {
@@ -668,6 +668,27 @@ describe('prompt construction', () => {
     ) as { evidenceText: string };
     expect(rec.evidenceText.startsWith('TIMECOIN — ATTRIBUTED RECORD')).toBe(true);
     expect(rec.evidenceText).toContain('Dr Craig Wright');
+  });
+
+  it('has a documented-record register keyed to the departure record marker', () => {
+    const sys = buildSystemPrompt('reference');
+    expect(sys).toContain('SATOSHI DEPARTURE — DOCUMENTED RECORD AND ATTRIBUTED ACCOUNT');
+    const rec = JSON.parse(
+      readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'data', 'departure-record.json'), 'utf8'),
+    ) as { evidenceText: string };
+    expect(rec.evidenceText.startsWith('SATOSHI DEPARTURE — DOCUMENTED RECORD AND ATTRIBUTED ACCOUNT')).toBe(true);
+  });
+
+  it('grounds a departure question as reference with the record first', async () => {
+    const curated = loadCuratedReference();
+    const g = await groundQuestion('Why did you leave Bitcoin?', {
+      mcp: fakeMcp(INSUFFICIENT_PKG),
+      corpus: null,
+      curated,
+    });
+    expect(g.mode).toBe('reference');
+    expect(g.evidenceText.startsWith('SATOSHI DEPARTURE — DOCUMENTED RECORD AND ATTRIBUTED ACCOUNT')).toBe(true);
+    expect(g.leadAngle).toBeUndefined();
   });
 
   it('has a directory register and gives listing questions a direct opener, never the distinction seed', () => {

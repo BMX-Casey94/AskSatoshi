@@ -7,6 +7,7 @@ import {
   CuratedReference,
   IMPLEMENTATION_TECH_QUERY,
   implementationTechQuery,
+  isDepartureQuestion,
   isIdentityQuestion,
   isImplementationQuestion,
   isScalingQuestion,
@@ -372,5 +373,88 @@ describe('shipped timecoin record', () => {
     for (const c of rec.citations) expect(c.url).toMatch(/^https:\/\//);
     expect(rec.evidenceText).toContain('must not assert one');
     expect(rec.evidenceText).toContain('totally without merit');
+  });
+});
+
+describe('isDepartureQuestion', () => {
+  it('matches leave, disappearance, handover and the last-post questions', () => {
+    expect(isDepartureQuestion('Why did you leave Bitcoin?')).toBe(true);
+    expect(isDepartureQuestion('why did you disappear')).toBe(true);
+    expect(isDepartureQuestion('why did you stop posting')).toBe(true);
+    expect(isDepartureQuestion('why did you go away')).toBe(true);
+    expect(isDepartureQuestion('why did you walk away')).toBe(true);
+    expect(isDepartureQuestion('why did you hand over to Gavin')).toBe(true);
+    expect(isDepartureQuestion('what happened to Satoshi')).toBe(true);
+    expect(isDepartureQuestion('why did Satoshi leave')).toBe(true);
+    expect(isDepartureQuestion("What was Satoshi's last post?")).toBe(true);
+    expect(isDepartureQuestion('What was your last email to Mike Hearn?')).toBe(true);
+    expect(isDepartureQuestion('Did you step back from Bitcoin?')).toBe(true);
+    expect(isDepartureQuestion('Did Satoshi abandon the project?')).toBe(true);
+  });
+
+  it('does not match protocol questions that only share a verb or a name', () => {
+    expect(isDepartureQuestion('Did you leave the block size unlimited?')).toBe(false);
+    expect(isDepartureQuestion('Can you leave the fee at zero?')).toBe(false);
+    expect(isDepartureQuestion("How does Gavin's getbalance command work?")).toBe(false);
+    expect(isDepartureQuestion('What is OP_CHECKSIG?')).toBe(false);
+    expect(isDepartureQuestion('How long does a block take, time wise?')).toBe(false);
+    expect(isDepartureQuestion('What was the last block?')).toBe(false);
+  });
+});
+
+describe('shipped departure record', () => {
+  const file = join(dirname(fileURLToPath(import.meta.url)), '..', 'data', 'departure-record.json');
+  const rec = JSON.parse(readFileSync(file, 'utf8')) as ScalingRecord;
+
+  it('loads from the default data directory', () => {
+    const curated = loadCuratedReference();
+    expect(curated?.departure?.evidenceText.startsWith('SATOSHI DEPARTURE — DOCUMENTED RECORD AND ATTRIBUTED ACCOUNT')).toBe(
+      true,
+    );
+  });
+
+  it('loads from the fifth path argument alone', () => {
+    const curated = loadCuratedReference(undefined, undefined, undefined, undefined, file);
+    expect(curated?.departure?.evidenceText).toContain("I've moved on to other things");
+    expect(curated?.timecoin).toBeNull();
+  });
+
+  it('attributes the account and does not assert foul play', () => {
+    expect(rec.evidenceText.startsWith('SATOSHI DEPARTURE — DOCUMENTED RECORD AND ATTRIBUTED ACCOUNT')).toBe(true);
+    expect(rec.evidenceText).toContain('Dr Wright has said');
+    expect(rec.evidenceText).toContain('mysterious shadowy figure');
+    expect(rec.evidenceText).toContain('you must not assert one');
+    expect(rec.evidenceText).not.toMatch(/foul play (?:happened|occurred|was involved|caused)/i);
+    expect(rec.citations.length).toBeGreaterThan(5);
+    for (const c of rec.citations) expect(c.url).toMatch(/^https:\/\//);
+  });
+});
+
+describe('groundQuestion departure record', () => {
+  const DEPARTURE: ScalingRecord = {
+    evidenceText: 'SATOSHI DEPARTURE — DOCUMENTED RECORD AND ATTRIBUTED ACCOUNT: the April 2011 emails.',
+    citations: [
+      {
+        label: 'Hearn thread',
+        url: 'https://plan99.net/~mike/satoshi-emails/thread5.html',
+        excerpt: "I've moved on to other things.",
+      },
+    ],
+  };
+
+  it('prepends the record and stands as reference when nothing else grounds the question', async () => {
+    const curated = new CuratedReference([], null, null, null, DEPARTURE);
+    const g = await groundQuestion('Why did you leave Bitcoin?', { mcp: thinMcp(), corpus: null, curated });
+    expect(g.mode).toBe('reference');
+    expect(g.evidenceText.startsWith('SATOSHI DEPARTURE')).toBe(true);
+    expect(g.leadAngle).toBeUndefined();
+    expect(g.citations.some((c) => c.url?.includes('plan99.net'))).toBe(true);
+  });
+
+  it('leaves an unrelated question alone when a departure record is loaded', async () => {
+    const curated = new CuratedReference([], null, null, null, DEPARTURE);
+    const g = await groundQuestion('zxqwv unrelated gibberish', { mcp: thinMcp(), corpus: null, curated });
+    expect(g.mode).toBe('none');
+    expect(g.evidenceText).toBe('');
   });
 });

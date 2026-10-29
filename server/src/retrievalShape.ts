@@ -2,11 +2,20 @@
  * Question-shape classifier and citation relevance for retrieval.
  *
  * Slot mix follows the question (mechanism, named spec, concept, Satoshi's own
- * words, scaling, builder). It is not one global order. Title overlap keeps a
- * citation only when it shares a content word with the question, so a France or
- * sourdough question cannot be answered from an unrelated Bitcoin post.
+ * words, scaling, builder). It is not one global order. A citation is kept when
+ * its title shares a distinctive content word with the question. Domain words
+ * that show up in a large share of the pinned corpus and the protocol index do
+ * not count on their own once a sharper word is present. A question whose only
+ * subject is one of those words ("Bitcoin", "blocks") still grounds. A common
+ * English verb does not qualify a code symbol, and it does not qualify a
+ * primary source from the body alone — "happened" in an unrelated mail, or
+ * "Stop" as an exported method, is not the subject.
  */
 
+import { createRequire } from 'node:module';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { isImplementationQuestion, isScalingQuestion } from './curatedReference.js';
 import { phraseExpansionQueries } from './queryUnderstanding.js';
 
@@ -49,14 +58,44 @@ const SATOSHI_QUOTE =
 const NAMED_SPEC_ID = /\b(?:BRC-?\d+s?|BEEF)\b/i;
 
 /**
- * Words that almost every Bitcoin title shares. When the question also has a
- * more specific word, these do not by themselves make a title relevant.
+ * Domain nouns that may be generic, but only after document frequency admits them.
+ * A candidate below the cutoff stays specific (merkle, utxo, ponzi). The stem
+ * "nod" is the tokenizer's form of "nodes".
  */
-const GENERIC = new Set([
-  'bitcoin', 'bitcoins', 'btc', 'bsv', 'satoshi', 'nakamoto', 'blockchain', 'block', 'chain',
-  'coin', 'coins', 'transaction', 'transactions', 'network', 'payment', 'payments', 'system',
-  'protocol', 'crypto', 'cryptocurrency',
+const DOMAIN_CANDIDATES = [
+  'bitcoin', 'btc', 'bsv', 'blockchain', 'block', 'chain', 'coin', 'money', 'cash',
+  'transaction', 'network', 'protocol', 'node', 'nod', 'payment', 'system', 'crypto',
+  'cryptocurrency',
+] as const;
+
+/**
+ * The author name is a question frame, the way "you" is, but titles rarely contain
+ * it — posts are titled "Re: …" and signed at the bottom — so title frequency
+ * understates it. It is generic when the index actually contains it.
+ */
+const AUTHOR_FRAME = ['satoshi', 'nakamoto'] as const;
+
+/**
+ * Used when the corpus and the protocol index cannot be read. Same closed set the
+ * frequency rule is aimed at, so a missing file does not open every title.
+ */
+const FALLBACK_GENERIC = new Set<string>([...DOMAIN_CANDIDATES, ...AUTHOR_FRAME]);
+
+/**
+ * Common English verbs. Overlap on one of these is not a subject match for a code
+ * symbol ("Stop" the exported method) and is not enough to cite a primary whose
+ * title never says the word. Stems are the forms contentTokens emits ("stopped"
+ * still matches "stop" through the prefix check).
+ */
+const COMMON_VERBS = new Set([
+  'stop', 'happen', 'disappear', 'leave', 'left', 'go', 'gone', 'went', 'come', 'get',
+  'take', 'see', 'think', 'start', 'try', 'put', 'let', 'keep', 'look', 'find', 'give',
+  'quit', 'move', 'turn', 'run', 'call', 'ask', 'seem', 'begin', 'end', 'help',
 ]);
+
+/** Share of documents a domain candidate must reach before it stops being distinctive. */
+const GENERIC_SHARE = 0.02;
+const GENERIC_MIN_DOCS = 8;
 
 const CONTENT_STOP = new Set(
   (
@@ -97,6 +136,124 @@ export function contentTokens(text: string): string[] {
   return out;
 }
 
+interface TitleLexicon {
+  docCount: number;
+  freq: Map<string, number>;
+  generic: Set<string>;
+}
+
+let lexiconCache: TitleLexicon | undefined;
+
+function countFrequencies(texts: readonly string[]): Map<string, number> {
+  const freq = new Map<string, number>();
+  for (const text of texts) {
+    for (const term of new Set(contentTokens(text))) {
+      freq.set(term, (freq.get(term) ?? 0) + 1);
+    }
+  }
+  return freq;
+}
+
+/**
+ * Admit a domain candidate only when it appears in at least 2% of documents
+ * (and at least 8). Author-frame names are admitted whenever the index contains
+ * them at all. Everything else — merkle, utxo, ponzi, scheme — stays specific.
+ */
+export function deriveDomainGenerics(freq: Map<string, number>, docCount: number): Set<string> {
+  const cutoff = Math.max(GENERIC_MIN_DOCS, Math.floor(docCount * GENERIC_SHARE));
+  const generic = new Set<string>();
+  for (const term of DOMAIN_CANDIDATES) {
+    if ((freq.get(term) ?? 0) >= cutoff) generic.add(term);
+  }
+  for (const name of AUTHOR_FRAME) {
+    if ((freq.get(name) ?? 0) > 0) generic.add(name);
+  }
+  return generic;
+}
+
+/**
+ * A word the index has never seen ("ponzi") is the subject. A companion the index
+ * uses often ("scheme" inside "URI-scheme") does not count in its place.
+ * A word the index does contain — even a rarer one, such as "tps", "app", or
+ * "wide" — does not erase the other subject words. The title may use those.
+ * `pinned` terms, such as "block" inside "block size", are never dropped.
+ */
+export function dominateTerms(
+  terms: readonly string[],
+  freq: Map<string, number>,
+  pinned: readonly string[] = [],
+): string[] {
+  const pin = new Set(pinned);
+  const floating = terms.filter((term) => !pin.has(term));
+  if (floating.length <= 1) return [...terms];
+  const absent = floating.some((term) => (freq.get(term) ?? 0) === 0);
+  if (!absent) return [...terms];
+  const kept = new Set(floating.filter((term) => (freq.get(term) ?? 0) < GENERIC_MIN_DOCS));
+  return terms.filter((term) => pin.has(term) || kept.has(term));
+}
+
+function loadLexiconTexts(): string[] {
+  const texts: string[] = [];
+  try {
+    const corpusPath = join(dirname(fileURLToPath(import.meta.url)), '..', 'data', 'satoshi-corpus.json');
+    const corpus = JSON.parse(readFileSync(corpusPath, 'utf8')) as {
+      documents?: { title?: string; text?: string }[];
+    };
+    for (const doc of corpus.documents ?? []) {
+      const blob = `${doc.title ?? ''}\n${doc.text ?? ''}`.trim();
+      if (blob) texts.push(blob);
+    }
+  } catch {
+    // Corpus missing: the fallback generic set is used below.
+  }
+  try {
+    const require = createRequire(import.meta.url);
+    const pkgDir = dirname(require.resolve('bsv-aio-mcp/package.json'));
+    const edu = JSON.parse(readFileSync(join(pkgDir, 'data', 'education_index.json'), 'utf8')) as {
+      essays?: { title?: string; verdict?: string }[];
+    };
+    for (const essay of edu.essays ?? []) {
+      if (essay.verdict === 'DROP' || !essay.title) continue;
+      texts.push(essay.title);
+    }
+    const brc = JSON.parse(readFileSync(join(pkgDir, 'reference', 'brc_index.json'), 'utf8')) as {
+      brcs?: { title?: string }[];
+    };
+    for (const row of brc.brcs ?? []) {
+      if (row.title) texts.push(row.title);
+    }
+  } catch {
+    // Protocol package missing: corpus frequencies still stand.
+  }
+  return texts;
+}
+
+function buildLexicon(texts: readonly string[], forceDerive: boolean): TitleLexicon {
+  const freq = countFrequencies(texts);
+  if (!forceDerive && texts.length < 30) {
+    return { docCount: texts.length, freq, generic: new Set(FALLBACK_GENERIC) };
+  }
+  return { docCount: texts.length, freq, generic: deriveDomainGenerics(freq, Math.max(texts.length, 1)) };
+}
+
+function lexicon(): TitleLexicon {
+  if (!lexiconCache) lexiconCache = buildLexicon(loadLexiconTexts(), false);
+  return lexiconCache;
+}
+
+/** Installed domain generics, derived from the pinned corpus and the protocol index. */
+export function domainGenericTerms(): ReadonlySet<string> {
+  return lexicon().generic;
+}
+
+/**
+ * Tests inject a small document set so frequency rules can be checked without the
+ * live index. `null` clears the override and the next call reloads the real files.
+ */
+export function useTestLexicon(texts: readonly string[] | null): void {
+  lexiconCache = texts === null ? undefined : buildLexicon(texts, true);
+}
+
 /** Subject terms the title must share. Generic Bitcoin words drop out when a sharper word exists. */
 export function subjectTerms(question: string): { terms: string[]; specific: boolean } {
   const expansions = phraseExpansionQueries(question);
@@ -107,9 +264,15 @@ export function subjectTerms(question: string): { terms: string[]; specific: boo
   if (expansions.some((item) => item.toLowerCase() === 'withdrew')) {
     terms = terms.filter((term) => term !== 'leave' && term !== 'left');
   }
+  // "co-opt" tokenises as "opt". The card says "hijacked", and "opt" would
+  // match an unrelated option.
+  if (expansions.some((item) => item.toLowerCase() === 'hijacked')) {
+    terms = terms.filter((term) => term !== 'opt' && term !== 'coopt');
+  }
   // "double-spending" is the subject. "spend" on its own matches spend-policy specs.
   if (terms.includes('double')) terms = terms.filter((term) => term !== 'spend');
-  const specific = terms.filter((term) => !GENERIC.has(term));
+  const generic = lexicon().generic;
+  const specific = terms.filter((term) => !generic.has(term));
   // "block" is generic next to a sharper word, except in "block size", where a title
   // that says "block" is the subject and a title that only says "scaling" is not.
   if (/\bblock\s+size\b/i.test(expanded) && terms.includes('block') && !specific.includes('block')) {
@@ -117,6 +280,70 @@ export function subjectTerms(question: string): { terms: string[]; specific: boo
   }
   if (specific.length > 0) return { terms: specific, specific: true };
   return { terms, specific: false };
+}
+
+export interface OverlapDecision {
+  /** Terms a title may match on. */
+  required: string[];
+  /**
+   * The question's only subjects are generic domain words ("What is Bitcoin?",
+   * "blocks"). Any retrieved title may ground; the search itself is already
+   * about that subject.
+   */
+  open: boolean;
+}
+
+/** Which terms are allowed to count as title overlap for this question. */
+export function overlapTerms(question: string): OverlapDecision {
+  const { terms, specific } = subjectTerms(question);
+  if (!specific) {
+    return { required: terms, open: terms.length > 0 };
+  }
+  const topical = terms.filter((term) => !COMMON_VERBS.has(term));
+  if (topical.length > 0) return { required: topical, open: false };
+  // Only a verb is left ("stop", "disappear"). Also allow the generic subject
+  // the question actually names ("satoshi"), so a post titled with that name
+  // still qualifies and a title that only uses the verb does not have to.
+  const index = lexicon();
+  const expanded = `${question} ${phraseExpansionQueries(question).join(' ')}`;
+  const genericSubjects = contentTokens(expanded).filter((term) => index.generic.has(term));
+  return { required: [...new Set([...terms, ...genericSubjects])], open: false };
+}
+
+/** Stems of whitespace-separated words. A word that itself splits into several tokens (URI-scheme, including a dash that is not an ASCII hyphen) does not contribute those pieces. */
+function wholeWordStems(text: string): Set<string> {
+  const stems = new Set<string>();
+  for (const word of text.split(/\s+/)) {
+    const pieces = contentTokens(word);
+    const only = pieces.length === 1 ? pieces[0] : undefined;
+    if (!only) continue;
+    stems.add(only);
+  }
+  return stems;
+}
+
+function substantiveHits(terms: readonly string[], text: string): string[] {
+  const all = tokenSet(text);
+  const whole = wholeWordStems(text);
+  const freq = lexicon().freq;
+  const found = terms.filter((term) => hayHas(all, term));
+  const missingRarer = terms.some((term) => {
+    if (hayHas(all, term)) return false;
+    const df = freq.get(term) ?? 0;
+    return found.some((other) => (freq.get(other) ?? 0) > df && !hayHas(whole, other));
+  });
+  if (!missingRarer) return found;
+  return found.filter((term) => hayHas(whole, term));
+}
+
+/**
+ * "scheme" inside "URI-scheme" is not the word "scheme". It must not satisfy a
+ * question that also asks about a rarer word the title does not contain ("ponzi").
+ * A hyphenated subject the question actually uses ("Double-Spend") still counts,
+ * because nothing rarer is missing.
+ */
+function countedTerms(question: string, text: string): string[] {
+  return substantiveHits(overlapTerms(question).required, text);
 }
 
 function tokenSet(text: string): Set<string> {
@@ -140,18 +367,82 @@ function hayHas(hay: Set<string>, term: string): boolean {
   return false;
 }
 
+function matchedTerms(question: string, text: string): string[] {
+  return countedTerms(question, text);
+}
+
 /**
  * True when `text` shares a subject word with the question.
  * A question with no specific word ("What is Bitcoin?") does not reject titles:
  * the whole record is about that topic, and theme packing already spreads it.
+ * A sharper word, when the question has one, has to appear; a high-frequency
+ * domain word left over from the question does not satisfy that on its own.
  */
 export function sharesSubject(question: string, text: string): boolean {
-  const { terms, specific } = subjectTerms(question);
   if (!text.trim()) return false;
-  if (!specific) return true;
-  if (terms.length === 0) return false;
-  const hay = tokenSet(text);
-  return terms.some((term) => hayHas(hay, term));
+  const decision = overlapTerms(question);
+  if (decision.open) return true;
+  if (decision.required.length === 0) return false;
+  return matchedTerms(question, text).length > 0;
+}
+
+function asQueries(retrievedBy?: string | readonly string[]): string[] {
+  if (!retrievedBy) return [];
+  const list = typeof retrievedBy === 'string' ? [retrievedBy] : retrievedBy;
+  return list.map((query) => query.trim()).filter(Boolean);
+}
+
+/**
+ * Terms in `text` that a retrieval query contributes beyond the question.
+ * Generic domain words do not count. A companion the question-side gate already
+ * dropped ("scheme" beside an unseen "ponzi") does not count either, so a
+ * rewrite cannot put an unrelated title back. A word the question never used
+ * ("alert" in a rewrite of "that warning") does count: that is the query which
+ * retrieved the hit.
+ */
+function retrievedMatchTerms(question: string, retrievedBy: string | readonly string[] | undefined, text: string): string[] {
+  if (!text.trim()) return [];
+  const generic = lexicon().generic;
+  const decision = overlapTerms(question);
+  const allowed = new Set(decision.required);
+  const questionTerms = new Set(subjectTerms(question).terms);
+  const asked = question.trim().toLowerCase();
+  const matched = new Set<string>();
+  for (const query of asQueries(retrievedBy)) {
+    if (query.toLowerCase() === asked) continue;
+    const specific = contentTokens(query).filter((term) => !generic.has(term));
+    const here = substantiveHits(specific, text);
+    if (here.length === 0) continue;
+    const weak = !decision.open && here.every((term) => questionTerms.has(term) && !allowed.has(term));
+    if (weak) continue;
+    for (const term of here) matched.add(term);
+  }
+  return [...matched];
+}
+
+/**
+ * A primary may match on its body for a real subject ("merkle" in a post whose
+ * title is "Re: …"). A common verb or a generic domain word in the body is not
+ * a subject: "what happened" and a signature "Satoshi" appear in unrelated mail.
+ */
+function primaryBodyQualifies(question: string, hit: GateHit): boolean {
+  const decision = overlapTerms(question);
+  const hay = tokenSet(`${hit.title ?? ''} ${hit.text ?? ''} ${hit.excerpt ?? ''}`);
+  if (decision.open) {
+    const { terms } = subjectTerms(question);
+    return terms.length === 0 || terms.some((term) => hayHas(hay, term));
+  }
+  const generic = lexicon().generic;
+  const freq = lexicon().freq;
+  let sharp = decision.required.filter((term) => !COMMON_VERBS.has(term) && !generic.has(term));
+  if (sharp.includes('size') || sharp.includes('1mb')) sharp = sharp.filter((term) => term !== 'block');
+  // A word the index has never seen ("ponzi") has to appear in the writing. A common
+  // companion in the body ("scheme" in a URI-scheme thread) does not stand in for it.
+  const unseen = sharp.filter((term) => (freq.get(term) ?? 0) === 0);
+  if (unseen.length > 0) sharp = unseen;
+  if (sharp.length === 0) return false;
+  const blob = `${hit.title ?? ''} ${hit.text ?? ''} ${hit.excerpt ?? ''}`;
+  return substantiveHits(sharp, blob).length > 0;
 }
 
 function namedSpecIds(question: string): string[] {
@@ -260,6 +551,8 @@ export interface GateHit {
   excerpt?: string;
   text?: string;
   url?: string;
+  /** Index kind, when the caller has it. Code kinds lose a verb-only overlap. */
+  kind?: string;
 }
 
 /**
@@ -273,6 +566,7 @@ export function hitQualifies(
   hit: GateHit,
   shape: RetrievalShape,
   source: GateSource,
+  retrievedBy?: string | readonly string[],
 ): boolean {
   const blob = `${hit.title ?? ''} ${hit.locator ?? ''} ${hit.url ?? ''}`;
   if (shape === 'builder' && /brc-?100|\b0100\.md\b/i.test(blob)) return true;
@@ -281,17 +575,30 @@ export function hitQualifies(
     const body = `${hit.title ?? ''} ${hit.text ?? ''} ${hit.excerpt ?? ''} ${hit.locator ?? ''}`.toLowerCase();
     return namedSpecIds(question).some((id) => body.includes(id));
   }
-  if (hit.title && sharesSubject(question, hit.title)) return true;
-  if (source === 'satoshi-primary') {
-    const { terms } = subjectTerms(question);
-    // "block" is kept so a title that says "block" can match a block-size question.
-    // A primary body is full of the word "block"; the sharper term has to appear too.
-    const sharp = terms.includes('size') || terms.includes('1mb') ? terms.filter((term) => term !== 'block') : terms;
-    const hay = tokenSet(`${hit.title ?? ''} ${hit.text ?? ''} ${hit.excerpt ?? ''}`);
-    return sharp.some((term) => hayHas(hay, term));
+  const viaQuestion = Boolean(hit.title && sharesSubject(question, hit.title));
+  const viaQuery = hit.title ? retrievedMatchTerms(question, retrievedBy, hit.title) : [];
+  if (viaQuestion || viaQuery.length > 0) {
+    // A common verb is not a subject. "Stop" the exported method, a mail whose
+    // body says "disappear", and an essay titled only with that verb ("Tollkeepers
+    // Disappear", "can not stop debt") are not the question. A title that also
+    // names the person ("Satoshi NEVER Posted") still matches on that name.
+    const matched = viaQuestion && hit.title ? matchedTerms(question, hit.title) : viaQuery;
+    if (!overlapTerms(question).open && matched.length > 0 && matched.every((term) => COMMON_VERBS.has(term))) {
+      return false;
+    }
+    return true;
   }
+  if (source === 'satoshi-primary') return primaryBodyQualifies(question, hit);
   if (!hit.url) {
-    return sharesSubject(question, `${hit.locator ?? ''} ${hit.excerpt ?? ''} ${hit.text ?? ''}`);
+    const blob = `${hit.locator ?? ''} ${hit.excerpt ?? ''} ${hit.text ?? ''}`;
+    if (!sharesSubject(question, blob)) return false;
+    // An internal card is kept when its snippet shares the subject ("hijacked"
+    // under a title that says "direction change"). A snippet that only shares a
+    // common verb ("disappearing" inside an unrelated finding) does not.
+    if (overlapTerms(question).open) return true;
+    const matched = matchedTerms(question, blob);
+    if (matched.length > 0 && matched.every((term) => COMMON_VERBS.has(term))) return false;
+    return true;
   }
   return false;
 }

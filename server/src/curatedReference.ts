@@ -116,6 +116,49 @@ export function isTimecoinQuestion(q: string): boolean {
   return TIMECOIN_TERM.test(q);
 }
 
+/**
+ * Why Satoshi, or "you" in this voice, stopped, left, or handed the work on.
+ * "Leave" alone is not enough: "leave the block size" is a protocol question.
+ * Hearn is this correspondence. Gavin matches only with a departure cue, so a
+ * question about his RPC work does not.
+ */
+const DEPARTURE_PERSON = /\b(you|u|your|satoshi|nakamoto)\b/i;
+const DEPARTURE_UNAMBIGUOUS =
+  /\b(disappear(?:ed|ing)?|vanish(?:ed|ing)?|stop(?:ped)? posting|go(?:ne)? away|went away|walk(?:ed)? away|hand(?:ed|ing)? over|step(?:ped|ping)? back|quit|abandon(?:ed|ing)?)\b/i;
+const DEPARTURE_LEAVE = /\b(leave|left|leaving)\b/i;
+const DEPARTURE_LEAVE_OBJECT =
+  /\b(bitcoin|the project|this project|the community|in public|public view|public life|the scene|posting|development)\b/i;
+
+export function isDepartureQuestion(q: string): boolean {
+  if (/\bwhat happened to (?:satoshi|nakamoto|you|u)\b/i.test(q)) return true;
+  if (
+    /\bwhy did (?:you|u|satoshi|nakamoto) leave(?:\s+(?:bitcoin|it|the project|the community|in public|public view|public life|us))?(?:\s*[?.!]|$)/i.test(
+      q,
+    )
+  ) {
+    return true;
+  }
+  if (DEPARTURE_PERSON.test(q) && DEPARTURE_UNAMBIGUOUS.test(q)) return true;
+  if (DEPARTURE_PERSON.test(q) && DEPARTURE_LEAVE.test(q) && DEPARTURE_LEAVE_OBJECT.test(q)) return true;
+  if (/\bhand(?:ed|ing)? over\b/i.test(q) && /\b(gavin|andresen|hearn)\b/i.test(q)) return true;
+  if (
+    /\blast\b[^?\n]{0,40}\b(?:forum post|posts|post|e-?mails?|emails?)\b/i.test(q) &&
+    /\b(satoshi|nakamoto|you|your|hearn)\b/i.test(q)
+  ) {
+    return true;
+  }
+  if (/\bhearn\b/i.test(q)) return true;
+  if (
+    /\b(gavin|andresen)\b/i.test(q) &&
+    /\b(satoshi|nakamoto|leave|left|hand(?:ed|ing)? over|alert key|disappear(?:ed)?|depart(?:ure|ed)?|shadowy|moved on)\b/i.test(
+      q,
+    )
+  ) {
+    return true;
+  }
+  return false;
+}
+
 /** Tech-retrieval hint so builder questions hit BRC-100 / SPV rather than a BTC prior. */
 export const IMPLEMENTATION_TECH_QUERY = 'BRC-100 BRC-62 OP_RETURN SPV wallet overlay SDK';
 
@@ -146,18 +189,21 @@ export class CuratedReference {
   readonly scaling: ScalingRecord | null;
   readonly implementation: ImplementationRecord | null;
   readonly timecoin: ScalingRecord | null;
+  readonly departure: ScalingRecord | null;
 
   constructor(
     entries: DossierEntry[],
     scaling: ScalingRecord | null,
     implementation: ImplementationRecord | null = null,
     timecoin: ScalingRecord | null = null,
+    departure: ScalingRecord | null = null,
   ) {
     this.all = entries;
     this.pinned = entries.filter((e) => e.pin);
     this.scaling = scaling;
     this.implementation = implementation;
     this.timecoin = timecoin;
+    this.departure = departure;
     this.mini = new MiniSearch<DossierEntry>({
       fields: ['title', 'text', 'category'],
       storeFields: ['id', 'category', 'title', 'date', 'url', 'text', 'pin'],
@@ -257,14 +303,17 @@ export function loadCuratedReference(
   scalingPath?: string,
   implementationPath?: string,
   timecoinPath?: string,
+  departurePath?: string,
 ): CuratedReference | null {
   let entries: DossierEntry[] = [];
   let scaling: ScalingRecord | null = null;
   let implementation: ImplementationRecord | null = null;
   let timecoin: ScalingRecord | null = null;
+  let departure: ScalingRecord | null = null;
 
-  if (dossierPath || scalingPath || implementationPath || timecoinPath) {
+  if (dossierPath || scalingPath || implementationPath || timecoinPath || departurePath) {
     if (timecoinPath) timecoin = loadPinnedJson(timecoinPath, 'timecoin record');
+    if (departurePath) departure = loadPinnedJson(departurePath, 'departure record');
     if (dossierPath && existsSync(dossierPath)) {
       try {
         entries = parseDossier(readFileSync(dossierPath, 'utf8'));
@@ -295,11 +344,14 @@ export function loadCuratedReference(
     const timecoinFile = join(dataDir, 'timecoin-record.json');
     timecoin = loadPinnedJson(timecoinFile, 'timecoin record');
     if (!timecoin) console.warn(`[curated] ${timecoinFile} not found — timecoin record disabled.`);
+    const departureFile = join(dataDir, 'departure-record.json');
+    departure = loadPinnedJson(departureFile, 'departure record');
+    if (!departure) console.warn(`[curated] ${departureFile} not found — departure record disabled.`);
   }
 
-  if (entries.length === 0 && !scaling && !implementation && !timecoin) return null;
+  if (entries.length === 0 && !scaling && !implementation && !timecoin && !departure) return null;
   console.log(
-    `[curated] loaded ${entries.length} dossier entries${scaling ? ' + scaling record' : ''}${implementation ? ' + implementation record' : ''}${timecoin ? ' + timecoin record' : ''}`,
+    `[curated] loaded ${entries.length} dossier entries${scaling ? ' + scaling record' : ''}${implementation ? ' + implementation record' : ''}${timecoin ? ' + timecoin record' : ''}${departure ? ' + departure record' : ''}`,
   );
-  return new CuratedReference(entries, scaling, implementation, timecoin);
+  return new CuratedReference(entries, scaling, implementation, timecoin, departure);
 }

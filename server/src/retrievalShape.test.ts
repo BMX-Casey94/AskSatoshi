@@ -1,10 +1,15 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import {
   classifyRetrieval,
+  deriveDomainGenerics,
+  domainGenericTerms,
+  dominateTerms,
   hitQualifies,
   mergeCollectorCitations,
+  overlapTerms,
   slotBudget,
   subjectTerms,
+  useTestLexicon,
 } from './retrievalShape.js';
 
 describe('classifyRetrieval', () => {
@@ -48,6 +53,8 @@ describe('hitQualifies', () => {
     expect(hitQualifies('What is BRC-100?', { title: 'Wallet note', text: 'See BRC-100 for the interface.', url: 'https://example.com/mail' }, 'named-spec', 'satoshi-primary')).toBe(true);
     expect(hitQualifies('How do I build a payment app?', { title: 'BRC-100', url: 'https://github.com/bsv-blockchain/BRCs/blob/master/wallet/0100.md' }, 'builder', 'spec')).toBe(true);
     expect(hitQualifies('Why was Bitcoin hijacked?', { title: 'Direction change', locator: 'analysis://bitcoin-scaling-history', excerpt: 'Bitcoin was hijacked from peer-to-peer cash.' }, 'concept', 'internal')).toBe(true);
+    expect(hitQualifies('Did someone co-opt Bitcoin?', { title: 'Direction change', locator: 'analysis://bitcoin-scaling-history', excerpt: 'Bitcoin was hijacked from peer-to-peer cash.' }, 'concept', 'internal')).toBe(true);
+    expect(hitQualifies('Did someone co-opt Bitcoin?', { title: 'Wallet options', url: 'https://example.com/opt' }, 'concept', 'spec')).toBe(false);
     expect(hitQualifies('What is Bitcoin?', { title: 'The 21 million', url: 'https://example.com/21' }, 'general', 'later-commentary')).toBe(true);
   });
 
@@ -92,5 +99,155 @@ describe('mergeCollectorCitations', () => {
     const merged = mergeCollectorCitations(search, investigate, 'What is OP_RETURN?');
     expect(merged.investigateFirst).toBe(false);
     expect(merged.citations[0]?.url).toBe('https://example.com/a');
+  });
+});
+
+describe('domain frequency', () => {
+  afterEach(() => useTestLexicon(null));
+
+  it('admits a domain word only when it is common, and always admits an author name that occurs', () => {
+    const freq = new Map<string, number>([
+      ['bitcoin', 40],
+      ['block', 20],
+      ['nod', 15],
+      ['merkle', 2],
+      ['satoshi', 1],
+      ['scheme', 1],
+    ]);
+    const generic = deriveDomainGenerics(freq, 100);
+    expect(generic.has('bitcoin')).toBe(true);
+    expect(generic.has('block')).toBe(true);
+    expect(generic.has('nod')).toBe(true);
+    expect(generic.has('satoshi')).toBe(true);
+    expect(generic.has('merkle')).toBe(false);
+    expect(generic.has('scheme')).toBe(false);
+  });
+
+  it('keeps the rare term when another term is far more common', () => {
+    const freq = new Map<string, number>([
+      ['ponzi', 0],
+      ['scheme', 15],
+      ['merkle', 13],
+      ['tree', 4],
+    ]);
+    expect(dominateTerms(['ponzi', 'scheme'], freq)).toEqual(['ponzi']);
+    expect(dominateTerms(['merkle', 'tree'], freq).sort()).toEqual(['merkle', 'tree']);
+    // A word the index has seen, however rare, does not erase the other subject.
+    expect(dominateTerms(['scale', 'million', 'tps'], new Map([['scale', 14], ['million', 22], ['tps', 1]])).sort())
+      .toEqual(['million', 'scale', 'tps']);
+    expect(dominateTerms(['build', 'app'], new Map([['build', 109], ['app', 19]])).sort()).toEqual(['app', 'build']);
+  });
+
+  it('derives the live generic set from the corpus and the protocol index', () => {
+    useTestLexicon(null);
+    const generic = domainGenericTerms();
+    for (const term of ['bitcoin', 'block', 'transaction', 'network', 'satoshi']) {
+      expect(generic.has(term)).toBe(true);
+    }
+    for (const term of ['merkle', 'utxo', 'ponzi']) {
+      expect(generic.has(term)).toBe(false);
+    }
+  });
+});
+
+describe('title gate against the weak overlaps', () => {
+  afterEach(() => useTestLexicon(null));
+
+  it('does not cite a title that only shares a generic or a verb-shaped near miss', () => {
+    useTestLexicon(null);
+    const ponzi = 'Is Bitcoin a Ponzi scheme?';
+    expect(overlapTerms(ponzi).required).toEqual(expect.arrayContaining(['ponzi', 'scheme']));
+    expect(hitQualifies(ponzi, { title: 'Re: URI-scheme for bitcoin', url: 'https://example.com/uri' }, 'general', 'later-commentary')).toBe(false);
+
+    const stop = 'Why did Satoshi stop posting?';
+    expect(hitQualifies(stop, { title: 'Stop — exported method in go-sdk', url: 'https://example.com/stop', kind: 'symbol' }, 'concept', 'spec')).toBe(false);
+    expect(hitQualifies(stop, { title: 'Stop — exported method in go-sdk', url: 'https://example.com/stop' }, 'concept', 'spec')).toBe(false);
+    expect(hitQualifies(stop, { title: 'Satoshi NEVER Posted on Bitcointalk', url: 'https://example.com/never' }, 'concept', 'later-commentary')).toBe(true);
+    expect(hitQualifies(stop, { title: 'Burning and why it matters that it is stopped', url: 'https://example.com/stopped' }, 'concept', 'later-commentary')).toBe(false);
+
+    const happened = 'What happened to Satoshi?';
+    expect(hitQualifies(happened, {
+      title: 'Re: [bitcoin-list] Does Bitcoin Crash in Windows?',
+      text: 'Satoshi Nakamoto: what happened was a display bug.',
+      url: 'https://example.com/windows',
+    }, 'concept', 'satoshi-primary')).toBe(false);
+
+    const gone = 'Why did you disappear?';
+    expect(hitQualifies(gone, {
+      title: 'Re: overflow bug SERIOUS',
+      text: 'The coins will not disappear.',
+      url: 'https://example.com/overflow',
+    }, 'concept', 'satoshi-primary')).toBe(false);
+    expect(hitQualifies(gone, {
+      title: 'Re: Transaction disappeared in the void...',
+      url: 'https://example.com/void',
+    }, 'concept', 'satoshi-primary')).toBe(false);
+    expect(hitQualifies(gone, {
+      title: 'When the Tollkeepers Disappear: The Consequences of Real Digital Cash',
+      url: 'https://example.com/toll',
+    }, 'concept', 'later-commentary')).toBe(false);
+  });
+
+  it('still grounds a question whose only subject is a generic domain word', () => {
+    useTestLexicon(null);
+    expect(overlapTerms('What is Bitcoin?').open).toBe(true);
+    expect(hitQualifies('What is Bitcoin?', { title: 'The 21 million', url: 'https://example.com/21' }, 'general', 'later-commentary')).toBe(true);
+    expect(overlapTerms('blocks').open).toBe(true);
+    expect(hitQualifies('blocks', { title: 'The 21 million', url: 'https://example.com/21' }, 'general', 'later-commentary')).toBe(true);
+    expect(hitQualifies('How do Merkle trees work?', { title: 'Merkle Trees and SPV', url: 'https://example.com/merkle' }, 'mechanism', 'spec')).toBe(true);
+    expect(hitQualifies('What is a UTXO?', { title: 'UTXO set and pruning', url: 'https://example.com/utxo' }, 'mechanism', 'spec')).toBe(true);
+  });
+
+  it('keeps a title that shares a real subject, including one introduced by the query that retrieved it', () => {
+    useTestLexicon(null);
+    expect(overlapTerms('alert system network-wide warning').required).toEqual(expect.arrayContaining(['alert']));
+    expect(hitQualifies(
+      'alert system network-wide warning',
+      { title: 'Alert key', url: 'https://example.com/alert' },
+      'general',
+      'spec',
+      'alert key emergency broadcast',
+    )).toBe(true);
+    expect(hitQualifies(
+      'How do I build a payment app?',
+      { title: 'Walletless applications to build SPV proofs at scale', url: 'https://example.com/wallets' },
+      'builder',
+      'later-commentary',
+    )).toBe(true);
+    expect(hitQualifies(
+      'How do I build a payment app?',
+      { title: 'BRC-100', url: 'https://github.com/bsv-blockchain/BRCs/blob/master/wallet/0100.md' },
+      'builder',
+      'spec',
+    )).toBe(true);
+    expect(hitQualifies(
+      'Can Bitcoin scale to a million TPS?',
+      { title: 'On-chain scaling essay 1', url: 'https://example.com/scale' },
+      'scaling',
+      'later-commentary',
+    )).toBe(true);
+    // The question never says "alert". The rewrite does, and that is what retrieved the hit.
+    expect(hitQualifies(
+      'What was that warning?',
+      { title: 'Alert key', url: 'https://example.com/alert' },
+      'general',
+      'spec',
+      'alert key emergency broadcast',
+    )).toBe(true);
+    // A rewrite must not revive a companion the question-side gate already dropped.
+    expect(hitQualifies(
+      'Is Bitcoin a Ponzi scheme?',
+      { title: 'Re: URI-scheme for bitcoin', url: 'https://example.com/uri' },
+      'general',
+      'later-commentary',
+      'ponzi scheme',
+    )).toBe(false);
+    expect(hitQualifies(
+      'Why did Satoshi stop posting?',
+      { title: 'Stop — exported method in go-sdk', url: 'https://example.com/stop', kind: 'symbol' },
+      'concept',
+      'spec',
+      'satoshi stop posting',
+    )).toBe(false);
   });
 });

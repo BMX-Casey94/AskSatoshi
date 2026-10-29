@@ -57,6 +57,13 @@ import {
   shouldSkipRewrite,
   type QueryUnderstanding,
 } from './queryUnderstanding.js';
+import {
+  expandShortQuery,
+  mergeRetrievalQueries,
+  ShortExpansionCache,
+  shouldRunShortExpansion,
+  type ShortExpansionOutcome,
+} from './shortExpansion.js';
 import { getActivity } from './satoshiActivity.js';
 import { helmetOptions } from './security.js';
 import { corpusUpdatedAt, loadCorpus } from './satoshiCorpus.js';
@@ -122,6 +129,7 @@ const breaker = new Breaker();
 const cache = new AnswerCache();
 const feedback = new FeedbackCounters();
 const rewriteCache = new RewriteCache();
+const shortExpansionCache = new ShortExpansionCache();
 const mcp = new McpBridge();
 const corpus = loadCorpus();
 const news = loadCoinGeekNews();
@@ -377,6 +385,41 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
       );
     }
     let understanding: QueryUnderstanding | undefined;
+    // Short inputs can miss the index on spelling ("op return", "merkle"). The
+    // expansion runs beside the rewrite, capped at 2s, and only adds search queries.
+    // It does not replace the question, and it does not run for greetings, specs,
+    // news, the directory, or a bare off-topic word. A failure leaves retrieval unchanged.
+    const expansionPromise: Promise<ShortExpansionOutcome> = shouldRunShortExpansion({
+      question,
+      hasKeys,
+      hasImage: Boolean(image),
+      constrained,
+    })
+      ? (() => {
+          const expansionAbort = new AbortController();
+          const stopExpansion = () => expansionAbort.abort();
+          if (controller.signal.aborted) stopExpansion();
+          else controller.signal.addEventListener('abort', stopExpansion, { once: true });
+          return expandShortQuery(
+            question,
+            async (req) => {
+              const res = await runChain(
+                { system: req.system, history: [], userContent: req.userContent },
+                { keys, breaker, signal: expansionAbort.signal, onDelta: () => undefined },
+              ).catch(() => null);
+              return res?.text ?? null;
+            },
+            {
+              priorUser,
+              cache: shortExpansionCache,
+              hasKeys,
+              hasImage: Boolean(image),
+              constrained,
+              abort: stopExpansion,
+            },
+          ).finally(() => controller.signal.removeEventListener('abort', stopExpansion));
+        })()
+      : Promise.resolve({ phrases: [], status: 'skipped' });
     if (hasKeys && !image && !constrained && !bareShape && !shouldSkipRewrite(question)) {
       const cacheKey = rewriteCacheKey(question, priorUser);
       understanding = rewriteCache.get(cacheKey);
@@ -410,9 +453,18 @@ app.post('/api/chat', chatGuards, async (req: express.Request, res: express.Resp
       }
     }
 
+    const expansion = await expansionPromise;
+    if (expansion.status === 'ok' || expansion.status === 'empty' || expansion.status === 'cache') {
+      console.info(`[short-expand] ${expansion.status} (phrases: ${expansion.phrases.length})`);
+    } else if (expansion.status === 'discarded') {
+      console.info('[short-expand] discarded (unparseable reply)');
+    } else if (expansion.status === 'timeout') {
+      console.info('[short-expand] no reply (timeout or provider error)');
+    }
     const retrievalQuery = understanding?.query ?? contextualQuery(question, priorUser);
+    const variants = mergeRetrievalQueries(understanding?.variants ?? [], expansion.phrases);
     const baseGrounding = await groundQuestion(retrievalQuery, { mcp, corpus, curated }, {
-      variants: understanding?.variants,
+      variants: variants.length > 0 ? variants : undefined,
       originalQuestion: question,
       // investigate resolves follow-up references when given the prior turn as context —
       // but only forward it when this message actually is a follow-up, or unrelated

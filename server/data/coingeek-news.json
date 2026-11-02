@@ -1,19 +1,361 @@
 {
   "pin": {
     "source": "https://coingeek.com/",
-    "fetchedAt": "2026-10-28T15:24:10.575Z",
+    "fetchedAt": "2026-11-02T13:32:51.413Z",
     "counts": {
-      "items": 5142,
-      "fetched": 5139
+      "items": 5154,
+      "fetched": 5114
     },
     "oldest": "2023-10-28T05:00:28.000Z",
-    "newest": "2026-10-28T14:00:00.000Z",
+    "newest": "2026-11-02T10:00:00.000Z",
     "method": "wp-rest",
     "months": 36,
     "complete": true,
     "requests": 192
   },
   "items": [
+    {
+      "id": "coingeek-625913",
+      "url": "https://coingeek.com/south-korea-crypto-faces-monthly-reports-possible-education-tax",
+      "title": "South Korea crypto faces monthly reports, possible education tax",
+      "date": "2026-11-02T10:00:00.000Z",
+      "excerpt": "South Korea weighs stricter crypto reporting and an education tax on exchanges as regulatory pressure grows and the Digital Asset Basic Act faces delays.",
+      "modified": "2026-10-29T22:05:21.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Bank of Korea",
+        "Digital Asset Basic Act",
+        "Digital Asset Exchange Alliance",
+        "Education",
+        "Regulation",
+        "South Korea",
+        "Tax"
+      ]
+    },
+    {
+      "id": "coingeek-626014",
+      "url": "https://coingeek.com/salting-the-grave-10-years-since-btc-killed-satoshi-alert-key",
+      "title": "Salting the grave: 10 years since BTC killed Satoshi’s alert key",
+      "date": "2026-11-02T08:00:00.000Z",
+      "excerpt": "Bitcoin’s original alert system, built by Satoshi Nakamoto in 2010, began its retirement in 2016, revealing a defining divide between BTC and BSV.",
+      "modified": "2026-10-30T22:52:21.000Z",
+      "categories": [
+        "Editorial"
+      ],
+      "tags": [
+        "Alert Key",
+        "Andrew Chow",
+        "Bitcoin",
+        "Bitcoin Core",
+        "Bitcoin History",
+        "Bitcoin SV",
+        "Bitcoin.org",
+        "Bryan Bishop",
+        "BSV Association",
+        "BSV Blockchain",
+        "BTC",
+        "Digital Asset Recovery",
+        "Gregory Maxwell",
+        "Jeff Garzik",
+        "Johnson Lau",
+        "Mark Karpelès",
+        "Network Access Rules",
+        "Satoshi Nakamoto",
+        "Wladimir van der Laan"
+      ]
+    },
+    {
+      "id": "coingeek-625834",
+      "url": "https://coingeek.com/will-ai-surpass-humans-2-filipino-student-teams-make-the-case",
+      "title": "Will AI surpass humans? 2 Filipino student teams make the case",
+      "date": "2026-11-02T06:00:00.000Z",
+      "excerpt": "Faster isn’t smarter, says UP. AI already wins, says Ateneo. Read the DigiCon 2026 debate on whether AI can surpass human intelligence in marketing.",
+      "modified": "2026-10-27T23:34:17.000Z",
+      "categories": [
+        "Business",
+        "Events"
+      ],
+      "tags": [
+        "AI",
+        "Alyssa Lorraine David",
+        "Artificial Intelligence",
+        "Ateneo de Manila University",
+        "Ateneo Debate Society",
+        "Cara Danielle Reyes",
+        "DigiCon",
+        "DigiCon 2026",
+        "Digital Marketing Association of the Philippines",
+        "Digital Transformation",
+        "DMAP",
+        "Hugh Mejos",
+        "interoperability",
+        "Philippines",
+        "Pio Raphael Ventura",
+        "Rafael Carasig",
+        "Ramya Espiritu",
+        "University of the Philippines",
+        "UP Debate Society",
+        "Willben Sebastian Ong"
+      ]
+    },
+    {
+      "id": "coingeek-625998",
+      "url": "https://coingeek.com/coinbase-prediction-market-enthusiasm-offsets-crypto-apathy",
+      "title": "Coinbase: Prediction market enthusiasm offsets crypto apathy",
+      "date": "2026-10-30T12:00:00.000Z",
+      "excerpt": "Coinbase returns to profitability despite weaker revenue, buoyed by investment gains as derivatives and prediction markets reshape its transaction business.",
+      "modified": "2026-10-30T11:58:17.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Circle",
+        "Coinbase",
+        "Coinbase Financial Markets",
+        "Coinbase Global Exchange",
+        "Crime",
+        "crypto derivatives",
+        "Cybercrime",
+        "Data Breach",
+        "Deribit",
+        "Prediction Markets",
+        "Ripple",
+        "Ripple Labs",
+        "RLUSD",
+        "Stablecoins",
+        "Trading",
+        "USDC"
+      ]
+    },
+    {
+      "id": "coingeek-625994",
+      "url": "https://coingeek.com/binance-6-3b-drained-in-largest-digital-asset-theft-on-record",
+      "title": "Binance: $6.3B drained in largest digital asset theft on record",
+      "date": "2026-10-30T11:00:00.000Z",
+      "excerpt": "Binance faces the largest theft in digital asset history, losing $6.3 billion, while user funds are promised to be safe and covered by insurance.",
+      "modified": "2026-10-30T10:53:14.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Binance",
+        "Bitcoin SV",
+        "BSV Blockchain",
+        "Chainalysis",
+        "Changpeng Zhao",
+        "Circle",
+        "Hack",
+        "Mt Gox",
+        "North Korea",
+        "SAFU",
+        "Stablecoins",
+        "Tether",
+        "TraderTraitor",
+        "TRM Labs",
+        "USDC",
+        "USDT",
+        "Yi He"
+      ]
+    },
+    {
+      "id": "coingeek-625887",
+      "url": "https://coingeek.com/anthropic-ipo-week-bans-buyouts-and-a-2t-bet",
+      "title": "Anthropic’s IPO week: Bans, buyouts and a $2T bet",
+      "date": "2026-10-30T10:00:00.000Z",
+      "excerpt": "Anthropic’s IPO filing goes public, Sweden blocks ChatGPT and Claude for government staff, and Microsoft offers buyouts to 60,000 employees.",
+      "modified": "2026-10-29T06:43:13.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "AI",
+        "Amy Coleman",
+        "Anthropic",
+        "Artificial Intelligence",
+        "ChatGPT",
+        "Claude",
+        "Government Offices of Sweden",
+        "Initial Public Offering",
+        "Mikael Wettercrantz",
+        "NASDAQ",
+        "OpenAI",
+        "Regeringskansliet",
+        "S-1",
+        "Securities and Exchange Commission",
+        "Voluntary Retirement Program"
+      ]
+    },
+    {
+      "id": "coingeek-625906",
+      "url": "https://coingeek.com/the-machine-economy-needs-a-universal-receipt-layer",
+      "title": "The machine economy needs a universal receipt layer",
+      "date": "2026-10-30T08:00:00.000Z",
+      "excerpt": "AI agents are evolving to perform transactions, requiring verifiable receipts to document actions, authority, and outcomes in the machine economy.",
+      "modified": "2026-10-29T21:37:44.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "A SCITT Profile for AI-Agent Action Receipts",
+        "Agentic AI",
+        "AI",
+        "AI Agents",
+        "Artificial Intelligence",
+        "Bitcoin SV",
+        "BSV Blockchain",
+        "Logs",
+        "Public Blockchain"
+      ]
+    },
+    {
+      "id": "coingeek-625786",
+      "url": "https://coingeek.com/visa-eyes-stablecoin-push-amid-philippines-low-public-trust",
+      "title": "Visa eyes stablecoin push amid Philippines’ low public trust",
+      "date": "2026-10-30T06:00:00.000Z",
+      "excerpt": "Visa eyes stablecoin remittances in the Philippines, where low public awareness and trust remain hurdles despite demand for faster, cheaper money transfers.",
+      "modified": "2026-10-26T23:39:03.000Z",
+      "categories": [
+        "Finance"
+      ],
+      "tags": [
+        "Digital Payments",
+        "Payments",
+        "Philippines",
+        "Qinwen Xiao",
+        "Remittances",
+        "Stablecoins",
+        "VISA"
+      ]
+    },
+    {
+      "id": "coingeek-625897",
+      "url": "https://coingeek.com/robinhood-posts-record-revenue-despite-crypto-trading-plunge",
+      "title": "Robinhood posts record revenue despite crypto trading plunge",
+      "date": "2026-10-29T12:00:00.000Z",
+      "excerpt": "Robinhood posts record Q3 revenue despite a 55% crypto slump, as prediction markets surge, while Ripple’s RLUSD deal and regulatory risks shape its outlook.",
+      "modified": "2026-10-29T07:15:20.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Bitstamp",
+        "Crypto.com",
+        "Earn",
+        "OG.com",
+        "Prediction Markets",
+        "Ripple",
+        "Ripple Labs",
+        "RLUSD",
+        "Robinhood",
+        "Robinhood Chain",
+        "Robinhood Ventures Fund I",
+        "Rothera",
+        "Shiv Verma",
+        "Stablecoins",
+        "Susquehanna International Group",
+        "Trading",
+        "United States",
+        "Vlad Tenev"
+      ]
+    },
+    {
+      "id": "coingeek-625892",
+      "url": "https://coingeek.com/over-half-of-okxice-tokenization-targets-have-now-opted-out",
+      "title": "Over half of OKXICE’s tokenization targets have now opted out",
+      "date": "2026-10-29T10:00:00.000Z",
+      "excerpt": "OKXICE tokenization faces 33 company opt-outs, while Robinhood expands tokenized stocks overseas and the DTCC Tokenization Service goes live.",
+      "modified": "2026-10-29T07:45:34.000Z",
+      "categories": [
+        "Finance"
+      ],
+      "tags": [
+        "Besu",
+        "Canton Network",
+        "Common Sense Leadership Fund",
+        "Decentralized Finance",
+        "DeFi",
+        "Depository Trust & Clearing Corporation",
+        "Depository Trust Company",
+        "DTC Digital Assets Solutions Industry Working Group",
+        "DTCC",
+        "DTTC Tokenization Service",
+        "ICE",
+        "Intercontinental Exchange Holdings",
+        "JPMorgan Chase",
+        "Ken Griffin",
+        "Kevin McLaughlin",
+        "Miles Jennings",
+        "New York Stock Exchange",
+        "NYSE",
+        "OKICE",
+        "OKX",
+        "Paul Atkins",
+        "Robinhood",
+        "Robinhood Markets",
+        "Tokenization"
+      ]
+    },
+    {
+      "id": "coingeek-625774",
+      "url": "https://coingeek.com/google-ai-push-brings-upskilling-to-filipino-teachers-and-beyond",
+      "title": "Google’s AI push brings upskilling to Filipino teachers and beyond",
+      "date": "2026-10-29T08:00:00.000Z",
+      "excerpt": "Google’s free AI Educator Series, launched with DepEd, CHED, and TESDA, aims to equip Filipino educators and learners with practical AI skills.",
+      "modified": "2026-10-26T23:24:18.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "AI",
+        "AI Adoption",
+        "AI Educator Series",
+        "Artificial Intelligence",
+        "Commission on Higher Education",
+        "Department of Education",
+        "Education",
+        "Google",
+        "Jose Francisco Benitez",
+        "Marcelino Veloso III",
+        "Philippines",
+        "Reniel Villaflor",
+        "Technical Education and Skills Development Authority"
+      ]
+    },
+    {
+      "id": "coingeek-625770",
+      "url": "https://coingeek.com/ai-uncovers-web-flaws-as-governments-race-to-plug-gaps",
+      "title": "AI uncovers web flaws as governments race to plug gaps",
+      "date": "2026-10-29T06:00:00.000Z",
+      "excerpt": "AI-driven security discoveries expose risks in PHP, prompting urgent shutdowns as organizations race to protect sites from cyberattacks.",
+      "modified": "2026-10-26T23:00:09.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "AI",
+        "Artificial Intelligence",
+        "Australia",
+        "Australian Cyber Security Centre",
+        "Calif",
+        "Crime",
+        "cyberattacks",
+        "Cybercrime",
+        "Cybersecurity",
+        "Europe",
+        "European Union Agency for Cybersecurity",
+        "Hack",
+        "National Security Agency",
+        "Office of National Security",
+        "OpenAI",
+        "PHP",
+        "PHP2Shell",
+        "South Korea",
+        "United States",
+        "Wiz"
+      ]
+    },
     {
       "id": "coingeek-625879",
       "url": "https://coingeek.com/tether-pimps-mining-development-kit-to-connect-mining-ai-whatever",
@@ -5431,7 +5773,7 @@
       "title": "Miners giving up on BTC as crypto traders also ‘pivoting to AI’",
       "date": "2026-08-12T07:00:00.000Z",
       "excerpt": "Rising challenges in Bitcoin mining are pushing miners toward AI, as operators seek new ways to put their power and infrastructure to work.",
-      "modified": "2026-08-12T05:04:23.000Z",
+      "modified": "2026-10-30T05:34:08.000Z",
       "categories": [
         "Business"
       ],
@@ -9878,7 +10220,7 @@
       "title": "Trust, technology, and governance take focus at Future of Trust leaders forum",
       "date": "2026-06-05T09:00:00.000Z",
       "excerpt": "Join industry leaders at the Future of Trust forum during the pre-opening of Philippine Blockchain Week 2026 to discuss tech and governance.",
-      "modified": "2026-06-04T09:21:01.000Z",
+      "modified": "2026-10-30T08:48:12.000Z",
       "categories": [
         "Business"
       ],
@@ -11491,7 +11833,7 @@
       "title": "IMF warns of financial risks as AI boosts cyberattacks",
       "date": "2026-05-12T07:00:00.000Z",
       "excerpt": "IMF warns that AI amplifies cyber threats, risking financial stability. Calls for resilient policies and international cooperation to combat emerging risks.",
-      "modified": "2026-05-11T12:26:09.000Z",
+      "modified": "2026-10-30T05:49:33.000Z",
       "categories": [
         "Business"
       ],
@@ -12663,7 +13005,7 @@
       "title": "UK disrupts first illegal peer-to-peer ‘crypto’ trading operation",
       "date": "2026-04-24T11:00:00.000Z",
       "excerpt": "The U.K.’s FCA has disrupted illegal peer-to-peer digital asset trading by issuing cease-and-desist orders to unregistered traders to combat financial crime.",
-      "modified": "2026-04-24T07:09:41.000Z",
+      "modified": "2026-10-30T05:18:09.000Z",
       "categories": [
         "Business"
       ],
@@ -13076,7 +13418,7 @@
       "title": "South Korea aids 6 ASEAN cities with AI-based smart city tech",
       "date": "2026-04-20T09:00:00.000Z",
       "excerpt": "South Korea’s K-City Network aims to support Southeast Asian metropolises with AI smart city tech, addressing urban issues and enhancing local development.",
-      "modified": "2026-04-15T09:48:29.000Z",
+      "modified": "2026-10-30T05:55:31.000Z",
       "categories": [
         "Business"
       ],
@@ -14055,7 +14397,7 @@
       "title": "Australia mandates licenses for crypto exchanges, custodians",
       "date": "2026-04-06T09:00:00.000Z",
       "excerpt": "Australia’s new digital assets legislation mandates crypto-related platforms to hold an AFSL, ensuring consumer protection akin to traditional finance.",
-      "modified": "2026-04-06T07:36:53.000Z",
+      "modified": "2026-10-30T05:56:20.000Z",
       "categories": [
         "Business"
       ],
@@ -17073,7 +17415,7 @@
       "title": "Malaysia to launch tests for stablecoins, tokenized deposits",
       "date": "2026-02-20T06:00:00.000Z",
       "excerpt": "Bank Negara Malaysia plans three 2026 DAIH pilots to explore real-world applications of Ringgit stablecoins and tokenized deposits.",
-      "modified": "2026-02-17T21:58:52.000Z",
+      "modified": "2026-10-30T05:09:45.000Z",
       "categories": [
         "Finance"
       ],
@@ -18012,7 +18354,7 @@
       "title": "UK Lords committee on stablecoin hears skepticism in first session",
       "date": "2026-02-10T08:00:00.000Z",
       "excerpt": "UK Lords grill stablecoins over risks as skepticism mounts, while Stand With Crypto UK touts surging support and a petition nearing Parliament debate.",
-      "modified": "2026-02-06T09:52:34.000Z",
+      "modified": "2026-10-30T05:08:32.000Z",
       "categories": [
         "Finance"
       ],
@@ -20033,7 +20375,7 @@
       "title": "Japan to tokenize local government bonds",
       "date": "2026-01-13T06:00:00.000Z",
       "excerpt": "While private and publicly traded firms can issue digital bonds, local governments have watched from the sidelines, but this could change with new rules.",
-      "modified": "2026-01-07T11:59:36.000Z",
+      "modified": "2026-10-30T05:17:15.000Z",
       "categories": [
         "Finance"
       ],
@@ -20329,7 +20671,7 @@
       "title": "Trump’s DeFi project seeks bank charter to grow USD1 stablecoin",
       "date": "2026-01-08T12:00:00.000Z",
       "excerpt": "U.S. crypto talks near an end as stablecoin yield disputes persist, a Trump-linked stablecoin seeks a bank charter, and GOP leaders push RFIA forward.",
-      "modified": "2026-01-13T10:19:55.000Z",
+      "modified": "2026-10-30T05:19:08.000Z",
       "categories": [
         "Business"
       ],
@@ -26305,7 +26647,7 @@
       "title": "PEZA secures PhP 175.37 billion in investments, reaffirms PH ecozones’ competitiveness in global stage",
       "date": "2025-11-05T02:00:00.000Z",
       "excerpt": "Despite global uncertainties, PEZA continues to see strong investment growth in Philippine ecozones, showing investors’ lasting trust and confidence.",
-      "modified": "2025-11-03T22:48:17.000Z",
+      "modified": "2026-10-30T05:51:07.000Z",
       "categories": [
         "Business"
       ],
@@ -28334,7 +28676,7 @@
       "title": "UK finance body outlines support for tokenized assets",
       "date": "2025-10-20T11:00:00.000Z",
       "excerpt": "The Financial Conduct Authority unveils plans to boost tokenization in asset management, removing blockchain barriers to drive innovation and efficiency.",
-      "modified": "2025-10-17T08:21:52.000Z",
+      "modified": "2026-10-30T05:15:52.000Z",
       "categories": [
         "Finance"
       ],
@@ -33132,7 +33474,7 @@
       "title": "Vietnam’s strict 5-year digital asset framework pilot kicks off",
       "date": "2025-09-12T09:00:00.000Z",
       "excerpt": "Vietnam has kickstarted a five-year pilot program for digital assets, setting strict rules for investors and service providers to ensure a safer market.",
-      "modified": "2025-09-11T11:09:56.000Z",
+      "modified": "2026-10-30T05:07:32.000Z",
       "categories": [
         "Business"
       ],
@@ -47572,7 +47914,7 @@
       "title": "Stablecoins to hold $1T in US Treasuries by 2030: report",
       "date": "2025-05-16T05:00:00.000Z",
       "excerpt": "Meanwhile, a U.S. Treasury report says that allowing stablecoin issuers to offer interest to holders could spur interest and boost demand for Treasuries.",
-      "modified": "2026-06-17T09:38:33.000Z",
+      "modified": "2026-10-30T05:11:28.000Z",
       "categories": [
         "Finance"
       ],
@@ -59060,7 +59402,7 @@
       "title": "This Week in AI: HP acquires Humane; xAI unveils Grok 3",
       "date": "2025-02-22T06:00:00.000Z",
       "excerpt": "In other news, Microsoft introduced Muse, an AI developed with Xbox Game Studios developer Ninja Theory, while xAI plans to launch its gaming studio.",
-      "modified": "2025-02-21T16:00:02.000Z",
+      "modified": "2026-10-30T08:39:48.000Z",
       "categories": [
         "Business"
       ],
@@ -62581,7 +62923,7 @@
       "title": "Nigeria, Zambia step up digital identity initiatives",
       "date": "2025-01-27T10:00:00.000Z",
       "excerpt": "Nigeria recently extended its partnership with the World Bank in an initiative that targets 180 million digital IDs for Nigerians by December 31, 2026.",
-      "modified": "2025-01-24T07:37:09.000Z",
+      "modified": "2026-10-30T05:22:11.000Z",
       "categories": [
         "Business"
       ],
@@ -71327,7 +71669,7 @@
       "title": "Zanzibar launches blockchain sandbox for startups",
       "date": "2024-11-05T06:00:00.000Z",
       "excerpt": "Zanzibar seeks to support blockchain startups and recently launched a sandbox; meanwhile, Vietnam has launched a national blockchain strategy.",
-      "modified": "2024-10-31T10:32:36.000Z",
+      "modified": "2026-10-30T05:24:15.000Z",
       "categories": [
         "Business"
       ],

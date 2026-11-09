@@ -2,34 +2,18 @@
   "pin": {
     "source": "https://bsvradar.com/llms-full.txt",
     "sourceClass": "directory",
-    "fetchedAt": "2026-10-28T16:34:42.721Z",
-    "sourceFileDate": "2026-10-28",
+    "fetchedAt": "2026-11-09T13:56:52.123Z",
+    "sourceFileDate": "2026-06-23",
     "method": "llms-full",
     "counts": {
-      "apps": 181,
-      "categories": 13,
-      "blocks": 205,
-      "organisations": 42
+      "apps": 167,
+      "categories": 12,
+      "blocks": 203,
+      "organisations": 36
     },
     "caveat": "BSV Radar is a partial, community catalogue; listing is not endorsement; status may be out of date."
   },
   "items": [
-    {
-      "id": "bananablocks",
-      "name": "BananaBlocks",
-      "category": "Block explorers",
-      "summary": "Explore the Bitcoin SV blockchain",
-      "radarUrl": "https://bsvradar.com/apps/bananablocks",
-      "tags": [
-        "Accepts BSV",
-        "Developer tool",
-        "Professional"
-      ],
-      "url": "https://bananablocks.com/",
-      "platform": "Web",
-      "lastUpdated": "2026-04-20",
-      "firstSeen": "2026-10-28"
-    },
     {
       "id": "bitails",
       "name": "Bitails",
@@ -58,6 +42,22 @@
       "url": "https://whatsonchain.com",
       "platform": "Web",
       "lastUpdated": "2026-05-05",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "bananablocks",
+      "name": "BananaBlocks",
+      "category": "Block explorers",
+      "summary": "Explore the Bitcoin SV blockchain",
+      "radarUrl": "https://bsvradar.com/apps/bananablocks",
+      "tags": [
+        "Accepts BSV",
+        "Developer tool",
+        "Professional"
+      ],
+      "url": "https://bananablocks.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-04-20",
       "firstSeen": "2026-10-28"
     },
     {
@@ -300,20 +300,6 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "bsv-ordinals-market",
-      "name": "BSV Ordinals Market",
-      "category": "Collectibles",
-      "summary": "Buy unique 1Sat Ordinals",
-      "radarUrl": "https://bsvradar.com/apps/bsv-ordinals-market",
-      "tags": [
-        "Accepts BSV"
-      ],
-      "url": "https://ordinal-hub.vercel.app/",
-      "platform": "Web",
-      "lastUpdated": "2026-08-02",
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "the-ai-bitcoin-revolution-book",
       "name": "The AI-Bitcoin Revolution Book",
       "category": "Education",
@@ -399,21 +385,6 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "build-easy-on-bsv",
-      "name": "Build Easy on BSV",
-      "category": "Education",
-      "summary": "Live, hands-on session companion for building Bitcoin SV apps on Replit.",
-      "radarUrl": "https://bsvradar.com/apps/build-easy-on-bsv",
-      "tags": [
-        "Developer tool",
-        "Professional"
-      ],
-      "url": "https://buildeasyonbsv.com/",
-      "platform": "Web",
-      "lastUpdated": "2026-09-21",
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "satolearn",
       "name": "Satolearn",
       "category": "Education",
@@ -455,22 +426,6 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "ask-satoshi",
-      "name": "Ask Satoshi",
-      "category": "Education",
-      "summary": "Ask Satoshi — Bitcoin-based AI Chat Interface",
-      "radarUrl": "https://bsvradar.com/apps/ask-satoshi",
-      "tags": [
-        "BRC-100",
-        "Developer tool",
-        "Professional"
-      ],
-      "url": "https://ask-satoshi.online",
-      "platform": "Web",
-      "lastUpdated": "2026-09-02",
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "blockchain-scaling-data-bsv-btc-eth",
       "name": "Blockchain Scaling Data: BSV, BTC, ETH,",
       "category": "Education",
@@ -480,20 +435,6 @@
       "url": "https://BitcoinSv.guide",
       "platform": "Web",
       "lastUpdated": "2026-04-22",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "bsv-fundamentals",
-      "name": "BSV Fundamentals",
-      "category": "Education",
-      "summary": "Master BSV from the ground up",
-      "radarUrl": "https://bsvradar.com/apps/bsv-fundamentals",
-      "tags": [
-        "Developer tool"
-      ],
-      "url": "https://utxoengineer.com/course/",
-      "platform": "Web",
-      "lastUpdated": "2026-06-18",
       "firstSeen": "2026-10-28"
     },
     {
@@ -539,15 +480,17 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "bitcoinsvit",
-      "name": "BitcoinSV.it",
+      "id": "bsv-fundamentals",
+      "name": "BSV Fundamentals",
       "category": "Education",
-      "summary": "BSV explained and compared to BTC and BCH, plus free tools",
-      "radarUrl": "https://bsvradar.com/apps/bitcoinsvit",
-      "tags": [],
-      "url": "https://bitcoinsv.it/",
+      "summary": "Master BSV from the ground up",
+      "radarUrl": "https://bsvradar.com/apps/bsv-fundamentals",
+      "tags": [
+        "Developer tool"
+      ],
+      "url": "https://utxoengineer.com/course/",
       "platform": "Web",
-      "lastUpdated": "2026-08-09",
+      "lastUpdated": "2026-06-18",
       "firstSeen": "2026-10-28"
     },
     {
@@ -590,21 +533,16 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "1satsnap",
-      "name": "1SatSnap",
-      "category": "Enterprise",
-      "summary": "A cryptographic fingerprint, anchored to Bitcoin. Your original file never leaves your device.",
-      "radarUrl": "https://bsvradar.com/apps/1satsnap",
-      "tags": [
-        "Accepts BSV",
-        "Time-sealing",
-        "Developer tool",
-        "Professional"
-      ],
-      "url": "https://www.1satsnap.com/",
+      "id": "orange-gateway",
+      "name": "Orange Gateway",
+      "category": "Exchanges",
+      "summary": "Buy and sell Bitcoin BSV easily",
+      "radarUrl": "https://bsvradar.com/apps/orange-gateway",
+      "tags": [],
+      "url": "https://orangegateway.com",
       "platform": "Web",
-      "lastUpdated": "2026-10-09",
-      "firstSeen": "2026-10-28"
+      "lastUpdated": "2026-06-03",
+      "firstSeen": "2026-11-09"
     },
     {
       "id": "buy-sell-swap-crypto-instantly",
@@ -757,6 +695,21 @@
       "firstSeen": "2026-10-28"
     },
     {
+      "id": "buy-bsv",
+      "name": "Buy BSV",
+      "category": "Exchanges",
+      "summary": "Buy BSV instantly",
+      "radarUrl": "https://bsvradar.com/apps/buy-bsv",
+      "tags": [
+        "Sells BSV",
+        "BRC Wallet"
+      ],
+      "url": "https://ramp.bsvblockchain.tech/",
+      "platform": "Web",
+      "lastUpdated": "2026-06-10",
+      "firstSeen": "2026-11-09"
+    },
+    {
       "id": "onramper",
       "name": "Onramper",
       "category": "Exchanges",
@@ -769,21 +722,6 @@
       "url": "https://www.onramper.com/buy",
       "platform": "Web",
       "lastUpdated": "2026-05-04",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "therealbitcoinfun",
-      "name": "therealbitcoin.fun",
-      "category": "Exchanges",
-      "summary": "Every chain changed the rules. BSV changed them back. Swap 1,100+ assets to BSV.",
-      "radarUrl": "https://bsvradar.com/apps/therealbitcoinfun",
-      "tags": [
-        "Sells BSV",
-        "BRC Wallet"
-      ],
-      "url": "https://therealbitcoin.fun",
-      "platform": "Web",
-      "lastUpdated": "2026-10-09",
       "firstSeen": "2026-10-28"
     },
     {
@@ -912,20 +850,6 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "magic-faucet-match",
-      "name": "Magic Faucet: Match-3 & BSV",
-      "category": "Gaming",
-      "summary": "BSV-faucet mixed up with a match-3 game",
-      "radarUrl": "https://bsvradar.com/apps/magic-faucet-match",
-      "tags": [
-        "BRC-100"
-      ],
-      "url": "https://play.google.com/store/apps/details?id=bsv.magic.faucet",
-      "platform": "Web",
-      "lastUpdated": "2026-06-10",
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "pixelwar",
       "name": "PixelWar",
       "category": "Gaming",
@@ -952,30 +876,32 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "blockspace",
-      "name": "BLOCKSPACE",
+      "id": "magic-faucet-match",
+      "name": "Magic Faucet: Match-3 & BSV",
       "category": "Gaming",
-      "summary": "BLOCKSPACE — a precise transaction-space game, based on Stix from the C64 80s game.",
-      "radarUrl": "https://bsvradar.com/apps/blockspace",
+      "summary": "BSV-faucet mixed up with a match-3 game",
+      "radarUrl": "https://bsvradar.com/apps/magic-faucet-match",
       "tags": [
-        "Accepts BSV"
+        "BRC-100"
       ],
-      "url": "https://blockspace-ruthheasman.replit.app/",
+      "url": "https://play.google.com/store/apps/details?id=bsv.magic.faucet",
       "platform": "Web",
-      "lastUpdated": "2026-09-20",
+      "lastUpdated": "2026-06-10",
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "terapong",
-      "name": "TERAPONG",
+      "id": "otherworldlytcg",
+      "name": "Otherworldly TCG",
       "category": "Gaming",
-      "summary": "Retro CRT Pong where every bounce fires a real on-chain BSV micropayment. Watch SATS·TX/s climb,…",
-      "radarUrl": "https://bsvradar.com/apps/terapong",
-      "tags": [],
-      "url": "https://terapong-game.replit.app/",
+      "summary": "A blockchain-based trading card game with unique collectibles",
+      "radarUrl": "https://bsvradar.com/apps/otherworldlytcg",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://otherworldly.game",
       "platform": "Web",
-      "lastUpdated": "2026-09-20",
-      "firstSeen": "2026-10-28"
+      "lastUpdated": "2026-05-01",
+      "firstSeen": "2026-11-09"
     },
     {
       "id": "tx-blaster",
@@ -1028,7 +954,7 @@
       ],
       "url": "https://www.lilpoker.com/",
       "platform": "Web",
-      "lastUpdated": "2026-07-06",
+      "lastUpdated": "2026-04-28",
       "firstSeen": "2026-10-28"
     },
     {
@@ -1040,23 +966,9 @@
       "tags": [
         "Accepts BSV"
       ],
-      "url": "https://squat.zone",
+      "url": "https://gopnikz.itch.io/goplandia",
       "platform": "Web",
-      "lastUpdated": "2026-07-01",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "lil-bit",
-      "name": "Lil Bit",
-      "category": "Gaming",
-      "summary": "On-chain Sports Book, Casino & Prediction Market.",
-      "radarUrl": "https://bsvradar.com/apps/lil-bit",
-      "tags": [
-        "Accepts BSV"
-      ],
-      "url": "https://www.lilb.it/",
-      "platform": "Web",
-      "lastUpdated": "2026-06-07",
+      "lastUpdated": "2026-05-13",
       "firstSeen": "2026-10-28"
     },
     {
@@ -1102,34 +1014,6 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "thryll-arcade",
-      "name": "Thryll Arcade",
-      "category": "Gaming",
-      "summary": "Ad-free blockchain gaming with a transparent on-chain raffle on every play.",
-      "radarUrl": "https://bsvradar.com/apps/thryll-arcade",
-      "tags": [
-        "BRC-100"
-      ],
-      "url": "https://thryll.online",
-      "platform": "Web",
-      "lastUpdated": "2026-04-17",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "bitcoin-clicker",
-      "name": "Bitcoin Clicker",
-      "category": "Gaming",
-      "summary": "Clicker game that runs on BSV",
-      "radarUrl": "https://bsvradar.com/apps/bitcoin-clicker",
-      "tags": [
-        "BRC-100"
-      ],
-      "url": "https://awesomekalin.github.io/Bitcoin-Clicker/",
-      "platform": "Web",
-      "lastUpdated": "2026-09-20",
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "brouter",
       "name": "Brouter",
       "category": "Gaming",
@@ -1144,22 +1028,6 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "grafverse",
-      "name": "grafverse",
-      "category": "Gaming",
-      "summary": "Own what you make",
-      "radarUrl": "https://bsvradar.com/apps/grafverse",
-      "tags": [
-        "Accepts BSV",
-        "Sells BSV",
-        "BRC Wallet"
-      ],
-      "url": "https://grafverse.com",
-      "platform": "Web",
-      "lastUpdated": "2026-08-09",
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "hypertypist",
       "name": "HyperTypist",
       "category": "Gaming",
@@ -1171,6 +1039,20 @@
       "url": "https://hypertypist.com/",
       "platform": "Web",
       "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "lil-bit",
+      "name": "Lil Bit",
+      "category": "Gaming",
+      "summary": "On-chain Sports Book, Casino & Prediction Market.",
+      "radarUrl": "https://bsvradar.com/apps/lil-bit",
+      "tags": [
+        "Accepts BSV"
+      ],
+      "url": "https://www.lilb.it/",
+      "platform": "Web",
+      "lastUpdated": "2026-06-07",
       "firstSeen": "2026-10-28"
     },
     {
@@ -1204,6 +1086,20 @@
       "firstSeen": "2026-10-28"
     },
     {
+      "id": "thryll-arcade",
+      "name": "Thryll Arcade",
+      "category": "Gaming",
+      "summary": "Ad-free blockchain gaming with a transparent on-chain raffle on every play.",
+      "radarUrl": "https://bsvradar.com/apps/thryll-arcade",
+      "tags": [
+        "BRC-100"
+      ],
+      "url": "https://thryll.online",
+      "platform": "Web",
+      "lastUpdated": "2026-04-17",
+      "firstSeen": "2026-10-28"
+    },
+    {
       "id": "zoide",
       "name": "Zoide",
       "category": "Marketplaces",
@@ -1229,7 +1125,7 @@
       ],
       "url": "https://3dordi.io",
       "platform": "Web",
-      "lastUpdated": "2026-07-06",
+      "lastUpdated": "2026-06-08",
       "firstSeen": "2026-10-28"
     },
     {
@@ -1374,21 +1270,6 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "nftsales",
-      "name": "Big Red",
-      "category": "Marketplaces",
-      "summary": "Buy your own copy of curated Smart NFTs in one click — on-chain, instant, yours to resell.",
-      "radarUrl": "https://bsvradar.com/apps/nftsales",
-      "tags": [
-        "Accepts BSV",
-        "BRC Wallet"
-      ],
-      "url": "https://nft.sale",
-      "platform": "Web",
-      "lastUpdated": "2026-07-07",
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "bsvradar",
       "name": "BSV Radar",
       "category": "Media",
@@ -1404,7 +1285,7 @@
       "id": "brandcasterstudio",
       "name": "BrandCaster.studio",
       "category": "Media",
-      "summary": "AI-generated brand bibles and social media assets in minutes",
+      "summary": "AI-generated Brand Bibles in minutes",
       "radarUrl": "https://bsvradar.com/apps/brandcasterstudio",
       "tags": [
         "Accepts BSV",
@@ -1412,7 +1293,7 @@
       ],
       "url": "https://brandcaster.studio/",
       "platform": "Web",
-      "lastUpdated": "2026-08-08",
+      "lastUpdated": "2026-04-20",
       "firstSeen": "2026-10-28"
     },
     {
@@ -1427,20 +1308,6 @@
       "url": "https://indigolive.io",
       "platform": "Web",
       "lastUpdated": "2026-04-17",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "permastack",
-      "name": "Permastack",
-      "category": "Media",
-      "summary": "Publish forever on BSV",
-      "radarUrl": "https://bsvradar.com/apps/permastack",
-      "tags": [
-        "Time-sealing"
-      ],
-      "url": "https://permastackpress.com/p/2",
-      "platform": "Web",
-      "lastUpdated": "2026-07-04",
       "firstSeen": "2026-10-28"
     },
     {
@@ -1533,6 +1400,20 @@
       "firstSeen": "2026-10-28"
     },
     {
+      "id": "permastack",
+      "name": "Permastack",
+      "category": "Media",
+      "summary": "Publish forever on BSV",
+      "radarUrl": "https://bsvradar.com/apps/permastack",
+      "tags": [
+        "Time-sealing"
+      ],
+      "url": "https://permastackpress.com/p/2",
+      "platform": "Web",
+      "lastUpdated": "2026-06-18",
+      "firstSeen": "2026-10-28"
+    },
+    {
       "id": "tonicpow",
       "name": "TonicPow",
       "category": "Media",
@@ -1615,18 +1496,6 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "wonkerly",
-      "name": "Wonkerly",
-      "category": "Media",
-      "summary": "Tolerate with style",
-      "radarUrl": "https://bsvradar.com/apps/wonkerly",
-      "tags": [],
-      "url": "https://wonkerly.com/",
-      "platform": "Web",
-      "lastUpdated": "2026-07-04",
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "zedvibe-music-streaming",
       "name": "ZedVibe Music Streaming",
       "category": "Media",
@@ -1638,18 +1507,6 @@
       "url": "https://zedvibe.org",
       "platform": "Web",
       "lastUpdated": "2026-04-17",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "coingeek",
-      "name": "CoinGeek",
-      "category": "Media",
-      "summary": "News outlet for Bitcoin Satoshi vision",
-      "radarUrl": "https://bsvradar.com/apps/coingeek",
-      "tags": [],
-      "url": "https://coingeek.com/",
-      "platform": "Web",
-      "lastUpdated": "2026-07-28",
       "firstSeen": "2026-10-28"
     },
     {
@@ -1665,6 +1522,18 @@
       "url": "https://intellegio.com/",
       "platform": "Web",
       "lastUpdated": "2026-05-29",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "wonkerly",
+      "name": "Wonkerly",
+      "category": "Media",
+      "summary": "Tolerate with style",
+      "radarUrl": "https://bsvradar.com/apps/wonkerly",
+      "tags": [],
+      "url": "https://wonkerly.com/",
+      "platform": "Web",
+      "lastUpdated": "2026-06-18",
       "firstSeen": "2026-10-28"
     },
     {
@@ -1736,20 +1605,6 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "kora-extra-virgin-olive-oil",
-      "name": "Kora Extra Virgin Olive Oil",
-      "category": "Other",
-      "summary": "Sealed on the blockchain",
-      "radarUrl": "https://bsvradar.com/apps/kora-extra-virgin-olive-oil",
-      "tags": [
-        "Time-sealing"
-      ],
-      "url": "https://kora.doremisystems.com",
-      "platform": "Web",
-      "lastUpdated": "2026-07-10",
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "indelibleone",
       "name": "Indelible.one",
       "category": "Productivity",
@@ -1765,21 +1620,6 @@
       "url": "https://indelible.one/",
       "platform": "Web",
       "lastUpdated": "2026-05-17",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "airchive",
-      "name": "Airchive",
-      "category": "Productivity",
-      "summary": "Live aircraft and flight telemetry data records on the BSV blockchain.",
-      "radarUrl": "https://bsvradar.com/apps/airchive",
-      "tags": [
-        "Time-sealing",
-        "Professional"
-      ],
-      "url": "https://airchive.uk",
-      "platform": "Web",
-      "lastUpdated": "2026-08-01",
       "firstSeen": "2026-10-28"
     },
     {
@@ -2196,35 +2036,6 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "moralo",
-      "name": "Moralo",
-      "category": "Social",
-      "summary": "Dating with one conversation at a time - full attention, no chatting into the void.",
-      "radarUrl": "https://bsvradar.com/apps/moralo",
-      "tags": [
-        "Accepts BSV"
-      ],
-      "url": "https://moralodating.com",
-      "platform": "Web",
-      "lastUpdated": "2026-10-20",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "relax4000",
-      "name": "Relax4000",
-      "category": "Social",
-      "summary": "Retro tech musings and more",
-      "radarUrl": "https://bsvradar.com/apps/relax4000",
-      "tags": [
-        "Accepts BSV",
-        "Time-sealing"
-      ],
-      "url": "https://www.relax4000.pl/",
-      "platform": "Web",
-      "lastUpdated": "2026-06-26",
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "handcash",
       "name": "HandCash",
       "category": "Wallets",
@@ -2251,7 +2062,7 @@
       ],
       "url": "https://mobile.bsvb.tech/",
       "platform": "Web",
-      "lastUpdated": "2026-10-22",
+      "lastUpdated": "2026-05-29",
       "firstSeen": "2026-10-28"
     },
     {
@@ -2262,25 +2073,13 @@
       "radarUrl": "https://bsvradar.com/apps/electrumsv",
       "tags": [
         "Accepts BSV",
+        "BRC-100",
+        "BRC Wallet",
         "Developer tool"
       ],
       "url": "https://electrumsv.io/",
       "platform": "Web",
-      "lastUpdated": "2026-06-26",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "1satchel",
-      "name": "1Satchel",
-      "category": "Wallets",
-      "summary": "Sell anything. On-chain. Like Linktree — but every link can charge for itself.",
-      "radarUrl": "https://bsvradar.com/apps/1satchel",
-      "tags": [
-        "Accepts BSV"
-      ],
-      "url": "https://1satchel.com",
-      "platform": "Web",
-      "lastUpdated": "2026-06-26",
+      "lastUpdated": "2026-05-29",
       "firstSeen": "2026-10-28"
     },
     {
@@ -2296,38 +2095,7 @@
       ],
       "url": "https://hodosbrowser.com/",
       "platform": "Web",
-      "lastUpdated": "2026-10-18",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "exodus",
-      "name": "Exodus",
-      "category": "Wallets",
-      "summary": "Multi-asset wallet with built-in exchange and BSV support",
-      "radarUrl": "https://bsvradar.com/apps/exodus",
-      "tags": [
-        "Accepts BSV",
-        "Sells BSV"
-      ],
-      "url": "https://exodus.com",
-      "platform": "Web",
       "lastUpdated": "2026-05-29",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "paiybit",
-      "name": "PaiyBit",
-      "category": "Wallets",
-      "summary": "Pay-per-use content, no subscriptions",
-      "radarUrl": "https://bsvradar.com/apps/paiybit",
-      "tags": [
-        "Accepts BSV",
-        "Time-locking",
-        "Professional"
-      ],
-      "url": "https://www.paiybit.com",
-      "platform": "Web",
-      "lastUpdated": "2026-04-21",
       "firstSeen": "2026-10-28"
     },
     {
@@ -2348,16 +2116,32 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "metanetexplorer",
-      "name": "Metanet Explorer",
+      "id": "1satchel",
+      "name": "1Satchel",
       "category": "Wallets",
-      "summary": "Simplify blockchain app development with secure identity management",
-      "radarUrl": "https://bsvradar.com/apps/metanetexplorer",
+      "summary": "Sell anything. On-chain. Like Linktree — but every link can charge for itself.",
+      "radarUrl": "https://bsvradar.com/apps/1satchel",
       "tags": [
         "Accepts BSV",
-        "Developer tool"
+        "BRC-100",
+        "BRC Wallet"
       ],
-      "url": "https://projectbabbage.com/metanet-mobile",
+      "url": "https://1satchel.com",
+      "platform": "Web",
+      "lastUpdated": "2026-05-15",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "exodus",
+      "name": "Exodus",
+      "category": "Wallets",
+      "summary": "Multi-asset wallet with built-in exchange and BSV support",
+      "radarUrl": "https://bsvradar.com/apps/exodus",
+      "tags": [
+        "Accepts BSV",
+        "Sells BSV"
+      ],
+      "url": "https://exodus.com",
       "platform": "Web",
       "lastUpdated": "2026-05-29",
       "firstSeen": "2026-10-28"
@@ -2368,10 +2152,14 @@
       "category": "Wallets",
       "summary": "Secure your BSV and MNEE funds",
       "radarUrl": "https://bsvradar.com/apps/primatecash",
-      "tags": [],
+      "tags": [
+        "Accepts BSV",
+        "BRC-100",
+        "BRC Wallet"
+      ],
       "url": "https://primate.cash",
       "platform": "Web",
-      "lastUpdated": "2026-06-26",
+      "lastUpdated": "2026-04-21",
       "firstSeen": "2026-10-28"
     },
     {
@@ -2386,7 +2174,23 @@
       ],
       "url": "https://desktop.bsvb.tech",
       "platform": "Web",
-      "lastUpdated": "2026-10-24",
+      "lastUpdated": "2026-06-21",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "paiybit",
+      "name": "PaiyBit",
+      "category": "Wallets",
+      "summary": "Pay-per-use content, no subscriptions",
+      "radarUrl": "https://bsvradar.com/apps/paiybit",
+      "tags": [
+        "Accepts BSV",
+        "Time-locking",
+        "Professional"
+      ],
+      "url": "https://www.paiybit.com",
+      "platform": "Web",
+      "lastUpdated": "2026-04-21",
       "firstSeen": "2026-10-28"
     },
     {
@@ -2401,6 +2205,21 @@
         "Developer tool"
       ],
       "url": "https://github.com/bitcoin-sv/metanet-desktop",
+      "platform": "Web",
+      "lastUpdated": "2026-05-29",
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "metanetexplorer",
+      "name": "Metanet Explorer",
+      "category": "Wallets",
+      "summary": "Simplify blockchain app development with secure identity management",
+      "radarUrl": "https://bsvradar.com/apps/metanetexplorer",
+      "tags": [
+        "Accepts BSV",
+        "Developer tool"
+      ],
+      "url": "https://projectbabbage.com/metanet-mobile",
       "platform": "Web",
       "lastUpdated": "2026-05-29",
       "firstSeen": "2026-10-28"
@@ -2484,10 +2303,12 @@
       "category": "Wallets",
       "summary": "Private BSV management with a fresh address generated for every transaction.",
       "radarUrl": "https://bsvradar.com/apps/metanet-highway",
-      "tags": [],
+      "tags": [
+        "BRC-100"
+      ],
       "url": "https://metanethighway.com",
       "platform": "Web",
-      "lastUpdated": "2026-06-26",
+      "lastUpdated": "2026-04-17",
       "firstSeen": "2026-10-28"
     },
     {
@@ -2510,10 +2331,12 @@
       "category": "Wallets",
       "summary": "Split a secure key into shares using Shamir's Secret Sharing for safe distributed backup.",
       "radarUrl": "https://bsvradar.com/apps/secure-backup-recovery",
-      "tags": [],
+      "tags": [
+        "BRC-100"
+      ],
       "url": "https://secure.atx.systems",
       "platform": "Web",
-      "lastUpdated": "2026-06-26",
+      "lastUpdated": "2026-04-17",
       "firstSeen": "2026-10-28"
     },
     {
@@ -2551,26 +2374,12 @@
       "category": "Wallets",
       "summary": "Recover funds from old BSV wallets using BIP39/BIP32 HD keys.",
       "radarUrl": "https://bsvradar.com/apps/mnemonic",
-      "tags": [],
+      "tags": [
+        "BRC-100"
+      ],
       "url": "https://mnemonic-brc100.vercel.app",
       "platform": "Web",
-      "lastUpdated": "2026-06-26",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "smart-nfts",
-      "name": "SMART NFTs",
-      "category": "Wallets",
-      "summary": "Content you truly own that pays you every time it spreads.",
-      "radarUrl": "https://bsvradar.com/apps/smart-nfts",
-      "tags": [
-        "Accepts BSV",
-        "Sells BSV",
-        "BRC Wallet"
-      ],
-      "url": "https://smartnfts.com",
-      "platform": "Web",
-      "lastUpdated": "2026-07-22",
+      "lastUpdated": "2026-04-17",
       "firstSeen": "2026-10-28"
     },
     {
@@ -2959,22 +2768,6 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "bitcoin-basic-script-to-basic-decompiler-basic-to-script-compile",
-      "name": "Bitcoin BASIC - Script to BASIC Decompiler - BASIC to Script Compiler",
-      "category": "Developer Tooling > Debugging Tools",
-      "summary": "Every infix language has a stack machine underneath. Script is what BASIC's expression evaluator looks like with the front end deleted — so this puts the front end back, and takes it off again.",
-      "radarUrl": "https://bsvradar.com/blocks/bitcoin-basic-script-to-basic-decompiler-basic-to-script-compile",
-      "tags": [
-        "Native Bitcoin Script"
-      ],
-      "url": "https://github.com/sun-dive/grafverse/blob/master/basic.html",
-      "docs": "https://grafverse.com/basic.html",
-      "maturity": "production",
-      "license": "Open BSV License",
-      "maintainer": "Sun-Dive",
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "bigblocks-dev-bitcoin-development-platform-2",
       "name": "Bitcoin UI blocks for React.",
       "category": "Developer Tooling > UI Blocks & Component Libraries",
@@ -3309,23 +3102,6 @@
       "maturity": "alpha",
       "license": "Apache-2.0",
       "maintainer": "Light",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "konareef-share-agents-companies-can-trust",
-      "name": "konareef — Share Agents Companies Can Trust",
-      "category": "Developer Tooling > CLI Tools",
-      "summary": "konareef lets developers package agent workflows as reusable reefpods and gives companies proof, budgets, and data-access controls so teams can safely run AI on internal work.",
-      "radarUrl": "https://bsvradar.com/blocks/konareef-share-agents-companies-can-trust",
-      "tags": [
-        "Go"
-      ],
-      "url": "https://konareef.ai",
-      "docs": "https://konareef.ai/docs/",
-      "maturity": "alpha",
-      "license": "Apache-2.0",
-      "maintainer": "Bittoku KK",
-      "version": "0.1.0",
       "firstSeen": "2026-10-28"
     },
     {
@@ -5671,7 +5447,7 @@
       "id": "bsva",
       "name": "BSV Association",
       "radarUrl": "https://bsvradar.com/orgs/bsva",
-      "apps": 5,
+      "apps": 4,
       "blocks": 102,
       "firstSeen": "2026-10-28"
     },
@@ -5698,13 +5474,6 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "bittoku-kk",
-      "name": "Bittoku KK",
-      "radarUrl": "https://bsvradar.com/orgs/bittoku-kk",
-      "blocks": 3,
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "handcash",
       "name": "HandCash",
       "radarUrl": "https://bsvradar.com/orgs/handcash",
@@ -5713,17 +5482,17 @@
       "firstSeen": "2026-10-28"
     },
     {
+      "id": "bittoku-kk",
+      "name": "Bittoku KK",
+      "radarUrl": "https://bsvradar.com/orgs/bittoku-kk",
+      "blocks": 2,
+      "firstSeen": "2026-10-28"
+    },
+    {
       "id": "gigamonkey",
       "name": "GigaMonkey",
       "radarUrl": "https://bsvradar.com/orgs/gigamonkey",
       "blocks": 1,
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "gopnikz",
-      "name": "Gopnikz",
-      "radarUrl": "https://bsvradar.com/orgs/gopnikz",
-      "apps": 1,
       "firstSeen": "2026-10-28"
     },
     {
@@ -5737,6 +5506,13 @@
       "id": "lamint",
       "name": "LaMint",
       "radarUrl": "https://bsvradar.com/orgs/lamint",
+      "apps": 1,
+      "firstSeen": "2026-10-28"
+    },
+    {
+      "id": "orangegateway",
+      "name": "Orange Gateway",
+      "radarUrl": "https://bsvradar.com/orgs/orangegateway",
       "apps": 1,
       "firstSeen": "2026-10-28"
     },
@@ -5776,21 +5552,9 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "aursis",
-      "name": "aursis",
-      "radarUrl": "https://bsvradar.com/orgs/aursis",
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "b0ase",
       "name": "b0ase",
       "radarUrl": "https://bsvradar.com/orgs/b0ase",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "b0ase-com",
-      "name": "b0ase.com",
-      "radarUrl": "https://bsvradar.com/orgs/b0ase-com",
       "firstSeen": "2026-10-28"
     },
     {
@@ -5800,21 +5564,9 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "bittoku",
-      "name": "Bittoku",
-      "radarUrl": "https://bsvradar.com/orgs/bittoku",
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "bsv-maps",
       "name": "BSV Maps",
       "radarUrl": "https://bsvradar.com/orgs/bsv-maps",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "bsv-cx",
-      "name": "bsv.cx",
-      "radarUrl": "https://bsvradar.com/orgs/bsv-cx",
       "firstSeen": "2026-10-28"
     },
     {
@@ -5860,12 +5612,6 @@
       "firstSeen": "2026-10-28"
     },
     {
-      "id": "gavin",
-      "name": "gavin",
-      "radarUrl": "https://bsvradar.com/orgs/gavin",
-      "firstSeen": "2026-10-28"
-    },
-    {
       "id": "hacked-it",
       "name": "Hacked it",
       "radarUrl": "https://bsvradar.com/orgs/hacked-it",
@@ -5905,12 +5651,6 @@
       "id": "noscerte-ltd",
       "name": "Noscerte Ltd",
       "radarUrl": "https://bsvradar.com/orgs/noscerte-ltd",
-      "firstSeen": "2026-10-28"
-    },
-    {
-      "id": "orangegateway",
-      "name": "Orange Gateway",
-      "radarUrl": "https://bsvradar.com/orgs/orangegateway",
       "firstSeen": "2026-10-28"
     },
     {

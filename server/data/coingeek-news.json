@@ -1,19 +1,913 @@
 {
   "pin": {
     "source": "https://coingeek.com/",
-    "fetchedAt": "2026-10-28T15:24:10.575Z",
+    "fetchedAt": "2026-11-09T13:56:50.736Z",
     "counts": {
-      "items": 5142,
-      "fetched": 5139
+      "items": 5175,
+      "fetched": 5080
     },
     "oldest": "2023-10-28T05:00:28.000Z",
-    "newest": "2026-10-28T14:00:00.000Z",
+    "newest": "2026-11-09T12:00:00.000Z",
     "method": "wp-rest",
     "months": 36,
     "complete": true,
-    "requests": 192
+    "requests": 191
   },
   "items": [
+    {
+      "id": "coingeek-626129",
+      "url": "https://coingeek.com/ai-makes-data-ownership-more-important-to-prove",
+      "title": "AI makes data ownership more important to prove",
+      "date": "2026-11-09T12:00:00.000Z",
+      "excerpt": "As AI trains on vast amounts of copyrighted material, experts say machine-readable systems are now needed to show who owns each work and how it can be used.",
+      "modified": "2026-11-05T09:33:21.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "AI",
+        "AI Act",
+        "Artificial Intelligence",
+        "Blockchain",
+        "Copyright",
+        "Data",
+        "European Union",
+        "Generative AI",
+        "Public Blockchain",
+        "Regulation",
+        "United Kingdom"
+      ]
+    },
+    {
+      "id": "coingeek-626188",
+      "url": "https://coingeek.com/china-oman-advance-cbdc-vietnam-ukraine-progress-crypto-rules",
+      "title": "China, Oman advance CBDC; Vietnam, Ukraine progress crypto rules",
+      "date": "2026-11-09T10:00:00.000Z",
+      "excerpt": "China and Oman sign a $4.49B currency swap and CBDC pact, while Vietnam tightens crypto exchange oversight and Ukraine advances its digital asset draft law.",
+      "modified": "2026-11-09T08:58:10.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Binance",
+        "Central Bank Digital Currency",
+        "Central Bank of Oman",
+        "China",
+        "Crime",
+        "Cyberattack",
+        "Cybercrime",
+        "Cybersecurity",
+        "Digital Asset Exchange",
+        "Digital Yuan",
+        "e-CNY",
+        "Hack",
+        "National Bank of Ukraine",
+        "Oman",
+        "People's Bank of China",
+        "Regulation",
+        "State Securities Commission",
+        "Tax",
+        "Ukraine",
+        "Vietnam"
+      ]
+    },
+    {
+      "id": "coingeek-626182",
+      "url": "https://coingeek.com/okxice-a-tokenized-security-reject-tsv-llc-first-to-market-with-cntn",
+      "title": "OKXICE a tokenized security reject, TSV LLC first to market with CNTN",
+      "date": "2026-11-09T08:00:00.000Z",
+      "excerpt": "OKXICE’s tokenization bid hit a wall as 67 firms opted out, while TSV LLC and Morgan Stanley notched firsts in tokenized securities trading.",
+      "modified": "2026-11-09T07:38:13.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Canton Strategic Holdings",
+        "DTTC Tokenization Service",
+        "Morgan Stanley",
+        "OKXICE",
+        "Tokenization",
+        "Tokenized Equities",
+        "Tokenized Securities",
+        "Tokenized Treasuries",
+        "TSV LLC",
+        "United States"
+      ]
+    },
+    {
+      "id": "coingeek-626110",
+      "url": "https://coingeek.com/unesco-pilots-digital-education-in-54-jamaican-schools",
+      "title": "UNESCO pilots digital education in 54 Jamaican schools",
+      "date": "2026-11-09T06:00:00.000Z",
+      "excerpt": "Logistics digital spending to hit $113.6 billion by 2030, WHO urges digital and paper ship health documents, and UNESCO tests digital tools in 54 schools.",
+      "modified": "2026-11-05T09:08:11.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Digital Transformation",
+        "Education",
+        "Education Management Information System",
+        "FAO",
+        "Healthcare",
+        "International Health Regulations",
+        "Jamaica",
+        "logistics",
+        "Marcia Phillips",
+        "Nichole Thompson",
+        "Nicole Bella",
+        "ResearchAndMarkets",
+        "SDG Joint Programme on Digital Transformation for Education",
+        "Ship Declaration of Health",
+        "Ship Sanitation Certificates",
+        "UNESCO",
+        "UNICEF",
+        "WFP",
+        "World Health Organization"
+      ]
+    },
+    {
+      "id": "coingeek-626099",
+      "url": "https://coingeek.com/ai-can-fake-documents-the-next-battle-is-proving-the-data",
+      "title": "AI can fake documents, the next battle is proving the data",
+      "date": "2026-11-06T12:00:00.000Z",
+      "excerpt": "AI is making document fraud detection challenging; trust shifts to provenance and verification through digital signatures and blockchain technology.",
+      "modified": "2026-11-05T08:04:32.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "AI",
+        "Artificial Intelligence",
+        "Digital Signatures",
+        "Generative AI",
+        "Public Blockchain"
+      ]
+    },
+    {
+      "id": "coingeek-626150",
+      "url": "https://coingeek.com/taiwan-bhutan-france-split-on-crypto-regulation",
+      "title": "Taiwan, Bhutan, France split on crypto regulation",
+      "date": "2026-11-06T10:00:00.000Z",
+      "excerpt": "As Taiwan moves to tighten stablecoin rules and Bhutan expands its crypto ambitions, France faces growing divisions over digital asset taxation.",
+      "modified": "2026-11-06T06:02:24.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Anti-Money Laundering",
+        "Bhutan",
+        "Financial Supervisory Commission",
+        "France",
+        "Gelephu Central Bank",
+        "Gelephu Financial Services Office",
+        "Gelephu Mindfulness City",
+        "Jigme Khesar Namgyel Wangchuck",
+        "Regulation",
+        "Stablecoins",
+        "Taiwan",
+        "Terrorism Financing",
+        "Virtual Asset Services Act"
+      ]
+    },
+    {
+      "id": "coingeek-626164",
+      "url": "https://coingeek.com/midterms-expose-crypto-pac-impotence-dems-plan-trump-probes",
+      "title": "Midterms expose crypto PAC impotence; Dems plan Trump probes",
+      "date": "2026-11-06T08:00:00.000Z",
+      "excerpt": "Crypto PACs spent $154.5 million on the 2026 midterms but lost big, and now the Democrats are eyeing new crypto legislation and investigation on Trump.",
+      "modified": "2026-11-06T07:44:34.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Brian Armstrong",
+        "Cameron Winklevoss",
+        "CLARITY Act",
+        "Donald Trump",
+        "Election",
+        "Elon Musk",
+        "ethics",
+        "Fairshake",
+        "Grand Old Party",
+        "Justin Sun",
+        "Kara Calvert",
+        "Political Action Committee",
+        "Regulation",
+        "Sherrod Brown",
+        "Trump Administration",
+        "Tyler Winklevoss",
+        "United Arab Emirates",
+        "United States",
+        "WLFI",
+        "World Liberty Financial"
+      ]
+    },
+    {
+      "id": "coingeek-626092",
+      "url": "https://coingeek.com/thailand-hk-make-digital-asset-progress-as-china-reinforces-ban",
+      "title": "Thailand, HK make digital asset progress as China reinforces ban",
+      "date": "2026-11-06T06:00:00.000Z",
+      "excerpt": "Thailand consults on THB stablecoin rules and Hong Kong expands tokenized settlements, while China adds digital assets to its anti-corruption crackdown.",
+      "modified": "2026-11-05T06:27:26.000Z",
+      "categories": [
+        "Finance"
+      ],
+      "tags": [
+        "Anti-Corruption",
+        "Ban",
+        "Bank of Thailand",
+        "Buy Now Pay Later",
+        "China",
+        "Corruption",
+        "EnsembleTX",
+        "Gold",
+        "Hong Kong",
+        "Hong Kong Monetary Authority",
+        "Project Ensemble",
+        "Regulation",
+        "Stablecoins",
+        "Thailand",
+        "Tokenization"
+      ]
+    },
+    {
+      "id": "coingeek-626072",
+      "url": "https://coingeek.com/the-next-internet-may-need-verifiable-state-not-just-apis",
+      "title": "The next internet may need verifiable state, not just APIs",
+      "date": "2026-11-05T12:00:00.000Z",
+      "excerpt": "APIs enhance communication between systems, but shared state is essential for autonomous agents to manage transactions and reconcile data.",
+      "modified": "2026-11-05T06:39:49.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Agent2Agent",
+        "AI",
+        "API",
+        "Artificial Intelligence",
+        "Cloudfare",
+        "Google",
+        "Internet",
+        "Public Blockchain"
+      ]
+    },
+    {
+      "id": "coingeek-626066",
+      "url": "https://coingeek.com/global-ai-landscape-fuels-competition-adoption-and-panic",
+      "title": "Global AI landscape fuels competition, adoption and panic",
+      "date": "2026-11-05T10:00:00.000Z",
+      "excerpt": "Malaysia seized $12.19M in smuggled AI chips as Taiwan sees 50.5% adult adoption of generative AI, while Alphabet’s market loss raises AI bubble concerns.",
+      "modified": "2026-11-04T09:19:50.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "AI",
+        "Alphabet",
+        "Artificial Intelligence",
+        "Aspalila Ag. Tuah",
+        "ChatGPT",
+        "Gemini",
+        "Google",
+        "Kuala Lumpur International Airport",
+        "Malaysia",
+        "Masyita Ismail",
+        "Strategic Trade Act 2010",
+        "Taiwan",
+        "United States"
+      ]
+    },
+    {
+      "id": "coingeek-626081",
+      "url": "https://coingeek.com/circle-sees-revenue-surge-on-arc-sales-lays-off-5-of-staff",
+      "title": "Circle sees revenue surge on ARC sales, lays off 5% of staff",
+      "date": "2026-11-05T08:00:00.000Z",
+      "excerpt": "Circle’s Q3 revenue rose 17% to $865M as ARC token sales masked weaker core income, USDC volume jumped 49%, and the Binance hack raised regulatory heat.",
+      "modified": "2026-11-05T06:00:17.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "ARC",
+        "Binance",
+        "cirBTC",
+        "Circle",
+        "Circle Payment Network",
+        "Jeremy Allaire",
+        "Jeremy Fox-Green",
+        "Stablecoins",
+        "Tazapay",
+        "Tether",
+        "USDC"
+      ]
+    },
+    {
+      "id": "coingeek-626062",
+      "url": "https://coingeek.com/philippines-ofw-remittances-up-2-3-da-backs-agribusiness",
+      "title": "Philippines: OFW remittances up 2.3%; DA backs agribusiness",
+      "date": "2026-11-05T06:00:00.000Z",
+      "excerpt": "The Philippines’ remittances grow 2.3% despite repatriations, the DA backs agribusiness investment, and Ho Chi Minh City’s Q3 remittances rebound to $2.84 billion.",
+      "modified": "2026-11-04T09:00:26.000Z",
+      "categories": [
+        "Finance"
+      ],
+      "tags": [
+        "Agribusiness and Marketing Assistance Service",
+        "Asia",
+        "Department of Agriculture",
+        "Department of Migrant Workers",
+        "Francisco Tiu Laurel Jr.",
+        "Hans Leo Cacdac",
+        "Ho Chi Minh",
+        "Overseas Filipino Workers",
+        "Philippines",
+        "Remittances",
+        "Tran Thi Ngoc Lien",
+        "Vietnam"
+      ]
+    },
+    {
+      "id": "coingeek-626057",
+      "url": "https://coingeek.com/e-conomy-sea-2026-report-philippines-digital-economy-on-track-to-reach-42b-gmv-in-2026",
+      "title": "e-Conomy SEA 2026 report: Philippines’ digital economy on track to reach $42B GMV in 2026",
+      "date": "2026-11-05T04:00:00.000Z",
+      "excerpt": "The Philippines’ digital economy is projected to reach $42B by 2026, driven by AI, digital innovation, supportive policies, and evolving consumer behavior.",
+      "modified": "2026-11-04T08:40:06.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "AI",
+        "AI Adoption",
+        "Artificial Intelligence",
+        "Bain & Company",
+        "Bennett Aquino",
+        "Digital Economy",
+        "Digital Payments",
+        "Fintech",
+        "Generative AI",
+        "Google",
+        "Payments",
+        "Philippines",
+        "Prep Palacios",
+        "Southeast Asia",
+        "Temasek"
+      ]
+    },
+    {
+      "id": "coingeek-626053",
+      "url": "https://coingeek.com/can-tokenization-prevent-double-pledging",
+      "title": "Can tokenization prevent ‘double-pledging’?",
+      "date": "2026-11-04T12:00:00.000Z",
+      "excerpt": "Tokenization enhances asset ownership tracking, addresses double-pledging challenges, and promotes faster, more reliable collateral management.",
+      "modified": "2026-11-04T08:23:04.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Bitcoin",
+        "Depository Trust & Clearing Corporation",
+        "Double Spending",
+        "International Monetary Fund",
+        "Public Blockchain",
+        "Tokenization"
+      ]
+    },
+    {
+      "id": "coingeek-626047",
+      "url": "https://coingeek.com/uk-france-tighten-digital-asset-rules-boe-studies-tokenization",
+      "title": "UK, France tighten digital asset rules; BoE studies tokenization",
+      "date": "2026-11-04T10:00:00.000Z",
+      "excerpt": "Bank of England consults on tokenized collateral for central counterparties, while FCA settles with HTX, and France greenlights CARF tax-reporting bill.",
+      "modified": "2026-11-04T08:07:51.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Bank of England",
+        "Central Counterparties",
+        "Crypto-Asset Reporting Framework",
+        "Europe",
+        "Financial Conduct Authority",
+        "Financial Services and Markets Act",
+        "France",
+        "HTX",
+        "Organisation for Economic Co-operation and Development",
+        "Regulations",
+        "Steve Smart",
+        "Tax",
+        "Tokenization",
+        "United Kingdom"
+      ]
+    },
+    {
+      "id": "coingeek-626041",
+      "url": "https://coingeek.com/tether-doubles-q3-equity-owns-give-or-take-50000-more-btc",
+      "title": "Tether doubles Q3 ‘equity,’ owns ‘give or take’ 50,000 more BTC",
+      "date": "2026-11-04T08:00:00.000Z",
+      "excerpt": "Tether’s Q3 equity nearly doubled to $8 billion, but its BTC count is ~50,000 short of Ardoino’s claim, and compliant reserves fell to 72.9%.",
+      "modified": "2026-11-04T07:44:58.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Bitfinex",
+        "Bo Hines",
+        "BTC",
+        "Donald Trump",
+        "GENIUS Act",
+        "Giancarlo Devasini",
+        "Jean-Louis van der Velde",
+        "Paolo Ardoino",
+        "Quote 500",
+        "Stablecoins",
+        "Tether",
+        "USAT",
+        "USDT"
+      ]
+    },
+    {
+      "id": "coingeek-625976",
+      "url": "https://coingeek.com/southeast-asia-digital-economy-to-top-1t-by-2035-report",
+      "title": "Southeast Asia’s digital economy to top $1T by 2035: report",
+      "date": "2026-11-04T06:00:00.000Z",
+      "excerpt": "Southeast Asia’s digital economy is set to grow 17% to $368B, while Singapore-Germany AI ties and Philippine APEC digital plans shape the region.",
+      "modified": "2026-11-01T23:21:06.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "33rd Asia-Pacific Economic Cooperation",
+        "APEC",
+        "Artificial Intelligence",
+        "Bain & Company",
+        "Department of Finance",
+        "Digital Transformation",
+        "Finance Ministers' Meeting",
+        "Fock Wai Hoong",
+        "Friedrich Merz",
+        "Germany",
+        "Google",
+        "Industrial AI",
+        "Joven Balbosa",
+        "Lawrence Wong",
+        "Nitin Gajria",
+        "Philippines",
+        "Singapore",
+        "Social Security System's Pension Reform Program",
+        "Southeast Asia",
+        "Temasek"
+      ]
+    },
+    {
+      "id": "coingeek-626034",
+      "url": "https://coingeek.com/binance-resumes-withdrawals-but-crypto-attacks-keep-on-coming",
+      "title": "Binance resumes withdrawals, but crypto attacks keep on coming",
+      "date": "2026-11-03T12:00:00.000Z",
+      "excerpt": "Binance resumes withdrawals after a historic $6.3 billion hack, claiming 95% of funds have been restored, as cyberattacks in crypto continue to rise.",
+      "modified": "2026-11-03T08:28:19.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "AI",
+        "Artificial Intelligence",
+        "Binance",
+        "Bitget",
+        "BTCPay",
+        "Chad Barraford",
+        "Chainalysis",
+        "Changpeng Zhao",
+        "Circle",
+        "Donald Trump",
+        "Federal Bureau of Investigation",
+        "Hack",
+        "Indodax",
+        "Internal Revenue Service",
+        "Kim Jong-un",
+        "Kim Yo-jong",
+        "Mercado Bitcoin",
+        "North Korea",
+        "Richard Teng",
+        "Ripple Labs",
+        "RLUSD",
+        "Secure Asset Fund for Users",
+        "Stablecoins",
+        "Tether"
+      ]
+    },
+    {
+      "id": "coingeek-626019",
+      "url": "https://coingeek.com/brazil-thailand-india-clarify-cryptos-place-in-law-finance",
+      "title": "Brazil, Thailand, India clarify crypto’s place in law, finance",
+      "date": "2026-11-03T10:00:00.000Z",
+      "excerpt": "Itaú Unibanco leads Brazil’s crypto compliance, as Thailand recognizes Bitcoin as property, and India advances programmable CBDCs for welfare payments.",
+      "modified": "2026-10-30T23:16:45.000Z",
+      "categories": [
+        "Finance"
+      ],
+      "tags": [
+        "Banco Central do Brasil",
+        "Bitcoin",
+        "Brazil",
+        "BTC",
+        "Central Bank Digital Currency",
+        "Digital Rupee",
+        "India",
+        "Itaú Unibanco",
+        "P-CBDC",
+        "Programmable CBDC",
+        "property law",
+        "Regulation",
+        "Sanjay Malhotra",
+        "Thailand",
+        "Unified Lending Interface"
+      ]
+    },
+    {
+      "id": "coingeek-625817",
+      "url": "https://coingeek.com/insert-coin-the-gaming-arcade-where-every-point-is-a-payment",
+      "title": "Insert Coin: The gaming arcade where every point is a payment",
+      "date": "2026-11-03T08:00:00.000Z",
+      "excerpt": "Meet Insert Coin, a BSV arcade from former pro Halo player CollinCTO. Play Satoshi Pong, FPSV, and ChessV for sats, with a free practice mode.",
+      "modified": "2026-10-27T22:52:31.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "@CollinCTO",
+        "Bitcoin SV",
+        "BSV Blockchain",
+        "Chess",
+        "FPSV",
+        "Insert Coin",
+        "Satoshi Pong"
+      ]
+    },
+    {
+      "id": "coingeek-625962",
+      "url": "https://coingeek.com/israeli-pm-central-bank-lock-horns-over-sanctions-evasion",
+      "title": "Israeli PM, central bank lock horns over sanctions evasion",
+      "date": "2026-11-03T06:00:00.000Z",
+      "excerpt": "Israel’s Netanyahu explores crypto to bypass sanctions, but Israel’s central bank, economists, and critics warn of economic damage and deeper isolation.",
+      "modified": "2026-11-01T23:20:59.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Bank of Israel",
+        "Benjamin Netanyahu",
+        "BibiCoin",
+        "Blockchain",
+        "Crime",
+        "Cybercrime",
+        "Israel",
+        "Sanctions"
+      ]
+    },
+    {
+      "id": "coingeek-625913",
+      "url": "https://coingeek.com/south-korea-crypto-faces-monthly-reports-possible-education-tax",
+      "title": "South Korea crypto faces monthly reports, possible education tax",
+      "date": "2026-11-02T10:00:00.000Z",
+      "excerpt": "South Korea weighs stricter crypto reporting and an education tax on exchanges as regulatory pressure grows and the Digital Asset Basic Act faces delays.",
+      "modified": "2026-10-29T22:05:21.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Bank of Korea",
+        "Digital Asset Basic Act",
+        "Digital Asset Exchange Alliance",
+        "Education",
+        "Regulation",
+        "South Korea",
+        "Tax"
+      ]
+    },
+    {
+      "id": "coingeek-626014",
+      "url": "https://coingeek.com/salting-the-grave-10-years-since-btc-killed-satoshi-alert-key",
+      "title": "Salting the grave: 10 years since BTC killed Satoshi’s alert key",
+      "date": "2026-11-02T08:00:00.000Z",
+      "excerpt": "Bitcoin’s original alert system, built by Satoshi Nakamoto in 2010, began its retirement in 2016, revealing a defining divide between BTC and BSV.",
+      "modified": "2026-10-30T22:52:21.000Z",
+      "categories": [
+        "Editorial"
+      ],
+      "tags": [
+        "Alert Key",
+        "Andrew Chow",
+        "Bitcoin",
+        "Bitcoin Core",
+        "Bitcoin History",
+        "Bitcoin SV",
+        "Bitcoin.org",
+        "Bryan Bishop",
+        "BSV Association",
+        "BSV Blockchain",
+        "BTC",
+        "Digital Asset Recovery",
+        "Gregory Maxwell",
+        "Jeff Garzik",
+        "Johnson Lau",
+        "Mark Karpelès",
+        "Network Access Rules",
+        "Satoshi Nakamoto",
+        "Wladimir van der Laan"
+      ]
+    },
+    {
+      "id": "coingeek-625834",
+      "url": "https://coingeek.com/will-ai-surpass-humans-2-filipino-student-teams-make-the-case",
+      "title": "Will AI surpass humans? 2 Filipino student teams make the case",
+      "date": "2026-11-02T06:00:00.000Z",
+      "excerpt": "Faster isn’t smarter, says UP. AI already wins, says Ateneo. Read the DigiCon 2026 debate on whether AI can surpass human intelligence in marketing.",
+      "modified": "2026-10-27T23:34:17.000Z",
+      "categories": [
+        "Business",
+        "Events"
+      ],
+      "tags": [
+        "AI",
+        "Alyssa Lorraine David",
+        "Artificial Intelligence",
+        "Ateneo de Manila University",
+        "Ateneo Debate Society",
+        "Cara Danielle Reyes",
+        "DigiCon",
+        "DigiCon 2026",
+        "Digital Marketing Association of the Philippines",
+        "Digital Transformation",
+        "DMAP",
+        "Hugh Mejos",
+        "interoperability",
+        "Philippines",
+        "Pio Raphael Ventura",
+        "Rafael Carasig",
+        "Ramya Espiritu",
+        "University of the Philippines",
+        "UP Debate Society",
+        "Willben Sebastian Ong"
+      ]
+    },
+    {
+      "id": "coingeek-625998",
+      "url": "https://coingeek.com/coinbase-prediction-market-enthusiasm-offsets-crypto-apathy",
+      "title": "Coinbase: Prediction market enthusiasm offsets crypto apathy",
+      "date": "2026-10-30T12:00:00.000Z",
+      "excerpt": "Coinbase returns to profitability despite weaker revenue, buoyed by investment gains as derivatives and prediction markets reshape its transaction business.",
+      "modified": "2026-10-30T11:58:17.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Circle",
+        "Coinbase",
+        "Coinbase Financial Markets",
+        "Coinbase Global Exchange",
+        "Crime",
+        "crypto derivatives",
+        "Cybercrime",
+        "Data Breach",
+        "Deribit",
+        "Prediction Markets",
+        "Ripple",
+        "Ripple Labs",
+        "RLUSD",
+        "Stablecoins",
+        "Trading",
+        "USDC"
+      ]
+    },
+    {
+      "id": "coingeek-625994",
+      "url": "https://coingeek.com/binance-6-3b-drained-in-largest-digital-asset-theft-on-record",
+      "title": "Binance: $6.3B drained in largest digital asset theft on record",
+      "date": "2026-10-30T11:00:00.000Z",
+      "excerpt": "Binance faces the largest theft in digital asset history, losing $6.3 billion, while user funds are promised to be safe and covered by insurance.",
+      "modified": "2026-10-30T10:53:14.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Binance",
+        "Bitcoin SV",
+        "BSV Blockchain",
+        "Chainalysis",
+        "Changpeng Zhao",
+        "Circle",
+        "Hack",
+        "Mt Gox",
+        "North Korea",
+        "SAFU",
+        "Stablecoins",
+        "Tether",
+        "TraderTraitor",
+        "TRM Labs",
+        "USDC",
+        "USDT",
+        "Yi He"
+      ]
+    },
+    {
+      "id": "coingeek-625887",
+      "url": "https://coingeek.com/anthropic-ipo-week-bans-buyouts-and-a-2t-bet",
+      "title": "Anthropic’s IPO week: Bans, buyouts and a $2T bet",
+      "date": "2026-10-30T10:00:00.000Z",
+      "excerpt": "Anthropic’s IPO filing goes public, Sweden blocks ChatGPT and Claude for government staff, and Microsoft offers buyouts to 60,000 employees.",
+      "modified": "2026-10-29T06:43:13.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "AI",
+        "Amy Coleman",
+        "Anthropic",
+        "Artificial Intelligence",
+        "ChatGPT",
+        "Claude",
+        "Government Offices of Sweden",
+        "Initial Public Offering",
+        "Mikael Wettercrantz",
+        "NASDAQ",
+        "OpenAI",
+        "Regeringskansliet",
+        "S-1",
+        "Securities and Exchange Commission",
+        "Voluntary Retirement Program"
+      ]
+    },
+    {
+      "id": "coingeek-625906",
+      "url": "https://coingeek.com/the-machine-economy-needs-a-universal-receipt-layer",
+      "title": "The machine economy needs a universal receipt layer",
+      "date": "2026-10-30T08:00:00.000Z",
+      "excerpt": "AI agents are evolving to perform transactions, requiring verifiable receipts to document actions, authority, and outcomes in the machine economy.",
+      "modified": "2026-10-29T21:37:44.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "A SCITT Profile for AI-Agent Action Receipts",
+        "Agentic AI",
+        "AI",
+        "AI Agents",
+        "Artificial Intelligence",
+        "Bitcoin SV",
+        "BSV Blockchain",
+        "Logs",
+        "Public Blockchain"
+      ]
+    },
+    {
+      "id": "coingeek-625786",
+      "url": "https://coingeek.com/visa-eyes-stablecoin-push-amid-philippines-low-public-trust",
+      "title": "Visa eyes stablecoin push amid Philippines’ low public trust",
+      "date": "2026-10-30T06:00:00.000Z",
+      "excerpt": "Visa eyes stablecoin remittances in the Philippines, where low public awareness and trust remain hurdles despite demand for faster, cheaper money transfers.",
+      "modified": "2026-10-26T23:39:03.000Z",
+      "categories": [
+        "Finance"
+      ],
+      "tags": [
+        "Digital Payments",
+        "Payments",
+        "Philippines",
+        "Qinwen Xiao",
+        "Remittances",
+        "Stablecoins",
+        "VISA"
+      ]
+    },
+    {
+      "id": "coingeek-625897",
+      "url": "https://coingeek.com/robinhood-posts-record-revenue-despite-crypto-trading-plunge",
+      "title": "Robinhood posts record revenue despite crypto trading plunge",
+      "date": "2026-10-29T12:00:00.000Z",
+      "excerpt": "Robinhood posts record Q3 revenue despite a 55% crypto slump, as prediction markets surge, while Ripple’s RLUSD deal and regulatory risks shape its outlook.",
+      "modified": "2026-10-29T07:15:20.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "Bitstamp",
+        "Crypto.com",
+        "Earn",
+        "OG.com",
+        "Prediction Markets",
+        "Ripple",
+        "Ripple Labs",
+        "RLUSD",
+        "Robinhood",
+        "Robinhood Chain",
+        "Robinhood Ventures Fund I",
+        "Rothera",
+        "Shiv Verma",
+        "Stablecoins",
+        "Susquehanna International Group",
+        "Trading",
+        "United States",
+        "Vlad Tenev"
+      ]
+    },
+    {
+      "id": "coingeek-625892",
+      "url": "https://coingeek.com/over-half-of-okxice-tokenization-targets-have-now-opted-out",
+      "title": "Over half of OKXICE’s tokenization targets have now opted out",
+      "date": "2026-10-29T10:00:00.000Z",
+      "excerpt": "OKXICE tokenization faces 33 company opt-outs, while Robinhood expands tokenized stocks overseas and the DTCC Tokenization Service goes live.",
+      "modified": "2026-10-29T07:45:34.000Z",
+      "categories": [
+        "Finance"
+      ],
+      "tags": [
+        "Besu",
+        "Canton Network",
+        "Common Sense Leadership Fund",
+        "Decentralized Finance",
+        "DeFi",
+        "Depository Trust & Clearing Corporation",
+        "Depository Trust Company",
+        "DTC Digital Assets Solutions Industry Working Group",
+        "DTCC",
+        "DTTC Tokenization Service",
+        "ICE",
+        "Intercontinental Exchange Holdings",
+        "JPMorgan Chase",
+        "Ken Griffin",
+        "Kevin McLaughlin",
+        "Miles Jennings",
+        "New York Stock Exchange",
+        "NYSE",
+        "OKICE",
+        "OKX",
+        "Paul Atkins",
+        "Robinhood",
+        "Robinhood Markets",
+        "Tokenization"
+      ]
+    },
+    {
+      "id": "coingeek-625774",
+      "url": "https://coingeek.com/google-ai-push-brings-upskilling-to-filipino-teachers-and-beyond",
+      "title": "Google’s AI push brings upskilling to Filipino teachers and beyond",
+      "date": "2026-10-29T08:00:00.000Z",
+      "excerpt": "Google’s free AI Educator Series, launched with DepEd, CHED, and TESDA, aims to equip Filipino educators and learners with practical AI skills.",
+      "modified": "2026-10-26T23:24:18.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "AI",
+        "AI Adoption",
+        "AI Educator Series",
+        "Artificial Intelligence",
+        "Commission on Higher Education",
+        "Department of Education",
+        "Education",
+        "Google",
+        "Jose Francisco Benitez",
+        "Marcelino Veloso III",
+        "Philippines",
+        "Reniel Villaflor",
+        "Technical Education and Skills Development Authority"
+      ]
+    },
+    {
+      "id": "coingeek-625770",
+      "url": "https://coingeek.com/ai-uncovers-web-flaws-as-governments-race-to-plug-gaps",
+      "title": "AI uncovers web flaws as governments race to plug gaps",
+      "date": "2026-10-29T06:00:00.000Z",
+      "excerpt": "AI-driven security discoveries expose risks in PHP, prompting urgent shutdowns as organizations race to protect sites from cyberattacks.",
+      "modified": "2026-10-26T23:00:09.000Z",
+      "categories": [
+        "Business"
+      ],
+      "tags": [
+        "AI",
+        "Artificial Intelligence",
+        "Australia",
+        "Australian Cyber Security Centre",
+        "Calif",
+        "Crime",
+        "cyberattacks",
+        "Cybercrime",
+        "Cybersecurity",
+        "Europe",
+        "European Union Agency for Cybersecurity",
+        "Hack",
+        "National Security Agency",
+        "Office of National Security",
+        "OpenAI",
+        "PHP",
+        "PHP2Shell",
+        "South Korea",
+        "United States",
+        "Wiz"
+      ]
+    },
     {
       "id": "coingeek-625879",
       "url": "https://coingeek.com/tether-pimps-mining-development-kit-to-connect-mining-ai-whatever",
@@ -780,8 +1674,8 @@
         "Helen Liu",
         "Middle East",
         "Mykolas Majauskas",
-        "Robert Pašičko",
         "Robert Pasicko",
+        "Robert Pašičko",
         "United Arab Emirates",
         "United Nations Development Programme"
       ]
@@ -5431,7 +6325,7 @@
       "title": "Miners giving up on BTC as crypto traders also ‘pivoting to AI’",
       "date": "2026-08-12T07:00:00.000Z",
       "excerpt": "Rising challenges in Bitcoin mining are pushing miners toward AI, as operators seek new ways to put their power and infrastructure to work.",
-      "modified": "2026-08-12T05:04:23.000Z",
+      "modified": "2026-10-30T05:34:08.000Z",
       "categories": [
         "Business"
       ],
@@ -9878,7 +10772,7 @@
       "title": "Trust, technology, and governance take focus at Future of Trust leaders forum",
       "date": "2026-06-05T09:00:00.000Z",
       "excerpt": "Join industry leaders at the Future of Trust forum during the pre-opening of Philippine Blockchain Week 2026 to discuss tech and governance.",
-      "modified": "2026-06-04T09:21:01.000Z",
+      "modified": "2026-10-30T08:48:12.000Z",
       "categories": [
         "Business"
       ],
@@ -11491,7 +12385,7 @@
       "title": "IMF warns of financial risks as AI boosts cyberattacks",
       "date": "2026-05-12T07:00:00.000Z",
       "excerpt": "IMF warns that AI amplifies cyber threats, risking financial stability. Calls for resilient policies and international cooperation to combat emerging risks.",
-      "modified": "2026-05-11T12:26:09.000Z",
+      "modified": "2026-10-30T05:49:33.000Z",
       "categories": [
         "Business"
       ],
@@ -12663,7 +13557,7 @@
       "title": "UK disrupts first illegal peer-to-peer ‘crypto’ trading operation",
       "date": "2026-04-24T11:00:00.000Z",
       "excerpt": "The U.K.’s FCA has disrupted illegal peer-to-peer digital asset trading by issuing cease-and-desist orders to unregistered traders to combat financial crime.",
-      "modified": "2026-04-24T07:09:41.000Z",
+      "modified": "2026-10-30T05:18:09.000Z",
       "categories": [
         "Business"
       ],
@@ -13076,7 +13970,7 @@
       "title": "South Korea aids 6 ASEAN cities with AI-based smart city tech",
       "date": "2026-04-20T09:00:00.000Z",
       "excerpt": "South Korea’s K-City Network aims to support Southeast Asian metropolises with AI smart city tech, addressing urban issues and enhancing local development.",
-      "modified": "2026-04-15T09:48:29.000Z",
+      "modified": "2026-10-30T05:55:31.000Z",
       "categories": [
         "Business"
       ],
@@ -13356,7 +14250,7 @@
       "title": "Tether launches stablecoin wallet, Circle’s Arc chain going proof-of-stake",
       "date": "2026-04-15T11:00:00.000Z",
       "excerpt": "Tether launches a self-custodial stablecoin wallet as Circle defends USDC freeze stance and the U.S. Fed questions claims of real-world stablecoin usage.",
-      "modified": "2026-04-15T09:14:42.000Z",
+      "modified": "2026-11-06T10:32:31.000Z",
       "categories": [
         "Business"
       ],
@@ -14055,7 +14949,7 @@
       "title": "Australia mandates licenses for crypto exchanges, custodians",
       "date": "2026-04-06T09:00:00.000Z",
       "excerpt": "Australia’s new digital assets legislation mandates crypto-related platforms to hold an AFSL, ensuring consumer protection akin to traditional finance.",
-      "modified": "2026-04-06T07:36:53.000Z",
+      "modified": "2026-10-30T05:56:20.000Z",
       "categories": [
         "Business"
       ],
@@ -17073,7 +17967,7 @@
       "title": "Malaysia to launch tests for stablecoins, tokenized deposits",
       "date": "2026-02-20T06:00:00.000Z",
       "excerpt": "Bank Negara Malaysia plans three 2026 DAIH pilots to explore real-world applications of Ringgit stablecoins and tokenized deposits.",
-      "modified": "2026-02-17T21:58:52.000Z",
+      "modified": "2026-10-30T05:09:45.000Z",
       "categories": [
         "Finance"
       ],
@@ -18012,7 +18906,7 @@
       "title": "UK Lords committee on stablecoin hears skepticism in first session",
       "date": "2026-02-10T08:00:00.000Z",
       "excerpt": "UK Lords grill stablecoins over risks as skepticism mounts, while Stand With Crypto UK touts surging support and a petition nearing Parliament debate.",
-      "modified": "2026-02-06T09:52:34.000Z",
+      "modified": "2026-10-30T05:08:32.000Z",
       "categories": [
         "Finance"
       ],
@@ -20033,7 +20927,7 @@
       "title": "Japan to tokenize local government bonds",
       "date": "2026-01-13T06:00:00.000Z",
       "excerpt": "While private and publicly traded firms can issue digital bonds, local governments have watched from the sidelines, but this could change with new rules.",
-      "modified": "2026-01-07T11:59:36.000Z",
+      "modified": "2026-10-30T05:17:15.000Z",
       "categories": [
         "Finance"
       ],
@@ -20329,7 +21223,7 @@
       "title": "Trump’s DeFi project seeks bank charter to grow USD1 stablecoin",
       "date": "2026-01-08T12:00:00.000Z",
       "excerpt": "U.S. crypto talks near an end as stablecoin yield disputes persist, a Trump-linked stablecoin seeks a bank charter, and GOP leaders push RFIA forward.",
-      "modified": "2026-01-13T10:19:55.000Z",
+      "modified": "2026-10-30T05:19:08.000Z",
       "categories": [
         "Business"
       ],
@@ -26305,7 +27199,7 @@
       "title": "PEZA secures PhP 175.37 billion in investments, reaffirms PH ecozones’ competitiveness in global stage",
       "date": "2025-11-05T02:00:00.000Z",
       "excerpt": "Despite global uncertainties, PEZA continues to see strong investment growth in Philippine ecozones, showing investors’ lasting trust and confidence.",
-      "modified": "2025-11-03T22:48:17.000Z",
+      "modified": "2026-10-30T05:51:07.000Z",
       "categories": [
         "Business"
       ],
@@ -28334,7 +29228,7 @@
       "title": "UK finance body outlines support for tokenized assets",
       "date": "2025-10-20T11:00:00.000Z",
       "excerpt": "The Financial Conduct Authority unveils plans to boost tokenization in asset management, removing blockchain barriers to drive innovation and efficiency.",
-      "modified": "2025-10-17T08:21:52.000Z",
+      "modified": "2026-10-30T05:15:52.000Z",
       "categories": [
         "Finance"
       ],
@@ -33132,7 +34026,7 @@
       "title": "Vietnam’s strict 5-year digital asset framework pilot kicks off",
       "date": "2025-09-12T09:00:00.000Z",
       "excerpt": "Vietnam has kickstarted a five-year pilot program for digital assets, setting strict rules for investors and service providers to ensure a safer market.",
-      "modified": "2025-09-11T11:09:56.000Z",
+      "modified": "2026-10-30T05:07:32.000Z",
       "categories": [
         "Business"
       ],
@@ -47572,7 +48466,7 @@
       "title": "Stablecoins to hold $1T in US Treasuries by 2030: report",
       "date": "2025-05-16T05:00:00.000Z",
       "excerpt": "Meanwhile, a U.S. Treasury report says that allowing stablecoin issuers to offer interest to holders could spur interest and boost demand for Treasuries.",
-      "modified": "2026-06-17T09:38:33.000Z",
+      "modified": "2026-10-30T05:11:28.000Z",
       "categories": [
         "Finance"
       ],
@@ -59060,7 +59954,7 @@
       "title": "This Week in AI: HP acquires Humane; xAI unveils Grok 3",
       "date": "2025-02-22T06:00:00.000Z",
       "excerpt": "In other news, Microsoft introduced Muse, an AI developed with Xbox Game Studios developer Ninja Theory, while xAI plans to launch its gaming studio.",
-      "modified": "2025-02-21T16:00:02.000Z",
+      "modified": "2026-10-30T08:39:48.000Z",
       "categories": [
         "Business"
       ],
@@ -62581,7 +63475,7 @@
       "title": "Nigeria, Zambia step up digital identity initiatives",
       "date": "2025-01-27T10:00:00.000Z",
       "excerpt": "Nigeria recently extended its partnership with the World Bank in an initiative that targets 180 million digital IDs for Nigerians by December 31, 2026.",
-      "modified": "2025-01-24T07:37:09.000Z",
+      "modified": "2026-10-30T05:22:11.000Z",
       "categories": [
         "Business"
       ],
@@ -71327,7 +72221,7 @@
       "title": "Zanzibar launches blockchain sandbox for startups",
       "date": "2024-11-05T06:00:00.000Z",
       "excerpt": "Zanzibar seeks to support blockchain startups and recently launched a sandbox; meanwhile, Vietnam has launched a national blockchain strategy.",
-      "modified": "2024-10-31T10:32:36.000Z",
+      "modified": "2026-10-30T05:24:15.000Z",
       "categories": [
         "Business"
       ],
